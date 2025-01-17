@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TestMapper">
+    
+    <resultMap type="Test" id="TestResult">
+        <result property="testId"    column="test_id"    />
+        <result property="testOne"    column="test_one"    />
+        <result property="testTwo"    column="test_two"    />
+        <result property="testThree"    column="test_three"    />
+        <result property="testFour"    column="test_four"    />
+    </resultMap>
+
+    <sql id="selectTestVo">
+        select test_id, test_one, test_two, test_three, test_four from test
+    </sql>
+
+    <select id="selectTestList" parameterType="Test" resultMap="TestResult">
+        <include refid="selectTestVo"/>
+        <where>  
+            <if test="testOne != null  and testOne != ''"> and test_one = #{testOne}</if>
+            <if test="testTwo != null  and testTwo != ''"> and test_two = #{testTwo}</if>
+            <if test="testThree != null  and testThree != ''"> and test_three = #{testThree}</if>
+            <if test="testFour != null  and testFour != ''"> and test_four = #{testFour}</if>
+        </where>
+    </select>
+    
+    <select id="selectTestByTestId" parameterType="Long" resultMap="TestResult">
+        <include refid="selectTestVo"/>
+        where test_id = #{testId}
+    </select>
+        
+    <insert id="insertTest" parameterType="Test" useGeneratedKeys="true" keyProperty="testId">
+        insert into test
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="testOne != null">test_one,</if>
+            <if test="testTwo != null">test_two,</if>
+            <if test="testThree != null">test_three,</if>
+            <if test="testFour != null">test_four,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="testOne != null">#{testOne},</if>
+            <if test="testTwo != null">#{testTwo},</if>
+            <if test="testThree != null">#{testThree},</if>
+            <if test="testFour != null">#{testFour},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTest" parameterType="Test">
+        update test
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="testOne != null">test_one = #{testOne},</if>
+            <if test="testTwo != null">test_two = #{testTwo},</if>
+            <if test="testThree != null">test_three = #{testThree},</if>
+            <if test="testFour != null">test_four = #{testFour},</if>
+        </trim>
+        where test_id = #{testId}
+    </update>
+
+    <delete id="deleteTestByTestId" parameterType="Long">
+        delete from test where test_id = #{testId}
+    </delete>
+
+    <delete id="deleteTestByTestIds" parameterType="String">
+        delete from test where test_id in 
+        <foreach item="testId" collection="array" open="(" separator="," close=")">
+            #{testId}
+        </foreach>
+    </delete>
+</mapper>
