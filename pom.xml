@@ -170,6 +170,11 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ToolingModule</artifactId>
+                <version>3.8.5</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -180,6 +185,7 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
+        <module>ToolingModule</module>
     </modules>
     <packaging>pom</packaging>
 

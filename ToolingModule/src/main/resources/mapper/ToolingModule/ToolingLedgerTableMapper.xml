@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.workClothes.mapper.ToolingLedgerTableMapper">
+    
+    <resultMap type="ToolingLedgerTable" id="ToolingLedgerTableResult">
+        <result property="id"    column="id"    />
+        <result property="moldOwnership"    column="mold_ownership"    />
+        <result property="serialNumber"    column="serial_number"    />
+        <result property="moldUsage"    column="mold_usage"    />
+        <result property="moldName"    column="mold_name"    />
+        <result property="moldNumber"    column="mold_number"    />
+        <result property="moldType"    column="mold_type"    />
+        <result property="investTime"    column="invest_time"    />
+        <result property="moldPosition"    column="mold_position"    />
+        <result property="quantityOfTooling"    column="quantity_of_tooling"    />
+        <result property="moldStatus"    column="mold_status"    />
+        <result property="assemblingProducts"    column="assembling_products"    />
+        <result property="remark"    column="remark"    />
+        <result property="sharedComponents"    column="shared_components"    />
+        <result property="toolingDrawings"    column="tooling_drawings"    />
+        <result property="verifyFile"    column="verify_file"    />
+        <result property="verificationConclusion"    column="verification_conclusion"    />
+        <result property="reminderDate"    column="reminder_date"    />
+        <result property="maintenanceCategory"    column="maintenance_category"    />
+    </resultMap>
+
+    <sql id="selectToolingLedgerTableVo">
+        select id, mold_ownership, serial_number, mold_usage, mold_name, mold_number, mold_type, invest_time, mold_position, quantity_of_tooling, mold_status, assembling_products, remark, shared_components, tooling_drawings, verify_file, verification_conclusion, reminder_date, maintenance_category from tooling_ledger_table
+    </sql>
+
+    <select id="selectToolingLedgerTableList" parameterType="ToolingLedgerTable" resultMap="ToolingLedgerTableResult">
+        <include refid="selectToolingLedgerTableVo"/>
+        <where>  
+            <if test="serialNumber != null "> and serial_number = #{serialNumber}</if>
+            <if test="moldUsage != null  and moldUsage != ''"> and mold_usage = #{moldUsage}</if>
+            <if test="moldName != null  and moldName != ''"> and mold_name like concat('%', #{moldName}, '%')</if>
+            <if test="moldNumber != null  and moldNumber != ''"> and mold_number = #{moldNumber}</if>
+            <if test="moldType != null  and moldType != ''"> and mold_type = #{moldType}</if>
+            <if test="investTime != null "> and invest_time = #{investTime}</if>
+            <if test="moldPosition != null  and moldPosition != ''"> and mold_position = #{moldPosition}</if>
+            <if test="quantityOfTooling != null  and quantityOfTooling != ''"> and quantity_of_tooling = #{quantityOfTooling}</if>
+            <if test="moldStatus != null  and moldStatus != ''"> and mold_status = #{moldStatus}</if>
+            <if test="assemblingProducts != null  and assemblingProducts != ''"> and assembling_products like concat('%', #{assemblingProducts}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectToolingLedgerTableById" parameterType="Long" resultMap="ToolingLedgerTableResult">
+        <include refid="selectToolingLedgerTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertToolingLedgerTable" parameterType="ToolingLedgerTable" useGeneratedKeys="true" keyProperty="id">
+        insert into tooling_ledger_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="moldOwnership != null">mold_ownership,</if>
+            <if test="serialNumber != null">serial_number,</if>
+            <if test="moldUsage != null">mold_usage,</if>
+            <if test="moldName != null">mold_name,</if>
+            <if test="moldNumber != null">mold_number,</if>
+            <if test="moldType != null">mold_type,</if>
+            <if test="investTime != null">invest_time,</if>
+            <if test="moldPosition != null">mold_position,</if>
+            <if test="quantityOfTooling != null">quantity_of_tooling,</if>
+            <if test="moldStatus != null">mold_status,</if>
+            <if test="assemblingProducts != null">assembling_products,</if>
+            <if test="remark != null">remark,</if>
+            <if test="sharedComponents != null">shared_components,</if>
+            <if test="toolingDrawings != null">tooling_drawings,</if>
+            <if test="verifyFile != null">verify_file,</if>
+            <if test="verificationConclusion != null">verification_conclusion,</if>
+            <if test="reminderDate != null">reminder_date,</if>
+            <if test="maintenanceCategory != null">maintenance_category,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="moldOwnership != null">#{moldOwnership},</if>
+            <if test="serialNumber != null">#{serialNumber},</if>
+            <if test="moldUsage != null">#{moldUsage},</if>
+            <if test="moldName != null">#{moldName},</if>
+            <if test="moldNumber != null">#{moldNumber},</if>
+            <if test="moldType != null">#{moldType},</if>
+            <if test="investTime != null">#{investTime},</if>
+            <if test="moldPosition != null">#{moldPosition},</if>
+            <if test="quantityOfTooling != null">#{quantityOfTooling},</if>
+            <if test="moldStatus != null">#{moldStatus},</if>
+            <if test="assemblingProducts != null">#{assemblingProducts},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="sharedComponents != null">#{sharedComponents},</if>
+            <if test="toolingDrawings != null">#{toolingDrawings},</if>
+            <if test="verifyFile != null">#{verifyFile},</if>
+            <if test="verificationConclusion != null">#{verificationConclusion},</if>
+            <if test="reminderDate != null">#{reminderDate},</if>
+            <if test="maintenanceCategory != null">#{maintenanceCategory},</if>
+         </trim>
+    </insert>
+
+    <update id="updateToolingLedgerTable" parameterType="ToolingLedgerTable">
+        update tooling_ledger_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="moldOwnership != null">mold_ownership = #{moldOwnership},</if>
+            <if test="serialNumber != null">serial_number = #{serialNumber},</if>
+            <if test="moldUsage != null">mold_usage = #{moldUsage},</if>
+            <if test="moldName != null">mold_name = #{moldName},</if>
+            <if test="moldNumber != null">mold_number = #{moldNumber},</if>
+            <if test="moldType != null">mold_type = #{moldType},</if>
+            <if test="investTime != null">invest_time = #{investTime},</if>
+            <if test="moldPosition != null">mold_position = #{moldPosition},</if>
+            <if test="quantityOfTooling != null">quantity_of_tooling = #{quantityOfTooling},</if>
+            <if test="moldStatus != null">mold_status = #{moldStatus},</if>
+            <if test="assemblingProducts != null">assembling_products = #{assemblingProducts},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="sharedComponents != null">shared_components = #{sharedComponents},</if>
+            <if test="toolingDrawings != null">tooling_drawings = #{toolingDrawings},</if>
+            <if test="verifyFile != null">verify_file = #{verifyFile},</if>
+            <if test="verificationConclusion != null">verification_conclusion = #{verificationConclusion},</if>
+            <if test="reminderDate != null">reminder_date = #{reminderDate},</if>
+            <if test="maintenanceCategory != null">maintenance_category = #{maintenanceCategory},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteToolingLedgerTableById" parameterType="Long">
+        delete from tooling_ledger_table where id = #{id}
+    </delete>
+
+    <delete id="deleteToolingLedgerTableByIds" parameterType="String">
+        delete from tooling_ledger_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
