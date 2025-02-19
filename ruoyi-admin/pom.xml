@@ -61,6 +61,12 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+        <!-- 工艺管理模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>craft-process</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ToolingModule</artifactId>
