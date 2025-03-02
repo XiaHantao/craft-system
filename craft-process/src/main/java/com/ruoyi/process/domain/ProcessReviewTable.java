@@ -42,6 +42,10 @@ public class ProcessReviewTable extends BaseEntity
     @Excel(name = "附带图片路径")
     private String imagePath;
 
+    /** 审查状态 */
+    @Excel(name = "审查状态")
+    private String reviewStatus;
+
     /** 审查记录文件路径 */
     @Excel(name = "审查记录文件路径")
     private String reviewRecordPath;

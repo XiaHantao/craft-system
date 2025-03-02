@@ -11,13 +11,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="materialFilePath"    column="material_file_path"    />
         <result property="remarks"    column="remarks"    />
         <result property="imagePath"    column="image_path"    />
+        <result property="reviewStatus"    column="review_status"    />
         <result property="reviewRecordPath"    column="review_record_path"    />
         <result property="reviewer"    column="reviewer"    />
         <result property="reviewTime"    column="review_time"    />
     </resultMap>
 
     <sql id="selectProcessReviewTableVo">
-        select id, material_number, material_name, material_file_path, remarks, image_path, review_record_path, reviewer, review_time from process_review_table
+        select id, material_number, material_name, material_file_path, remarks, image_path, review_status, review_record_path, reviewer, review_time from process_review_table
     </sql>
 
     <select id="selectProcessReviewTableList" parameterType="ProcessReviewTable" resultMap="ProcessReviewTableResult">
@@ -28,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="materialFilePath != null  and materialFilePath != ''"> and material_file_path = #{materialFilePath}</if>
             <if test="remarks != null  and remarks != ''"> and remarks like concat('%', #{remarks}, '%')</if>
             <if test="imagePath != null  and imagePath != ''"> and image_path = #{imagePath}</if>
+             <if test="reviewStatus != null  and reviewStatus != ''"> and review_status = #{reviewStatus}</if>
             <if test="reviewRecordPath != null  and reviewRecordPath != ''"> and review_record_path = #{reviewRecordPath}</if>
             <if test="reviewer != null  and reviewer != ''"> and reviewer like concat('%', #{reviewer}, '%')</if>
             <if test="reviewTime != null "> and review_time = #{reviewTime}</if>
@@ -47,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialFilePath != null">material_file_path,</if>
             <if test="remarks != null">remarks,</if>
             <if test="imagePath != null">image_path,</if>
+            <if test="reviewStatus != null">review_status,</if>
             <if test="reviewRecordPath != null">review_record_path,</if>
             <if test="reviewer != null">reviewer,</if>
             <if test="reviewTime != null">review_time,</if>
@@ -57,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialFilePath != null">#{materialFilePath},</if>
             <if test="remarks != null">#{remarks},</if>
             <if test="imagePath != null">#{imagePath},</if>
+            <if test="reviewStatus != null">#{reviewStatus},</if>
             <if test="reviewRecordPath != null">#{reviewRecordPath},</if>
             <if test="reviewer != null">#{reviewer},</if>
             <if test="reviewTime != null">#{reviewTime},</if>
@@ -71,6 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialFilePath != null">material_file_path = #{materialFilePath},</if>
             <if test="remarks != null">remarks = #{remarks},</if>
             <if test="imagePath != null">image_path = #{imagePath},</if>
+            <if test="reviewStatus != null">review_status = #{reviewStatus},</if>
             <if test="reviewRecordPath != null">review_record_path = #{reviewRecordPath},</if>
             <if test="reviewer != null">reviewer = #{reviewer},</if>
             <if test="reviewTime != null">review_time = #{reviewTime},</if>

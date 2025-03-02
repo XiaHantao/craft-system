@@ -104,6 +104,15 @@
           <image-preview v-if="scope.row.imagePath" :src="scope.row.imagePath" :width="50" :height="50"/>
         </template>
       </el-table-column>
+      <el-table-column label="审查状态" align="center">
+        <template #default="scope">
+          <el-tag :type="scope.row.reviewStatus === '已审查' ? 'success' : 'danger'" >
+            {{ scope.row.reviewStatus }}
+          </el-tag>
+        </template>
+      </el-table-column>
+
+
       <el-table-column label="审查记录文件" align="center" prop="reviewRecordPath">
         <template v-slot:default="scope">
           <el-button v-if="scope.row.reviewRecordPath" icon="Download" @click="downloadFile(scope.row.reviewRecordPath)"></el-button>
@@ -137,9 +146,10 @@
       <el-form ref="processReviewTableRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="物料号" prop="materialNumber">
           <el-select
-              v-model="form.vehicleModel"
+              v-model="form.materialNumber"
               placeholder="请选择物料号"
               clearable
+              filterable
               @keyup.enter="handleQuery"
           >
             <el-option
@@ -191,9 +201,11 @@
 import { listProcessReviewTable, getProcessReviewTable, delProcessReviewTable, addProcessReviewTable, updateProcessReviewTable } from "@/api/process/processReviewTable";
 import {listModelTable} from "@/api/process/modelTable";
 import ImagePreview from "@/components/ImagePreview/index.vue";
+import {getUserProfile} from "@/api/system/user";
 
 const { proxy } = getCurrentInstance();
 
+const userInfoList = ref([]);  //用户信息
 const processReviewTableList = ref([]);
 const modelList = ref([]); // 车型列表
 const open = ref(false);
@@ -216,11 +228,15 @@ const data = reactive({
     materialFilePath: null,
     remarks: null,
     imagePath: null,
+    reviewStatus: null,
     reviewRecordPath: null,
     reviewer: null,
     reviewTime: null
   },
   rules: {
+    materialNumber: [
+      { required: true, message: "物料号不能为空", trigger: "blur" }
+    ]
   }
 });
 
@@ -229,12 +245,13 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询工艺性审查列表 */
 function getList() {
   loading.value = true;
-  console.log("queryParams===>",queryParams.value);
   listProcessReviewTable(queryParams.value).then(response => {
     processReviewTableList.value = response.rows;
-    console.log("response===>",response);
     total.value = Number(response.total);
     loading.value = false;
+  });
+  getUserProfile().then(response => {
+    userInfoList.value = response.data;
   });
 }
 
@@ -315,6 +332,8 @@ function submitForm() {
           getList();
         });
       } else {
+        form.value.reviewStatus = "未审查";
+        console.log("form.value2===>",form.value);
         addProcessReviewTable(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
@@ -374,12 +393,16 @@ function handleReview(row) {
 function reviewSubmitForm() {
   proxy.$refs["processReviewTableRef"].validate(valid => {
     if (valid) {
-      console.log("form.value===>",form.value);
-        updateProcessReviewTable(form.value).then(response => {
-          proxy.$modal.msgSuccess("上传成功");
-          reviewOpen.value = false;
-          getList();
-        });
+      if(form.value.reviewRecordPath) {
+        form.value.reviewStatus = "已审查";
+      } else form.value.reviewStatus = "未审查";
+      form.value.reviewer = userInfoList.value.nickName;
+      form.value.reviewTime = new Date();
+      updateProcessReviewTable(form.value).then(response => {
+        proxy.$modal.msgSuccess("上传成功");
+        reviewOpen.value = false;
+        getList();
+      });
     }
   });
 }
@@ -389,8 +412,8 @@ function reviewCancel() {
   reviewOpen.value = false;
 }
 
-getList();
 getModelList();
+getList();
 </script>
 
 <style scoped>

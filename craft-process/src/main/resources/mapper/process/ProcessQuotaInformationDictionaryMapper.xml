@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.mapper.ProcessQuotaInformationDictionaryMapper">
+    
+    <resultMap type="ProcessQuotaInformationDictionary" id="ProcessQuotaInformationDictionaryResult">
+        <result property="id"    column="id"    />
+        <result property="quotaName"    column="quota_name"    />
+    </resultMap>
+
+    <sql id="selectProcessQuotaInformationDictionaryVo">
+        select id, quota_name from process_quota_information_dictionary
+    </sql>
+
+    <select id="selectProcessQuotaInformationDictionaryList" parameterType="ProcessQuotaInformationDictionary" resultMap="ProcessQuotaInformationDictionaryResult">
+        <include refid="selectProcessQuotaInformationDictionaryVo"/>
+        <where>  
+            <if test="quotaName != null  and quotaName != ''"> and quota_name like concat('%', #{quotaName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectProcessQuotaInformationDictionaryById" parameterType="Long" resultMap="ProcessQuotaInformationDictionaryResult">
+        <include refid="selectProcessQuotaInformationDictionaryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProcessQuotaInformationDictionary" parameterType="ProcessQuotaInformationDictionary">
+        insert into process_quota_information_dictionary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="quotaName != null">quota_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="quotaName != null">#{quotaName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessQuotaInformationDictionary" parameterType="ProcessQuotaInformationDictionary">
+        update process_quota_information_dictionary
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="quotaName != null">quota_name = #{quotaName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessQuotaInformationDictionaryById" parameterType="Long">
+        delete from process_quota_information_dictionary where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessQuotaInformationDictionaryByIds" parameterType="String">
+        delete from process_quota_information_dictionary where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
