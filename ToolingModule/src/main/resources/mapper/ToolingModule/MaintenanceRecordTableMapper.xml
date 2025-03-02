@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.workClothes.mapper.MaintenanceRecordTableMapper">
+    
+    <resultMap type="MaintenanceRecordTable" id="MaintenanceRecordTableResult">
+        <result property="id"    column="id"    />
+        <result property="maintenanceRecord"    column="maintenance_record"    />
+        <result property="maintenanceFile"    column="maintenance_file"    />
+        <result property="maintenanceTool"    column="maintenance_tool"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectMaintenanceRecordTableVo">
+        select id, maintenance_record, maintenance_file, maintenance_tool, create_by, create_time from maintenance_record_table
+    </sql>
+
+    <select id="selectMaintenanceRecordTableList" parameterType="MaintenanceRecordTable" resultMap="MaintenanceRecordTableResult">
+        <include refid="selectMaintenanceRecordTableVo"/>
+        <where>  
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+
+    <select id="selectMaintenanceRecordTableListbynumber" parameterType="MaintenanceRecordTable" resultMap="MaintenanceRecordTableResult">
+        <include refid="selectMaintenanceRecordTableVo"/>
+        <where>
+            <if test="Ownership != null and Ownership != ''">
+                and maintenance_tool = #{Ownership}
+            </if>
+        </where>
+
+    </select>
+    
+    <select id="selectMaintenanceRecordTableById" parameterType="Long" resultMap="MaintenanceRecordTableResult">
+        <include refid="selectMaintenanceRecordTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMaintenanceRecordTable" parameterType="MaintenanceRecordTable" useGeneratedKeys="true" keyProperty="id">
+        insert into maintenance_record_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="maintenanceRecord != null">maintenance_record,</if>
+            <if test="maintenanceFile != null">maintenance_file,</if>
+            <if test="maintenanceTool != null">maintenance_tool,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="maintenanceRecord != null">#{maintenanceRecord},</if>
+            <if test="maintenanceFile != null">#{maintenanceFile},</if>
+            <if test="maintenanceTool != null">#{maintenanceTool},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMaintenanceRecordTable" parameterType="MaintenanceRecordTable">
+        update maintenance_record_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="maintenanceRecord != null">maintenance_record = #{maintenanceRecord},</if>
+            <if test="maintenanceFile != null">maintenance_file = #{maintenanceFile},</if>
+            <if test="maintenanceTool != null">maintenance_tool = #{maintenanceTool},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMaintenanceRecordTableById" parameterType="Long">
+        delete from maintenance_record_table where id = #{id}
+    </delete>
+
+    <delete id="deleteMaintenanceRecordTableByIds" parameterType="String">
+        delete from maintenance_record_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -4,14 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -20,6 +13,7 @@ import com.ruoyi.workClothes.domain.ToolingTable;
 import com.ruoyi.workClothes.service.IToolingTableService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 工装详细Controller
@@ -47,6 +41,43 @@ public class ToolingTableController extends BaseController
     }
 
     /**
+     * 查询共用工装详细列表
+     */
+    @PreAuthorize("@ss.hasPermi('ToolingModule:toolingDetail:list')")
+    @GetMapping("/sharelist")
+    public TableDataInfo sharelist(ToolingTable toolingTable)
+    {
+        startPage();
+        List<ToolingTable> list = toolingTableService.selectshareToolingTableList(toolingTable);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询距离当前日期一个月内的工装详细列表
+     */
+    @PreAuthorize("@ss.hasPermi('ToolingModule:toolingDetail:upcomingChangeTime')")  // 适当修改权限
+    @GetMapping("/upcomingChangeTime")
+    public TableDataInfo upcomingChangeTime(ToolingTable toolingTable) {
+        startPage();
+        List<ToolingTable> list = toolingTableService.selectUpcomingChangeTimeToolingTableList(toolingTable);
+        return getDataTable(list);
+    }
+
+
+    /**
+     * 查询工装详细列表
+     */
+    @PreAuthorize("@ss.hasPermi('ToolingModule:toolingDetail:list')")
+    @GetMapping("/listNew")
+    public TableDataInfo listnew(@RequestParam (required = false) String toolNumber , ToolingTable toolingTable)
+    {
+//        System.out.println( " ====" + toolNumber);
+        startPage();
+        List<ToolingTable> list = toolingTableService.selectToolingTableListbymoldOwnership(toolingTable , toolNumber);
+        return getDataTable(list);
+    }
+
+    /**
      * 导出工装详细列表
      */
     @PreAuthorize("@ss.hasPermi('ToolingModule:toolingDetail:export')")
@@ -69,6 +100,21 @@ public class ToolingTableController extends BaseController
         return success(toolingTableService.selectToolingTableById(id));
     }
 
+    /**
+     * 导入工装详细
+     */
+    @PreAuthorize("@ss.hasPermi('ToolingModule:toolingDetail:add')")
+    @Log(title = "工装详细", businessType = BusinessType.INSERT)
+    @PostMapping("/import")
+    public AjaxResult loadImport(@RequestParam("file") MultipartFile file) {
+        // 调用服务层的方法处理文件导入
+        int result = toolingTableService.loadImport(file);
+        if (result == -1) {
+            return AjaxResult.error("文件导入失败");
+        } else {
+            return AjaxResult.success("文件导入成功，共导入 " + result + " 行");
+        }
+    }
     /**
      * 新增工装详细
      */

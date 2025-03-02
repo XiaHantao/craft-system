@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.workClothes.mapper.NonstructuraltoolingTableMapper">
+    
+    <resultMap type="NonstructuraltoolingTable" id="NonstructuraltoolingTableResult">
+        <result property="id"    column="id"    />
+        <result property="serialNumber"    column="serial_number"    />
+        <result property="moldName"    column="mold_name"    />
+        <result property="moldNumber"    column="mold_number"    />
+        <result property="moldType"    column="mold_type"    />
+        <result property="investTime"    column="invest_time"    />
+        <result property="moldStatus"    column="mold_status"    />
+        <result property="quantityOfTooling"    column="quantity_of_tooling"    />
+        <result property="assemblingProducts"    column="assembling_products"    />
+        <result property="moldPosition"    column="mold_position"    />
+        <result property="remark"    column="remark"    />
+        <result property="sharedComponents"    column="shared_components"    />
+        <result property="toolingDrawings"    column="tooling_drawings"    />
+        <result property="verifyFile"    column="verify_file"    />
+        <result property="verificationConclusion"    column="verification_conclusion"    />
+        <result property="reminderDate"    column="reminder_date"    />
+        <result property="maintenanceCategory"    column="maintenance_category"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="moldOwnership"    column="mold_ownership"    />
+        <result property="moldUsage"    column="mold_usage"    />
+    </resultMap>
+
+    <sql id="selectNonstructuraltoolingTableVo">
+        select id, serial_number, mold_name, mold_number, mold_type, invest_time, mold_status, quantity_of_tooling, assembling_products, mold_position, remark, shared_components, tooling_drawings, verify_file, verification_conclusion, reminder_date, maintenance_category, create_by, create_time, mold_ownership, mold_usage from NonStructuralTooling_table
+    </sql>
+
+    <select id="selectNonstructuraltoolingTableList" parameterType="NonstructuraltoolingTable" resultMap="NonstructuraltoolingTableResult">
+        <include refid="selectNonstructuraltoolingTableVo"/>
+        <where>  
+            <if test="moldName != null  and moldName != ''"> and mold_name like concat('%', #{moldName}, '%')</if>
+            <if test="moldNumber != null  and moldNumber != ''"> and mold_number = #{moldNumber}</if>
+            <if test="moldType != null  and moldType != ''"> and mold_type = #{moldType}</if>
+            <if test="investTime != null "> and invest_time = #{investTime}</if>
+            <if test="moldStatus != null  and moldStatus != ''"> and mold_status = #{moldStatus}</if>
+            <if test="quantityOfTooling != null  and quantityOfTooling != ''"> and quantity_of_tooling = #{quantityOfTooling}</if>
+            <if test="assemblingProducts != null  and assemblingProducts != ''"> and assembling_products = #{assemblingProducts}</if>
+            <if test="moldPosition != null  and moldPosition != ''"> and mold_position = #{moldPosition}</if>
+            <if test="sharedComponents != null  and sharedComponents != ''"> and shared_components = #{sharedComponents}</if>
+            <if test="toolingDrawings != null  and toolingDrawings != ''"> and tooling_drawings = #{toolingDrawings}</if>
+            <if test="verifyFile != null  and verifyFile != ''"> and verify_file = #{verifyFile}</if>
+            <if test="verificationConclusion != null  and verificationConclusion != ''"> and verification_conclusion = #{verificationConclusion}</if>
+            <if test="reminderDate != null "> and reminder_date = #{reminderDate}</if>
+            <if test="maintenanceCategory != null  and maintenanceCategory != ''"> and maintenance_category = #{maintenanceCategory}</if>
+            <if test="moldOwnership != null  and moldOwnership != ''"> and mold_ownership = #{moldOwnership}</if>
+            <if test="moldUsage != null  and moldUsage != ''"> and mold_usage = #{moldUsage}</if>
+            mold_ownership = 'externalTooling'
+        </where>
+    </select>
+
+    <select id="selectNonstructuraltoolingTableList1" parameterType="NonstructuraltoolingTable" resultMap="NonstructuraltoolingTableResult">
+        <include refid="selectNonstructuraltoolingTableVo"/>
+        <where>
+            <if test="moldName != null  and moldName != ''"> and mold_name like concat('%', #{moldName}, '%')</if>
+            <if test="moldNumber != null  and moldNumber != ''"> and mold_number = #{moldNumber}</if>
+            <if test="moldType != null  and moldType != ''"> and mold_type = #{moldType}</if>
+            <if test="investTime != null "> and invest_time = #{investTime}</if>
+            <if test="moldStatus != null  and moldStatus != ''"> and mold_status = #{moldStatus}</if>
+            <if test="quantityOfTooling != null  and quantityOfTooling != ''"> and quantity_of_tooling = #{quantityOfTooling}</if>
+            <if test="assemblingProducts != null  and assemblingProducts != ''"> and assembling_products = #{assemblingProducts}</if>
+            <if test="moldPosition != null  and moldPosition != ''"> and mold_position = #{moldPosition}</if>
+            <if test="sharedComponents != null  and sharedComponents != ''"> and shared_components = #{sharedComponents}</if>
+            <if test="toolingDrawings != null  and toolingDrawings != ''"> and tooling_drawings = #{toolingDrawings}</if>
+            <if test="verifyFile != null  and verifyFile != ''"> and verify_file = #{verifyFile}</if>
+            <if test="verificationConclusion != null  and verificationConclusion != ''"> and verification_conclusion = #{verificationConclusion}</if>
+            <if test="reminderDate != null "> and reminder_date = #{reminderDate}</if>
+            <if test="maintenanceCategory != null  and maintenanceCategory != ''"> and maintenance_category = #{maintenanceCategory}</if>
+            <if test="moldOwnership != null  and moldOwnership != ''"> and mold_ownership = #{moldOwnership}</if>
+            <if test="moldUsage != null  and moldUsage != ''"> and mold_usage = #{moldUsage}</if>
+            and mold_ownership = 'metalworkingClassTooling'
+        </where>
+    </select>
+
+    <select id="selectNonstructuraltoolingTableList2" parameterType="NonstructuraltoolingTable" resultMap="NonstructuraltoolingTableResult">
+        <include refid="selectNonstructuraltoolingTableVo"/>
+        <where>
+            <if test="moldName != null  and moldName != ''"> and mold_name like concat('%', #{moldName}, '%')</if>
+            <if test="moldNumber != null  and moldNumber != ''"> and mold_number = #{moldNumber}</if>
+            <if test="moldType != null  and moldType != ''"> and mold_type = #{moldType}</if>
+            <if test="investTime != null "> and invest_time = #{investTime}</if>
+            <if test="moldStatus != null  and moldStatus != ''"> and mold_status = #{moldStatus}</if>
+            <if test="quantityOfTooling != null  and quantityOfTooling != ''"> and quantity_of_tooling = #{quantityOfTooling}</if>
+            <if test="assemblingProducts != null  and assemblingProducts != ''"> and assembling_products = #{assemblingProducts}</if>
+            <if test="moldPosition != null  and moldPosition != ''"> and mold_position = #{moldPosition}</if>
+            <if test="sharedComponents != null  and sharedComponents != ''"> and shared_components = #{sharedComponents}</if>
+            <if test="toolingDrawings != null  and toolingDrawings != ''"> and tooling_drawings = #{toolingDrawings}</if>
+            <if test="verifyFile != null  and verifyFile != ''"> and verify_file = #{verifyFile}</if>
+            <if test="verificationConclusion != null  and verificationConclusion != ''"> and verification_conclusion = #{verificationConclusion}</if>
+            <if test="reminderDate != null "> and reminder_date = #{reminderDate}</if>
+            <if test="maintenanceCategory != null  and maintenanceCategory != ''"> and maintenance_category = #{maintenanceCategory}</if>
+            <if test="moldOwnership != null  and moldOwnership != ''"> and mold_ownership = #{moldOwnership}</if>
+            <if test="moldUsage != null  and moldUsage != ''"> and mold_usage = #{moldUsage}</if>
+            and mold_ownership = 'materialPreparationTeamTooling'
+        </where>
+    </select>
+    
+    <select id="selectNonstructuraltoolingTableById" parameterType="Long" resultMap="NonstructuraltoolingTableResult">
+        <include refid="selectNonstructuraltoolingTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNonstructuraltoolingTable" parameterType="NonstructuraltoolingTable" useGeneratedKeys="true" keyProperty="id">
+        insert into NonStructuralTooling_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">serial_number,</if>
+            <if test="moldName != null">mold_name,</if>
+            <if test="moldNumber != null">mold_number,</if>
+            <if test="moldType != null">mold_type,</if>
+            <if test="investTime != null">invest_time,</if>
+            <if test="moldStatus != null">mold_status,</if>
+            <if test="quantityOfTooling != null">quantity_of_tooling,</if>
+            <if test="assemblingProducts != null">assembling_products,</if>
+            <if test="moldPosition != null">mold_position,</if>
+            <if test="remark != null">remark,</if>
+            <if test="sharedComponents != null">shared_components,</if>
+            <if test="toolingDrawings != null">tooling_drawings,</if>
+            <if test="verifyFile != null">verify_file,</if>
+            <if test="verificationConclusion != null">verification_conclusion,</if>
+            <if test="reminderDate != null">reminder_date,</if>
+            <if test="maintenanceCategory != null">maintenance_category,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="moldOwnership != null">mold_ownership,</if>
+            <if test="moldUsage != null">mold_usage,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">#{serialNumber},</if>
+            <if test="moldName != null">#{moldName},</if>
+            <if test="moldNumber != null">#{moldNumber},</if>
+            <if test="moldType != null">#{moldType},</if>
+            <if test="investTime != null">#{investTime},</if>
+            <if test="moldStatus != null">#{moldStatus},</if>
+            <if test="quantityOfTooling != null">#{quantityOfTooling},</if>
+            <if test="assemblingProducts != null">#{assemblingProducts},</if>
+            <if test="moldPosition != null">#{moldPosition},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="sharedComponents != null">#{sharedComponents},</if>
+            <if test="toolingDrawings != null">#{toolingDrawings},</if>
+            <if test="verifyFile != null">#{verifyFile},</if>
+            <if test="verificationConclusion != null">#{verificationConclusion},</if>
+            <if test="reminderDate != null">#{reminderDate},</if>
+            <if test="maintenanceCategory != null">#{maintenanceCategory},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="moldOwnership != null">#{moldOwnership},</if>
+            <if test="moldUsage != null">#{moldUsage},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNonstructuraltoolingTable" parameterType="NonstructuraltoolingTable">
+        update NonStructuralTooling_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNumber != null">serial_number = #{serialNumber},</if>
+            <if test="moldName != null">mold_name = #{moldName},</if>
+            <if test="moldNumber != null">mold_number = #{moldNumber},</if>
+            <if test="moldType != null">mold_type = #{moldType},</if>
+            <if test="investTime != null">invest_time = #{investTime},</if>
+            <if test="moldStatus != null">mold_status = #{moldStatus},</if>
+            <if test="quantityOfTooling != null">quantity_of_tooling = #{quantityOfTooling},</if>
+            <if test="assemblingProducts != null">assembling_products = #{assemblingProducts},</if>
+            <if test="moldPosition != null">mold_position = #{moldPosition},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="sharedComponents != null">shared_components = #{sharedComponents},</if>
+            <if test="toolingDrawings != null">tooling_drawings = #{toolingDrawings},</if>
+            <if test="verifyFile != null">verify_file = #{verifyFile},</if>
+            <if test="verificationConclusion != null">verification_conclusion = #{verificationConclusion},</if>
+            <if test="reminderDate != null">reminder_date = #{reminderDate},</if>
+            <if test="maintenanceCategory != null">maintenance_category = #{maintenanceCategory},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="moldOwnership != null">mold_ownership = #{moldOwnership},</if>
+            <if test="moldUsage != null">mold_usage = #{moldUsage},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNonstructuraltoolingTableById" parameterType="Long">
+        delete from NonStructuralTooling_table where id = #{id}
+    </delete>
+
+    <delete id="deleteNonstructuraltoolingTableByIds" parameterType="String">
+        delete from NonStructuralTooling_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

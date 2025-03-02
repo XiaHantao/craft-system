@@ -1,22 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="序号" prop="serialNumber">
-        <el-input
-          v-model="queryParams.serialNumber"
-          placeholder="请输入序号"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="模具用途" prop="moldUsage">
-        <el-input
-          v-model="queryParams.moldUsage"
-          placeholder="请输入模具用途"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="模具名称" prop="moldName">
         <el-input
           v-model="queryParams.moldName"
@@ -33,14 +17,14 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="投入时间" prop="investTime">
-        <el-date-picker clearable
-          v-model="queryParams.investTime"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="请选择投入时间">
-        </el-date-picker>
-      </el-form-item>
+<!--      <el-form-item label="投入时间" prop="investTime">-->
+<!--        <el-date-picker clearable-->
+<!--          v-model="queryParams.investTime"-->
+<!--          type="date"-->
+<!--          value-format="YYYY-MM-DD"-->
+<!--          placeholder="请选择投入时间">-->
+<!--        </el-date-picker>-->
+<!--      </el-form-item>-->
       <el-form-item label="模具位置" prop="moldPosition">
         <el-input
           v-model="queryParams.moldPosition"
@@ -49,14 +33,14 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="数量" prop="quantityOfTooling">
-        <el-input
-          v-model="queryParams.quantityOfTooling"
-          placeholder="请输入数量"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
+<!--      <el-form-item label="数量" prop="quantityOfTooling">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.quantityOfTooling"-->
+<!--          placeholder="请输入数量"-->
+<!--          clearable-->
+<!--          @keyup.enter="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
       <el-form-item label="组装产品" prop="assemblingProducts">
         <el-input
           v-model="queryParams.assemblingProducts"
@@ -113,11 +97,11 @@
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="WorkClothesList" @selection-change="handleSelectionChange" @row-click="handleRowClick">
+    <el-table v-loading="loading" :data="WorkClothesList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
 <!--      <el-table-column label="id" align="center" prop="id" />-->
       <el-table-column label="序号" align="center" prop="serialNumber" />
-      <el-table-column label="模具用途" align="center" prop="moldUsage" />
+<!--      <el-table-column label="模具用途" align="center" prop="moldUsage" />-->
       <el-table-column label="模具名称" align="center" prop="moldName" />
       <el-table-column label="模具号" align="center" prop="moldNumber" />
       <el-table-column label="种类" align="center" prop="moldType" />
@@ -130,16 +114,58 @@
       <el-table-column label="数量" align="center" prop="quantityOfTooling" />
       <el-table-column label="模具状态" align="center" prop="moldStatus" />
       <el-table-column label="组装产品" align="center" prop="assemblingProducts" />
+      <el-table-column label="工装图纸" align="center" prop="toolingDrawings">
+        <template #default="{ row }">
+            <span v-if="row.toolingDrawings">
+              <!-- 如果有文件地址，显示预览按钮 -->
+              <el-button type="text" @click="previewFile(row.toolingDrawings)">预览</el-button>
+            </span>
+          <span v-else>
+            <!-- 如果没有文件地址，显示“无图纸” -->
+            无图纸
+          </span>
+        </template>
+      </el-table-column>
+<!--      <el-table-column label="工艺文件名" align="center" prop="processDocumentsName" />-->
+      <el-table-column label="工艺文件名" align="center" prop="processDocumentsName">
+        <template #default="{ row }">
+            <span v-if="row.processDocumentsName">
+              <!-- 如果有文件地址，显示预览按钮 -->
+              <el-button type="text" @click="previewFile(row.processDocuments)">{{ row.processDocumentsName }}</el-button>
+            </span>
+          <span v-else>
+            <!-- 如果没有文件地址，显示“无图纸” -->
+            无文件
+          </span>
+        </template>
+      </el-table-column>
+<!--      <el-table-column label="工艺文件路径" align="center" prop="processDocuments" />-->
+<!--      <el-table-column label="物料清单名" align="center" prop="mbomName" />-->
+      <el-table-column label="物料清单" align="center" prop="mbomName">
+        <template #default="{ row }">
+            <span v-if="row.mbomName">
+              <!-- 如果有文件地址，显示预览按钮 -->
+              <el-button type="text" @click="previewFile(row.mbomFile)">{{ row.mbomName }}</el-button>
+            </span>
+          <span v-else>
+            <!-- 如果没有文件地址，显示“无图纸” -->
+            无文件
+          </span>
+        </template>
+      </el-table-column>
+<!--      <el-table-column label="物料清单路径" align="center" prop="mbomFile" />-->
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="工装图纸" align="center" prop="toolingDrawings" />
-      <el-table-column label="验证文件" align="center" prop="verifyFile" />
-      <el-table-column label="验证结论" align="center" prop="verificationConclusion" />
+<!--      <el-table-column label="工装图纸" align="center" prop="toolingDrawings" />-->
+<!--      <el-table-column label="验证文件" align="center" prop="verifyFile" />-->
+<!--      <el-table-column label="验证结论" align="center" prop="verificationConclusion" />-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['ToolingModule:WorkClothes:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['ToolingModule:WorkClothes:remove']">删除</el-button>
             <!-- 新增“工装详细”按钮 -->
-            <el-button link type="info" icon="Search" @click="handleViewDetails(scope.row.id)">工装详细</el-button>
+            <el-button link type="primary" icon="Search" @click="handleViewDetails(scope.row.moldNumber)">工装详细</el-button>
+          <!-- 新增“维修记录”按钮 -->
+          <el-button link type="primary" icon="Search" @click="handlemaintenance(scope.row.moldNumber)">维修记录</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -155,7 +181,7 @@
       <el-dialog title="工装详细" v-model="dialogVisible" width="80%">
           <el-table :data="subData" v-loading="loadingDetails">
               <el-table-column type="selection" width="55" align="center" />
-              <el-table-column label="id" align="center" prop="id" />
+<!--              <el-table-column label="id" align="center" prop="id" />-->
               <el-table-column label="序号" align="center" prop="serialNumber" />
               <el-table-column label="工具编号" align="center" prop="toolNumber" />
               <el-table-column label="工具名称" align="center" prop="toolName" />
@@ -199,21 +225,18 @@
 
     <!-- 添加或修改工装台账对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="WorkClothesRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="模具所属" prop="moldOwnership">
-          <el-input v-model="form.moldOwnership" placeholder="请输入模具所属" />
-        </el-form-item>
-        <el-form-item label="序号" prop="serialNumber">
-          <el-input v-model="form.serialNumber" placeholder="请输入序号" />
-        </el-form-item>
-        <el-form-item label="模具用途" prop="moldUsage">
-          <el-input v-model="form.moldUsage" placeholder="请输入模具用途" />
-        </el-form-item>
+      <el-form ref="WorkClothesRef" :model="form" :rules="rules" label-width="100px">
+<!--        <el-form-item label="模具所属" prop="moldOwnership">-->
+<!--          <el-input v-model="form.moldOwnership" placeholder="请输入模具所属" />-->
+<!--        </el-form-item>-->
         <el-form-item label="模具名称" prop="moldName">
           <el-input v-model="form.moldName" placeholder="请输入模具名称" />
         </el-form-item>
         <el-form-item label="模具号" prop="moldNumber">
           <el-input v-model="form.moldNumber" placeholder="请输入模具号" />
+        </el-form-item>
+        <el-form-item label="种类" prop="moldType">
+          <el-input v-model="form.moldType" placeholder="请输入模具种类" />
         </el-form-item>
         <el-form-item label="投入时间" prop="investTime">
           <el-date-picker clearable
@@ -226,26 +249,35 @@
         <el-form-item label="模具位置" prop="moldPosition">
           <el-input v-model="form.moldPosition" placeholder="请输入模具位置" />
         </el-form-item>
+        <el-form-item label="模具状态" prop="moldStatus">
+          <el-input v-model="form.moldStatus" placeholder="请输入模具状态" />
+        </el-form-item>
         <el-form-item label="数量" prop="quantityOfTooling">
           <el-input v-model="form.quantityOfTooling" placeholder="请输入数量" />
         </el-form-item>
         <el-form-item label="组装产品" prop="assemblingProducts">
           <el-input v-model="form.assemblingProducts" placeholder="请输入组装产品" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" placeholder="请输入备注" />
-        </el-form-item>
+<!--        <el-form-item label="是否为共用件" prop="sharedComponents">-->
+<!--          <el-input v-model="form.sharedComponents" placeholder="请输入是否为共用件" />-->
+<!--        </el-form-item>-->
         <el-form-item label="是否为共用件" prop="sharedComponents">
-          <el-input v-model="form.sharedComponents" placeholder="请输入是否为共用件" />
+          <el-radio-group v-model="form.sharedComponents">
+            <el-radio label="1">是</el-radio>
+            <el-radio label="0">否</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="工装图纸" prop="toolingDrawings">
-          <el-input v-model="form.toolingDrawings" placeholder="请输入工装图纸" />
+          <file-upload v-model="form.toolingDrawings"/>
         </el-form-item>
-        <el-form-item label="验证文件" prop="verifyFile">
-          <file-upload v-model="form.verifyFile"/>
-        </el-form-item>
-        <el-form-item label="验证结论" prop="verificationConclusion">
-          <el-input v-model="form.verificationConclusion" placeholder="请输入验证结论" />
+<!--        <el-form-item label="验证文件" prop="verifyFile">-->
+<!--          <file-upload v-model="form.verifyFile"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="验证结论" prop="verificationConclusion">-->
+<!--          <el-input v-model="form.verificationConclusion" placeholder="请输入验证结论" />-->
+<!--        </el-form-item>-->
+        <el-form-item label="保养类别" prop="maintenanceCategory">
+          <el-input v-model="form.maintenanceCategory" placeholder="请输入保养类别" />
         </el-form-item>
         <el-form-item label="保养提醒日期" prop="reminderDate">
           <el-date-picker clearable
@@ -255,8 +287,20 @@
             placeholder="请选择保养提醒日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="保养类别" prop="maintenanceCategory">
-          <el-input v-model="form.maintenanceCategory" placeholder="请输入保养类别" />
+        <el-form-item label="工艺文件名" prop="processDocumentsName">
+          <el-input v-model="form.processDocumentsName" placeholder="请输入工艺文件名" />
+        </el-form-item>
+        <el-form-item label="工艺文件" prop="processDocuments">
+          <file-upload v-model="form.processDocuments"/>
+        </el-form-item>
+        <el-form-item label="物料清单名" prop="mbomName">
+          <el-input v-model="form.mbomName" placeholder="请输入物料清单名" />
+        </el-form-item>
+        <el-form-item label="物料清单" prop="mbomFile">
+          <file-upload v-model="form.mbomFile"/>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -271,7 +315,7 @@
 
 <script setup name="WorkClothes">
 import { listWorkClothes, getWorkClothes, delWorkClothes, addWorkClothes, updateWorkClothes } from "@/api/ToolingModule/WorkClothes";
-import {getToolingDetail, listToolingDetail} from "@/api/ToolingModule/toolingDetail";
+
 
 const { proxy } = getCurrentInstance();
 
@@ -288,6 +332,8 @@ const title = ref("");
 const dialogVisible = ref(false); // 控制弹框的显示与隐藏
 const loadingDetails = ref(false);  // 控制工装详细表格的加载状态
 const subData = ref([]); // 存储子数据
+// 获取路由实例
+const router = useRouter()
 
 const data = reactive({
   form: {},
@@ -301,6 +347,10 @@ const data = reactive({
     moldType: null,
     investTime: null,
     moldPosition: null,
+    processDocumentsName: null,
+    processDocuments: null,
+    mbomName: null,
+    mbomFile: null,
     quantityOfTooling: null,
     moldStatus: null,
     assemblingProducts: null,
@@ -311,19 +361,6 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-// 查看工装详细
-function handleViewDetails(id) {
-    detailsDialogVisible.value = true;  // 打开弹框
-    loadingDetails.value = true;  // 开始加载
-    // 根据传入的 id 查询工装详细信息
-    getWorkClothesDetails(id).then(response => {
-        detailsList.value = response.data;  // 假设返回的数据格式是 { data: [...] }
-        loadingDetails.value = false;  // 加载完成
-    }).catch(error => {
-        loadingDetails.value = false;
-        proxy.$modal.msgError("加载工装详细失败");
-    });
-}
 /** 查询工装台账列表 */
 function getList() {
   loading.value = true;
@@ -356,6 +393,10 @@ function reset() {
     moldStatus: null,
     assemblingProducts: null,
     remark: null,
+    processDocumentsName: null,
+    processDocuments: null,
+    mbomName: null,
+    mbomFile: null,
     sharedComponents: null,
     toolingDrawings: null,
     verifyFile: null,
@@ -365,17 +406,23 @@ function reset() {
   };
   proxy.resetForm("WorkClothesRef");
 }
-
-// 处理点击行事件
-function handleRowClick(row) {
-    // 假设子数据存储在另一个表中，使用 `row.id` 来获取子数据
-    listToolingDetail().then(response => {
-        subData.value = response.rows; // 设置子数据
-        total1.value = Number(response.total);
-        dialogVisible.value = true; // 打开弹框
-    });
+// 处理点击“维修记录”按钮
+function handlemaintenance(Number) {
+  router.push({ name: 'mainRecord', query: { Number } }); // 使用路由的 name 来跳转
 }
 
+// 处理点击行事件
+// 处理点击“工装详细”按钮
+function handleViewDetails(Number) {
+  router.push({ name: 'Detail', query: { Number } }); // 使用路由的 name 来跳转
+}
+//预览文件
+function previewFile(fileUrl) {
+  const baseUrl = import.meta.env.VITE_APP_BASE_API; // 或者你可以直接赋值为基础文件路径
+  const fullUrl = `${baseUrl}${fileUrl}`; // 拼接文件的完整 URL 地址
+  // console.log('处理中');
+  window.open(fullUrl, '_blank');
+}
 /** 搜索按钮操作 */
 function handleQuery() {
   queryParams.value.pageNum = 1;

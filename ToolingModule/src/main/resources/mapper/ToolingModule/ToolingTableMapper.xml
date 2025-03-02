@@ -65,12 +65,187 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="moldOwnership != null  and moldOwnership != ''"> and mold_ownership = #{moldOwnership}</if>
         </where>
     </select>
-    
+
+    <select id="selectshareToolingTableList" parameterType="ToolingTable" resultMap="ToolingTableResult">
+        <include refid="selectToolingTableVo"/>
+        <where>
+            <if test="serialNumber != null "> and serial_number = #{serialNumber}</if>
+            <if test="toolNumber != null  and toolNumber != ''"> and tool_number like concat('%', #{toolNumber}, '%')</if>
+            <if test="toolName != null  and toolName != ''"> and tool_name like concat('%', #{toolName}, '%')</if>
+            <if test="totalQuantity != null "> and total_quantity = #{totalQuantity}</if>
+            <if test="textureOfMaterial != null  and textureOfMaterial != ''"> and texture_of_material = #{textureOfMaterial}</if>
+            <if test="cuttingSize != null  and cuttingSize != ''"> and cutting_size = #{cuttingSize}</if>
+            <if test="totalWeight != null "> and total_weight = #{totalWeight}</if>
+            <if test="rawMaterialNumber != null  and rawMaterialNumber != ''"> and raw_material_number = #{rawMaterialNumber}</if>
+            <if test="materialCutting != null "> and material_cutting = #{materialCutting}</if>
+            <if test="metalworking != null "> and metalworking = #{metalworking}</if>
+            <if test="assemblyWelding != null "> and assembly_welding = #{assemblyWelding}</if>
+            <if test="painting != null "> and painting = #{painting}</if>
+            <if test="assembling != null "> and assembling = #{assembling}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="sharedComponents != null  and sharedComponents != ''"> and shared_components = #{sharedComponents}</if>
+            <if test="toolingDrawings != null  and toolingDrawings != ''"> and tooling_drawings = #{toolingDrawings}</if>
+            <if test="verifyFile != null  and verifyFile != ''"> and verify_file = #{verifyFile}</if>
+            <if test="procurementList != null  and procurementList != ''"> and procurement_list = #{procurementList}</if>
+            <if test="verificationConclusion != null  and verificationConclusion != ''"> and verification_conclusion = #{verificationConclusion}</if>
+            <if test="changeTime != null "> and change_time = #{changeTime}</if>
+            <if test="keyComponents != null  and keyComponents != ''"> and key_components = #{keyComponents}</if>
+            <if test="maintenanceRecord != null  and maintenanceRecord != ''"> and maintenance_record = #{maintenanceRecord}</if>
+            <if test="moldOwnership != null  and moldOwnership != ''"> and mold_ownership = #{moldOwnership}</if>
+            and shared_components = 1
+        </where>
+    </select>
+
+    <select id="selectUpcomingChangeTimeToolingTableList" parameterType="ToolingTable" resultMap="ToolingTableResult">
+        <include refid="selectToolingTableVo"/>
+        <where>
+            <if test="serialNumber != null "> and serial_number = #{serialNumber}</if>
+            <if test="toolNumber != null  and toolNumber != ''"> and tool_number like concat('%', #{toolNumber}, '%')</if>
+            <if test="toolName != null  and toolName != ''"> and tool_name like concat('%', #{toolName}, '%')</if>
+            <if test="totalQuantity != null "> and total_quantity = #{totalQuantity}</if>
+            <if test="textureOfMaterial != null  and textureOfMaterial != ''"> and texture_of_material = #{textureOfMaterial}</if>
+            <if test="cuttingSize != null  and cuttingSize != ''"> and cutting_size = #{cuttingSize}</if>
+            <if test="totalWeight != null "> and total_weight = #{totalWeight}</if>
+            <if test="rawMaterialNumber != null  and rawMaterialNumber != ''"> and raw_material_number = #{rawMaterialNumber}</if>
+            <if test="materialCutting != null "> and material_cutting = #{materialCutting}</if>
+            <if test="metalworking != null "> and metalworking = #{metalworking}</if>
+            <if test="assemblyWelding != null "> and assembly_welding = #{assemblyWelding}</if>
+            <if test="painting != null "> and painting = #{painting}</if>
+            <if test="assembling != null "> and assembling = #{assembling}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="sharedComponents != null  and sharedComponents != ''"> and shared_components = #{sharedComponents}</if>
+            <if test="toolingDrawings != null  and toolingDrawings != ''"> and tooling_drawings = #{toolingDrawings}</if>
+            <if test="verifyFile != null  and verifyFile != ''"> and verify_file = #{verifyFile}</if>
+            <if test="procurementList != null  and procurementList != ''"> and procurement_list = #{procurementList}</if>
+            <if test="verificationConclusion != null  and verificationConclusion != ''"> and verification_conclusion = #{verificationConclusion}</if>
+            <if test="changeTime != null "> and change_time = #{changeTime}</if>
+            <if test="keyComponents != null  and keyComponents != ''"> and key_components = #{keyComponents}</if>
+            <if test="maintenanceRecord != null  and maintenanceRecord != ''"> and maintenance_record = #{maintenanceRecord}</if>
+            <if test="moldOwnership != null  and moldOwnership != ''"> and mold_ownership = #{moldOwnership}</if>
+            <!-- 计算日期差值，查询出 change_time 在一个月内的数据 -->
+            <if test="changeTime == null">
+                and <![CDATA[change_time <= DATE_ADD(NOW(), INTERVAL 1 MONTH)]]>
+            </if>
+        </where>
+    </select>
+
+    <!-- selectToolingTableListbymoldOwnership 查询工装详细列表 -->
+    <select id="selectToolingTableListbymoldOwnership" parameterType="map" resultMap="ToolingTableResult">
+        <include refid="selectToolingTableVo"/>
+        <where>
+            <if test="Ownership != null and Ownership != ''">
+                and mold_ownership = #{Ownership}
+            </if>
+        </where>
+    </select>
+
+
     <select id="selectToolingTableById" parameterType="Long" resultMap="ToolingTableResult">
         <include refid="selectToolingTableVo"/>
         where id = #{id}
     </select>
-        
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO tooling_table (
+        tool_number,
+        tool_name,
+        total_quantity,
+        texture_of_material,
+        cutting_size,
+        total_weight,
+        raw_material_number,
+        material_cutting,
+        metalworking,
+        assembly_welding,
+        painting,
+        assembling,
+        remarks,
+        mold_ownership
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.toolNumber},
+            #{item.toolName},
+            #{item.totalQuantity},
+            #{item.textureOfMaterial},
+            #{item.cuttingSize},
+            #{item.totalWeight},
+            #{item.rawMaterialNumber},
+            #{item.materialCutting},
+            #{item.metalworking},
+            #{item.assemblyWelding},
+            #{item.painting},
+            #{item.assembling},
+            #{item.remarks},
+            #{item.moldOwnership}
+            )
+        </foreach>
+    </insert>
+
+    <!--    <insert id="insertBatch" parameterType="java.util.List">-->
+<!--        insert into tooling_table-->
+<!--        <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--            <if test="list != null and list.size() > 0">-->
+<!--                <foreach collection="list" item="item" separator=",">-->
+<!--                    <if test="item.toolNumber != null">tool_number,</if>-->
+<!--                    <if test="item.toolName != null">tool_name,</if>-->
+<!--                    <if test="item.totalQuantity != null">total_quantity,</if>-->
+<!--                    <if test="item.textureOfMaterial != null">texture_of_material,</if>-->
+<!--                    <if test="item.cuttingSize != null">cutting_size,</if>-->
+<!--                    <if test="item.totalWeight != null">total_weight,</if>-->
+<!--                    <if test="item.rawMaterialNumber != null">raw_material_number,</if>-->
+<!--                    <if test="item.materialCutting != null">material_cutting,</if>-->
+<!--                    <if test="item.metalworking != null">metalworking,</if>-->
+<!--                    <if test="item.assemblyWelding != null">assembly_welding,</if>-->
+<!--                    <if test="item.painting != null">painting,</if>-->
+<!--                    <if test="item.assembling != null">assembling,</if>-->
+<!--                    <if test="item.remarks != null">remarks,</if>-->
+<!--&lt;!&ndash;                    <if test="item.modelId != null">model_id,</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <if test="item.sharedComponents != null">shared_components,</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <if test="item.toolingDrawings != null">tooling_drawings,</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <if test="item.verifyFile != null">verify_file,</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <if test="item.procurementList != null">procurement_list,</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <if test="item.verificationConclusion != null">verification_conclusion,</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <if test="item.changeTime != null">change_time,</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <if test="item.keyComponents != null">key_components,</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <if test="item.maintenanceRecord != null">maintenance_record,</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <if test="item.moldOwnership != null">mold_ownership,</if>&ndash;&gt;-->
+<!--                </foreach>-->
+<!--            </if>-->
+<!--        </trim>-->
+<!--        <trim prefix="values" suffix=")" suffixOverrides=",">-->
+<!--            <foreach collection="list" item="item" separator=",">-->
+<!--                <if test="item.toolNumber != null">#{item.toolNumber},</if>-->
+<!--                <if test="item.toolName != null">#{item.toolName},</if>-->
+<!--                <if test="item.totalQuantity != null">#{item.totalQuantity},</if>-->
+<!--                <if test="item.textureOfMaterial != null">#{item.textureOfMaterial},</if>-->
+<!--                <if test="item.cuttingSize != null">#{item.cuttingSize},</if>-->
+<!--                <if test="item.totalWeight != null">#{item.totalWeight},</if>-->
+<!--                <if test="item.rawMaterialNumber != null">#{item.rawMaterialNumber},</if>-->
+<!--                <if test="item.materialCutting != null">#{item.materialCutting},</if>-->
+<!--                <if test="item.metalworking != null">#{item.metalworking},</if>-->
+<!--                <if test="item.assemblyWelding != null">#{item.assemblyWelding},</if>-->
+<!--                <if test="item.painting != null">#{item.painting},</if>-->
+<!--                <if test="item.assembling != null">#{item.assembling},</if>-->
+<!--                <if test="item.remarks != null">#{item.remarks},</if>-->
+<!--&lt;!&ndash;                <if test="item.modelId != null">#{item.modelId},</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                <if test="item.sharedComponents != null">#{item.sharedComponents},</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                <if test="item.toolingDrawings != null">#{item.toolingDrawings},</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                <if test="item.verifyFile != null">#{item.verifyFile},</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                <if test="item.procurementList != null">#{item.procurementList},</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                <if test="item.verificationConclusion != null">#{item.verificationConclusion},</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                <if test="item.changeTime != null">#{item.changeTime},</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                <if test="item.keyComponents != null">#{item.keyComponents},</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                <if test="item.maintenanceRecord != null">#{item.maintenanceRecord},</if>&ndash;&gt;-->
+<!--&lt;!&ndash;                <if test="item.moldOwnership != null">#{item.moldOwnership},</if>&ndash;&gt;-->
+<!--            </foreach>-->
+<!--        </trim>-->
+<!--    </insert>-->
+
+
     <insert id="insertToolingTable" parameterType="ToolingTable" useGeneratedKeys="true" keyProperty="id">
         insert into tooling_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
