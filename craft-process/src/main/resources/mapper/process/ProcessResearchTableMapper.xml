@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.mapper.ProcessResearchTableMapper">
+    
+    <resultMap type="ProcessResearchTable" id="ProcessResearchTableResult">
+        <result property="id"    column="id"    />
+        <result property="vehicleModel"    column="vehicle_model"    />
+        <result property="reportTitle"    column="report_title"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="researchDate"    column="research_date"    />
+    </resultMap>
+
+    <sql id="selectProcessResearchTableVo">
+        select id, vehicle_model, report_title, file_path, keyword, research_date from process_research_table
+    </sql>
+
+    <select id="selectProcessResearchTableList" parameterType="ProcessResearchTable" resultMap="ProcessResearchTableResult">
+        <include refid="selectProcessResearchTableVo"/>
+        <where>  
+            <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model like concat('%', #{vehicleModel}, '%')</if>
+            <if test="reportTitle != null  and reportTitle != ''"> and report_title like concat('%', #{reportTitle}, '%')</if>
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+            <if test="keyword != null  and keyword != ''"> and keyword like concat('%', #{keyword}, '%')</if>
+            <if test="researchDate != null "> and research_date = #{researchDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectProcessResearchTableById" parameterType="Long" resultMap="ProcessResearchTableResult">
+        <include refid="selectProcessResearchTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProcessResearchTable" parameterType="ProcessResearchTable" useGeneratedKeys="true" keyProperty="id">
+        insert into process_research_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vehicleModel != null">vehicle_model,</if>
+            <if test="reportTitle != null">report_title,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="keyword != null">keyword,</if>
+            <if test="researchDate != null">research_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vehicleModel != null">#{vehicleModel},</if>
+            <if test="reportTitle != null">#{reportTitle},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="keyword != null">#{keyword},</if>
+            <if test="researchDate != null">#{researchDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessResearchTable" parameterType="ProcessResearchTable">
+        update process_research_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vehicleModel != null">vehicle_model = #{vehicleModel},</if>
+            <if test="reportTitle != null">report_title = #{reportTitle},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="keyword != null">keyword = #{keyword},</if>
+            <if test="researchDate != null">research_date = #{researchDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessResearchTableById" parameterType="Long">
+        delete from process_research_table where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessResearchTableByIds" parameterType="String">
+        delete from process_research_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

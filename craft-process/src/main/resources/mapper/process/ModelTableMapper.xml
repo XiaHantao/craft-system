@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.mapper.ModelTableMapper">
+    
+    <resultMap type="ModelTable" id="ModelTableResult">
+        <result property="id"    column="id"    />
+        <result property="series"    column="series"    />
+        <result property="tonnage"    column="tonnage"    />
+        <result property="vehicleModel"    column="vehicle_model"    />
+        <result property="mainConfiguration"    column="main_configuration"    />
+        <result property="numberOfValvePlates"    column="number_of_valve_plates"    />
+        <result property="batteryCapacity"    column="battery_capacity"    />
+        <result property="tireSpecifications"    column="tire_specifications"    />
+        <result property="businessSupportPersonnel"    column="business_support_personnel"    />
+        <result property="developmentCategory"    column="development_category"    />
+        <result property="listingTime"    column="listing_time"    />
+    </resultMap>
+
+    <sql id="selectModelTableVo">
+        select id, series, tonnage, vehicle_model, main_configuration, number_of_valve_plates, battery_capacity, tire_specifications, business_support_personnel, development_category, listing_time from model_table
+    </sql>
+
+    <select id="selectModelTableList" parameterType="ModelTable" resultMap="ModelTableResult">
+        <include refid="selectModelTableVo"/>
+        <where>  
+            <if test="series != null  and series != ''"> and series like concat('%', #{series}, '%')</if>
+            <if test="tonnage != null  and tonnage != ''"> and tonnage like concat('%', #{tonnage}, '%')</if>
+            <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model like concat('%', #{vehicleModel}, '%')</if>
+            <if test="mainConfiguration != null  and mainConfiguration != ''"> and main_configuration like concat('%', #{mainConfiguration}, '%')</if>
+            <if test="numberOfValvePlates != null  and numberOfValvePlates != ''"> and number_of_valve_plates like concat('%', #{numberOfValvePlates}, '%')</if>
+            <if test="batteryCapacity != null  and batteryCapacity != ''"> and battery_capacity like concat('%', #{batteryCapacity}, '%')</if>
+            <if test="tireSpecifications != null  and tireSpecifications != ''"> and tire_specifications like concat('%', #{tireSpecifications}, '%')</if>
+            <if test="businessSupportPersonnel != null  and businessSupportPersonnel != ''"> and business_support_personnel like concat('%', #{businessSupportPersonnel}, '%')</if>
+            <if test="developmentCategory != null  and developmentCategory != ''"> and development_category like concat('%', #{developmentCategory}, '%')</if>
+            <if test="listingTime != null "> and listing_time = #{listingTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectModelTableById" parameterType="Long" resultMap="ModelTableResult">
+        <include refid="selectModelTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertModelTable" parameterType="ModelTable" useGeneratedKeys="true" keyProperty="id">
+        insert into model_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="series != null">series,</if>
+            <if test="tonnage != null">tonnage,</if>
+            <if test="vehicleModel != null">vehicle_model,</if>
+            <if test="mainConfiguration != null">main_configuration,</if>
+            <if test="numberOfValvePlates != null">number_of_valve_plates,</if>
+            <if test="batteryCapacity != null">battery_capacity,</if>
+            <if test="tireSpecifications != null">tire_specifications,</if>
+            <if test="businessSupportPersonnel != null">business_support_personnel,</if>
+            <if test="developmentCategory != null">development_category,</if>
+            <if test="listingTime != null">listing_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="series != null">#{series},</if>
+            <if test="tonnage != null">#{tonnage},</if>
+            <if test="vehicleModel != null">#{vehicleModel},</if>
+            <if test="mainConfiguration != null">#{mainConfiguration},</if>
+            <if test="numberOfValvePlates != null">#{numberOfValvePlates},</if>
+            <if test="batteryCapacity != null">#{batteryCapacity},</if>
+            <if test="tireSpecifications != null">#{tireSpecifications},</if>
+            <if test="businessSupportPersonnel != null">#{businessSupportPersonnel},</if>
+            <if test="developmentCategory != null">#{developmentCategory},</if>
+            <if test="listingTime != null">#{listingTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateModelTable" parameterType="ModelTable">
+        update model_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="series != null">series = #{series},</if>
+            <if test="tonnage != null">tonnage = #{tonnage},</if>
+            <if test="vehicleModel != null">vehicle_model = #{vehicleModel},</if>
+            <if test="mainConfiguration != null">main_configuration = #{mainConfiguration},</if>
+            <if test="numberOfValvePlates != null">number_of_valve_plates = #{numberOfValvePlates},</if>
+            <if test="batteryCapacity != null">battery_capacity = #{batteryCapacity},</if>
+            <if test="tireSpecifications != null">tire_specifications = #{tireSpecifications},</if>
+            <if test="businessSupportPersonnel != null">business_support_personnel = #{businessSupportPersonnel},</if>
+            <if test="developmentCategory != null">development_category = #{developmentCategory},</if>
+            <if test="listingTime != null">listing_time = #{listingTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteModelTableById" parameterType="Long">
+        delete from model_table where id = #{id}
+    </delete>
+
+    <delete id="deleteModelTableByIds" parameterType="String">
+        delete from model_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
