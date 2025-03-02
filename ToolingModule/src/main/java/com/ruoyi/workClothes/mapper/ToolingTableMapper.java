@@ -2,6 +2,8 @@ package com.ruoyi.workClothes.mapper;
 
 import java.util.List;
 import com.ruoyi.workClothes.domain.ToolingTable;
+import org.apache.ibatis.annotations.Param;
+
 
 /**
  * 工装详细Mapper接口
@@ -36,6 +38,14 @@ public interface ToolingTableMapper
     public int insertToolingTable(ToolingTable toolingTable);
 
     /**
+     * 批量导入工装详细
+     *
+     * @param toolingTableList 工装详细
+     * @return 结果
+     */
+    int insertBatch(List<ToolingTable> toolingTableList);
+
+    /**
      * 修改工装详细
      * 
      * @param toolingTable 工装详细
@@ -58,4 +68,30 @@ public interface ToolingTableMapper
      * @return 结果
      */
     public int deleteToolingTableByIds(Long[] ids);
+
+    /**
+     * 通过父编号查询工装详细
+     *
+     * @param Ownership 父编号
+     * @return 工装详细
+     */
+    public List<ToolingTable> selectToolingTableListbymoldOwnership(@Param("toolingTable") ToolingTable toolingTable, @Param("Ownership") String Ownership);
+
+    /**
+     * 查询共用工装详细列表
+     *
+     * @param toolingTable 工装详细
+     * @return 工装详细集合
+     */
+    public List<ToolingTable> selectshareToolingTableList(ToolingTable toolingTable);
+
+    /**
+     * 查询距离当前日期一个月内的工装详细列表
+     *
+     * @param toolingTable 工装详细
+     * @return 工装详细集合
+     */
+    public List<ToolingTable> selectUpcomingChangeTimeToolingTableList(ToolingTable toolingTable);
+
+
 }

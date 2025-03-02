@@ -9,6 +9,33 @@ export function listToolingDetail(query) {
   })
 }
 
+// 查询公用工装详细列表
+export function listshareToolingDetail(query) {
+  return request({
+    url: '/ToolingModule/toolingDetail/sharelist',
+    method: 'get',
+    params: query
+  })
+}
+
+// 新查询工装详细列表
+export function listToolingnewDetail(query , toolNumber) {
+  return request({
+    url: '/ToolingModule/toolingDetail/listNew',
+    method: 'get',
+    params: {query , toolNumber}
+  })
+}
+
+// 到期工装预警列表
+export function upcomingChangeTime(query) {
+  return request({
+    url: '/ToolingModule/toolingDetail/upcomingChangeTime',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询工装详细详细
 export function getToolingDetail(id) {
   return request({
@@ -41,4 +68,19 @@ export function delToolingDetail(id) {
     url: '/ToolingModule/toolingDetail/' + id,
     method: 'delete'
   })
+}
+
+// 上传文件的函数
+export function uploadFile(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  return request({
+    url: '/ToolingModule/toolingDetail/import',
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 }

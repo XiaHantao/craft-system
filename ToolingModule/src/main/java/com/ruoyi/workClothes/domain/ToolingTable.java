@@ -1,5 +1,6 @@
 package com.ruoyi.workClothes.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,9 +10,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 工装详细对象 tooling_table
- * 
+ *
  * @author ruoyi
- * @date 2025-01-20
+ * @date 2025-02-20
  */
 public class ToolingTable extends BaseEntity
 {
@@ -46,7 +47,7 @@ public class ToolingTable extends BaseEntity
 
     /** 总重量 */
     @Excel(name = "总重量")
-    private Long totalWeight;
+    private BigDecimal totalWeight;
 
     /** 原材料物料号 */
     @Excel(name = "原材料物料号")
@@ -117,228 +118,228 @@ public class ToolingTable extends BaseEntity
     @Excel(name = "模具所属")
     private String moldOwnership;
 
-    public void setId(Long id) 
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setSerialNumber(Long serialNumber) 
+    public void setSerialNumber(Long serialNumber)
     {
         this.serialNumber = serialNumber;
     }
 
-    public Long getSerialNumber() 
+    public Long getSerialNumber()
     {
         return serialNumber;
     }
-    public void setToolNumber(String toolNumber) 
+    public void setToolNumber(String toolNumber)
     {
         this.toolNumber = toolNumber;
     }
 
-    public String getToolNumber() 
+    public String getToolNumber()
     {
         return toolNumber;
     }
-    public void setToolName(String toolName) 
+    public void setToolName(String toolName)
     {
         this.toolName = toolName;
     }
 
-    public String getToolName() 
+    public String getToolName()
     {
         return toolName;
     }
-    public void setTotalQuantity(Long totalQuantity) 
+    public void setTotalQuantity(Long totalQuantity)
     {
         this.totalQuantity = totalQuantity;
     }
 
-    public Long getTotalQuantity() 
+    public Long getTotalQuantity()
     {
         return totalQuantity;
     }
-    public void setTextureOfMaterial(String textureOfMaterial) 
+    public void setTextureOfMaterial(String textureOfMaterial)
     {
         this.textureOfMaterial = textureOfMaterial;
     }
 
-    public String getTextureOfMaterial() 
+    public String getTextureOfMaterial()
     {
         return textureOfMaterial;
     }
-    public void setCuttingSize(String cuttingSize) 
+    public void setCuttingSize(String cuttingSize)
     {
         this.cuttingSize = cuttingSize;
     }
 
-    public String getCuttingSize() 
+    public String getCuttingSize()
     {
         return cuttingSize;
     }
-    public void setTotalWeight(Long totalWeight) 
+    public void setTotalWeight(BigDecimal totalWeight)
     {
         this.totalWeight = totalWeight;
     }
 
-    public Long getTotalWeight() 
+    public BigDecimal getTotalWeight()
     {
         return totalWeight;
     }
-    public void setRawMaterialNumber(String rawMaterialNumber) 
+    public void setRawMaterialNumber(String rawMaterialNumber)
     {
         this.rawMaterialNumber = rawMaterialNumber;
     }
 
-    public String getRawMaterialNumber() 
+    public String getRawMaterialNumber()
     {
         return rawMaterialNumber;
     }
-    public void setMaterialCutting(Long materialCutting) 
+    public void setMaterialCutting(Long materialCutting)
     {
         this.materialCutting = materialCutting;
     }
 
-    public Long getMaterialCutting() 
+    public Long getMaterialCutting()
     {
         return materialCutting;
     }
-    public void setMetalworking(Long metalworking) 
+    public void setMetalworking(Long metalworking)
     {
         this.metalworking = metalworking;
     }
 
-    public Long getMetalworking() 
+    public Long getMetalworking()
     {
         return metalworking;
     }
-    public void setAssemblyWelding(Long assemblyWelding) 
+    public void setAssemblyWelding(Long assemblyWelding)
     {
         this.assemblyWelding = assemblyWelding;
     }
 
-    public Long getAssemblyWelding() 
+    public Long getAssemblyWelding()
     {
         return assemblyWelding;
     }
-    public void setPainting(Long painting) 
+    public void setPainting(Long painting)
     {
         this.painting = painting;
     }
 
-    public Long getPainting() 
+    public Long getPainting()
     {
         return painting;
     }
-    public void setAssembling(Long assembling) 
+    public void setAssembling(Long assembling)
     {
         this.assembling = assembling;
     }
 
-    public Long getAssembling() 
+    public Long getAssembling()
     {
         return assembling;
     }
-    public void setRemarks(String remarks) 
+    public void setRemarks(String remarks)
     {
         this.remarks = remarks;
     }
 
-    public String getRemarks() 
+    public String getRemarks()
     {
         return remarks;
     }
-    public void setModelId(Long modelId) 
+    public void setModelId(Long modelId)
     {
         this.modelId = modelId;
     }
 
-    public Long getModelId() 
+    public Long getModelId()
     {
         return modelId;
     }
-    public void setSharedComponents(String sharedComponents) 
+    public void setSharedComponents(String sharedComponents)
     {
         this.sharedComponents = sharedComponents;
     }
 
-    public String getSharedComponents() 
+    public String getSharedComponents()
     {
         return sharedComponents;
     }
-    public void setToolingDrawings(String toolingDrawings) 
+    public void setToolingDrawings(String toolingDrawings)
     {
         this.toolingDrawings = toolingDrawings;
     }
 
-    public String getToolingDrawings() 
+    public String getToolingDrawings()
     {
         return toolingDrawings;
     }
-    public void setVerifyFile(String verifyFile) 
+    public void setVerifyFile(String verifyFile)
     {
         this.verifyFile = verifyFile;
     }
 
-    public String getVerifyFile() 
+    public String getVerifyFile()
     {
         return verifyFile;
     }
-    public void setProcurementList(String procurementList) 
+    public void setProcurementList(String procurementList)
     {
         this.procurementList = procurementList;
     }
 
-    public String getProcurementList() 
+    public String getProcurementList()
     {
         return procurementList;
     }
-    public void setVerificationConclusion(String verificationConclusion) 
+    public void setVerificationConclusion(String verificationConclusion)
     {
         this.verificationConclusion = verificationConclusion;
     }
 
-    public String getVerificationConclusion() 
+    public String getVerificationConclusion()
     {
         return verificationConclusion;
     }
-    public void setChangeTime(Date changeTime) 
+    public void setChangeTime(Date changeTime)
     {
         this.changeTime = changeTime;
     }
 
-    public Date getChangeTime() 
+    public Date getChangeTime()
     {
         return changeTime;
     }
-    public void setKeyComponents(String keyComponents) 
+    public void setKeyComponents(String keyComponents)
     {
         this.keyComponents = keyComponents;
     }
 
-    public String getKeyComponents() 
+    public String getKeyComponents()
     {
         return keyComponents;
     }
-    public void setMaintenanceRecord(String maintenanceRecord) 
+    public void setMaintenanceRecord(String maintenanceRecord)
     {
         this.maintenanceRecord = maintenanceRecord;
     }
 
-    public String getMaintenanceRecord() 
+    public String getMaintenanceRecord()
     {
         return maintenanceRecord;
     }
-    public void setMoldOwnership(String moldOwnership) 
+    public void setMoldOwnership(String moldOwnership)
     {
         this.moldOwnership = moldOwnership;
     }
 
-    public String getMoldOwnership() 
+    public String getMoldOwnership()
     {
         return moldOwnership;
     }
@@ -346,31 +347,33 @@ public class ToolingTable extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("serialNumber", getSerialNumber())
-            .append("toolNumber", getToolNumber())
-            .append("toolName", getToolName())
-            .append("totalQuantity", getTotalQuantity())
-            .append("textureOfMaterial", getTextureOfMaterial())
-            .append("cuttingSize", getCuttingSize())
-            .append("totalWeight", getTotalWeight())
-            .append("rawMaterialNumber", getRawMaterialNumber())
-            .append("materialCutting", getMaterialCutting())
-            .append("metalworking", getMetalworking())
-            .append("assemblyWelding", getAssemblyWelding())
-            .append("painting", getPainting())
-            .append("assembling", getAssembling())
-            .append("remarks", getRemarks())
-            .append("modelId", getModelId())
-            .append("sharedComponents", getSharedComponents())
-            .append("toolingDrawings", getToolingDrawings())
-            .append("verifyFile", getVerifyFile())
-            .append("procurementList", getProcurementList())
-            .append("verificationConclusion", getVerificationConclusion())
-            .append("changeTime", getChangeTime())
-            .append("keyComponents", getKeyComponents())
-            .append("maintenanceRecord", getMaintenanceRecord())
-            .append("moldOwnership", getMoldOwnership())
-            .toString();
+                .append("id", getId())
+                .append("serialNumber", getSerialNumber())
+                .append("toolNumber", getToolNumber())
+                .append("toolName", getToolName())
+                .append("totalQuantity", getTotalQuantity())
+                .append("textureOfMaterial", getTextureOfMaterial())
+                .append("cuttingSize", getCuttingSize())
+                .append("totalWeight", getTotalWeight())
+                .append("rawMaterialNumber", getRawMaterialNumber())
+                .append("materialCutting", getMaterialCutting())
+                .append("metalworking", getMetalworking())
+                .append("assemblyWelding", getAssemblyWelding())
+                .append("painting", getPainting())
+                .append("assembling", getAssembling())
+                .append("remarks", getRemarks())
+                .append("modelId", getModelId())
+                .append("sharedComponents", getSharedComponents())
+                .append("toolingDrawings", getToolingDrawings())
+                .append("verifyFile", getVerifyFile())
+                .append("procurementList", getProcurementList())
+                .append("verificationConclusion", getVerificationConclusion())
+                .append("changeTime", getChangeTime())
+                .append("keyComponents", getKeyComponents())
+                .append("maintenanceRecord", getMaintenanceRecord())
+                .append("moldOwnership", getMoldOwnership())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .toString();
     }
 }

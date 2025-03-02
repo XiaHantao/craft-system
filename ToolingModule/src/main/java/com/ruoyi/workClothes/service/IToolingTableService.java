@@ -2,6 +2,7 @@ package com.ruoyi.workClothes.service;
 
 import java.util.List;
 import com.ruoyi.workClothes.domain.ToolingTable;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 工装详细Service接口
@@ -26,6 +27,14 @@ public interface IToolingTableService
      * @return 工装详细集合
      */
     public List<ToolingTable> selectToolingTableList(ToolingTable toolingTable);
+
+    /**
+     * 导入工装详细
+     *
+     * @param file 工装表格
+     * @return 结果
+     */
+    public int loadImport(MultipartFile file);
 
     /**
      * 新增工装详细
@@ -58,4 +67,28 @@ public interface IToolingTableService
      * @return 结果
      */
     public int deleteToolingTableById(Long id);
+
+    /**
+     * 根据父编号查询工装详细列表
+     *
+     * @param toolingTable 工装详细
+     * @return 工装详细集合
+     */
+    public List<ToolingTable> selectToolingTableListbymoldOwnership(ToolingTable toolingTable , String moldOwnership);
+
+    /**
+     * 查询共用工装详细列表
+     *
+     * @param toolingTable 工装详细
+     * @return 工装详细集合
+     */
+    public List<ToolingTable> selectshareToolingTableList(ToolingTable toolingTable);
+
+    /**
+     * 查询距离当前日期一个月内的工装详细列表
+     *
+     * @param toolingTable 工装详细
+     * @return 工装详细集合
+     */
+    public List<ToolingTable> selectUpcomingChangeTimeToolingTableList(ToolingTable toolingTable);
 }

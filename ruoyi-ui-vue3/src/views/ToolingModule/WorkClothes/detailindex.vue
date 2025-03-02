@@ -1,83 +1,83 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="工具编号" prop="toolNumber">
-        <el-input
-          v-model="queryParams.toolNumber"
-          placeholder="请输入工具编号"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="工具名称" prop="toolName">
-        <el-input
-          v-model="queryParams.toolName"
-          placeholder="请输入工具名称"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+<!--    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">-->
+<!--      <el-form-item label="工具编号" prop="toolNumber">-->
+<!--        <el-input-->
+<!--            v-model="queryParams.toolNumber"-->
+<!--            placeholder="请输入工具编号"-->
+<!--            clearable-->
+<!--            @keyup.enter="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="工具名称" prop="toolName">-->
+<!--        <el-input-->
+<!--            v-model="queryParams.toolName"-->
+<!--            placeholder="请输入工具名称"-->
+<!--            clearable-->
+<!--            @keyup.enter="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item>-->
+<!--        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>-->
+<!--        <el-button icon="Refresh" @click="resetQuery">重置</el-button>-->
+<!--      </el-form-item>-->
+<!--    </el-form>-->
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['ToolingModule:toolingDetail:add']"
+            type="primary"
+            plain
+            icon="Plus"
+            @click="handleAdd"
+            v-hasPermi="['ToolingModule:toolingDetail:add']"
         >新增</el-button>
       </el-col>
-      <el-upload
-          class="upload-demo"
-          action=""
-          :http-request="handleUpload"
-          :show-file-list="true"
-          :limit="1"
-          accept=".xls,.xlsx"
-      >
-        <el-button type="primary">上传 Excel 文件</el-button>
-      </el-upload>
+<!--      <el-upload-->
+<!--          class="upload-demo"-->
+<!--          action=""-->
+<!--          :http-request="handleUpload"-->
+<!--          :show-file-list="true"-->
+<!--          :limit="1"-->
+<!--          accept=".xls,.xlsx"-->
+<!--      >-->
+<!--        <el-button type="primary">上传 Excel 文件</el-button>-->
+<!--      </el-upload>-->
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--            type="success"-->
+<!--            plain-->
+<!--            icon="Edit"-->
+<!--            :disabled="single"-->
+<!--            @click="handleUpdate"-->
+<!--            v-hasPermi="['ToolingModule:toolingDetail:edit']"-->
+<!--        >修改</el-button>-->
+<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['ToolingModule:toolingDetail:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['ToolingModule:toolingDetail:remove']"
+            type="danger"
+            plain
+            icon="Delete"
+            :disabled="multiple"
+            @click="handleDelete"
+            v-hasPermi="['ToolingModule:toolingDetail:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['ToolingModule:toolingDetail:export']"
-        >导出</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--            type="warning"-->
+<!--            plain-->
+<!--            icon="Download"-->
+<!--            @click="handleExport"-->
+<!--            v-hasPermi="['ToolingModule:toolingDetail:export']"-->
+<!--        >导出</el-button>-->
+<!--      </el-col>-->
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="toolingDetailList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="toolingDetailList" @selection-change="handleSelectionChange" :row-class-name="rowClassName">
       <el-table-column type="selection" width="55" align="center" />
-<!--      <el-table-column label="id" align="center" prop="id" />-->
+      <!--      <el-table-column label="id" align="center" prop="id" />-->
       <el-table-column label="序号" align="center" prop="serialNumber" />
       <el-table-column label="工具编号" align="center" prop="toolNumber" />
       <el-table-column label="工具名称" align="center" prop="toolName" />
@@ -92,8 +92,8 @@
       <el-table-column label="涂装" align="center" prop="painting" />
       <el-table-column label="装配" align="center" prop="assembling" />
       <el-table-column label="备注" align="center" prop="remarks" />
-<!--      <el-table-column label="车型id" align="center" prop="modelId" />-->
-<!--      <el-table-column label="是否为共用件" align="center" prop="sharedComponents" />-->
+      <!--      <el-table-column label="车型id" align="center" prop="modelId" />-->
+      <!--      <el-table-column label="是否为共用件" align="center" prop="sharedComponents" />-->
       <el-table-column label="工装图纸" align="center" prop="toolingDrawings">
         <template #default="{ row }">
             <span v-if="row.toolingDrawings">
@@ -105,17 +105,22 @@
             无图纸
           </span>
         </template>
-      </el-table-column><!--      <el-table-column label="验证文件" align="center" prop="verifyFile" />-->
-<!--      <el-table-column label="采购清单" align="center" prop="procurementList" />-->
-<!--      <el-table-column label="验证结论" align="center" prop="verificationConclusion" />-->
+      </el-table-column>
+      <!--      <el-table-column label="验证文件" align="center" prop="verifyFile" />-->
+      <!--      <el-table-column label="采购清单" align="center" prop="procurementList" />-->
+      <!--      <el-table-column label="验证结论" align="center" prop="verificationConclusion" />-->
       <el-table-column label="更换时间" align="center" prop="changeTime" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.changeTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否为关键部件" align="center" prop="keyComponents" />
-<!--      <el-table-column label="维修记录" align="center" prop="maintenanceRecord" />-->
-<!--      <el-table-column label="模具所属" align="center" prop="moldOwnership" />-->
+      <el-table-column label="是否为关键部件" align="center" prop="keyComponents">
+        <template #default="{ row }">
+          <span>{{ row.keyComponents == 1 ? '是' : '否' }}</span>
+        </template>
+      </el-table-column>
+      <!--      <el-table-column label="维修记录" align="center" prop="maintenanceRecord" />-->
+      <!--      <el-table-column label="模具所属" align="center" prop="moldOwnership" />-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['ToolingModule:toolingDetail:edit']">修改</el-button>
@@ -123,21 +128,21 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
-      v-show="total>0"
-      :total="total"
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
+        v-show="total>0"
+        :total="total"
+        v-model:page="queryParams.pageNum"
+        v-model:limit="queryParams.pageSize"
+        @pagination="getList"
     />
 
     <!-- 添加或修改工装详细对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="toolingDetailRef" :model="form" :rules="rules" label-width="110px">
-<!--        <el-form-item label="序号" prop="serialNumber">-->
-<!--          <el-input v-model="form.serialNumber" placeholder="请输入序号" />-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="序号" prop="serialNumber">-->
+        <!--          <el-input v-model="form.serialNumber" placeholder="请输入序号" />-->
+        <!--        </el-form-item>-->
         <el-form-item label="工具编号" prop="toolNumber">
           <el-input v-model="form.toolNumber" placeholder="请输入工具编号" />
         </el-form-item>
@@ -177,9 +182,9 @@
         <el-form-item label="备注" prop="remarks">
           <el-input v-model="form.remarks" placeholder="请输入备注" />
         </el-form-item>
-<!--        <el-form-item label="车型" prop="modelId">-->
-<!--          <el-input v-model="form.modelId" placeholder="请输入车型" />-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="车型" prop="modelId">-->
+        <!--          <el-input v-model="form.modelId" placeholder="请输入车型" />-->
+        <!--        </el-form-item>-->
         <el-form-item label="是否为共用件" prop="sharedComponents">
           <el-radio-group v-model="form.sharedComponents">
             <el-radio label="1">是</el-radio>
@@ -189,21 +194,21 @@
         <el-form-item label="工装图纸" prop="toolingDrawings">
           <file-upload v-model="form.toolingDrawings"/>
         </el-form-item>
-<!--        <el-form-item label="验证文件" prop="verifyFile">-->
-<!--          <file-upload v-model="form.verifyFile"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="采购清单" prop="procurementList">-->
-<!--          <el-input v-model="form.procurementList" placeholder="请输入采购清单" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="验证结论" prop="verificationConclusion">-->
-<!--          <el-input v-model="form.verificationConclusion" placeholder="请输入验证结论" />-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="验证文件" prop="verifyFile">-->
+        <!--          <file-upload v-model="form.verifyFile"/>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="采购清单" prop="procurementList">-->
+        <!--          <el-input v-model="form.procurementList" placeholder="请输入采购清单" />-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="验证结论" prop="verificationConclusion">-->
+        <!--          <el-input v-model="form.verificationConclusion" placeholder="请输入验证结论" />-->
+        <!--        </el-form-item>-->
         <el-form-item label="更换时间" prop="changeTime">
           <el-date-picker clearable
-            v-model="form.changeTime"
-            type="date"
-            value-format="YYYY-MM-DD"
-            placeholder="请选择更换时间">
+                          v-model="form.changeTime"
+                          type="date"
+                          value-format="YYYY-MM-DD"
+                          placeholder="请选择更换时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="是否为关键部件" prop="keyComponents">
@@ -212,15 +217,15 @@
             <el-radio label="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
-<!--        <el-form-item label="是否关键部件" prop="keyComponents">-->
-<!--          <el-input v-model="form.keyComponents" placeholder="请输入是否为关键部件" />-->
+        <!--        <el-form-item label="是否关键部件" prop="keyComponents">-->
+        <!--          <el-input v-model="form.keyComponents" placeholder="请输入是否为关键部件" />-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="维修记录" prop="maintenanceRecord">-->
+        <!--          <el-input v-model="form.maintenanceRecord" placeholder="请输入维修记录" />-->
+        <!--        </el-form-item>-->
+<!--        <el-form-item label="模具所属" prop="moldOwnership">-->
+<!--          <el-input v-model="form.moldOwnership" placeholder="请输入模具所属" />-->
 <!--        </el-form-item>-->
-<!--        <el-form-item label="维修记录" prop="maintenanceRecord">-->
-<!--          <el-input v-model="form.maintenanceRecord" placeholder="请输入维修记录" />-->
-<!--        </el-form-item>-->
-        <el-form-item label="模具所属" prop="moldOwnership">
-          <el-input v-model="form.moldOwnership" placeholder="请输入模具所属" />
-        </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -232,14 +237,22 @@
   </div>
 </template>
 
+<style>
+/* 定义高亮样式 */
+.el-table .highlight-row {
+  background: oldlace;
+}
+</style>
+
 <script setup name="ToolingDetail">
 import {
   listToolingDetail,
   getToolingDetail,
   delToolingDetail,
   addToolingDetail,
-  updateToolingDetail, uploadFile,
+  updateToolingDetail, uploadFile, listToolingnewDetail,
 } from "@/api/ToolingModule/toolingDetail";
+import { useRoute } from 'vue-router';
 
 
 const { proxy } = getCurrentInstance();
@@ -254,6 +267,14 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
+
+const route = useRoute();
+
+
+
+
+
+
 
 const data = reactive({
   form: {},
@@ -291,20 +312,13 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-
-//预览文件
-function previewFile(fileUrl) {
-  const baseUrl = import.meta.env.VITE_APP_BASE_API; // 或者你可以直接赋值为基础文件路径
-  const fullUrl = `${baseUrl}${fileUrl}`; // 拼接文件的完整 URL 地址
-  console.log('处理中');
-  window.open(fullUrl, '_blank');
-}
-
-
 /** 查询工装详细列表 */
 function getList() {
-  loading.value = true;
-  listToolingDetail(queryParams.value).then(response => {
+  const toolnumber = route.query.Number;
+  // console.log('=====' ,toolnumber);
+
+  // 获取查询参数
+  listToolingnewDetail(queryParams.value ,toolnumber).then(response => {
     toolingDetailList.value = response.rows;
     total.value = Number(response.total);
     loading.value = false;
@@ -349,6 +363,22 @@ function reset() {
   proxy.resetForm("toolingDetailRef");
 }
 
+//预览文件
+function previewFile(fileUrl) {
+  const baseUrl = import.meta.env.VITE_APP_BASE_API; // 或者你可以直接赋值为基础文件路径
+  const fullUrl = `${baseUrl}${fileUrl}`; // 拼接文件的完整 URL 地址
+  console.log('处理中');
+  window.open(fullUrl, '_blank');
+}
+
+// 为每一行动态添加class
+// 使用 function 定义函数
+function rowClassName({ row }) {
+  console.log(row.keyComponents);
+  if (row.keyComponents == 1 )
+  return 'highlight-row';
+}
+
 /** 搜索按钮操作 */
 function handleQuery() {
   queryParams.value.pageNum = 1;
@@ -368,8 +398,10 @@ function handleSelectionChange(selection) {
   multiple.value = !selection.length;
 }
 
+
 /** 新增按钮操作 */
 function handleAdd() {
+  loading.value = true;
   reset();
   open.value = true;
   title.value = "添加工装详细";
@@ -377,6 +409,8 @@ function handleAdd() {
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
+  // const number = route.query.Number;
+  // console.log("======", number);  // 输出传递的 Number 参数
   reset();
   const _id = row.id || ids.value
   getToolingDetail(_id).then(response => {
@@ -397,6 +431,7 @@ function submitForm() {
           getList();
         });
       } else {
+        form.value.moldOwnership = route.query.Number ;
         addToolingDetail(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
@@ -443,3 +478,6 @@ const handleUpload = async (file) => {
 
 getList();
 </script>
+
+
+
