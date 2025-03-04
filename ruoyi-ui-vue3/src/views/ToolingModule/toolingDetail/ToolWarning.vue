@@ -78,12 +78,7 @@
     <el-table v-loading="loading" :data="toolingDetailList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <!--      <el-table-column label="id" align="center" prop="id" />-->
-<!--      <el-table-column label="序号" align="center" prop="serialNumber" />-->
-      <el-table-column label="序号" align="center">
-        <template #default="{ $index }">
-          <span>{{ ($index + 1) + (queryParams.pageNum - 1) * queryParams.pageSize }}</span> <!-- 根据当前页计算序号 -->
-        </template>
-      </el-table-column>
+      <el-table-column label="序号" align="center" prop="serialNumber" />
       <el-table-column label="工具编号" align="center" prop="toolNumber" />
       <el-table-column label="工具名称" align="center" prop="toolName" />
       <el-table-column label="合计数量" align="center" prop="totalQuantity" />

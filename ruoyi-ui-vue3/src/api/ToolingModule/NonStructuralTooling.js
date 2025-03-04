@@ -27,14 +27,6 @@ export function listNonStructuralTooling2(query) {
   })
 }
 
-// 补充非结构工装工艺文件及物料清单
-export function updateNonStructuralfile(data) {
-  return request({
-    url: '/ToolingModule/NonStructuralTooling/fileupdate',
-    method: 'put',
-    data: data
-  })
-}
 // 查询非结构工装台账详细
 export function getNonStructuralTooling(id) {
   return request({

@@ -1,8 +1,6 @@
 package com.ruoyi.workClothes.service;
 
 import java.util.List;
-import java.util.Map;
-
 import com.ruoyi.workClothes.domain.NonstructuraltoolingTable;
 
 /**
@@ -76,6 +74,4 @@ public interface INonstructuraltoolingTableService
      * @return 结果
      */
     public int deleteNonstructuraltoolingTableById(Long id);
-
-    int updateWorkClothesfile(Map<String, Object> fileform);
 }

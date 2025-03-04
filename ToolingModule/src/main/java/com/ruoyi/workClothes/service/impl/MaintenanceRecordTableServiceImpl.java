@@ -3,7 +3,6 @@ package com.ruoyi.workClothes.service.impl;
 import java.util.Collections;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.workClothes.mapper.MaintenanceRecordTableMapper;
@@ -61,9 +60,6 @@ public class MaintenanceRecordTableServiceImpl implements IMaintenanceRecordTabl
     public int insertMaintenanceRecordTable(MaintenanceRecordTable maintenanceRecordTable)
     {
         maintenanceRecordTable.setCreateTime(DateUtils.getNowDate());
-        String createAccount = SecurityUtils.getUsername();
-//        System.out.println("createAccount:"+createAccount);
-        maintenanceRecordTable.setCreateBy(createAccount);
         return maintenanceRecordTableMapper.insertMaintenanceRecordTable(maintenanceRecordTable);
     }
 

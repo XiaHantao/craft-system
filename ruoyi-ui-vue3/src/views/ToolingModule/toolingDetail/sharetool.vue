@@ -78,12 +78,7 @@
     <el-table v-loading="loading" :data="toolingDetailList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <!--      <el-table-column label="id" align="center" prop="id" />-->
-<!--      <el-table-column label="序号" align="center" prop="serialNumber" />-->
-      <el-table-column label="序号" align="center">
-        <template #default="{ $index }">
-          <span>{{ ($index + 1) + (queryParams.pageNum - 1) * queryParams.pageSize }}</span> <!-- 根据当前页计算序号 -->
-        </template>
-      </el-table-column>
+      <el-table-column label="序号" align="center" prop="serialNumber" />
       <el-table-column label="工具编号" align="center" prop="toolNumber" />
       <el-table-column label="工具名称" align="center" prop="toolName" />
       <el-table-column label="合计数量" align="center" prop="totalQuantity" />
@@ -98,7 +93,7 @@
       <el-table-column label="装配" align="center" prop="assembling" />
       <el-table-column label="备注" align="center" prop="remarks" />
       <!--      <el-table-column label="车型id" align="center" prop="modelId" />-->
-<!--            <el-table-column label="是否为共用件" align="center" prop="sharedComponents" />-->
+            <el-table-column label="是否为共用件" align="center" prop="sharedComponents" />
       <el-table-column label="工装图纸" align="center" prop="toolingDrawings">
         <template #default="{ row }">
             <span v-if="row.toolingDrawings">
@@ -119,7 +114,7 @@
           <span>{{ parseTime(scope.row.changeTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-<!--      <el-table-column label="是否为关键部件" align="center" prop="keyComponents" />-->
+      <el-table-column label="是否为关键部件" align="center" prop="keyComponents" />
       <!--      <el-table-column label="维修记录" align="center" prop="maintenanceRecord" />-->
       <!--      <el-table-column label="模具所属" align="center" prop="moldOwnership" />-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
