@@ -9,7 +9,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 工艺定额值对象 process_quota_value_table
  * 
  * @author Kanna Bush
- * @date 2025-02-28
+ * @date 2025-03-04
  */
 public class ProcessQuotaValueTable extends BaseEntity
 {

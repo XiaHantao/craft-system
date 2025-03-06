@@ -44,6 +44,18 @@ public class ProcessQuotaTableServiceImpl implements IProcessQuotaTableService
     }
 
     /**
+     * 查询当前车型关联的工艺定额列表
+     *
+     * @param vehicleModel 工艺定额
+     * @return 工艺定额
+     */
+    @Override
+    public List<ProcessQuotaTable> selectRelatedList(String vehicleModel)
+    {
+        return processQuotaTableMapper.selectRelatedList(vehicleModel);
+    }
+
+    /**
      * 新增工艺定额
      * 
      * @param processQuotaTable 工艺定额

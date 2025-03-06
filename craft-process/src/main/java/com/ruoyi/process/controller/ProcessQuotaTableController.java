@@ -47,6 +47,17 @@ public class ProcessQuotaTableController extends BaseController
     }
 
     /**
+     * 查询当前车型相关联的列表
+     */
+    @PreAuthorize("@ss.hasPermi('process:processQuotaTable:list')")
+    @GetMapping(value = "/related/{vehicleModel}")
+    public TableDataInfo listRelated(@PathVariable("vehicleModel") String vehicleModel)
+    {
+        List<ProcessQuotaTable> list = processQuotaTableService.selectRelatedList(vehicleModel);
+        return getDataTable(list);
+    }
+
+    /**
      * 导出工艺定额列表
      */
     @PreAuthorize("@ss.hasPermi('process:processQuotaTable:export')")

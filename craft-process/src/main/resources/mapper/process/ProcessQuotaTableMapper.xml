@@ -17,10 +17,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, step, vehicle_model, file_path, upload_person, upload_time from process_quota_table
     </sql>
 
-    <select id="selectProcessQuotaTableList" parameterType="ProcessQuotaTable" resultMap="ProcessQuotaTableResult">
+    <select id="selectRelatedList" parameterType="ProcessQuotaTable" resultMap="ProcessQuotaTableResult">
         <include refid="selectProcessQuotaTableVo"/>
         <where>  
-            <if test="step != null "> and step = #{step}</if>
+             step is not null
+             and vehicle_model = #{vehicleModel}
+        </where>
+    </select>
+
+    <select id="selectProcessQuotaTableList" parameterType="ProcessQuotaTable" resultMap="ProcessQuotaTableResult">
+        <include refid="selectProcessQuotaTableVo"/>
+        <where>
+            <if test="step == null "> and step is null</if>
             <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model like concat('%', #{vehicleModel}, '%')</if>
             <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
             <if test="uploadPerson != null  and uploadPerson != ''"> and upload_person like concat('%', #{uploadPerson}, '%')</if>

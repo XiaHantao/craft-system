@@ -9,6 +9,14 @@ export function listProcessQuotaTable(query) {
   })
 }
 
+// 查询当前车型关联的工艺定额列表
+export function listRelatedProcessQuotaTable(vehicleModel) {
+  return request({
+    url: '/process/processQuotaTable/related/' + vehicleModel,
+    method: 'get'
+  })
+}
+
 // 查询工艺定额详细
 export function getProcessQuotaTable(id) {
   return request({

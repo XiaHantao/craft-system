@@ -21,11 +21,19 @@ public interface IProcessQuotaTableService
 
     /**
      * 查询工艺定额列表
-     * 
+     *
      * @param processQuotaTable 工艺定额
      * @return 工艺定额集合
      */
     public List<ProcessQuotaTable> selectProcessQuotaTableList(ProcessQuotaTable processQuotaTable);
+
+    /**
+     * 查询当前车型关联的工艺定额列表
+     *
+     * @param vehicleModel 工艺定额
+     * @return 工艺定额集合
+     */
+    public List<ProcessQuotaTable> selectRelatedList(String vehicleModel);
 
     /**
      * 新增工艺定额
