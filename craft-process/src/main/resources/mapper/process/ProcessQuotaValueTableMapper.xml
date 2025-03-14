@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.mapper.ProcessQuotaValueTableMapper">
+    
+    <resultMap type="ProcessQuotaValueTable" id="ProcessQuotaValueTableResult">
+        <result property="id"    column="id"    />
+        <result property="vehicleModel"    column="vehicle_model"    />
+        <result property="step"    column="step"    />
+        <result property="quotaName"    column="quota_name"    />
+        <result property="quotaValue"    column="quota_value"    />
+    </resultMap>
+
+    <sql id="selectProcessQuotaValueTableVo">
+        select id, vehicle_model, step, quota_name, quota_value from process_quota_value_table
+    </sql>
+
+    <select id="selectProcessQuotaValueTableList" parameterType="ProcessQuotaValueTable" resultMap="ProcessQuotaValueTableResult">
+        <include refid="selectProcessQuotaValueTableVo"/>
+        <where>  
+            <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model like concat('%', #{vehicleModel}, '%')</if>
+            <if test="step != null "> and step = #{step}</if>
+            <if test="quotaName != null  and quotaName != ''"> and quota_name like concat('%', #{quotaName}, '%')</if>
+            <if test="quotaValue != null  and quotaValue != ''"> and quota_value = #{quotaValue}</if>
+        </where>
+    </select>
+    
+    <select id="selectProcessQuotaValueTableById" parameterType="Long" resultMap="ProcessQuotaValueTableResult">
+        <include refid="selectProcessQuotaValueTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProcessQuotaValueTable" parameterType="ProcessQuotaValueTable" useGeneratedKeys="true" keyProperty="id">
+        insert into process_quota_value_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vehicleModel != null">vehicle_model,</if>
+            <if test="step != null">step,</if>
+            <if test="quotaName != null">quota_name,</if>
+            <if test="quotaValue != null">quota_value,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vehicleModel != null">#{vehicleModel},</if>
+            <if test="step != null">#{step},</if>
+            <if test="quotaName != null">#{quotaName},</if>
+            <if test="quotaValue != null">#{quotaValue},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessQuotaValueTable" parameterType="ProcessQuotaValueTable">
+        update process_quota_value_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vehicleModel != null">vehicle_model = #{vehicleModel},</if>
+            <if test="step != null">step = #{step},</if>
+            <if test="quotaName != null">quota_name = #{quotaName},</if>
+            <if test="quotaValue != null">quota_value = #{quotaValue},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessQuotaValueTableById" parameterType="Long">
+        delete from process_quota_value_table where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessQuotaValueTableByIds" parameterType="String">
+        delete from process_quota_value_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

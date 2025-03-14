@@ -36,8 +36,6 @@
     <dependencyManagement>
         <dependencies>
 
-
-
             <!-- SpringBoot的依赖配置-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -172,6 +170,18 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!-- 工艺管理模块-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>craft-process</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ToolingModule</artifactId>
+                <version>3.8.5</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -183,6 +193,8 @@
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
         <module>ruoyi-NewProducts</module>
+        <module>ToolingModule</module>
+        <module>craft-process</module>
     </modules>
     <packaging>pom</packaging>
 
