@@ -8,11 +8,12 @@
       <template v-if="appStore.device !== 'mobile'">
         <header-search id="header-search" class="right-menu-item" />
 
-        <el-tooltip :content="noticeContent" effect="dark" placement="bottom">
-          <el-badge :value="noticeCount" class="right-menu-item hover-effect" :class="{'badge-custom':noticeCount>0}" >
-            <el-icon @click="toNoticePage"><Message /></el-icon>
-          </el-badge>
-        </el-tooltip>
+<!--        <el-tooltip :content="noticeContent" effect="dark" placement="bottom">-->
+<!--          <el-badge :value="noticeCount" class="right-menu-item hover-effect" :class="{'badge-custom':noticeCount>0}" >-->
+<!--            <el-icon @click="toNoticePage"><Message /></el-icon>-->
+<!--          </el-badge>-->
+<!--        </el-tooltip>-->
+
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
