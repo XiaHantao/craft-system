@@ -82,24 +82,24 @@ public class ProcessQuotaTableServiceImpl implements IProcessQuotaTableService
     /**
      * 批量删除工艺定额
      * 
-     * @param ids 需要删除的工艺定额主键
+     * @param vehicleModels 需要删除的工艺定额主键
      * @return 结果
      */
     @Override
-    public int deleteProcessQuotaTableByIds(Long[] ids)
+    public int deleteProcessQuotaTableByIds(String[] vehicleModels)
     {
-        return processQuotaTableMapper.deleteProcessQuotaTableByIds(ids);
+        return processQuotaTableMapper.deleteProcessQuotaTableByIds(vehicleModels);
     }
 
     /**
      * 删除工艺定额信息
      * 
-     * @param id 工艺定额主键
+     * @param vehicleModel 工艺定额主键
      * @return 结果
      */
     @Override
-    public int deleteProcessQuotaTableById(Long id)
+    public int deleteProcessQuotaTableById(String vehicleModel)
     {
-        return processQuotaTableMapper.deleteProcessQuotaTableById(id);
+        return processQuotaTableMapper.deleteProcessQuotaTableById(vehicleModel);
     }
 }

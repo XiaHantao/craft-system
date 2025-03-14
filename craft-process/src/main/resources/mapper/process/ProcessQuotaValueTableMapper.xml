@@ -63,9 +63,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteProcessQuotaValueTableByIds" parameterType="String">
-        delete from process_quota_value_table where id in 
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
+        delete from process_quota_value_table where vehicle_model in
+        <foreach item="vehicleModel" collection="array" open="(" separator="," close=")">
+            #{vehicleModel}
         </foreach>
     </delete>
 </mapper>

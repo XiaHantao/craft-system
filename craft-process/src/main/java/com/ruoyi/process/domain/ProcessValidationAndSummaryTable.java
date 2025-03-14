@@ -1,5 +1,8 @@
 package com.ruoyi.process.domain;
 
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -9,14 +12,19 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 工艺验证与总结对象 process_validation_and_summary_table
  * 
  * @author Kanna Bush
- * @date 2025-01-20
+ * @date 2025-03-10
  */
+@Data
 public class ProcessValidationAndSummaryTable extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** id */
     private Long id;
+
+    /** 车型 */
+    @Excel(name = "车型")
+    private String vehicleModel;
 
     /** 验证报告名称 */
     @Excel(name = "验证报告名称")
@@ -26,13 +34,15 @@ public class ProcessValidationAndSummaryTable extends BaseEntity
     @Excel(name = "验证报告路径")
     private String verificationReportPath;
 
-    /** 改进清单名称 */
-    @Excel(name = "改进清单名称")
-    private String improvementChecklistName;
+    /** 验证报告上传人 */
+    @Excel(name = "验证报告上传人")
+    private String verificationReportUploadPerson;
 
-    /** 改进清单路径 */
-    @Excel(name = "改进清单路径")
-    private String improvementChecklistPath;
+    /** 验证报告上传时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "验证报告上传时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date verificationReportUploadTime;
+
 
     /** 改进报告名称 */
     @Excel(name = "改进报告名称")
@@ -42,9 +52,14 @@ public class ProcessValidationAndSummaryTable extends BaseEntity
     @Excel(name = "改进报告路径")
     private String improvementReportPath;
 
-    /** 改进状态 */
-    @Excel(name = "改进状态")
-    private String improvementStatus;
+    /** 改进报告上传人 */
+    @Excel(name = "改进报告上传人")
+    private String improvementReportUploadPerson;
+
+    /** 改进报告上传时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "改进报告上传时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date improvementReportUploadTime;
 
     /** 总结报告名称 */
     @Excel(name = "总结报告名称")
@@ -54,110 +69,22 @@ public class ProcessValidationAndSummaryTable extends BaseEntity
     @Excel(name = "总结报告路径")
     private String summaryReportPath;
 
-    public void setId(Long id) 
-    {
-        this.id = id;
-    }
+    /** 总结报告上传人 */
+    @Excel(name = "总结报告上传人")
+    private String summaryReportUploadPerson;
 
-    public Long getId() 
-    {
-        return id;
-    }
-    public void setVerificationReportName(String verificationReportName) 
-    {
-        this.verificationReportName = verificationReportName;
-    }
+    /** 总结报告上传时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "总结报告上传时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date summaryReportUploadTime;
 
-    public String getVerificationReportName() 
-    {
-        return verificationReportName;
-    }
-    public void setVerificationReportPath(String verificationReportPath) 
-    {
-        this.verificationReportPath = verificationReportPath;
-    }
+    /** 状态 */
+    @Excel(name = "状态")
+    private String status;
 
-    public String getVerificationReportPath() 
-    {
-        return verificationReportPath;
-    }
-    public void setImprovementChecklistName(String improvementChecklistName) 
-    {
-        this.improvementChecklistName = improvementChecklistName;
-    }
+    /** 标记(历史版本为0) */
+    @Excel(name = "标记(历史版本为0)")
+    private Long newFlag;
 
-    public String getImprovementChecklistName() 
-    {
-        return improvementChecklistName;
-    }
-    public void setImprovementChecklistPath(String improvementChecklistPath) 
-    {
-        this.improvementChecklistPath = improvementChecklistPath;
-    }
 
-    public String getImprovementChecklistPath() 
-    {
-        return improvementChecklistPath;
-    }
-    public void setImprovementReportName(String improvementReportName) 
-    {
-        this.improvementReportName = improvementReportName;
-    }
-
-    public String getImprovementReportName() 
-    {
-        return improvementReportName;
-    }
-    public void setImprovementReportPath(String improvementReportPath) 
-    {
-        this.improvementReportPath = improvementReportPath;
-    }
-
-    public String getImprovementReportPath() 
-    {
-        return improvementReportPath;
-    }
-    public void setImprovementStatus(String improvementStatus) 
-    {
-        this.improvementStatus = improvementStatus;
-    }
-
-    public String getImprovementStatus() 
-    {
-        return improvementStatus;
-    }
-    public void setSummaryReportName(String summaryReportName) 
-    {
-        this.summaryReportName = summaryReportName;
-    }
-
-    public String getSummaryReportName() 
-    {
-        return summaryReportName;
-    }
-    public void setSummaryReportPath(String summaryReportPath) 
-    {
-        this.summaryReportPath = summaryReportPath;
-    }
-
-    public String getSummaryReportPath() 
-    {
-        return summaryReportPath;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("verificationReportName", getVerificationReportName())
-            .append("verificationReportPath", getVerificationReportPath())
-            .append("improvementChecklistName", getImprovementChecklistName())
-            .append("improvementChecklistPath", getImprovementChecklistPath())
-            .append("improvementReportName", getImprovementReportName())
-            .append("improvementReportPath", getImprovementReportPath())
-            .append("improvementStatus", getImprovementStatus())
-            .append("summaryReportName", getSummaryReportName())
-            .append("summaryReportPath", getSummaryReportPath())
-            .toString();
-    }
 }

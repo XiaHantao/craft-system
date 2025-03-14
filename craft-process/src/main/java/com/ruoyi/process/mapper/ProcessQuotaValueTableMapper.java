@@ -54,8 +54,8 @@ public interface ProcessQuotaValueTableMapper
     /**
      * 批量删除工艺定额值
      * 
-     * @param ids 需要删除的数据主键集合
+     * @param vehicleModels 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteProcessQuotaValueTableByIds(Long[] ids);
+    public int deleteProcessQuotaValueTableByIds(String[] vehicleModels);
 }

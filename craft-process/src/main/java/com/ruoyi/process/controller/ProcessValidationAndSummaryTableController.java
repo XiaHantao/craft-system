@@ -25,10 +25,10 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 工艺验证与总结Controller
  * 
  * @author Kanna Bush
- * @date 2025-01-20
+ * @date 2025-03-10
  */
 @RestController
-@RequestMapping("/process/ProcessValidationAndSummary")
+@RequestMapping("/process/processValidationAndSummary")
 public class ProcessValidationAndSummaryTableController extends BaseController
 {
     @Autowired
@@ -37,7 +37,7 @@ public class ProcessValidationAndSummaryTableController extends BaseController
     /**
      * 查询工艺验证与总结列表
      */
-    @PreAuthorize("@ss.hasPermi('process:ProcessValidationAndSummary:list')")
+    @PreAuthorize("@ss.hasPermi('process:processValidationAndSummary:list')")
     @GetMapping("/list")
     public TableDataInfo list(ProcessValidationAndSummaryTable processValidationAndSummaryTable)
     {
@@ -47,9 +47,21 @@ public class ProcessValidationAndSummaryTableController extends BaseController
     }
 
     /**
+     * 查询历史记录
+     */
+    @PreAuthorize("@ss.hasPermi('process:processValidationAndSummary:list')")
+    @GetMapping("/listHistory")
+    public TableDataInfo listHistory(ProcessValidationAndSummaryTable processValidationAndSummaryTable)
+    {
+        startPage();
+        List<ProcessValidationAndSummaryTable> list = processValidationAndSummaryTableService.selectHistoryList(processValidationAndSummaryTable);
+        return getDataTable(list);
+    }
+
+    /**
      * 导出工艺验证与总结列表
      */
-    @PreAuthorize("@ss.hasPermi('process:ProcessValidationAndSummary:export')")
+    @PreAuthorize("@ss.hasPermi('process:processValidationAndSummary:export')")
     @Log(title = "工艺验证与总结", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, ProcessValidationAndSummaryTable processValidationAndSummaryTable)
@@ -62,7 +74,7 @@ public class ProcessValidationAndSummaryTableController extends BaseController
     /**
      * 获取工艺验证与总结详细信息
      */
-    @PreAuthorize("@ss.hasPermi('process:ProcessValidationAndSummary:query')")
+    @PreAuthorize("@ss.hasPermi('process:processValidationAndSummary:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -72,7 +84,7 @@ public class ProcessValidationAndSummaryTableController extends BaseController
     /**
      * 新增工艺验证与总结
      */
-    @PreAuthorize("@ss.hasPermi('process:ProcessValidationAndSummary:add')")
+    @PreAuthorize("@ss.hasPermi('process:processValidationAndSummary:add')")
     @Log(title = "工艺验证与总结", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ProcessValidationAndSummaryTable processValidationAndSummaryTable)
@@ -83,7 +95,7 @@ public class ProcessValidationAndSummaryTableController extends BaseController
     /**
      * 修改工艺验证与总结
      */
-    @PreAuthorize("@ss.hasPermi('process:ProcessValidationAndSummary:edit')")
+    @PreAuthorize("@ss.hasPermi('process:processValidationAndSummary:edit')")
     @Log(title = "工艺验证与总结", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ProcessValidationAndSummaryTable processValidationAndSummaryTable)
@@ -94,7 +106,7 @@ public class ProcessValidationAndSummaryTableController extends BaseController
     /**
      * 删除工艺验证与总结
      */
-    @PreAuthorize("@ss.hasPermi('process:ProcessValidationAndSummary:remove')")
+    @PreAuthorize("@ss.hasPermi('process:processValidationAndSummary:remove')")
     @Log(title = "工艺验证与总结", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

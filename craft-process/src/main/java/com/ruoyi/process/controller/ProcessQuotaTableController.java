@@ -107,9 +107,9 @@ public class ProcessQuotaTableController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('process:processQuotaTable:remove')")
     @Log(title = "工艺定额", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+	@DeleteMapping("/{vehicleModels}")
+    public AjaxResult remove(@PathVariable String[] vehicleModels)
     {
-        return toAjax(processQuotaTableService.deleteProcessQuotaTableByIds(ids));
+        return toAjax(processQuotaTableService.deleteProcessQuotaTableByIds(vehicleModels));
     }
 }

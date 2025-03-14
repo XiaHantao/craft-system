@@ -11,7 +11,7 @@ import com.ruoyi.process.service.IProcessValidationAndSummaryTableService;
  * 工艺验证与总结Service业务层处理
  * 
  * @author Kanna Bush
- * @date 2025-01-20
+ * @date 2025-03-10
  */
 @Service
 public class ProcessValidationAndSummaryTableServiceImpl implements IProcessValidationAndSummaryTableService 
@@ -41,6 +41,18 @@ public class ProcessValidationAndSummaryTableServiceImpl implements IProcessVali
     public List<ProcessValidationAndSummaryTable> selectProcessValidationAndSummaryTableList(ProcessValidationAndSummaryTable processValidationAndSummaryTable)
     {
         return processValidationAndSummaryTableMapper.selectProcessValidationAndSummaryTableList(processValidationAndSummaryTable);
+    }
+
+    /**
+     * 查询历史记录列表
+     *
+     * @param processValidationAndSummaryTable 工艺验证与总结
+     * @return 工艺验证与总结
+     */
+    @Override
+    public List<ProcessValidationAndSummaryTable> selectHistoryList(ProcessValidationAndSummaryTable processValidationAndSummaryTable)
+    {
+        return processValidationAndSummaryTableMapper.selectHistoryList(processValidationAndSummaryTable);
     }
 
     /**

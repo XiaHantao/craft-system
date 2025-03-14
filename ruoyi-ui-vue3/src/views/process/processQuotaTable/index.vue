@@ -226,7 +226,7 @@ import {
 import {getCurrentInstance} from "vue";
 import {listModelTable} from "@/api/process/modelTable";
 import {addProcessQuotaInformation, listProcessQuotaInformation} from "@/api/process/processQuotaInformation";
-import {addProcessQuotaValue, listProcessQuotaValue} from "@/api/process/processQuotaValue";
+import {addProcessQuotaValue, delProcessQuotaValue, listProcessQuotaValue} from "@/api/process/processQuotaValue";
 import {getUserProfile} from "@/api/system/user";
 
 const { proxy } = getCurrentInstance();
@@ -250,6 +250,7 @@ const openShowQuota = ref(false); // 查看定额详情对话框
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
+const selectedVehicleModel = ref([]); //多选选中的车型
 const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
@@ -353,6 +354,7 @@ function resetQuery() {
 // 多选框选中数据
 function handleSelectionChange(selection) {
   ids.value = selection.map(item => item.id);
+  selectedVehicleModel.value = selection.map(item => item.vehicleModel);  //多选选中的车型
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -504,22 +506,40 @@ function quotaSubmitForm() {
       });
       proxy.$modal.msgSuccess("上传成功");
       openQuota.value = false;
+      quotaCancel();
       getList();
     }
   });
 
 }
 
+// /** 删除按钮操作 */
+// function handleDelete(row) {
+//   const _ids = row.id || ids.value;
+//   proxy.$modal.confirm('是否确认删除工艺定额编号为"' + _ids + '"的数据项？').then(function() {
+//     return delProcessQuotaTable(_ids);
+//   }).then(() => {
+//     getList();
+//     proxy.$modal.msgSuccess("删除成功");
+//   }).catch(() => {});
+// }
+
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除工艺定额编号为"' + _ids + '"的数据项？').then(function() {
-    return delProcessQuotaTable(_ids);
+  const vehicleModels = row.vehicleModel ? [row.vehicleModel] : selectedVehicleModel.value;
+  proxy.$modal.confirm('是否确认删除车型为"' + vehicleModels.join(", ") + '"的数据项？').then(function() {
+    return Promise.all([
+      delProcessQuotaTable(vehicleModels),
+      delProcessQuotaValue(vehicleModels)
+    ]);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
-  }).catch(() => {});
+  }).catch(() => {
+    proxy.$modal.msgError("删除失败");
+  });
 }
+
 
 /** 导出按钮操作 */
 function handleExport() {

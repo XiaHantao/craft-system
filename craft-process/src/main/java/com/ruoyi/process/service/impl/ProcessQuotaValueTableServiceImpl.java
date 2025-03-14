@@ -74,9 +74,9 @@ public class ProcessQuotaValueTableServiceImpl implements IProcessQuotaValueTabl
      * @return 结果
      */
     @Override
-    public int deleteProcessQuotaValueTableByIds(Long[] ids)
+    public int deleteProcessQuotaValueTableByIds(String[] vehicleModels)
     {
-        return processQuotaValueTableMapper.deleteProcessQuotaValueTableByIds(ids);
+        return processQuotaValueTableMapper.deleteProcessQuotaValueTableByIds(vehicleModels);
     }
 
     /**
