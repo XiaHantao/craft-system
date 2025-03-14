@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.marketanalysis.mapper.TestReportTableMapper">
+    
+    <resultMap type="TestReportTable" id="TestReportTableResult">
+        <result property="id"    column="id"    />
+        <result property="reportTitle"    column="report_title"    />
+        <result property="vehicleType"    column="vehicle_type"    />
+        <result property="reportFormat"    column="report_format"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="file"    column="file"    />
+        <result property="beiyongTwo"    column="beiyong_two"    />
+        <result property="beiyongThree"    column="beiyong_three"    />
+        <result property="beiyongFour"    column="beiyong_four"    />
+        <result property="beiyongFive"    column="beiyong_five"    />
+    </resultMap>
+
+    <sql id="selectTestReportTableVo">
+        select id, report_title, vehicle_type, report_format, create_time, file, beiyong_two, beiyong_three, beiyong_four, beiyong_five from test_report_table
+    </sql>
+
+    <select id="selectTestReportTableList" parameterType="TestReportTable" resultMap="TestReportTableResult">
+        <include refid="selectTestReportTableVo"/>
+        <where>  
+            <if test="reportTitle != null  and reportTitle != ''"> and report_title like concat('%', #{reportTitle}, '%')</if>
+            <if test="vehicleType != null  and vehicleType != ''"> and vehicle_type like concat('%', #{vehicleType}, '%')</if>
+            <if test="reportFormat != null  and reportFormat != ''"> and report_format = #{reportFormat}</if>
+        </where>
+    </select>
+    
+    <select id="selectTestReportTableById" parameterType="Long" resultMap="TestReportTableResult">
+        <include refid="selectTestReportTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTestReportTable" parameterType="TestReportTable" useGeneratedKeys="true" keyProperty="id">
+        insert into test_report_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportTitle != null">report_title,</if>
+            <if test="vehicleType != null">vehicle_type,</if>
+            <if test="reportFormat != null">report_format,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="file != null">file,</if>
+            <if test="beiyongTwo != null">beiyong_two,</if>
+            <if test="beiyongThree != null">beiyong_three,</if>
+            <if test="beiyongFour != null">beiyong_four,</if>
+            <if test="beiyongFive != null">beiyong_five,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportTitle != null">#{reportTitle},</if>
+            <if test="vehicleType != null">#{vehicleType},</if>
+            <if test="reportFormat != null">#{reportFormat},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="file != null">#{file},</if>
+            <if test="beiyongTwo != null">#{beiyongTwo},</if>
+            <if test="beiyongThree != null">#{beiyongThree},</if>
+            <if test="beiyongFour != null">#{beiyongFour},</if>
+            <if test="beiyongFive != null">#{beiyongFive},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTestReportTable" parameterType="TestReportTable">
+        update test_report_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reportTitle != null">report_title = #{reportTitle},</if>
+            <if test="vehicleType != null">vehicle_type = #{vehicleType},</if>
+            <if test="reportFormat != null">report_format = #{reportFormat},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="file != null">file = #{file},</if>
+            <if test="beiyongTwo != null">beiyong_two = #{beiyongTwo},</if>
+            <if test="beiyongThree != null">beiyong_three = #{beiyongThree},</if>
+            <if test="beiyongFour != null">beiyong_four = #{beiyongFour},</if>
+            <if test="beiyongFive != null">beiyong_five = #{beiyongFive},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTestReportTableById" parameterType="Long">
+        delete from test_report_table where id = #{id}
+    </delete>
+
+    <delete id="deleteTestReportTableByIds" parameterType="String">
+        delete from test_report_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

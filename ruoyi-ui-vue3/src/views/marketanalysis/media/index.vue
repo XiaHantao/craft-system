@@ -1,34 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="${comment}" prop="testOne">
+      <el-form-item label="文件名称" prop="fileName">
         <el-input
-          v-model="queryParams.testOne"
-          placeholder="请输入${comment}"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="${comment}" prop="testTwo">
-        <el-input
-          v-model="queryParams.testTwo"
-          placeholder="请输入${comment}"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="${comment}" prop="testThree">
-        <el-input
-          v-model="queryParams.testThree"
-          placeholder="请输入${comment}"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label=" ${comment}" prop="testFour">
-        <el-input
-          v-model="queryParams.testFour"
-          placeholder="请输入${comment}" 
+          v-model="queryParams.fileName"
+          placeholder="请输入文件名称"
           clearable
           @keyup.enter="handleQuery"
         />
@@ -46,7 +22,7 @@
           plain
           icon="Plus"
           @click="handleAdd"
-          v-hasPermi="['system:test:add']"
+          v-hasPermi="['marketanalysis:media:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -56,7 +32,7 @@
           icon="Edit"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:test:edit']"
+          v-hasPermi="['marketanalysis:media:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -66,32 +42,38 @@
           icon="Delete"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:test:remove']"
+          v-hasPermi="['marketanalysis:media:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="warning"
           plain
           icon="Download"
           @click="handleExport"
-          v-hasPermi="['system:test:export']"
+          v-hasPermi="['marketanalysis:media:export']"
         >导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="testList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="mediaList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="${comment}" align="center" prop="testId" />
-      <el-table-column label="${comment}" align="center" prop="testOne" />
-      <el-table-column label="${comment}" align="center" prop="testTwo" />
-      <el-table-column label="${comment}" align="center" prop="testThree" />
-      <el-table-column label="${comment}" align="center" prop="testFour" />
+      <el-table-column label="编号" align="center" prop="id" />
+      <el-table-column label="文件名称" align="center" prop="fileName" />
+      <el-table-column label="备注" align="center" prop="notes" />
+      <el-table-column label="文件地址" align="center" prop="file" />
+      <el-table-column label="图片" align="center" prop="image" width="100">
+        <template #default="scope">
+          <image-preview :src="scope.row.image" :width="50" :height="50"/>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:test:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:test:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:media:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:media:remove']">删除</el-button>
+          <el-button size="mini" type="text" icon="Download"
+  @click="handleDownload(scope.row.file)">下载文件</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -104,20 +86,20 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改【请填写功能名称】对话框 -->
+    <!-- 添加或修改多媒体文件对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="testRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="${comment}" prop="testOne">
-          <el-input v-model="form.testOne" placeholder="请输入${comment}" />
+      <el-form ref="mediaRef" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="文件名称" prop="fileName">
+          <el-input v-model="form.fileName" placeholder="请输入文件名称" />
         </el-form-item>
-        <el-form-item label="${comment}" prop="testTwo">
-          <el-input v-model="form.testTwo" placeholder="请输入${comment}" />
+        <el-form-item label="备注" prop="notes">
+          <el-input v-model="form.notes" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="${comment}" prop="testThree">
-          <el-input v-model="form.testThree" placeholder="请输入${comment}" />
+        <el-form-item label="文件地址" prop="file">
+          <file-upload v-model="form.file"/>
         </el-form-item>
-        <el-form-item label="${comment}" prop="testFour">
-          <el-input v-model="form.testFour" placeholder="请输入${comment}" />
+        <el-form-item label="图片地址" prop="image">
+          <image-upload v-model="form.image"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -130,12 +112,12 @@
   </div>
 </template>
 
-<script setup name="Test">
-import { listTest, getTest, delTest, addTest, updateTest } from "@/api/system/test";
+<script setup name="Media">
+import { listMedia, getMedia, delMedia, addMedia, updateMedia } from "@/api/marketanalysis/media/media";
 
 const { proxy } = getCurrentInstance();
 
-const testList = ref([]);
+const mediaList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
@@ -150,22 +132,30 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    testOne: null,
-    testTwo: null,
-    testThree: null,
-    testFour: null
+    fileName: null,
+    notes: null,
+    file: null,
+    image: null
   },
   rules: {
   }
 });
 
 const { queryParams, form, rules } = toRefs(data);
+// 在setup中添加下载处理方法
+const handleDownload = (fileUrl) => {
+  if (!fileUrl) {
+    proxy.$modal.msgError("未检测到文件，请检查文件上传！");
+    return;
+  }
+  proxy.$download.resource(fileUrl, false);
+};
 
-/** 查询【请填写功能名称】列表 */
+/** 查询多媒体文件列表 */
 function getList() {
   loading.value = true;
-  listTest(queryParams.value).then(response => {
-    testList.value = response.rows;
+  listMedia(queryParams.value).then(response => {
+    mediaList.value = response.rows;
     total.value = Number(response.total);
     loading.value = false;
   });
@@ -180,13 +170,13 @@ function cancel() {
 // 表单重置
 function reset() {
   form.value = {
-    testId: null,
-    testOne: null,
-    testTwo: null,
-    testThree: null,
-    testFour: null
+    id: null,
+    fileName: null,
+    notes: null,
+    file: null,
+    image: null
   };
-  proxy.resetForm("testRef");
+  proxy.resetForm("mediaRef");
 }
 
 /** 搜索按钮操作 */
@@ -203,7 +193,7 @@ function resetQuery() {
 
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.testId);
+  ids.value = selection.map(item => item.id);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -212,32 +202,32 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加【请填写功能名称】";
+  title.value = "添加多媒体文件";
 }
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  const _testId = row.testId || ids.value
-  getTest(_testId).then(response => {
+  const _id = row.id || ids.value
+  getMedia(_id).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改【请填写功能名称】";
+    title.value = "修改多媒体文件";
   });
 }
 
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs["testRef"].validate(valid => {
+  proxy.$refs["mediaRef"].validate(valid => {
     if (valid) {
-      if (form.value.testId != null) {
-        updateTest(form.value).then(response => {
+      if (form.value.id != null) {
+        updateMedia(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
           getList();
         });
       } else {
-        addTest(form.value).then(response => {
+        addMedia(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
           getList();
@@ -249,9 +239,9 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const _testIds = row.testId || ids.value;
-  proxy.$modal.confirm('是否确认删除【请填写功能名称】编号为"' + _testIds + '"的数据项？').then(function() {
-    return delTest(_testIds);
+  const _ids = row.id || ids.value;
+  proxy.$modal.confirm('是否确认删除多媒体文件编号为"' + _ids + '"的数据项？').then(function() {
+    return delMedia(_ids);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
@@ -260,9 +250,9 @@ function handleDelete(row) {
 
 /** 导出按钮操作 */
 function handleExport() {
-  proxy.download('system/test/export', {
+  proxy.download('marketanalysis/media/export', {
     ...queryParams.value
-  }, `test_${new Date().getTime()}.xlsx`)
+  }, `media_${new Date().getTime()}.xlsx`)
 }
 
 getList();

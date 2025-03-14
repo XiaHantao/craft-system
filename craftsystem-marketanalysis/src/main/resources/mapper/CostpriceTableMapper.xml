@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.marketanalysis.mapper.CostpriceTableMapper">
+    
+    <resultMap type="CostpriceTable" id="CostpriceTableResult">
+        <result property="id"    column="id"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="vehicleType"    column="vehicle_type"    />
+        <result property="cost"    column="cost"    />
+        <result property="carBody"    column="car_body"    />
+        <result property="lifting"    column="lifting"    />
+        <result property="other"    column="other"    />
+        <result property="panjinPricing"    column="panjin_pricing"    />
+        <result property="income"    column="income"    />
+        <result property="grossMargin"    column="gross_margin"    />
+        <result property="grossMarginRate"    column="gross_margin_rate"    />
+        <result property="stockPricing"    column="stock_pricing"    />
+        <result property="outletSellingPrice"    column="outlet_selling_price"    />
+        <result property="grossProfitIncludingTax"    column="gross_profit_including_tax"    />
+    </resultMap>
+
+    <sql id="selectCostpriceTableVo">
+        select id, manufacturer, vehicle_type, cost, car_body, lifting, other, panjin_pricing, income, gross_margin, gross_margin_rate, stock_pricing, outlet_selling_price, gross_profit_including_tax from costprice_table
+    </sql>
+
+    <select id="selectCostpriceTableList" parameterType="CostpriceTable" resultMap="CostpriceTableResult">
+        <include refid="selectCostpriceTableVo"/>
+        <where>  
+            <if test="manufacturer != null  and manufacturer != ''"> and manufacturer like concat('%', #{manufacturer}, '%')</if>
+            <if test="vehicleType != null  and vehicleType != ''"> and vehicle_type like concat('%', #{vehicleType}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectCostpriceTableById" parameterType="Long" resultMap="CostpriceTableResult">
+        <include refid="selectCostpriceTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCostpriceTable" parameterType="CostpriceTable" useGeneratedKeys="true" keyProperty="id">
+        insert into costprice_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="manufacturer != null">manufacturer,</if>
+            <if test="vehicleType != null">vehicle_type,</if>
+            <if test="cost != null">cost,</if>
+            <if test="carBody != null">car_body,</if>
+            <if test="lifting != null">lifting,</if>
+            <if test="other != null">other,</if>
+            <if test="panjinPricing != null">panjin_pricing,</if>
+            <if test="income != null">income,</if>
+            <if test="grossMargin != null">gross_margin,</if>
+            <if test="grossMarginRate != null">gross_margin_rate,</if>
+            <if test="stockPricing != null">stock_pricing,</if>
+            <if test="outletSellingPrice != null">outlet_selling_price,</if>
+            <if test="grossProfitIncludingTax != null">gross_profit_including_tax,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="vehicleType != null">#{vehicleType},</if>
+            <if test="cost != null">#{cost},</if>
+            <if test="carBody != null">#{carBody},</if>
+            <if test="lifting != null">#{lifting},</if>
+            <if test="other != null">#{other},</if>
+            <if test="panjinPricing != null">#{panjinPricing},</if>
+            <if test="income != null">#{income},</if>
+            <if test="grossMargin != null">#{grossMargin},</if>
+            <if test="grossMarginRate != null">#{grossMarginRate},</if>
+            <if test="stockPricing != null">#{stockPricing},</if>
+            <if test="outletSellingPrice != null">#{outletSellingPrice},</if>
+            <if test="grossProfitIncludingTax != null">#{grossProfitIncludingTax},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCostpriceTable" parameterType="CostpriceTable">
+        update costprice_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="manufacturer != null">manufacturer = #{manufacturer},</if>
+            <if test="vehicleType != null">vehicle_type = #{vehicleType},</if>
+            <if test="cost != null">cost = #{cost},</if>
+            <if test="carBody != null">car_body = #{carBody},</if>
+            <if test="lifting != null">lifting = #{lifting},</if>
+            <if test="other != null">other = #{other},</if>
+            <if test="panjinPricing != null">panjin_pricing = #{panjinPricing},</if>
+            <if test="income != null">income = #{income},</if>
+            <if test="grossMargin != null">gross_margin = #{grossMargin},</if>
+            <if test="grossMarginRate != null">gross_margin_rate = #{grossMarginRate},</if>
+            <if test="stockPricing != null">stock_pricing = #{stockPricing},</if>
+            <if test="outletSellingPrice != null">outlet_selling_price = #{outletSellingPrice},</if>
+            <if test="grossProfitIncludingTax != null">gross_profit_including_tax = #{grossProfitIncludingTax},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCostpriceTableById" parameterType="Long">
+        delete from costprice_table where id = #{id}
+    </delete>
+
+    <delete id="deleteCostpriceTableByIds" parameterType="String">
+        delete from costprice_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!-- 批量插入 -->
+    <insert id="batchInsertCostpriceTable" parameterType="java.util.List">
+        INSERT INTO costprice_table (
+        manufacturer,
+        vehicle_type,
+        cost,
+        car_body,
+        lifting,
+        other,
+        panjin_pricing,
+        income,
+        gross_margin,
+        gross_margin_rate,
+        stock_pricing,
+        outlet_selling_price,
+        gross_profit_including_tax
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.manufacturer},
+            #{item.vehicleType},
+            #{item.cost},
+            #{item.carBody},
+            #{item.lifting},
+            #{item.other},
+            #{item.panjinPricing},
+            #{item.income},
+            #{item.grossMargin},
+            #{item.grossMarginRate},
+            #{item.stockPricing},
+            #{item.outletSellingPrice},
+            #{item.grossProfitIncludingTax}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 检查数据存在 -->
+    <select id="checkDataExists" resultType="int">
+        SELECT COUNT(*) FROM costprice_table LIMIT 1
+    </select>
+
+    <!-- 清空表 -->
+    <delete id="cleanTable">
+        TRUNCATE TABLE costprice_table
+    </delete>
+</mapper>

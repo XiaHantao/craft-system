@@ -99,6 +99,11 @@
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>3.3.2</version>
+            </dependency>
 
             <!-- velocity代码生成使用模板 -->
             <dependency>
@@ -169,6 +174,12 @@
                 <artifactId>ruoyi-common</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>craftsystem-marketanalysis</artifactId>
+                <version>3.8.5</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>
@@ -180,6 +191,7 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
+        <module>craftsystem-marketanalysis</module>
     </modules>
     <packaging>pom</packaging>
 
