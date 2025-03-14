@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="100px">
       <el-form-item label="车型" prop="vehicleModel">
         <el-input
           v-model="queryParams.vehicleModel"
@@ -17,22 +17,6 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="验证报告上传人" prop="verificationReportUploadPerson">
-        <el-input
-          v-model="queryParams.verificationReportUploadPerson"
-          placeholder="请输入验证报告上传人"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="验证报告上传时间" prop="verificationReportUploadTime">
-        <el-date-picker clearable
-          v-model="queryParams.verificationReportUploadTime"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="请选择验证报告上传时间">
-        </el-date-picker>
-      </el-form-item>
       <el-form-item label="改进报告名称" prop="improvementReportName">
         <el-input
           v-model="queryParams.improvementReportName"
@@ -41,22 +25,6 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="改进报告上传人" prop="improvementReportUploadPerson">
-        <el-input
-          v-model="queryParams.improvementReportUploadPerson"
-          placeholder="请输入改进报告上传人"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="改进报告上传时间" prop="improvementReportUploadTime">
-        <el-date-picker clearable
-          v-model="queryParams.improvementReportUploadTime"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="请选择改进报告上传时间">
-        </el-date-picker>
-      </el-form-item>
       <el-form-item label="总结报告名称" prop="summaryReportName">
         <el-input
           v-model="queryParams.summaryReportName"
@@ -64,22 +32,6 @@
           clearable
           @keyup.enter="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="总结报告上传人" prop="summaryReportUploadPerson">
-        <el-input
-          v-model="queryParams.summaryReportUploadPerson"
-          placeholder="请输入总结报告上传人"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="总结报告上传时间" prop="summaryReportUploadTime">
-        <el-date-picker clearable
-          v-model="queryParams.summaryReportUploadTime"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="请选择总结报告上传时间">
-        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
