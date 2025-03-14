@@ -40,23 +40,24 @@
 
 <script setup>
 import { getToken } from "@/utils/auth";
+import { deleteFile} from "@/api/newproducts/submit";
 
 const props = defineProps({
   modelValue: [String, Object, Array],
   // 数量限制
   limit: {
     type: Number,
-    default: 5,
+    default: 10,
   },
   // 大小限制(MB)
   fileSize: {
     type: Number,
-    default: 5,
+    default: 10,
   },
   // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileType: {
     type: Array,
-    default: () => ["doc","docx", "xls","xlsx", "ppt", "txt", "pdf"],
+    default: () => ["docx", "xlsx", "pptx", "txt", "pdf","jpg","png","zip","rar"],
   },
   // 是否显示提示
   isShowTip: {
@@ -147,9 +148,15 @@ function handleUploadSuccess(res, file) {
 
 // 删除文件
 function handleDelete(index) {
-  fileList.value.splice(index, 1);
-  emit("update:modelValue", listToString(fileList.value));
+  const file = fileList.value[index]; // 获取要删除的文件对象
+  const filePath = file.url; // 获取文件的路径
+  console.log(filePath);
+  fileList.value.splice(index, 1);// 从文件列表中删除该文件
+  emit("update:modelValue", listToString(fileList.value));// 更新父组件的modelValue
+  deleteFile(filePath);//从服务器删除文件
 }
+
+
 
 // 上传结束处理
 function uploadedSuccessfully() {
@@ -165,7 +172,7 @@ function uploadedSuccessfully() {
 // 获取文件名称
 function getFileName(name) {
   if (name.lastIndexOf("/") > -1) {
-    return name.slice(name.lastIndexOf("/") + 1);
+    return name.slice(name.lastIndexOf("/") );
   } else {
     return "";
   }
