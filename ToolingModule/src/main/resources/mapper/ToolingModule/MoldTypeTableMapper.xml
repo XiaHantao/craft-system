@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.workClothes.mapper.MoldTypeTableMapper">
+    
+    <resultMap type="MoldTypeTable" id="MoldTypeTableResult">
+        <result property="id"    column="id"    />
+        <result property="serialNumber"    column="serial_number"    />
+        <result property="moldType"    column="mold_type"    />
+        <result property="moldDescribe"    column="mold_describe"    />
+    </resultMap>
+
+    <sql id="selectMoldTypeTableVo">
+        select id, serial_number, mold_type, mold_describe from mold_type_table
+    </sql>
+
+    <select id="selectMoldTypeTableList" parameterType="MoldTypeTable" resultMap="MoldTypeTableResult">
+        <include refid="selectMoldTypeTableVo"/>
+        <where>  
+            <if test="serialNumber != null "> and serial_number = #{serialNumber}</if>
+            <if test="moldType != null  and moldType != ''"> and mold_type = #{moldType}</if>
+            <if test="moldDescribe != null  and moldDescribe != ''"> and mold_describe = #{moldDescribe}</if>
+        </where>
+    </select>
+    
+    <select id="selectMoldTypeTableById" parameterType="Long" resultMap="MoldTypeTableResult">
+        <include refid="selectMoldTypeTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMoldTypeTable" parameterType="MoldTypeTable" useGeneratedKeys="true" keyProperty="id">
+        insert into mold_type_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">serial_number,</if>
+            <if test="moldType != null">mold_type,</if>
+            <if test="moldDescribe != null">mold_describe,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">#{serialNumber},</if>
+            <if test="moldType != null">#{moldType},</if>
+            <if test="moldDescribe != null">#{moldDescribe},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMoldTypeTable" parameterType="MoldTypeTable">
+        update mold_type_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNumber != null">serial_number = #{serialNumber},</if>
+            <if test="moldType != null">mold_type = #{moldType},</if>
+            <if test="moldDescribe != null">mold_describe = #{moldDescribe},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMoldTypeTableById" parameterType="Long">
+        delete from mold_type_table where id = #{id}
+    </delete>
+
+    <delete id="deleteMoldTypeTableByIds" parameterType="String">
+        delete from mold_type_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 查询所有工装类别字典的ID -->
+    <select id="selectAllIds" resultType="java.lang.String">
+        SELECT mold_type FROM mold_type_table
+    </select>
+</mapper>

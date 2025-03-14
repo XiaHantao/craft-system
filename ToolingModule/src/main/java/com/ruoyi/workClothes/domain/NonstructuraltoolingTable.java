@@ -65,6 +65,22 @@ public class NonstructuraltoolingTable extends BaseEntity
     @Excel(name = "工装图纸")
     private String toolingDrawings;
 
+    /** 工艺文件名 */
+    @Excel(name = "工艺文件名")
+    private String processDocumentsName;
+
+    /** 工艺文件路径 */
+    @Excel(name = "工艺文件路径")
+    private String processDocuments;
+
+    /** 物料清单名 */
+    @Excel(name = "物料清单名")
+    private String mbomName;
+
+    /** 物料清单路径 */
+    @Excel(name = "物料清单路径")
+    private String mbomFile;
+
     /** 验证文件 */
     @Excel(name = "验证文件")
     private String verifyFile;
@@ -198,6 +214,42 @@ public class NonstructuraltoolingTable extends BaseEntity
     {
         return toolingDrawings;
     }
+    public void setProcessDocumentsName(String processDocumentsName)
+    {
+        this.processDocumentsName = processDocumentsName;
+    }
+
+    public String getProcessDocumentsName()
+    {
+        return processDocumentsName;
+    }
+    public void setProcessDocuments(String processDocuments)
+    {
+        this.processDocuments = processDocuments;
+    }
+
+    public String getProcessDocuments()
+    {
+        return processDocuments;
+    }
+    public void setMbomName(String mbomName)
+    {
+        this.mbomName = mbomName;
+    }
+
+    public String getMbomName()
+    {
+        return mbomName;
+    }
+    public void setMbomFile(String mbomFile)
+    {
+        this.mbomFile = mbomFile;
+    }
+
+    public String getMbomFile()
+    {
+        return mbomFile;
+    }
     public void setVerifyFile(String verifyFile) 
     {
         this.verifyFile = verifyFile;
@@ -266,6 +318,10 @@ public class NonstructuraltoolingTable extends BaseEntity
             .append("quantityOfTooling", getQuantityOfTooling())
             .append("assemblingProducts", getAssemblingProducts())
             .append("moldPosition", getMoldPosition())
+                .append("processDocumentsName", getProcessDocumentsName())
+                .append("processDocuments", getProcessDocuments())
+                .append("mbomName", getMbomName())
+                .append("mbomFile", getMbomFile())
             .append("remark", getRemark())
             .append("sharedComponents", getSharedComponents())
             .append("toolingDrawings", getToolingDrawings())

@@ -94,13 +94,28 @@
           v-hasPermi="['ToolingModule:WorkClothes:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+            type="primary"
+            plain
+            icon="Plus"
+            @click="fileAdd"
+            v-hasPermi="['ToolingModule:WorkClothes:add']"
+        >上传</el-button>
+      </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="WorkClothesList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
 <!--      <el-table-column label="id" align="center" prop="id" />-->
-      <el-table-column label="序号" align="center" prop="serialNumber" />
+      <!-- 添加序号列 -->
+      <el-table-column label="序号" align="center">
+        <template #default="{ $index }">
+          <span>{{ ($index + 1) + (queryParams.pageNum - 1) * queryParams.pageSize }}</span> <!-- 根据当前页计算序号 -->
+        </template>
+      </el-table-column>
+<!--      <el-table-column label="序号" align="center" prop="serialNumber" />-->
 <!--      <el-table-column label="模具用途" align="center" prop="moldUsage" />-->
       <el-table-column label="模具名称" align="center" prop="moldName" />
       <el-table-column label="模具号" align="center" prop="moldNumber" />
@@ -127,11 +142,11 @@
         </template>
       </el-table-column>
 <!--      <el-table-column label="工艺文件名" align="center" prop="processDocumentsName" />-->
-      <el-table-column label="工艺文件名" align="center" prop="processDocumentsName">
+      <el-table-column label="工艺文件" align="center" prop="processDocumentsName" width="160">
         <template #default="{ row }">
-            <span v-if="row.processDocumentsName">
+            <span v-if="getFileName(row.processDocuments)">
               <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.processDocuments)">{{ row.processDocumentsName }}</el-button>
+              <el-button type="text" @click="previewFile(row.processDocuments)">{{ getFileName(row.processDocuments) }}</el-button>
             </span>
           <span v-else>
             <!-- 如果没有文件地址，显示“无图纸” -->
@@ -141,11 +156,11 @@
       </el-table-column>
 <!--      <el-table-column label="工艺文件路径" align="center" prop="processDocuments" />-->
 <!--      <el-table-column label="物料清单名" align="center" prop="mbomName" />-->
-      <el-table-column label="物料清单" align="center" prop="mbomName">
+      <el-table-column label="物料清单" align="center" prop="mbomName" width="160">
         <template #default="{ row }">
-            <span v-if="row.mbomName">
+            <span v-if="getFileName(row.mbomFile)">
               <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.mbomFile)">{{ row.mbomName }}</el-button>
+              <el-button type="text" @click="previewFile(row.mbomFile)">{{ getFileName(row.mbomFile) }}</el-button>
             </span>
           <span v-else>
             <!-- 如果没有文件地址，显示“无图纸” -->
@@ -177,51 +192,75 @@
       v-model:limit="queryParams.pageSize"
       @pagination="getList"
     />
-      <!-- 工装详细表格对话框 -->
-      <el-dialog title="工装详细" v-model="dialogVisible" width="80%">
-          <el-table :data="subData" v-loading="loadingDetails">
-              <el-table-column type="selection" width="55" align="center" />
-<!--              <el-table-column label="id" align="center" prop="id" />-->
-              <el-table-column label="序号" align="center" prop="serialNumber" />
-              <el-table-column label="工具编号" align="center" prop="toolNumber" />
-              <el-table-column label="工具名称" align="center" prop="toolName" />
-              <el-table-column label="合计数量" align="center" prop="totalQuantity" />
-              <el-table-column label="材质" align="center" prop="textureOfMaterial" />
-              <el-table-column label="下料尺寸" align="center" prop="cuttingSize" />
-              <el-table-column label="总重量" align="center" prop="totalWeight" />
-              <el-table-column label="原材料物料号" align="center" prop="rawMaterialNumber" />
-              <el-table-column label="下料" align="center" prop="materialCutting" />
-              <el-table-column label="金工" align="center" prop="metalworking" />
-              <el-table-column label="组焊" align="center" prop="assemblyWelding" />
-              <el-table-column label="涂装" align="center" prop="painting" />
-              <el-table-column label="装配" align="center" prop="assembling" />
-              <el-table-column label="备注" align="center" prop="remarks" />
-              <el-table-column label="车型id" align="center" prop="modelId" />
-              <el-table-column label="是否为共用件" align="center" prop="sharedComponents" />
-              <el-table-column label="工装图纸" align="center" prop="toolingDrawings" />
-              <el-table-column label="验证文件" align="center" prop="verifyFile" />
-              <el-table-column label="采购清单" align="center" prop="procurementList" />
-              <el-table-column label="验证结论" align="center" prop="verificationConclusion" />
-              <el-table-column label="更换时间" align="center" prop="changeTime" width="180">
-                  <template #default="scope">
-                      <span>{{ parseTime(scope.row.changeTime, '{y}-{m}-{d}') }}</span>
-                  </template>
-              </el-table-column>
-              <el-table-column label="是否为关键部件" align="center" prop="keyComponents" />
-              <el-table-column label="维修记录" align="center" prop="maintenanceRecord" />
-              <el-table-column label="模具所属" align="center" prop="moldOwnership" />
-              <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-                  <template #default="scope">
-                      <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['ToolingModule:toolingDetail:edit']">修改</el-button>
-                      <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['ToolingModule:toolingDetail:remove']">删除</el-button>
-                  </template>
-              </el-table-column>
-          </el-table>
+    <!-- 弹窗 -->
+    <el-dialog v-model="dialogVisible" title="上传文件" width="30%">
+      <el-form :model="fileform" ref="formRef">
+        <!-- 单选框：工艺文件 或 物料清单 -->
+        <el-form-item label="文件类型" prop="fileType">
+          <el-radio-group v-model="fileform.fileType">
+            <el-radio label="processDocuments">工艺文件</el-radio>
+            <el-radio label="mbom">物料清单</el-radio>
+            <el-radio label="toolingDrawings">工装图纸</el-radio>
+          </el-radio-group>
+        </el-form-item>
 
-          <template #footer>
-              <el-button @click="dialogVisible = false">关闭</el-button>
-          </template>
-      </el-dialog>
+        <!-- 上传组件 -->
+        <el-form-item label="文件选择" prop="file">
+          <file-upload v-model="fileform.file"/>
+        </el-form-item>
+      </el-form>
+
+      <template #footer>
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleSubmit">提交</el-button>
+      </template>
+    </el-dialog>
+
+      <!-- 工装详细表格对话框 -->
+<!--      <el-dialog title="工装详细" v-model="dialogVisible" width="80%">-->
+<!--          <el-table :data="subData" v-loading="loadingDetails">-->
+<!--              <el-table-column type="selection" width="55" align="center" />-->
+<!--&lt;!&ndash;              <el-table-column label="id" align="center" prop="id" />&ndash;&gt;-->
+<!--              <el-table-column label="序号" align="center" prop="serialNumber" />-->
+<!--              <el-table-column label="工具编号" align="center" prop="toolNumber" />-->
+<!--              <el-table-column label="工具名称" align="center" prop="toolName" />-->
+<!--              <el-table-column label="合计数量" align="center" prop="totalQuantity" />-->
+<!--              <el-table-column label="材质" align="center" prop="textureOfMaterial" />-->
+<!--              <el-table-column label="下料尺寸" align="center" prop="cuttingSize" />-->
+<!--              <el-table-column label="总重量" align="center" prop="totalWeight" />-->
+<!--              <el-table-column label="原材料物料号" align="center" prop="rawMaterialNumber" />-->
+<!--              <el-table-column label="下料" align="center" prop="materialCutting" />-->
+<!--              <el-table-column label="金工" align="center" prop="metalworking" />-->
+<!--              <el-table-column label="组焊" align="center" prop="assemblyWelding" />-->
+<!--              <el-table-column label="涂装" align="center" prop="painting" />-->
+<!--              <el-table-column label="装配" align="center" prop="assembling" />-->
+<!--              <el-table-column label="备注" align="center" prop="remarks" />-->
+<!--              <el-table-column label="车型id" align="center" prop="modelId" />-->
+<!--              <el-table-column label="是否为共用件" align="center" prop="sharedComponents" />-->
+<!--              <el-table-column label="工装图纸" align="center" prop="toolingDrawings" />-->
+<!--              <el-table-column label="验证文件" align="center" prop="verifyFile" />-->
+<!--              <el-table-column label="采购清单" align="center" prop="procurementList" />-->
+<!--              <el-table-column label="验证结论" align="center" prop="verificationConclusion" />-->
+<!--              <el-table-column label="更换时间" align="center" prop="changeTime" width="180">-->
+<!--                  <template #default="scope">-->
+<!--                      <span>{{ parseTime(scope.row.changeTime, '{y}-{m}-{d}') }}</span>-->
+<!--                  </template>-->
+<!--              </el-table-column>-->
+<!--              <el-table-column label="是否为关键部件" align="center" prop="keyComponents" />-->
+<!--              <el-table-column label="维修记录" align="center" prop="maintenanceRecord" />-->
+<!--              <el-table-column label="模具所属" align="center" prop="moldOwnership" />-->
+<!--              <el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->
+<!--                  <template #default="scope">-->
+<!--                      <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['ToolingModule:toolingDetail:edit']">修改</el-button>-->
+<!--                      <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['ToolingModule:toolingDetail:remove']">删除</el-button>-->
+<!--                  </template>-->
+<!--              </el-table-column>-->
+<!--          </el-table>-->
+
+<!--          <template #footer>-->
+<!--              <el-button @click="dialogVisible = false">关闭</el-button>-->
+<!--          </template>-->
+<!--      </el-dialog>-->
 
     <!-- 添加或修改工装台账对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
@@ -235,8 +274,18 @@
         <el-form-item label="模具号" prop="moldNumber">
           <el-input v-model="form.moldNumber" placeholder="请输入模具号" />
         </el-form-item>
+<!--        <el-form-item label="种类" prop="moldType">-->
+<!--          <el-input v-model="form.moldType" placeholder="请输入模具种类" />-->
+<!--        </el-form-item>-->
         <el-form-item label="种类" prop="moldType">
-          <el-input v-model="form.moldType" placeholder="请输入模具种类" />
+          <el-select v-model="form.moldType" placeholder="请选择模具种类" clearable style="width: 50%;">
+            <el-option
+                v-for="item in moldTypeList"
+                :key="item.id"
+                :label="item.label"
+                :value="item.label">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="投入时间" prop="investTime">
           <el-date-picker clearable
@@ -287,15 +336,15 @@
             placeholder="请选择保养提醒日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="工艺文件名" prop="processDocumentsName">
-          <el-input v-model="form.processDocumentsName" placeholder="请输入工艺文件名" />
-        </el-form-item>
+<!--        <el-form-item label="工艺文件名" prop="processDocumentsName">-->
+<!--          <el-input v-model="form.processDocumentsName" placeholder="请输入工艺文件名" />-->
+<!--        </el-form-item>-->
         <el-form-item label="工艺文件" prop="processDocuments">
           <file-upload v-model="form.processDocuments"/>
         </el-form-item>
-        <el-form-item label="物料清单名" prop="mbomName">
-          <el-input v-model="form.mbomName" placeholder="请输入物料清单名" />
-        </el-form-item>
+<!--        <el-form-item label="物料清单名" prop="mbomName">-->
+<!--          <el-input v-model="form.mbomName" placeholder="请输入物料清单名" />-->
+<!--        </el-form-item>-->
         <el-form-item label="物料清单" prop="mbomFile">
           <file-upload v-model="form.mbomFile"/>
         </el-form-item>
@@ -310,11 +359,21 @@
         </div>
       </template>
     </el-dialog>
+
   </div>
 </template>
 
 <script setup name="WorkClothes">
-import { listWorkClothes, getWorkClothes, delWorkClothes, addWorkClothes, updateWorkClothes } from "@/api/ToolingModule/WorkClothes";
+import {
+  listWorkClothes,
+  getWorkClothes,
+  delWorkClothes,
+  addWorkClothes,
+  updateWorkClothes,
+  updateWorkClothesfile
+} from "@/api/ToolingModule/WorkClothes";
+import {ElMessage} from "element-plus";
+import {listMoldTypename} from "@/api/ToolingModule/MoldType";
 
 
 const { proxy } = getCurrentInstance();
@@ -327,13 +386,44 @@ const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
-const total1 = ref(0);
+// const total1 = ref(0);
 const title = ref("");
 const dialogVisible = ref(false); // 控制弹框的显示与隐藏
-const loadingDetails = ref(false);  // 控制工装详细表格的加载状态
-const subData = ref([]); // 存储子数据
+// const loadingDetails = ref(false);  // 控制工装详细表格的加载状态
+// const subData = ref([]); // 存储子数据
+
+const moldTypeList = ref([]); // 存储后端返回的数组
 // 获取路由实例
 const router = useRouter()
+
+// 定义表单模型和弹窗显示状态
+const fileform = ref({
+  fileType: 'processDocuments', // 默认选中工艺文件
+  file: null, // 上传的文件
+  moldname: null, //工装编号
+});
+
+// 获取工装类型数据
+const fetchMoldTypeList = async () => {
+  try {
+    const response = await listMoldTypename();
+    // moldTypeList.value = response.data || []; // 确保数据是数组
+    moldTypeList.value = response.data.map((item, index) => ({
+      id: index,  // 使用索引作为唯一标识
+      label: item // 使用数组的字符串作为显示的 label
+    }));
+    console.log('加载中....' , moldTypeList.value)
+
+  } catch (error) {
+    console.error("获取工装类型失败：", error);
+  }
+};
+
+// 组件加载时调用
+onMounted(() => {
+  fetchMoldTypeList();
+  // console.log('加载中....' , moldTypeList.value)
+});
 
 const data = reactive({
   form: {},
@@ -360,6 +450,53 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
+
+// const handleFileChange = (file) => {
+//   if (!file) return;
+//   console.log("处理后的文件名:", file);
+//   // 确保获取文件名
+//   const fileName = typeof file === "string" ? file : file.name;
+//   const processedName = getFileName(fileName);
+//
+//   console.log("处理后的文件名:", processedName);
+// };
+// const handleFileChange = (event) => {
+//   // console.log('打印1' , form.value.processDocuments);
+//   const file = event.target.files?.[0]; // 获取上传的第一个文件
+//   if (!file) {
+//     console.error("未选择文件");
+//     return;
+//   }
+//
+//   console.log("正确获取的文件对象:", file);
+//   console.log("文件名:", file.name);
+// };
+
+// 弹窗显示控制
+function fileAdd(){
+  dialogVisible.value = true;
+};
+
+// 提交上传的文件
+const handleSubmit = () => {
+  // 在这里处理提交的逻辑
+  // console.log('提交的文件:', fileform.value.fileType);
+  const filename = getFileName(fileform.value.file);
+  const moldname = extractModelName(filename);
+  fileform.value.moldname = moldname;
+  if (moldname == null){
+    ElMessage.error("请确认文件名称");
+  }
+  else {
+    updateWorkClothesfile(fileform.value).then(response => {
+      proxy.$modal.msgSuccess("修改成功");
+      dialogVisible.value = false;
+      getList();
+    });
+  }
+  // console.log('提交的文件:', moldname);
+  dialogVisible.value = false;
+};
 
 /** 查询工装台账列表 */
 function getList() {
@@ -423,6 +560,42 @@ function previewFile(fileUrl) {
   // console.log('处理中');
   window.open(fullUrl, '_blank');
 }
+
+/** 获取文件名 */
+function getFileName(name) {
+  if (!name) return "";
+  // 找到最后一个斜杠或反斜杠的位置
+  const lastSlashIndex = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\'));
+  if (lastSlashIndex === -1) {
+    return name; // 如果没有找到斜杠或反斜杠，返回整个字符串
+  }
+  // 提取文件名部分
+  const fileName = name.slice(lastSlashIndex + 1);
+  // 分割文件名
+  const parts = fileName.split('_');
+  // console.log("parts===>",parts);
+  // 如果没有找到版本号部分，返回整个文件名
+  return parts.length > 1 ? parts[0] : fileName;
+}
+
+// 提取文件名中的型号
+function extractModelName(filename) {
+
+
+  // // 正则表达式匹配类似 PJ-24-ZH-10901 格式的型号
+  // const regex = /([A-Za-z]+-\d+-[A-Za-z]+-\d+)/;
+  // const match = filename.match(regex);
+
+  // 正则表达式匹配中英文括号内的内容
+  const regex = /[\(（]([^）\)]+)[\)）]/;
+  const match = filename.match(regex);
+  // console.log('数据' ,match)
+  // 如果匹配成功，返回型号部分，否则返回空字符串
+  return match ? match[1] : '';
+}
+
+
+
 /** 搜索按钮操作 */
 function handleQuery() {
   queryParams.value.pageNum = 1;
@@ -445,6 +618,7 @@ function handleSelectionChange(selection) {
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
+  // console.log('加载中....' , moldTypeList.value)
   open.value = true;
   title.value = "添加工装台账";
 }
@@ -473,6 +647,7 @@ function submitForm() {
       } else {
         addWorkClothes(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
+          // console.log('打印1' , form.value.toolingDrawings);
           open.value = false;
           getList();
         });

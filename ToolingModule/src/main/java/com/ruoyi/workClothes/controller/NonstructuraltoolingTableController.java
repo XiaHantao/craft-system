@@ -1,6 +1,7 @@
 package com.ruoyi.workClothes.controller;
 
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,18 @@ public class NonstructuraltoolingTableController extends BaseController
         return getDataTable(list);
     }
 
+    /**
+     * 修改非结构工装台账工艺及物料
+     */
+    @PreAuthorize("@ss.hasPermi('ToolingModule:NonStructuralTooling:edit')")
+    @Log(title = "工装台账", businessType = BusinessType.UPDATE)
+    @PutMapping("/fileupdate")
+    public AjaxResult updateWorkClothesfile(@RequestBody Map<String, Object> fileform)
+    {
+//        System.out.println("传过来的数据: " + fileform);
+
+        return toAjax(nonstructuraltoolingTableService.updateWorkClothesfile(fileform));
+    }
     /**
      * 导出非结构工装台账列表
      */
