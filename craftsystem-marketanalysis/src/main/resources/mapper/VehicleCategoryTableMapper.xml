@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.marketanalysis.mapper.VehicleCategoryTableMapper">
+    
+    <resultMap type="VehicleCategoryTable" id="VehicleCategoryTableResult">
+        <result property="id"    column="id"    />
+        <result property="vehicleCategory"    column="vehicle_category"    />
+        <result property="vehicleType"    column="vehicle_type"    />
+        <result property="series"    column="series"    />
+        <result property="tonnage"    column="tonnage"    />
+        <result property="engineType"    column="engine_type"    />
+        <result property="enginebatteryCapacity"    column="enginebattery_capacity"    />
+        <result property="powerRating"    column="power_rating"    />
+        <result property="torqueRotationalspeed"    column="torque_rotationalspeed"    />
+        <result property="fuelInjectionSystem"    column="fuel_injection_system"    />
+        <result property="effluentStandard"    column="effluent_standard"    />
+        <result property="valveplateNumber"    column="valveplate_number"    />
+        <result property="batteryCapacity"    column="battery_capacity"    />
+        <result property="tireSpecification"    column="tire_specification"    />
+        <result property="businessPersonnel"    column="business_personnel"    />
+        <result property="developmentClass"    column="development_class"    />
+        <result property="releaseDate"    column="release_date"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="beiyongOne"    column="beiyong_one"    />
+        <result property="beiyongTwo"    column="beiyong_two"    />
+        <result property="beiyongThree"    column="beiyong_three"    />
+        <result property="beiyongFour"    column="beiyong_four"    />
+        <result property="beiyongFive"    column="beiyong_five"    />
+    </resultMap>
+
+    <sql id="selectVehicleCategoryTableVo">
+        select id, vehicle_category, vehicle_type, series, tonnage, engine_type, enginebattery_capacity, power_rating, torque_rotationalspeed, fuel_injection_system, effluent_standard, valveplate_number, battery_capacity, tire_specification, business_personnel, development_class, release_date, create_time, update_time, beiyong_one, beiyong_two, beiyong_three, beiyong_four, beiyong_five from vehicle_category_table
+    </sql>
+
+    <select id="selectVehicleCategoryTableList" parameterType="VehicleCategoryTable" resultMap="VehicleCategoryTableResult">
+        <include refid="selectVehicleCategoryTableVo"/>
+        <where>  
+            <if test="vehicleCategory != null  and vehicleCategory != ''"> and vehicle_category like concat('%', #{vehicleCategory}, '%')</if>
+            <if test="vehicleType != null  and vehicleType != ''"> and vehicle_type like concat('%', #{vehicleType}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectVehicleCategoryTableById" parameterType="Long" resultMap="VehicleCategoryTableResult">
+        <include refid="selectVehicleCategoryTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertVehicleCategoryTable" parameterType="VehicleCategoryTable">
+        insert into vehicle_category_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="vehicleCategory != null">vehicle_category,</if>
+            <if test="vehicleType != null">vehicle_type,</if>
+            <if test="series != null">series,</if>
+            <if test="tonnage != null">tonnage,</if>
+            <if test="engineType != null">engine_type,</if>
+            <if test="enginebatteryCapacity != null">enginebattery_capacity,</if>
+            <if test="powerRating != null">power_rating,</if>
+            <if test="torqueRotationalspeed != null">torque_rotationalspeed,</if>
+            <if test="fuelInjectionSystem != null">fuel_injection_system,</if>
+            <if test="effluentStandard != null">effluent_standard,</if>
+            <if test="valveplateNumber != null">valveplate_number,</if>
+            <if test="batteryCapacity != null">battery_capacity,</if>
+            <if test="tireSpecification != null">tire_specification,</if>
+            <if test="businessPersonnel != null">business_personnel,</if>
+            <if test="developmentClass != null">development_class,</if>
+            <if test="releaseDate != null">release_date,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="beiyongOne != null">beiyong_one,</if>
+            <if test="beiyongTwo != null">beiyong_two,</if>
+            <if test="beiyongThree != null">beiyong_three,</if>
+            <if test="beiyongFour != null">beiyong_four,</if>
+            <if test="beiyongFive != null">beiyong_five,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="vehicleCategory != null">#{vehicleCategory},</if>
+            <if test="vehicleType != null">#{vehicleType},</if>
+            <if test="series != null">#{series},</if>
+            <if test="tonnage != null">#{tonnage},</if>
+            <if test="engineType != null">#{engineType},</if>
+            <if test="enginebatteryCapacity != null">#{enginebatteryCapacity},</if>
+            <if test="powerRating != null">#{powerRating},</if>
+            <if test="torqueRotationalspeed != null">#{torqueRotationalspeed},</if>
+            <if test="fuelInjectionSystem != null">#{fuelInjectionSystem},</if>
+            <if test="effluentStandard != null">#{effluentStandard},</if>
+            <if test="valveplateNumber != null">#{valveplateNumber},</if>
+            <if test="batteryCapacity != null">#{batteryCapacity},</if>
+            <if test="tireSpecification != null">#{tireSpecification},</if>
+            <if test="businessPersonnel != null">#{businessPersonnel},</if>
+            <if test="developmentClass != null">#{developmentClass},</if>
+            <if test="releaseDate != null">#{releaseDate},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="beiyongOne != null">#{beiyongOne},</if>
+            <if test="beiyongTwo != null">#{beiyongTwo},</if>
+            <if test="beiyongThree != null">#{beiyongThree},</if>
+            <if test="beiyongFour != null">#{beiyongFour},</if>
+            <if test="beiyongFive != null">#{beiyongFive},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVehicleCategoryTable" parameterType="VehicleCategoryTable">
+        update vehicle_category_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vehicleCategory != null">vehicle_category = #{vehicleCategory},</if>
+            <if test="vehicleType != null">vehicle_type = #{vehicleType},</if>
+            <if test="series != null">series = #{series},</if>
+            <if test="tonnage != null">tonnage = #{tonnage},</if>
+            <if test="engineType != null">engine_type = #{engineType},</if>
+            <if test="enginebatteryCapacity != null">enginebattery_capacity = #{enginebatteryCapacity},</if>
+            <if test="powerRating != null">power_rating = #{powerRating},</if>
+            <if test="torqueRotationalspeed != null">torque_rotationalspeed = #{torqueRotationalspeed},</if>
+            <if test="fuelInjectionSystem != null">fuel_injection_system = #{fuelInjectionSystem},</if>
+            <if test="effluentStandard != null">effluent_standard = #{effluentStandard},</if>
+            <if test="valveplateNumber != null">valveplate_number = #{valveplateNumber},</if>
+            <if test="batteryCapacity != null">battery_capacity = #{batteryCapacity},</if>
+            <if test="tireSpecification != null">tire_specification = #{tireSpecification},</if>
+            <if test="businessPersonnel != null">business_personnel = #{businessPersonnel},</if>
+            <if test="developmentClass != null">development_class = #{developmentClass},</if>
+            <if test="releaseDate != null">release_date = #{releaseDate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="beiyongOne != null">beiyong_one = #{beiyongOne},</if>
+            <if test="beiyongTwo != null">beiyong_two = #{beiyongTwo},</if>
+            <if test="beiyongThree != null">beiyong_three = #{beiyongThree},</if>
+            <if test="beiyongFour != null">beiyong_four = #{beiyongFour},</if>
+            <if test="beiyongFive != null">beiyong_five = #{beiyongFive},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVehicleCategoryTableById" parameterType="Long">
+        delete from vehicle_category_table where id = #{id}
+    </delete>
+
+    <delete id="deleteVehicleCategoryTableByIds" parameterType="String">
+        delete from vehicle_category_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

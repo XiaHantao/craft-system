@@ -54,16 +54,16 @@ public interface IProcessQuotaTableService
     /**
      * 批量删除工艺定额
      * 
-     * @param ids 需要删除的工艺定额主键集合
+     * @param vehicleModels 需要删除的工艺定额主键集合
      * @return 结果
      */
-    public int deleteProcessQuotaTableByIds(Long[] ids);
+    public int deleteProcessQuotaTableByIds(String[] vehicleModels);
 
     /**
      * 删除工艺定额信息
      * 
-     * @param id 工艺定额主键
+     * @param vehicleModel 工艺定额主键
      * @return 结果
      */
-    public int deleteProcessQuotaTableById(Long id);
+    public int deleteProcessQuotaTableById(String vehicleModel);
 }

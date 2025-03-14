@@ -114,6 +114,22 @@ export const constantRoutes = [
       }
     ]
   },
+
+  {
+    path: '',
+    component: Layout,
+    hidden: true,
+    redirect: 'history',
+    children: [
+      {
+        path: '/history',
+        component: () => import('@/views/process/processValidationAndSummary/history.vue'),
+        name: 'history',
+        meta: { title: '历史记录', icon: 'user' }
+      }
+    ]
+  }
+
   // {
   //   path: '/WorkClothes',
   //   component: () => import('@/views/ToolingModule/WorkClothes/detailindex'),

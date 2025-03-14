@@ -169,6 +169,12 @@
                 <artifactId>ruoyi-common</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>craftsystem-marketanalysis</artifactId>
+                <version>3.8.5</version>
+            </dependency>
+
 
             <!-- 工艺管理模块-->
             <dependency>
@@ -192,6 +198,7 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
+        <module>craftsystem-marketanalysis</module>
         <module>ruoyi-NewProducts</module>
         <module>ToolingModule</module>
         <module>craft-process</module>

@@ -44,9 +44,9 @@ export function updateProcessQuotaTable(data) {
 }
 
 // 删除工艺定额
-export function delProcessQuotaTable(id) {
+export function delProcessQuotaTable(vehicleModels) {
   return request({
-    url: '/process/processQuotaTable/' + id,
+    url: '/process/processQuotaTable/' + vehicleModels,
     method: 'delete'
   })
 }

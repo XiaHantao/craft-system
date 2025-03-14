@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.marketanalysis.mapper.CategoryoneParameterTableMapper">
+
+    <resultMap type="CategoryoneParameterTable" id="CategoryoneParameterTableResult">
+        <result property="id"    column="id"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="configurationNumber"    column="configuration_number"    />
+        <result property="liftingWeight"    column="lifting_weight"    />
+        <result property="loadCenter"    column="load_center"    />
+        <result property="powerMode"    column="power_mode"    />
+        <result property="drivingStyle"    column="driving_style"    />
+        <result property="liftingHeight"    column="lifting_height"    />
+        <result property="doorframeHeight"    column="doorframe_height"    />
+        <result property="maximumLiftingHeightOfFork"    column="maximum_lifting_height_of_fork"    />
+        <result property="freeElevationHeight"    column="free_elevation_height"    />
+        <result property="fullHeight"    column="full_height"    />
+        <result property="minimumGroundClearance"    column="minimum_ground_clearance"    />
+        <result property="overallLength"    column="overall_length"    />
+        <result property="wheelbase"    column="wheelbase"    />
+        <result property="frontSuspensionDistance"    column="front_suspension_distance"    />
+        <result property="rearSuspensionDistance"    column="rear_suspension_distance"    />
+        <result property="fullWidth"    column="full_width"    />
+        <result property="trackWidth"    column="track_width"    />
+        <result property="minimumOuterTurningRadius"    column="minimum_outer_turning_radius"    />
+        <result property="gateFrameInclinationAngle"    column="gate_frame_inclination_angle"    />
+        <result property="forkSize"    column="fork_size"    />
+        <result property="maximumDrivingSpeed"    column="maximum_driving_speed"    />
+        <result property="maxClimbCapability"    column="max_climb_capability"    />
+        <result property="maximumTractionForce"    column="maximum_traction_force"    />
+        <result property="liftingSpeed"    column="lifting_speed"    />
+        <result property="descentSpeed"    column="descent_speed"    />
+        <result property="totalWeight"    column="total_weight"    />
+        <result property="weightDistributionWithFullLoad"    column="weight_distribution_with_full_load"    />
+        <result property="weightDistributionEmptyLoad"    column="weight_distribution_empty_load"    />
+        <result property="numberOfWheels"    column="number_of_wheels"    />
+        <result property="tireType"    column="tire_type"    />
+        <result property="tireSize"    column="tire_size"    />
+        <result property="batteryVoltageCapacity"    column="battery_voltage_capacity"    />
+        <result property="driveMotorPower"    column="drive_motor_power"    />
+        <result property="powerOfLiftingMotor"    column="power_of_lifting_motor"    />
+        <result property="driveMotorControlMode"    column="drive_motor_control_mode"    />
+        <result property="controlModeOfLiftingMotor"    column="control_mode_of_lifting_motor"    />
+    </resultMap>
+
+    <sql id="selectCategoryoneParameterTableVo">
+        select id, manufacturer, configuration_number, lifting_weight, load_center, power_mode, driving_style, lifting_height, doorframe_height, maximum_lifting_height_of_fork, free_elevation_height, full_height, minimum_ground_clearance, overall_length, wheelbase, front_suspension_distance, rear_suspension_distance, full_width, track_width, minimum_outer_turning_radius, gate_frame_inclination_angle, fork_size, maximum_driving_speed, max_climb_capability, maximum_traction_force, lifting_speed, descent_speed, total_weight, weight_distribution_with_full_load, weight_distribution_empty_load, number_of_wheels, tire_type, tire_size, battery_voltage_capacity, drive_motor_power, power_of_lifting_motor, drive_motor_control_mode, control_mode_of_lifting_motor from categoryone_parameter_table
+    </sql>
+
+    <select id="selectCategoryoneParameterTableList" parameterType="CategoryoneParameterTable" resultMap="CategoryoneParameterTableResult">
+        <include refid="selectCategoryoneParameterTableVo"/>
+        <where>
+            <if test="manufacturer != null  and manufacturer != ''"> and manufacturer like concat('%', #{manufacturer}, '%')</if>
+            <if test="configurationNumber != null  and configurationNumber != ''"> and configuration_number like concat('%', #{configurationNumber}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectCategoryoneParameterTableById" parameterType="Long" resultMap="CategoryoneParameterTableResult">
+        <include refid="selectCategoryoneParameterTableVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCategoryoneParameterTable" parameterType="CategoryoneParameterTable">
+        insert into categoryone_parameter_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="manufacturer != null">manufacturer,</if>
+            <if test="configurationNumber != null">configuration_number,</if>
+            <if test="liftingWeight != null">lifting_weight,</if>
+            <if test="loadCenter != null">load_center,</if>
+            <if test="powerMode != null">power_mode,</if>
+            <if test="drivingStyle != null">driving_style,</if>
+            <if test="liftingHeight != null">lifting_height,</if>
+            <if test="doorframeHeight != null">doorframe_height,</if>
+            <if test="maximumLiftingHeightOfFork != null">maximum_lifting_height_of_fork,</if>
+            <if test="freeElevationHeight != null">free_elevation_height,</if>
+            <if test="fullHeight != null">full_height,</if>
+            <if test="minimumGroundClearance != null">minimum_ground_clearance,</if>
+            <if test="overallLength != null">overall_length,</if>
+            <if test="wheelbase != null">wheelbase,</if>
+            <if test="frontSuspensionDistance != null">front_suspension_distance,</if>
+            <if test="rearSuspensionDistance != null">rear_suspension_distance,</if>
+            <if test="fullWidth != null">full_width,</if>
+            <if test="trackWidth != null">track_width,</if>
+            <if test="minimumOuterTurningRadius != null">minimum_outer_turning_radius,</if>
+            <if test="gateFrameInclinationAngle != null">gate_frame_inclination_angle,</if>
+            <if test="forkSize != null">fork_size,</if>
+            <if test="maximumDrivingSpeed != null">maximum_driving_speed,</if>
+            <if test="maxClimbCapability != null">max_climb_capability,</if>
+            <if test="maximumTractionForce != null">maximum_traction_force,</if>
+            <if test="liftingSpeed != null">lifting_speed,</if>
+            <if test="descentSpeed != null">descent_speed,</if>
+            <if test="totalWeight != null">total_weight,</if>
+            <if test="weightDistributionWithFullLoad != null">weight_distribution_with_full_load,</if>
+            <if test="weightDistributionEmptyLoad != null">weight_distribution_empty_load,</if>
+            <if test="numberOfWheels != null">number_of_wheels,</if>
+            <if test="tireType != null">tire_type,</if>
+            <if test="tireSize != null">tire_size,</if>
+            <if test="batteryVoltageCapacity != null">battery_voltage_capacity,</if>
+            <if test="driveMotorPower != null">drive_motor_power,</if>
+            <if test="powerOfLiftingMotor != null">power_of_lifting_motor,</if>
+            <if test="driveMotorControlMode != null">drive_motor_control_mode,</if>
+            <if test="controlModeOfLiftingMotor != null">control_mode_of_lifting_motor,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="configurationNumber != null">#{configurationNumber},</if>
+            <if test="liftingWeight != null">#{liftingWeight},</if>
+            <if test="loadCenter != null">#{loadCenter},</if>
+            <if test="powerMode != null">#{powerMode},</if>
+            <if test="drivingStyle != null">#{drivingStyle},</if>
+            <if test="liftingHeight != null">#{liftingHeight},</if>
+            <if test="doorframeHeight != null">#{doorframeHeight},</if>
+            <if test="maximumLiftingHeightOfFork != null">#{maximumLiftingHeightOfFork},</if>
+            <if test="freeElevationHeight != null">#{freeElevationHeight},</if>
+            <if test="fullHeight != null">#{fullHeight},</if>
+            <if test="minimumGroundClearance != null">#{minimumGroundClearance},</if>
+            <if test="overallLength != null">#{overallLength},</if>
+            <if test="wheelbase != null">#{wheelbase},</if>
+            <if test="frontSuspensionDistance != null">#{frontSuspensionDistance},</if>
+            <if test="rearSuspensionDistance != null">#{rearSuspensionDistance},</if>
+            <if test="fullWidth != null">#{fullWidth},</if>
+            <if test="trackWidth != null">#{trackWidth},</if>
+            <if test="minimumOuterTurningRadius != null">#{minimumOuterTurningRadius},</if>
+            <if test="gateFrameInclinationAngle != null">#{gateFrameInclinationAngle},</if>
+            <if test="forkSize != null">#{forkSize},</if>
+            <if test="maximumDrivingSpeed != null">#{maximumDrivingSpeed},</if>
+            <if test="maxClimbCapability != null">#{maxClimbCapability},</if>
+            <if test="maximumTractionForce != null">#{maximumTractionForce},</if>
+            <if test="liftingSpeed != null">#{liftingSpeed},</if>
+            <if test="descentSpeed != null">#{descentSpeed},</if>
+            <if test="totalWeight != null">#{totalWeight},</if>
+            <if test="weightDistributionWithFullLoad != null">#{weightDistributionWithFullLoad},</if>
+            <if test="weightDistributionEmptyLoad != null">#{weightDistributionEmptyLoad},</if>
+            <if test="numberOfWheels != null">#{numberOfWheels},</if>
+            <if test="tireType != null">#{tireType},</if>
+            <if test="tireSize != null">#{tireSize},</if>
+            <if test="batteryVoltageCapacity != null">#{batteryVoltageCapacity},</if>
+            <if test="driveMotorPower != null">#{driveMotorPower},</if>
+            <if test="powerOfLiftingMotor != null">#{powerOfLiftingMotor},</if>
+            <if test="driveMotorControlMode != null">#{driveMotorControlMode},</if>
+            <if test="controlModeOfLiftingMotor != null">#{controlModeOfLiftingMotor},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCategoryoneParameterTable" parameterType="CategoryoneParameterTable">
+        update categoryone_parameter_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="manufacturer != null">manufacturer = #{manufacturer},</if>
+            <if test="configurationNumber != null">configuration_number = #{configurationNumber},</if>
+            <if test="liftingWeight != null">lifting_weight = #{liftingWeight},</if>
+            <if test="loadCenter != null">load_center = #{loadCenter},</if>
+            <if test="powerMode != null">power_mode = #{powerMode},</if>
+            <if test="drivingStyle != null">driving_style = #{drivingStyle},</if>
+            <if test="liftingHeight != null">lifting_height = #{liftingHeight},</if>
+            <if test="doorframeHeight != null">doorframe_height = #{doorframeHeight},</if>
+            <if test="maximumLiftingHeightOfFork != null">maximum_lifting_height_of_fork = #{maximumLiftingHeightOfFork},</if>
+            <if test="freeElevationHeight != null">free_elevation_height = #{freeElevationHeight},</if>
+            <if test="fullHeight != null">full_height = #{fullHeight},</if>
+            <if test="minimumGroundClearance != null">minimum_ground_clearance = #{minimumGroundClearance},</if>
+            <if test="overallLength != null">overall_length = #{overallLength},</if>
+            <if test="wheelbase != null">wheelbase = #{wheelbase},</if>
+            <if test="frontSuspensionDistance != null">front_suspension_distance = #{frontSuspensionDistance},</if>
+            <if test="rearSuspensionDistance != null">rear_suspension_distance = #{rearSuspensionDistance},</if>
+            <if test="fullWidth != null">full_width = #{fullWidth},</if>
+            <if test="trackWidth != null">track_width = #{trackWidth},</if>
+            <if test="minimumOuterTurningRadius != null">minimum_outer_turning_radius = #{minimumOuterTurningRadius},</if>
+            <if test="gateFrameInclinationAngle != null">gate_frame_inclination_angle = #{gateFrameInclinationAngle},</if>
+            <if test="forkSize != null">fork_size = #{forkSize},</if>
+            <if test="maximumDrivingSpeed != null">maximum_driving_speed = #{maximumDrivingSpeed},</if>
+            <if test="maxClimbCapability != null">max_climb_capability = #{maxClimbCapability},</if>
+            <if test="maximumTractionForce != null">maximum_traction_force = #{maximumTractionForce},</if>
+            <if test="liftingSpeed != null">lifting_speed = #{liftingSpeed},</if>
+            <if test="descentSpeed != null">descent_speed = #{descentSpeed},</if>
+            <if test="totalWeight != null">total_weight = #{totalWeight},</if>
+            <if test="weightDistributionWithFullLoad != null">weight_distribution_with_full_load = #{weightDistributionWithFullLoad},</if>
+            <if test="weightDistributionEmptyLoad != null">weight_distribution_empty_load = #{weightDistributionEmptyLoad},</if>
+            <if test="numberOfWheels != null">number_of_wheels = #{numberOfWheels},</if>
+            <if test="tireType != null">tire_type = #{tireType},</if>
+            <if test="tireSize != null">tire_size = #{tireSize},</if>
+            <if test="batteryVoltageCapacity != null">battery_voltage_capacity = #{batteryVoltageCapacity},</if>
+            <if test="driveMotorPower != null">drive_motor_power = #{driveMotorPower},</if>
+            <if test="powerOfLiftingMotor != null">power_of_lifting_motor = #{powerOfLiftingMotor},</if>
+            <if test="driveMotorControlMode != null">drive_motor_control_mode = #{driveMotorControlMode},</if>
+            <if test="controlModeOfLiftingMotor != null">control_mode_of_lifting_motor = #{controlModeOfLiftingMotor},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCategoryoneParameterTableById" parameterType="Long">
+        delete from categoryone_parameter_table where id = #{id}
+    </delete>
+
+    <delete id="deleteCategoryoneParameterTableByIds" parameterType="String">
+        delete from categoryone_parameter_table where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.marketanalysis.mapper.CategorytwoStandardConfigurationTableMapper">
+    
+    <resultMap type="CategorytwoStandardConfigurationTable" id="CategorytwoStandardConfigurationTableResult">
+        <result property="id"    column="id"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="polyurethaneTires"    column="polyurethane_tires"    />
+        <result property="fiveMeterLiftingHeight"    column="five_meter_lifting_height"    />
+        <result property="liftingHeightGantry"    column="lifting_height_gantry"    />
+        <result property="standardSeriesFork"    column="standard_series_fork"    />
+        <result property="nonStandardSeriesFork"    column="non_standard_series_fork"    />
+        <result property="standardBodyColor"    column="standard_body_color"    />
+        <result property="customizedBodyColor"    column="customized_body_color"    />
+        <result property="accessoriesAndSpeedLimit"    column="accessories_and_speed_limit"    />
+        <result property="turningSpeedLimit"    column="turning_speed_limit"    />
+        <result property="fireExtinguisher"    column="fire_extinguisher"    />
+        <result property="reverseBuzzer"    column="reverse_buzzer"    />
+        <result property="reverseVoiceHorn"    column="reverse_voice_horn"    />
+        <result property="twoSideRearviewMirrors"    column="two_side_rearview_mirrors"    />
+        <result property="escapeBag"    column="escape_bag"    />
+        <result property="rearWheelBraking"    column="rear_wheel_braking"    />
+        <result property="frontWheelBrake"    column="front_wheel_brake"    />
+        <result property="guideWheel"    column="guide_wheel"    />
+        <result property="monitor"    column="monitor"    />
+        <result property="magneticNavigation"    column="magnetic_navigation"    />
+        <result property="stationDrivingSoftPackSeat"    column="station_driving_soft_pack_seat"    />
+        <result property="carStyleSeats"    column="car_style_seats"    />
+        <result property="electricFan"    column="electric_fan"    />
+        <result property="windscreen"    column="windscreen"    />
+        <result property="rearWindshield"    column="rear_windshield"    />
+        <result property="fullCarLedLights"    column="full_car_led_lights"    />
+        <result property="readingLamp"    column="reading_lamp"    />
+        <result property="ledFlashingWarningLight"    column="led_flashing_warning_light"    />
+        <result property="metric"    column="metric"    />
+        <result property="nationalStandardPowerConnector"    column="national_standard_power_connector"    />
+        <result property="chineseIdentification"    column="chinese_identification"    />
+        <result property="englishLogo"    column="english_logo"    />
+    </resultMap>
+
+    <sql id="selectCategorytwoStandardConfigurationTableVo">
+        select id, manufacturer, polyurethane_tires, five_meter_lifting_height, lifting_height_gantry, standard_series_fork, non_standard_series_fork, standard_body_color, customized_body_color, accessories_and_speed_limit, turning_speed_limit, fire_extinguisher, reverse_buzzer, reverse_voice_horn, two_side_rearview_mirrors, escape_bag, rear_wheel_braking, front_wheel_brake, guide_wheel, monitor, magnetic_navigation, station_driving_soft_pack_seat, car_style_seats, electric_fan, windscreen, rear_windshield, full_car_led_lights, reading_lamp, led_flashing_warning_light, metric, national_standard_power_connector, chinese_identification, english_logo from categorytwo_standard_configuration_table
+    </sql>
+
+    <select id="selectCategorytwoStandardConfigurationTableList" parameterType="CategorytwoStandardConfigurationTable" resultMap="CategorytwoStandardConfigurationTableResult">
+        <include refid="selectCategorytwoStandardConfigurationTableVo"/>
+        <where>  
+            <if test="manufacturer != null  and manufacturer != ''"> and manufacturer like concat('%', #{manufacturer}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectCategorytwoStandardConfigurationTableById" parameterType="Long" resultMap="CategorytwoStandardConfigurationTableResult">
+        <include refid="selectCategorytwoStandardConfigurationTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCategorytwoStandardConfigurationTable" parameterType="CategorytwoStandardConfigurationTable" useGeneratedKeys="true" keyProperty="id">
+        insert into categorytwo_standard_configuration_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="manufacturer != null">manufacturer,</if>
+            <if test="polyurethaneTires != null">polyurethane_tires,</if>
+            <if test="fiveMeterLiftingHeight != null">five_meter_lifting_height,</if>
+            <if test="liftingHeightGantry != null">lifting_height_gantry,</if>
+            <if test="standardSeriesFork != null">standard_series_fork,</if>
+            <if test="nonStandardSeriesFork != null">non_standard_series_fork,</if>
+            <if test="standardBodyColor != null">standard_body_color,</if>
+            <if test="customizedBodyColor != null">customized_body_color,</if>
+            <if test="accessoriesAndSpeedLimit != null">accessories_and_speed_limit,</if>
+            <if test="turningSpeedLimit != null">turning_speed_limit,</if>
+            <if test="fireExtinguisher != null">fire_extinguisher,</if>
+            <if test="reverseBuzzer != null">reverse_buzzer,</if>
+            <if test="reverseVoiceHorn != null">reverse_voice_horn,</if>
+            <if test="twoSideRearviewMirrors != null">two_side_rearview_mirrors,</if>
+            <if test="escapeBag != null">escape_bag,</if>
+            <if test="rearWheelBraking != null">rear_wheel_braking,</if>
+            <if test="frontWheelBrake != null">front_wheel_brake,</if>
+            <if test="guideWheel != null">guide_wheel,</if>
+            <if test="monitor != null">monitor,</if>
+            <if test="magneticNavigation != null">magnetic_navigation,</if>
+            <if test="stationDrivingSoftPackSeat != null">station_driving_soft_pack_seat,</if>
+            <if test="carStyleSeats != null">car_style_seats,</if>
+            <if test="electricFan != null">electric_fan,</if>
+            <if test="windscreen != null">windscreen,</if>
+            <if test="rearWindshield != null">rear_windshield,</if>
+            <if test="fullCarLedLights != null">full_car_led_lights,</if>
+            <if test="readingLamp != null">reading_lamp,</if>
+            <if test="ledFlashingWarningLight != null">led_flashing_warning_light,</if>
+            <if test="metric != null">metric,</if>
+            <if test="nationalStandardPowerConnector != null">national_standard_power_connector,</if>
+            <if test="chineseIdentification != null">chinese_identification,</if>
+            <if test="englishLogo != null">english_logo,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="polyurethaneTires != null">#{polyurethaneTires},</if>
+            <if test="fiveMeterLiftingHeight != null">#{fiveMeterLiftingHeight},</if>
+            <if test="liftingHeightGantry != null">#{liftingHeightGantry},</if>
+            <if test="standardSeriesFork != null">#{standardSeriesFork},</if>
+            <if test="nonStandardSeriesFork != null">#{nonStandardSeriesFork},</if>
+            <if test="standardBodyColor != null">#{standardBodyColor},</if>
+            <if test="customizedBodyColor != null">#{customizedBodyColor},</if>
+            <if test="accessoriesAndSpeedLimit != null">#{accessoriesAndSpeedLimit},</if>
+            <if test="turningSpeedLimit != null">#{turningSpeedLimit},</if>
+            <if test="fireExtinguisher != null">#{fireExtinguisher},</if>
+            <if test="reverseBuzzer != null">#{reverseBuzzer},</if>
+            <if test="reverseVoiceHorn != null">#{reverseVoiceHorn},</if>
+            <if test="twoSideRearviewMirrors != null">#{twoSideRearviewMirrors},</if>
+            <if test="escapeBag != null">#{escapeBag},</if>
+            <if test="rearWheelBraking != null">#{rearWheelBraking},</if>
+            <if test="frontWheelBrake != null">#{frontWheelBrake},</if>
+            <if test="guideWheel != null">#{guideWheel},</if>
+            <if test="monitor != null">#{monitor},</if>
+            <if test="magneticNavigation != null">#{magneticNavigation},</if>
+            <if test="stationDrivingSoftPackSeat != null">#{stationDrivingSoftPackSeat},</if>
+            <if test="carStyleSeats != null">#{carStyleSeats},</if>
+            <if test="electricFan != null">#{electricFan},</if>
+            <if test="windscreen != null">#{windscreen},</if>
+            <if test="rearWindshield != null">#{rearWindshield},</if>
+            <if test="fullCarLedLights != null">#{fullCarLedLights},</if>
+            <if test="readingLamp != null">#{readingLamp},</if>
+            <if test="ledFlashingWarningLight != null">#{ledFlashingWarningLight},</if>
+            <if test="metric != null">#{metric},</if>
+            <if test="nationalStandardPowerConnector != null">#{nationalStandardPowerConnector},</if>
+            <if test="chineseIdentification != null">#{chineseIdentification},</if>
+            <if test="englishLogo != null">#{englishLogo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCategorytwoStandardConfigurationTable" parameterType="CategorytwoStandardConfigurationTable">
+        update categorytwo_standard_configuration_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="manufacturer != null">manufacturer = #{manufacturer},</if>
+            <if test="polyurethaneTires != null">polyurethane_tires = #{polyurethaneTires},</if>
+            <if test="fiveMeterLiftingHeight != null">five_meter_lifting_height = #{fiveMeterLiftingHeight},</if>
+            <if test="liftingHeightGantry != null">lifting_height_gantry = #{liftingHeightGantry},</if>
+            <if test="standardSeriesFork != null">standard_series_fork = #{standardSeriesFork},</if>
+            <if test="nonStandardSeriesFork != null">non_standard_series_fork = #{nonStandardSeriesFork},</if>
+            <if test="standardBodyColor != null">standard_body_color = #{standardBodyColor},</if>
+            <if test="customizedBodyColor != null">customized_body_color = #{customizedBodyColor},</if>
+            <if test="accessoriesAndSpeedLimit != null">accessories_and_speed_limit = #{accessoriesAndSpeedLimit},</if>
+            <if test="turningSpeedLimit != null">turning_speed_limit = #{turningSpeedLimit},</if>
+            <if test="fireExtinguisher != null">fire_extinguisher = #{fireExtinguisher},</if>
+            <if test="reverseBuzzer != null">reverse_buzzer = #{reverseBuzzer},</if>
+            <if test="reverseVoiceHorn != null">reverse_voice_horn = #{reverseVoiceHorn},</if>
+            <if test="twoSideRearviewMirrors != null">two_side_rearview_mirrors = #{twoSideRearviewMirrors},</if>
+            <if test="escapeBag != null">escape_bag = #{escapeBag},</if>
+            <if test="rearWheelBraking != null">rear_wheel_braking = #{rearWheelBraking},</if>
+            <if test="frontWheelBrake != null">front_wheel_brake = #{frontWheelBrake},</if>
+            <if test="guideWheel != null">guide_wheel = #{guideWheel},</if>
+            <if test="monitor != null">monitor = #{monitor},</if>
+            <if test="magneticNavigation != null">magnetic_navigation = #{magneticNavigation},</if>
+            <if test="stationDrivingSoftPackSeat != null">station_driving_soft_pack_seat = #{stationDrivingSoftPackSeat},</if>
+            <if test="carStyleSeats != null">car_style_seats = #{carStyleSeats},</if>
+            <if test="electricFan != null">electric_fan = #{electricFan},</if>
+            <if test="windscreen != null">windscreen = #{windscreen},</if>
+            <if test="rearWindshield != null">rear_windshield = #{rearWindshield},</if>
+            <if test="fullCarLedLights != null">full_car_led_lights = #{fullCarLedLights},</if>
+            <if test="readingLamp != null">reading_lamp = #{readingLamp},</if>
+            <if test="ledFlashingWarningLight != null">led_flashing_warning_light = #{ledFlashingWarningLight},</if>
+            <if test="metric != null">metric = #{metric},</if>
+            <if test="nationalStandardPowerConnector != null">national_standard_power_connector = #{nationalStandardPowerConnector},</if>
+            <if test="chineseIdentification != null">chinese_identification = #{chineseIdentification},</if>
+            <if test="englishLogo != null">english_logo = #{englishLogo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCategorytwoStandardConfigurationTableById" parameterType="Long">
+        delete from categorytwo_standard_configuration_table where id = #{id}
+    </delete>
+
+    <delete id="deleteCategorytwoStandardConfigurationTableByIds" parameterType="String">
+        delete from categorytwo_standard_configuration_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

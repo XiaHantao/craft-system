@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.marketanalysis.mapper.CategoryfiveStandardConfigurationTableMapper">
+    
+    <resultMap type="CategoryfiveStandardConfigurationTable" id="CategoryfiveStandardConfigurationTableResult">
+        <result property="id"    column="id"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="pneumaticTire"    column="pneumatic_tire"    />
+        <result property="solidTire"    column="solid_tire"    />
+        <result property="singleTire"    column="single_tire"    />
+        <result property="twinTires"    column="twin_tires"    />
+        <result property="twoPieceValve"    column="two_piece_valve"    />
+        <result property="threeOrFourPieceValve"    column="three_or_four_piece_valve"    />
+        <result property="threeMeterLiftingHeight"    column="three_meter_lifting_height"    />
+        <result property="liftingHeightGantry"    column="lifting_height_gantry"    />
+        <result property="standardSeriesFork"    column="standard_series_fork"    />
+        <result property="nonStandardSeriesForks"    column="non_standard_series_forks"    />
+        <result property="standardBodyColor"    column="standard_body_color"    />
+        <result property="customizedBodyColor"    column="customized_body_color"    />
+        <result property="completeOpsFunctionality"    column="complete_ops_functionality"    />
+        <result property="walkingOpsFunction"    column="walking_ops_function"    />
+        <result property="overspeed"    column="overspeed"    />
+        <result property="reverseArmrestWithHorn"    column="reverse_armrest_with_horn"    />
+        <result property="seatBeltSwitch"    column="seat_belt_switch"    />
+        <result property="overloadOfMultiWayValve"    column="overload_of_multi_way_valve"    />
+        <result property="fireExtinguisher"    column="fire_extinguisher"    />
+        <result property="reverseBuzzer"    column="reverse_buzzer"    />
+        <result property="centralWideangleRearviewMirror"    column="central_wideangle_rearview_mirror"    />
+        <result property="twoSideRearviewMirrors"    column="two_side_rearview_mirrors"    />
+        <result property="parkingSensor"    column="parking_sensor"    />
+        <result property="semiEnclosedSeat"    column="semi_enclosed_seat"    />
+        <result property="fullySuspendedSeat"    column="fully_suspended_seat"    />
+        <result property="usbInterface"    column="usb_interface"    />
+        <result property="electricFan"    column="electric_fan"    />
+        <result property="turnTheSteeringWheel"    column="turn_the_steering_wheel"    />
+        <result property="synchronousSteering"    column="synchronous_steering"    />
+        <result property="standardRoofProtectionFrame"    column="standard_roof_protection_frame"    />
+        <result property="nonStandardRoofProtectionFrame"    column="non_standard_roof_protection_frame"    />
+        <result property="windscreen"    column="windscreen"    />
+        <result property="frontHeatresistantWindshield"    column="front_heatresistant_windshield"    />
+        <result property="rearWindshield"    column="rear_windshield"    />
+        <result property="pcEnduranceBoardCeiling"    column="pc_endurance_board_ceiling"    />
+        <result property="surfaceMountedCab"    column="surface_mounted_cab"    />
+        <result property="singleCoolingAirConditioner"    column="single_cooling_air_conditioner"    />
+        <result property="dualPurposeAirConditioner"    column="dual_purpose_air_conditioner"    />
+        <result property="warmAirBlower"    column="warm_air_blower"    />
+        <result property="fullCarLedLights"    column="full_car_led_lights"    />
+        <result property="ledRearWorkLight"    column="led_rear_work_light"    />
+        <result property="blueLightBehindTheCar"    column="blue_light_behind_the_car"    />
+        <result property="threeSidedBlueStripLight"    column="three_sided_blue_strip_light"    />
+        <result property="threeSidedRedStripLights"    column="three_sided_red_strip_lights"    />
+        <result property="ledFlashingWarningLight"    column="led_flashing_warning_light"    />
+        <result property="ledRotatingWarningLight"    column="led_rotating_warning_light"    />
+        <result property="ledRotatingBuzzerWarningLight"    column="led_rotating_buzzer_warning_light"    />
+        <result property="metric"    column="metric"    />
+        <result property="tiltCylinderSleeve"    column="tilt_cylinder_sleeve"    />
+        <result property="steeringCylinderSleeve"    column="steering_cylinder_sleeve"    />
+        <result property="medianExhaust"    column="median_exhaust"    />
+        <result property="highExhaust"    column="high_exhaust"    />
+        <result property="twoWheelDrive"    column="two_wheel_drive"    />
+        <result property="fourWheelDrive"    column="four_wheel_drive"    />
+        <result property="dentalEmbeddedDifferentialLock"    column="dental_embedded_differential_lock"    />
+        <result property="limitedSlipDifferential"    column="limited_slip_differential"    />
+        <result property="manualDifferentialLock"    column="manual_differential_lock"    />
+        <result property="ficsHeliConnectedCarBasicEdition"    column="fics_heli_connected_car_basic_edition"    />
+    </resultMap>
+
+    <sql id="selectCategoryfiveStandardConfigurationTableVo">
+        select id, manufacturer, pneumatic_tire, solid_tire, single_tire, twin_tires, two_piece_valve, three_or_four_piece_valve, three_meter_lifting_height, lifting_height_gantry, standard_series_fork, non_standard_series_forks, standard_body_color, customized_body_color, complete_ops_functionality, walking_ops_function, overspeed, reverse_armrest_with_horn, seat_belt_switch, overload_of_multi_way_valve, fire_extinguisher, reverse_buzzer, central_wideangle_rearview_mirror, two_side_rearview_mirrors, parking_sensor, semi_enclosed_seat, fully_suspended_seat, usb_interface, electric_fan, turn_the_steering_wheel, synchronous_steering, standard_roof_protection_frame, non_standard_roof_protection_frame, windscreen, front_heatresistant_windshield, rear_windshield, pc_endurance_board_ceiling, surface_mounted_cab, single_cooling_air_conditioner, dual_purpose_air_conditioner, warm_air_blower, full_car_led_lights, led_rear_work_light, blue_light_behind_the_car, three_sided_blue_strip_light, three_sided_red_strip_lights, led_flashing_warning_light, led_rotating_warning_light, led_rotating_buzzer_warning_light, metric, tilt_cylinder_sleeve, steering_cylinder_sleeve, median_exhaust, high_exhaust, two_wheel_drive, four_wheel_drive, dental_embedded_differential_lock, limited_slip_differential, manual_differential_lock, fics_heli_connected_car_basic_edition from categoryfive_standard_configuration_table
+    </sql>
+
+    <select id="selectCategoryfiveStandardConfigurationTableList" parameterType="CategoryfiveStandardConfigurationTable" resultMap="CategoryfiveStandardConfigurationTableResult">
+        <include refid="selectCategoryfiveStandardConfigurationTableVo"/>
+        <where>  
+            <if test="manufacturer != null  and manufacturer != ''"> and manufacturer like concat('%', #{manufacturer}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectCategoryfiveStandardConfigurationTableById" parameterType="Long" resultMap="CategoryfiveStandardConfigurationTableResult">
+        <include refid="selectCategoryfiveStandardConfigurationTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCategoryfiveStandardConfigurationTable" parameterType="CategoryfiveStandardConfigurationTable" useGeneratedKeys="true" keyProperty="id">
+        insert into categoryfive_standard_configuration_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="manufacturer != null">manufacturer,</if>
+            <if test="pneumaticTire != null">pneumatic_tire,</if>
+            <if test="solidTire != null">solid_tire,</if>
+            <if test="singleTire != null">single_tire,</if>
+            <if test="twinTires != null">twin_tires,</if>
+            <if test="twoPieceValve != null">two_piece_valve,</if>
+            <if test="threeOrFourPieceValve != null">three_or_four_piece_valve,</if>
+            <if test="threeMeterLiftingHeight != null">three_meter_lifting_height,</if>
+            <if test="liftingHeightGantry != null">lifting_height_gantry,</if>
+            <if test="standardSeriesFork != null">standard_series_fork,</if>
+            <if test="nonStandardSeriesForks != null">non_standard_series_forks,</if>
+            <if test="standardBodyColor != null">standard_body_color,</if>
+            <if test="customizedBodyColor != null">customized_body_color,</if>
+            <if test="completeOpsFunctionality != null">complete_ops_functionality,</if>
+            <if test="walkingOpsFunction != null">walking_ops_function,</if>
+            <if test="overspeed != null">overspeed,</if>
+            <if test="reverseArmrestWithHorn != null">reverse_armrest_with_horn,</if>
+            <if test="seatBeltSwitch != null">seat_belt_switch,</if>
+            <if test="overloadOfMultiWayValve != null">overload_of_multi_way_valve,</if>
+            <if test="fireExtinguisher != null">fire_extinguisher,</if>
+            <if test="reverseBuzzer != null">reverse_buzzer,</if>
+            <if test="centralWideangleRearviewMirror != null">central_wideangle_rearview_mirror,</if>
+            <if test="twoSideRearviewMirrors != null">two_side_rearview_mirrors,</if>
+            <if test="parkingSensor != null">parking_sensor,</if>
+            <if test="semiEnclosedSeat != null">semi_enclosed_seat,</if>
+            <if test="fullySuspendedSeat != null">fully_suspended_seat,</if>
+            <if test="usbInterface != null">usb_interface,</if>
+            <if test="electricFan != null">electric_fan,</if>
+            <if test="turnTheSteeringWheel != null">turn_the_steering_wheel,</if>
+            <if test="synchronousSteering != null">synchronous_steering,</if>
+            <if test="standardRoofProtectionFrame != null">standard_roof_protection_frame,</if>
+            <if test="nonStandardRoofProtectionFrame != null">non_standard_roof_protection_frame,</if>
+            <if test="windscreen != null">windscreen,</if>
+            <if test="frontHeatresistantWindshield != null">front_heatresistant_windshield,</if>
+            <if test="rearWindshield != null">rear_windshield,</if>
+            <if test="pcEnduranceBoardCeiling != null">pc_endurance_board_ceiling,</if>
+            <if test="surfaceMountedCab != null">surface_mounted_cab,</if>
+            <if test="singleCoolingAirConditioner != null">single_cooling_air_conditioner,</if>
+            <if test="dualPurposeAirConditioner != null">dual_purpose_air_conditioner,</if>
+            <if test="warmAirBlower != null">warm_air_blower,</if>
+            <if test="fullCarLedLights != null">full_car_led_lights,</if>
+            <if test="ledRearWorkLight != null">led_rear_work_light,</if>
+            <if test="blueLightBehindTheCar != null">blue_light_behind_the_car,</if>
+            <if test="threeSidedBlueStripLight != null">three_sided_blue_strip_light,</if>
+            <if test="threeSidedRedStripLights != null">three_sided_red_strip_lights,</if>
+            <if test="ledFlashingWarningLight != null">led_flashing_warning_light,</if>
+            <if test="ledRotatingWarningLight != null">led_rotating_warning_light,</if>
+            <if test="ledRotatingBuzzerWarningLight != null">led_rotating_buzzer_warning_light,</if>
+            <if test="metric != null">metric,</if>
+            <if test="tiltCylinderSleeve != null">tilt_cylinder_sleeve,</if>
+            <if test="steeringCylinderSleeve != null">steering_cylinder_sleeve,</if>
+            <if test="medianExhaust != null">median_exhaust,</if>
+            <if test="highExhaust != null">high_exhaust,</if>
+            <if test="twoWheelDrive != null">two_wheel_drive,</if>
+            <if test="fourWheelDrive != null">four_wheel_drive,</if>
+            <if test="dentalEmbeddedDifferentialLock != null">dental_embedded_differential_lock,</if>
+            <if test="limitedSlipDifferential != null">limited_slip_differential,</if>
+            <if test="manualDifferentialLock != null">manual_differential_lock,</if>
+            <if test="ficsHeliConnectedCarBasicEdition != null">fics_heli_connected_car_basic_edition,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="pneumaticTire != null">#{pneumaticTire},</if>
+            <if test="solidTire != null">#{solidTire},</if>
+            <if test="singleTire != null">#{singleTire},</if>
+            <if test="twinTires != null">#{twinTires},</if>
+            <if test="twoPieceValve != null">#{twoPieceValve},</if>
+            <if test="threeOrFourPieceValve != null">#{threeOrFourPieceValve},</if>
+            <if test="threeMeterLiftingHeight != null">#{threeMeterLiftingHeight},</if>
+            <if test="liftingHeightGantry != null">#{liftingHeightGantry},</if>
+            <if test="standardSeriesFork != null">#{standardSeriesFork},</if>
+            <if test="nonStandardSeriesForks != null">#{nonStandardSeriesForks},</if>
+            <if test="standardBodyColor != null">#{standardBodyColor},</if>
+            <if test="customizedBodyColor != null">#{customizedBodyColor},</if>
+            <if test="completeOpsFunctionality != null">#{completeOpsFunctionality},</if>
+            <if test="walkingOpsFunction != null">#{walkingOpsFunction},</if>
+            <if test="overspeed != null">#{overspeed},</if>
+            <if test="reverseArmrestWithHorn != null">#{reverseArmrestWithHorn},</if>
+            <if test="seatBeltSwitch != null">#{seatBeltSwitch},</if>
+            <if test="overloadOfMultiWayValve != null">#{overloadOfMultiWayValve},</if>
+            <if test="fireExtinguisher != null">#{fireExtinguisher},</if>
+            <if test="reverseBuzzer != null">#{reverseBuzzer},</if>
+            <if test="centralWideangleRearviewMirror != null">#{centralWideangleRearviewMirror},</if>
+            <if test="twoSideRearviewMirrors != null">#{twoSideRearviewMirrors},</if>
+            <if test="parkingSensor != null">#{parkingSensor},</if>
+            <if test="semiEnclosedSeat != null">#{semiEnclosedSeat},</if>
+            <if test="fullySuspendedSeat != null">#{fullySuspendedSeat},</if>
+            <if test="usbInterface != null">#{usbInterface},</if>
+            <if test="electricFan != null">#{electricFan},</if>
+            <if test="turnTheSteeringWheel != null">#{turnTheSteeringWheel},</if>
+            <if test="synchronousSteering != null">#{synchronousSteering},</if>
+            <if test="standardRoofProtectionFrame != null">#{standardRoofProtectionFrame},</if>
+            <if test="nonStandardRoofProtectionFrame != null">#{nonStandardRoofProtectionFrame},</if>
+            <if test="windscreen != null">#{windscreen},</if>
+            <if test="frontHeatresistantWindshield != null">#{frontHeatresistantWindshield},</if>
+            <if test="rearWindshield != null">#{rearWindshield},</if>
+            <if test="pcEnduranceBoardCeiling != null">#{pcEnduranceBoardCeiling},</if>
+            <if test="surfaceMountedCab != null">#{surfaceMountedCab},</if>
+            <if test="singleCoolingAirConditioner != null">#{singleCoolingAirConditioner},</if>
+            <if test="dualPurposeAirConditioner != null">#{dualPurposeAirConditioner},</if>
+            <if test="warmAirBlower != null">#{warmAirBlower},</if>
+            <if test="fullCarLedLights != null">#{fullCarLedLights},</if>
+            <if test="ledRearWorkLight != null">#{ledRearWorkLight},</if>
+            <if test="blueLightBehindTheCar != null">#{blueLightBehindTheCar},</if>
+            <if test="threeSidedBlueStripLight != null">#{threeSidedBlueStripLight},</if>
+            <if test="threeSidedRedStripLights != null">#{threeSidedRedStripLights},</if>
+            <if test="ledFlashingWarningLight != null">#{ledFlashingWarningLight},</if>
+            <if test="ledRotatingWarningLight != null">#{ledRotatingWarningLight},</if>
+            <if test="ledRotatingBuzzerWarningLight != null">#{ledRotatingBuzzerWarningLight},</if>
+            <if test="metric != null">#{metric},</if>
+            <if test="tiltCylinderSleeve != null">#{tiltCylinderSleeve},</if>
+            <if test="steeringCylinderSleeve != null">#{steeringCylinderSleeve},</if>
+            <if test="medianExhaust != null">#{medianExhaust},</if>
+            <if test="highExhaust != null">#{highExhaust},</if>
+            <if test="twoWheelDrive != null">#{twoWheelDrive},</if>
+            <if test="fourWheelDrive != null">#{fourWheelDrive},</if>
+            <if test="dentalEmbeddedDifferentialLock != null">#{dentalEmbeddedDifferentialLock},</if>
+            <if test="limitedSlipDifferential != null">#{limitedSlipDifferential},</if>
+            <if test="manualDifferentialLock != null">#{manualDifferentialLock},</if>
+            <if test="ficsHeliConnectedCarBasicEdition != null">#{ficsHeliConnectedCarBasicEdition},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCategoryfiveStandardConfigurationTable" parameterType="CategoryfiveStandardConfigurationTable">
+        update categoryfive_standard_configuration_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="manufacturer != null">manufacturer = #{manufacturer},</if>
+            <if test="pneumaticTire != null">pneumatic_tire = #{pneumaticTire},</if>
+            <if test="solidTire != null">solid_tire = #{solidTire},</if>
+            <if test="singleTire != null">single_tire = #{singleTire},</if>
+            <if test="twinTires != null">twin_tires = #{twinTires},</if>
+            <if test="twoPieceValve != null">two_piece_valve = #{twoPieceValve},</if>
+            <if test="threeOrFourPieceValve != null">three_or_four_piece_valve = #{threeOrFourPieceValve},</if>
+            <if test="threeMeterLiftingHeight != null">three_meter_lifting_height = #{threeMeterLiftingHeight},</if>
+            <if test="liftingHeightGantry != null">lifting_height_gantry = #{liftingHeightGantry},</if>
+            <if test="standardSeriesFork != null">standard_series_fork = #{standardSeriesFork},</if>
+            <if test="nonStandardSeriesForks != null">non_standard_series_forks = #{nonStandardSeriesForks},</if>
+            <if test="standardBodyColor != null">standard_body_color = #{standardBodyColor},</if>
+            <if test="customizedBodyColor != null">customized_body_color = #{customizedBodyColor},</if>
+            <if test="completeOpsFunctionality != null">complete_ops_functionality = #{completeOpsFunctionality},</if>
+            <if test="walkingOpsFunction != null">walking_ops_function = #{walkingOpsFunction},</if>
+            <if test="overspeed != null">overspeed = #{overspeed},</if>
+            <if test="reverseArmrestWithHorn != null">reverse_armrest_with_horn = #{reverseArmrestWithHorn},</if>
+            <if test="seatBeltSwitch != null">seat_belt_switch = #{seatBeltSwitch},</if>
+            <if test="overloadOfMultiWayValve != null">overload_of_multi_way_valve = #{overloadOfMultiWayValve},</if>
+            <if test="fireExtinguisher != null">fire_extinguisher = #{fireExtinguisher},</if>
+            <if test="reverseBuzzer != null">reverse_buzzer = #{reverseBuzzer},</if>
+            <if test="centralWideangleRearviewMirror != null">central_wideangle_rearview_mirror = #{centralWideangleRearviewMirror},</if>
+            <if test="twoSideRearviewMirrors != null">two_side_rearview_mirrors = #{twoSideRearviewMirrors},</if>
+            <if test="parkingSensor != null">parking_sensor = #{parkingSensor},</if>
+            <if test="semiEnclosedSeat != null">semi_enclosed_seat = #{semiEnclosedSeat},</if>
+            <if test="fullySuspendedSeat != null">fully_suspended_seat = #{fullySuspendedSeat},</if>
+            <if test="usbInterface != null">usb_interface = #{usbInterface},</if>
+            <if test="electricFan != null">electric_fan = #{electricFan},</if>
+            <if test="turnTheSteeringWheel != null">turn_the_steering_wheel = #{turnTheSteeringWheel},</if>
+            <if test="synchronousSteering != null">synchronous_steering = #{synchronousSteering},</if>
+            <if test="standardRoofProtectionFrame != null">standard_roof_protection_frame = #{standardRoofProtectionFrame},</if>
+            <if test="nonStandardRoofProtectionFrame != null">non_standard_roof_protection_frame = #{nonStandardRoofProtectionFrame},</if>
+            <if test="windscreen != null">windscreen = #{windscreen},</if>
+            <if test="frontHeatresistantWindshield != null">front_heatresistant_windshield = #{frontHeatresistantWindshield},</if>
+            <if test="rearWindshield != null">rear_windshield = #{rearWindshield},</if>
+            <if test="pcEnduranceBoardCeiling != null">pc_endurance_board_ceiling = #{pcEnduranceBoardCeiling},</if>
+            <if test="surfaceMountedCab != null">surface_mounted_cab = #{surfaceMountedCab},</if>
+            <if test="singleCoolingAirConditioner != null">single_cooling_air_conditioner = #{singleCoolingAirConditioner},</if>
+            <if test="dualPurposeAirConditioner != null">dual_purpose_air_conditioner = #{dualPurposeAirConditioner},</if>
+            <if test="warmAirBlower != null">warm_air_blower = #{warmAirBlower},</if>
+            <if test="fullCarLedLights != null">full_car_led_lights = #{fullCarLedLights},</if>
+            <if test="ledRearWorkLight != null">led_rear_work_light = #{ledRearWorkLight},</if>
+            <if test="blueLightBehindTheCar != null">blue_light_behind_the_car = #{blueLightBehindTheCar},</if>
+            <if test="threeSidedBlueStripLight != null">three_sided_blue_strip_light = #{threeSidedBlueStripLight},</if>
+            <if test="threeSidedRedStripLights != null">three_sided_red_strip_lights = #{threeSidedRedStripLights},</if>
+            <if test="ledFlashingWarningLight != null">led_flashing_warning_light = #{ledFlashingWarningLight},</if>
+            <if test="ledRotatingWarningLight != null">led_rotating_warning_light = #{ledRotatingWarningLight},</if>
+            <if test="ledRotatingBuzzerWarningLight != null">led_rotating_buzzer_warning_light = #{ledRotatingBuzzerWarningLight},</if>
+            <if test="metric != null">metric = #{metric},</if>
+            <if test="tiltCylinderSleeve != null">tilt_cylinder_sleeve = #{tiltCylinderSleeve},</if>
+            <if test="steeringCylinderSleeve != null">steering_cylinder_sleeve = #{steeringCylinderSleeve},</if>
+            <if test="medianExhaust != null">median_exhaust = #{medianExhaust},</if>
+            <if test="highExhaust != null">high_exhaust = #{highExhaust},</if>
+            <if test="twoWheelDrive != null">two_wheel_drive = #{twoWheelDrive},</if>
+            <if test="fourWheelDrive != null">four_wheel_drive = #{fourWheelDrive},</if>
+            <if test="dentalEmbeddedDifferentialLock != null">dental_embedded_differential_lock = #{dentalEmbeddedDifferentialLock},</if>
+            <if test="limitedSlipDifferential != null">limited_slip_differential = #{limitedSlipDifferential},</if>
+            <if test="manualDifferentialLock != null">manual_differential_lock = #{manualDifferentialLock},</if>
+            <if test="ficsHeliConnectedCarBasicEdition != null">fics_heli_connected_car_basic_edition = #{ficsHeliConnectedCarBasicEdition},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCategoryfiveStandardConfigurationTableById" parameterType="Long">
+        delete from categoryfive_standard_configuration_table where id = #{id}
+    </delete>
+
+    <delete id="deleteCategoryfiveStandardConfigurationTableByIds" parameterType="String">
+        delete from categoryfive_standard_configuration_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

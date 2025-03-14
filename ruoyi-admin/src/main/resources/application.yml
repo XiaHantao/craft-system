@@ -62,6 +62,8 @@ spring:
        max-file-size:  10MB
        # 设置总上传的文件大小
        max-request-size:  20MB
+  file:
+    upload-dir: D:/custom-path/uploads/
   # 服务模块
   devtools:
     restart:
@@ -136,3 +138,4 @@ snowid:
   workerId: 1
   #数据中心id
   datacenterId: 1
+

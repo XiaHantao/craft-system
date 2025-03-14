@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.marketanalysis.mapper.PerformanceTableMapper">
+    
+    <resultMap type="PerformanceTable" id="PerformanceTableResult">
+        <result property="id"    column="id"    />
+        <result property="vehicleCategory"    column="vehicle_category"    />
+        <result property="vehicleType"    column="vehicle_type"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="maximumDrivingSpeedFull"    column="maximum_driving_speed_full"    />
+        <result property="maximumDrivingSpeedEmpty"    column="maximum_driving_speed_empty"    />
+        <result property="maxClimbCapabilityFull"    column="max_climb_capability_full"    />
+        <result property="maxClimbCapabilityEmpty"    column="max_climb_capability_empty"    />
+        <result property="maximumTractionForceFull"    column="maximum_traction_force_full"    />
+        <result property="maximumTractionForceEmpty"    column="maximum_traction_force_empty"    />
+        <result property="liftingSpeedFull"    column="lifting_speed_full"    />
+        <result property="liftingSpeedEmpty"    column="lifting_speed_empty"    />
+        <result property="descentSpeedFull"    column="descent_speed_full"    />
+        <result property="descentSpeedEmpty"    column="descent_speed_empty"    />
+        <result property="runningSpeedFull"    column="running_speed_full"    />
+        <result property="runningSpeedEmpty"    column="running_speed_empty"    />
+        <result property="increaseSpeedFull"    column="increase_speed_full"    />
+        <result property="increaseSpeedEmpty"    column="increase_speed_empty"    />
+        <result property="lateralMovementSpeedFull"    column="lateral_movement_speed_full"    />
+        <result property="lateralMovementSpeedEmpty"    column="lateral_movement_speed_empty"    />
+        <result property="travelBrake"    column="travel_brake"    />
+        <result property="parkingBrake"    column="parking_brake"    />
+        <result property="bridgeLoadFullyLoadedFront"    column="bridge_load_fully_loaded_front"    />
+        <result property="bridgeLoadFullyLoadedBehind"    column="bridge_load_fully_loaded_behind"    />
+        <result property="bridgeLoadUnloadedFront"    column="bridge_load_unloaded_front"    />
+        <result property="bridgeLoadUnloadedBehind"    column="bridge_load_unloaded_behind"    />
+    </resultMap>
+
+    <sql id="selectPerformanceTableVo">
+        select id, vehicle_category, vehicle_type, manufacturer, maximum_driving_speed_full, maximum_driving_speed_empty, max_climb_capability_full, max_climb_capability_empty, maximum_traction_force_full, maximum_traction_force_empty, lifting_speed_full, lifting_speed_empty, descent_speed_full, descent_speed_empty, running_speed_full, running_speed_empty, increase_speed_full, increase_speed_empty, lateral_movement_speed_full, lateral_movement_speed_empty, travel_brake, parking_brake, bridge_load_fully_loaded_front, bridge_load_fully_loaded_behind, bridge_load_unloaded_front, bridge_load_unloaded_behind from performance_table
+    </sql>
+
+    <select id="selectPerformanceTableList" parameterType="PerformanceTable" resultMap="PerformanceTableResult">
+        <include refid="selectPerformanceTableVo"/>
+        <where>  
+            <if test="vehicleCategory != null  and vehicleCategory != ''"> and vehicle_category like concat('%', #{vehicleCategory}, '%')</if>
+            <if test="vehicleType != null  and vehicleType != ''"> and vehicle_type like concat('%', #{vehicleType}, '%')</if>
+            <if test="manufacturer != null  and manufacturer != ''"> and manufacturer like concat('%', #{manufacturer}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectPerformanceTableById" parameterType="Long" resultMap="PerformanceTableResult">
+        <include refid="selectPerformanceTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPerformanceTable" parameterType="PerformanceTable" useGeneratedKeys="true" keyProperty="id">
+        insert into performance_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vehicleCategory != null">vehicle_category,</if>
+            <if test="vehicleType != null">vehicle_type,</if>
+            <if test="manufacturer != null">manufacturer,</if>
+            <if test="maximumDrivingSpeedFull != null">maximum_driving_speed_full,</if>
+            <if test="maximumDrivingSpeedEmpty != null">maximum_driving_speed_empty,</if>
+            <if test="maxClimbCapabilityFull != null">max_climb_capability_full,</if>
+            <if test="maxClimbCapabilityEmpty != null">max_climb_capability_empty,</if>
+            <if test="maximumTractionForceFull != null">maximum_traction_force_full,</if>
+            <if test="maximumTractionForceEmpty != null">maximum_traction_force_empty,</if>
+            <if test="liftingSpeedFull != null">lifting_speed_full,</if>
+            <if test="liftingSpeedEmpty != null">lifting_speed_empty,</if>
+            <if test="descentSpeedFull != null">descent_speed_full,</if>
+            <if test="descentSpeedEmpty != null">descent_speed_empty,</if>
+            <if test="runningSpeedFull != null">running_speed_full,</if>
+            <if test="runningSpeedEmpty != null">running_speed_empty,</if>
+            <if test="increaseSpeedFull != null">increase_speed_full,</if>
+            <if test="increaseSpeedEmpty != null">increase_speed_empty,</if>
+            <if test="lateralMovementSpeedFull != null">lateral_movement_speed_full,</if>
+            <if test="lateralMovementSpeedEmpty != null">lateral_movement_speed_empty,</if>
+            <if test="travelBrake != null">travel_brake,</if>
+            <if test="parkingBrake != null">parking_brake,</if>
+            <if test="bridgeLoadFullyLoadedFront != null">bridge_load_fully_loaded_front,</if>
+            <if test="bridgeLoadFullyLoadedBehind != null">bridge_load_fully_loaded_behind,</if>
+            <if test="bridgeLoadUnloadedFront != null">bridge_load_unloaded_front,</if>
+            <if test="bridgeLoadUnloadedBehind != null">bridge_load_unloaded_behind,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vehicleCategory != null">#{vehicleCategory},</if>
+            <if test="vehicleType != null">#{vehicleType},</if>
+            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="maximumDrivingSpeedFull != null">#{maximumDrivingSpeedFull},</if>
+            <if test="maximumDrivingSpeedEmpty != null">#{maximumDrivingSpeedEmpty},</if>
+            <if test="maxClimbCapabilityFull != null">#{maxClimbCapabilityFull},</if>
+            <if test="maxClimbCapabilityEmpty != null">#{maxClimbCapabilityEmpty},</if>
+            <if test="maximumTractionForceFull != null">#{maximumTractionForceFull},</if>
+            <if test="maximumTractionForceEmpty != null">#{maximumTractionForceEmpty},</if>
+            <if test="liftingSpeedFull != null">#{liftingSpeedFull},</if>
+            <if test="liftingSpeedEmpty != null">#{liftingSpeedEmpty},</if>
+            <if test="descentSpeedFull != null">#{descentSpeedFull},</if>
+            <if test="descentSpeedEmpty != null">#{descentSpeedEmpty},</if>
+            <if test="runningSpeedFull != null">#{runningSpeedFull},</if>
+            <if test="runningSpeedEmpty != null">#{runningSpeedEmpty},</if>
+            <if test="increaseSpeedFull != null">#{increaseSpeedFull},</if>
+            <if test="increaseSpeedEmpty != null">#{increaseSpeedEmpty},</if>
+            <if test="lateralMovementSpeedFull != null">#{lateralMovementSpeedFull},</if>
+            <if test="lateralMovementSpeedEmpty != null">#{lateralMovementSpeedEmpty},</if>
+            <if test="travelBrake != null">#{travelBrake},</if>
+            <if test="parkingBrake != null">#{parkingBrake},</if>
+            <if test="bridgeLoadFullyLoadedFront != null">#{bridgeLoadFullyLoadedFront},</if>
+            <if test="bridgeLoadFullyLoadedBehind != null">#{bridgeLoadFullyLoadedBehind},</if>
+            <if test="bridgeLoadUnloadedFront != null">#{bridgeLoadUnloadedFront},</if>
+            <if test="bridgeLoadUnloadedBehind != null">#{bridgeLoadUnloadedBehind},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePerformanceTable" parameterType="PerformanceTable">
+        update performance_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vehicleCategory != null">vehicle_category = #{vehicleCategory},</if>
+            <if test="vehicleType != null">vehicle_type = #{vehicleType},</if>
+            <if test="manufacturer != null">manufacturer = #{manufacturer},</if>
+            <if test="maximumDrivingSpeedFull != null">maximum_driving_speed_full = #{maximumDrivingSpeedFull},</if>
+            <if test="maximumDrivingSpeedEmpty != null">maximum_driving_speed_empty = #{maximumDrivingSpeedEmpty},</if>
+            <if test="maxClimbCapabilityFull != null">max_climb_capability_full = #{maxClimbCapabilityFull},</if>
+            <if test="maxClimbCapabilityEmpty != null">max_climb_capability_empty = #{maxClimbCapabilityEmpty},</if>
+            <if test="maximumTractionForceFull != null">maximum_traction_force_full = #{maximumTractionForceFull},</if>
+            <if test="maximumTractionForceEmpty != null">maximum_traction_force_empty = #{maximumTractionForceEmpty},</if>
+            <if test="liftingSpeedFull != null">lifting_speed_full = #{liftingSpeedFull},</if>
+            <if test="liftingSpeedEmpty != null">lifting_speed_empty = #{liftingSpeedEmpty},</if>
+            <if test="descentSpeedFull != null">descent_speed_full = #{descentSpeedFull},</if>
+            <if test="descentSpeedEmpty != null">descent_speed_empty = #{descentSpeedEmpty},</if>
+            <if test="runningSpeedFull != null">running_speed_full = #{runningSpeedFull},</if>
+            <if test="runningSpeedEmpty != null">running_speed_empty = #{runningSpeedEmpty},</if>
+            <if test="increaseSpeedFull != null">increase_speed_full = #{increaseSpeedFull},</if>
+            <if test="increaseSpeedEmpty != null">increase_speed_empty = #{increaseSpeedEmpty},</if>
+            <if test="lateralMovementSpeedFull != null">lateral_movement_speed_full = #{lateralMovementSpeedFull},</if>
+            <if test="lateralMovementSpeedEmpty != null">lateral_movement_speed_empty = #{lateralMovementSpeedEmpty},</if>
+            <if test="travelBrake != null">travel_brake = #{travelBrake},</if>
+            <if test="parkingBrake != null">parking_brake = #{parkingBrake},</if>
+            <if test="bridgeLoadFullyLoadedFront != null">bridge_load_fully_loaded_front = #{bridgeLoadFullyLoadedFront},</if>
+            <if test="bridgeLoadFullyLoadedBehind != null">bridge_load_fully_loaded_behind = #{bridgeLoadFullyLoadedBehind},</if>
+            <if test="bridgeLoadUnloadedFront != null">bridge_load_unloaded_front = #{bridgeLoadUnloadedFront},</if>
+            <if test="bridgeLoadUnloadedBehind != null">bridge_load_unloaded_behind = #{bridgeLoadUnloadedBehind},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePerformanceTableById" parameterType="Long">
+        delete from performance_table where id = #{id}
+    </delete>
+
+    <delete id="deletePerformanceTableByIds" parameterType="String">
+        delete from performance_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

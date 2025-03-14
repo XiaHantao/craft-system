@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.marketanalysis.mapper.SalesLedgerTableMapper">
+    
+    <resultMap type="SalesLedgerTable" id="SalesLedgerTableResult">
+        <result property="id"    column="id"    />
+        <result property="branch"    column="branch"    />
+        <result property="contractNumber"    column="contract_number"    />
+        <result property="orderNumber"    column="order_number"    />
+        <result property="orderAcceptanceDate"    column="order_acceptance_date"    />
+        <result property="vehicleType"    column="vehicle_type"    />
+        <result property="number"    column="number"    />
+        <result property="valveplateNumber"    column="valveplate_number"    />
+        <result property="goodsFork"    column="goods_fork"    />
+        <result property="gantry"    column="gantry"    />
+        <result property="airFilter"    column="air_filter"    />
+        <result property="accessory"    column="accessory"    />
+        <result property="tyre"    column="tyre"    />
+        <result property="configuration"    column="configuration"    />
+        <result property="carNumber"    column="car_number"    />
+        <result property="remark"    column="remark"    />
+        <result property="deliveryForm"    column="delivery_form"    />
+        <result property="deliveryLocation"    column="delivery_location"    />
+        <result property="contactPerson"    column="contact_person"    />
+        <result property="phoneNumber"    column="phone_number"    />
+        <result property="deliveryTime"    column="delivery_time"    />
+        <result property="planDepartureDate"    column="plan_departure_date"    />
+        <result property="actualDepartureDate"    column="actual_departure_date"    />
+        <result property="systemDeliveryTime"    column="system_delivery_time"    />
+        <result property="deliveryOrderNumber"    column="delivery_order_number"    />
+        <result property="completionTime"    column="completion_time"    />
+        <result property="redemptionRate"    column="redemption_rate"    />
+    </resultMap>
+
+    <sql id="selectSalesLedgerTableVo">
+        select id,branch, contract_number, order_number, order_acceptance_date, vehicle_type, number, valveplate_number, goods_fork, gantry, air_filter, accessory, tyre, configuration, car_number, remark, delivery_form, delivery_location, contact_person, phone_number, delivery_time, plan_departure_date, actual_departure_date, system_delivery_time, delivery_order_number, completion_time, redemption_rate from sales_ledger_table
+    </sql>
+
+    <select id="selectSalesLedgerTableList" parameterType="SalesLedgerTable" resultMap="SalesLedgerTableResult">
+        <include refid="selectSalesLedgerTableVo"/>
+        <where>  
+            <if test="branch != null  and branch != ''"> and branch like concat('%', #{branch}, '%')</if>
+            <if test="vehicleType != null  and vehicleType != ''"> and vehicle_type like concat('%', #{vehicleType}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSalesLedgerTableByBranch" parameterType="String" resultMap="SalesLedgerTableResult">
+        <include refid="selectSalesLedgerTableVo"/>
+        where branch = #{branch}
+    </select>
+        
+    <insert id="insertSalesLedgerTable" parameterType="SalesLedgerTable">
+        insert into sales_ledger_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="branch != null">branch,</if>
+            <if test="contractNumber != null">contract_number,</if>
+            <if test="orderNumber != null">order_number,</if>
+            <if test="orderAcceptanceDate != null">order_acceptance_date,</if>
+            <if test="vehicleType != null">vehicle_type,</if>
+            <if test="number != null">number,</if>
+            <if test="valveplateNumber != null">valveplate_number,</if>
+            <if test="goodsFork != null">goods_fork,</if>
+            <if test="gantry != null">gantry,</if>
+            <if test="airFilter != null">air_filter,</if>
+            <if test="accessory != null">accessory,</if>
+            <if test="tyre != null">tyre,</if>
+            <if test="configuration != null">configuration,</if>
+            <if test="carNumber != null">car_number,</if>
+            <if test="remark != null">remark,</if>
+            <if test="deliveryForm != null">delivery_form,</if>
+            <if test="deliveryLocation != null">delivery_location,</if>
+            <if test="contactPerson != null">contact_person,</if>
+            <if test="phoneNumber != null">phone_number,</if>
+            <if test="deliveryTime != null">delivery_time,</if>
+            <if test="planDepartureDate != null">plan_departure_date,</if>
+            <if test="actualDepartureDate != null">actual_departure_date,</if>
+            <if test="systemDeliveryTime != null">system_delivery_time,</if>
+            <if test="deliveryOrderNumber != null">delivery_order_number,</if>
+            <if test="completionTime != null">completion_time,</if>
+            <if test="redemptionRate != null">redemption_rate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="branch != null">#{branch},</if>
+            <if test="contractNumber != null">#{contractNumber},</if>
+            <if test="orderNumber != null">#{orderNumber},</if>
+            <if test="orderAcceptanceDate != null">#{orderAcceptanceDate},</if>
+            <if test="vehicleType != null">#{vehicleType},</if>
+            <if test="number != null">#{number},</if>
+            <if test="valveplateNumber != null">#{valveplateNumber},</if>
+            <if test="goodsFork != null">#{goodsFork},</if>
+            <if test="gantry != null">#{gantry},</if>
+            <if test="airFilter != null">#{airFilter},</if>
+            <if test="accessory != null">#{accessory},</if>
+            <if test="tyre != null">#{tyre},</if>
+            <if test="configuration != null">#{configuration},</if>
+            <if test="carNumber != null">#{carNumber},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="deliveryForm != null">#{deliveryForm},</if>
+            <if test="deliveryLocation != null">#{deliveryLocation},</if>
+            <if test="contactPerson != null">#{contactPerson},</if>
+            <if test="phoneNumber != null">#{phoneNumber},</if>
+            <if test="deliveryTime != null">#{deliveryTime},</if>
+            <if test="planDepartureDate != null">#{planDepartureDate},</if>
+            <if test="actualDepartureDate != null">#{actualDepartureDate},</if>
+            <if test="systemDeliveryTime != null">#{systemDeliveryTime},</if>
+            <if test="deliveryOrderNumber != null">#{deliveryOrderNumber},</if>
+            <if test="completionTime != null">#{completionTime},</if>
+            <if test="redemptionRate != null">#{redemptionRate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSalesLedgerTable" parameterType="SalesLedgerTable">
+        update sales_ledger_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contractNumber != null">contract_number = #{contractNumber},</if>
+            <if test="orderNumber != null">order_number = #{orderNumber},</if>
+            <if test="orderAcceptanceDate != null">order_acceptance_date = #{orderAcceptanceDate},</if>
+            <if test="vehicleType != null">vehicle_type = #{vehicleType},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="valveplateNumber != null">valveplate_number = #{valveplateNumber},</if>
+            <if test="goodsFork != null">goods_fork = #{goodsFork},</if>
+            <if test="gantry != null">gantry = #{gantry},</if>
+            <if test="airFilter != null">air_filter = #{airFilter},</if>
+            <if test="accessory != null">accessory = #{accessory},</if>
+            <if test="tyre != null">tyre = #{tyre},</if>
+            <if test="configuration != null">configuration = #{configuration},</if>
+            <if test="carNumber != null">car_number = #{carNumber},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="deliveryForm != null">delivery_form = #{deliveryForm},</if>
+            <if test="deliveryLocation != null">delivery_location = #{deliveryLocation},</if>
+            <if test="contactPerson != null">contact_person = #{contactPerson},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="deliveryTime != null">delivery_time = #{deliveryTime},</if>
+            <if test="planDepartureDate != null">plan_departure_date = #{planDepartureDate},</if>
+            <if test="actualDepartureDate != null">actual_departure_date = #{actualDepartureDate},</if>
+            <if test="systemDeliveryTime != null">system_delivery_time = #{systemDeliveryTime},</if>
+            <if test="deliveryOrderNumber != null">delivery_order_number = #{deliveryOrderNumber},</if>
+            <if test="completionTime != null">completion_time = #{completionTime},</if>
+            <if test="redemptionRate != null">redemption_rate = #{redemptionRate},</if>
+        </trim>
+        where branch = #{branch}
+    </update>
+
+    <delete id="deleteSalesLedgerTableById" parameterType="Long">
+        delete from sales_ledger_table where id = #{id}
+    </delete>
+
+    <delete id="deleteSalesLedgerTableByIds" parameterType="Long">
+        delete from sales_ledger_table where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="batchInsertSalesLedgerTable" parameterType="java.util.List">
+        INSERT INTO sales_ledger_table (
+        branch,
+        contract_number,
+        order_number,
+        order_acceptance_date,
+        vehicle_type,
+        number,
+        valveplate_number,
+        goods_fork,
+        gantry,
+        air_filter,
+        accessory,
+        tyre,
+        configuration,
+        car_number,
+        remark,
+        delivery_form,
+        delivery_location,
+        contact_person,
+        phone_number,
+        delivery_time,
+        plan_departure_date,
+        actual_departure_date,
+        system_delivery_time,
+        delivery_order_number,
+        completion_time,
+        redemption_rate
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.branch},
+            #{item.contractNumber},
+            #{item.orderNumber},
+            #{item.orderAcceptanceDate},
+            #{item.vehicleType},
+            #{item.number},
+            #{item.valveplateNumber},
+            #{item.goodsFork},
+            #{item.gantry},
+            #{item.airFilter},
+            #{item.accessory},
+            #{item.tyre},
+            #{item.configuration},
+            #{item.carNumber},
+            #{item.remark},
+            #{item.deliveryForm},
+            #{item.deliveryLocation},
+            #{item.contactPerson},
+            #{item.phoneNumber},
+            #{item.deliveryTime},
+            #{item.planDepartureDate},
+            #{item.actualDepartureDate},
+            #{item.systemDeliveryTime},
+            #{item.deliveryOrderNumber},
+            #{item.completionTime},
+            #{item.redemptionRate}
+            )
+        </foreach>
+    </insert>
+    <select id="countSalesByBranch" resultType="java.util.Map">
+        SELECT branch AS name, COUNT(*) AS value
+        FROM sales_ledger_table
+        GROUP BY branch
+    </select>
+    <!-- 按月份统计 -->
+    <select id="countSalesByMonth" resultType="java.util.Map">
+        SELECT
+            DATE_FORMAT(order_acceptance_date, '%Y-%m') AS month,
+        COUNT(*) AS value
+        FROM sales_ledger_table
+        WHERE vehicle_type = #{vehicleType} AND branch = #{branch}
+        GROUP BY month
+        ORDER BY month
+    </select>
+
+    <!-- 按网点统计（特定车型） -->
+    <select id="countSalesByBranchForVehicle" resultType="java.util.Map">
+        SELECT
+            branch AS name,
+            COUNT(*) AS value
+        FROM sales_ledger_table
+        WHERE vehicle_type = #{vehicleType}
+        GROUP BY branch
+    </select>
+    <select id="countMonthlySalesComparison" resultType="map">
+        WITH RECURSIVE months(month) AS (
+            SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6
+            UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12
+        )
+        SELECT
+            m.month AS month,
+        COALESCE(COUNT(CASE WHEN YEAR(s.order_acceptance_date) = #{year}
+                AND (#{vehicleType} IS NULL OR s.vehicle_type = #{vehicleType})
+                AND (#{branch} IS NULL OR s.branch = #{branch}) THEN 1 END), 0) AS currentYear,
+            COALESCE(COUNT(CASE WHEN YEAR(s.order_acceptance_date) = #{year} - 1
+                AND (#{vehicleType} IS NULL OR s.vehicle_type = #{vehicleType})
+                AND (#{branch} IS NULL OR s.branch = #{branch}) THEN 1 END), 0) AS lastYear
+        FROM months m
+            LEFT JOIN sales_ledger_table s
+        ON m.month = MONTH(s.order_acceptance_date)
+            AND (YEAR(s.order_acceptance_date) = #{year} OR YEAR(s.order_acceptance_date) = #{year} - 1)
+        GROUP BY m.month
+        ORDER BY m.month;
+    </select>
+
+    <select id="countSalesByVehicleForBranch" resultType="map">
+        SELECT vehicle_type AS name, COUNT(*) AS value
+        FROM sales_ledger_table
+        WHERE branch = #{branch}
+        GROUP BY vehicle_type
+    </select>
+    <select id="countSalesByVehicle" resultType="map">
+        SELECT
+        vehicle_type AS name,
+        COUNT(*) AS value
+        FROM sales_ledger_table
+        <where>
+            <if test="vehicleType != null and vehicleType != ''">
+                vehicle_type LIKE CONCAT('%', #{vehicleType}, '%')
+            </if>
+        </where>
+        GROUP BY vehicle_type
+        ORDER BY value DESC
+    </select>
+    <select id="checkDataExists" resultType="int">
+        SELECT COUNT(*) FROM sales_ledger_table LIMIT 1
+    </select>
+    <delete id="cleanTable">
+        TRUNCATE TABLE sales_ledger_table
+    </delete>
+    <select id="getDistinctVehicleTypes" resultType="java.lang.String">
+        SELECT DISTINCT vehicle_type FROM sales_ledger_table WHERE vehicle_type IS NOT NULL
+    </select>
+
+    <!-- 获取所有网点 -->
+    <select id="getDistinctBranches" resultType="java.lang.String">
+        SELECT DISTINCT branch FROM sales_ledger_table WHERE branch IS NOT NULL
+    </select>
+</mapper>

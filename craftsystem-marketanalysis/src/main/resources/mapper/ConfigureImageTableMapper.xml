@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.marketanalysis.mapper.ConfigureImageTableMapper">
+    
+    <resultMap type="ConfigureImageTable" id="ConfigureImageTableResult">
+        <result property="id"    column="id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="notes"    column="notes"    />
+        <result property="file"    column="file"    />
+        <result property="image"    column="image"    />
+    </resultMap>
+
+    <sql id="selectConfigureImageTableVo">
+        select id, file_name, notes, file, image from configure_image_table
+    </sql>
+
+    <select id="selectConfigureImageTableList" parameterType="ConfigureImageTable" resultMap="ConfigureImageTableResult">
+        <include refid="selectConfigureImageTableVo"/>
+        <where>  
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectConfigureImageTableById" parameterType="Long" resultMap="ConfigureImageTableResult">
+        <include refid="selectConfigureImageTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertConfigureImageTable" parameterType="ConfigureImageTable" useGeneratedKeys="true" keyProperty="id">
+        insert into configure_image_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">file_name,</if>
+            <if test="notes != null">notes,</if>
+            <if test="file != null">file,</if>
+            <if test="image != null">image,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">#{fileName},</if>
+            <if test="notes != null">#{notes},</if>
+            <if test="file != null">#{file},</if>
+            <if test="image != null">#{image},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConfigureImageTable" parameterType="ConfigureImageTable">
+        update configure_image_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="notes != null">notes = #{notes},</if>
+            <if test="file != null">file = #{file},</if>
+            <if test="image != null">image = #{image},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteConfigureImageTableById" parameterType="Long">
+        delete from configure_image_table where id = #{id}
+    </delete>
+
+    <delete id="deleteConfigureImageTableByIds" parameterType="String">
+        delete from configure_image_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
