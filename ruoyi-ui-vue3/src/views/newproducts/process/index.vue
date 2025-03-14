@@ -61,9 +61,21 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column v-if="false" label="id" align="center" prop="id" />
       <el-table-column label="新产品名称" align="center" prop="name" />
-      <el-table-column label="试验记录文件" align="center" prop="testprocess" />
-      <el-table-column label="总结文件" align="center" prop="conclude" />
-      <el-table-column label="其他文件" align="center" prop="other" />
+      <el-table-column label="试验记录文件" align="center" prop="testprocess" >
+        <template v-slot:default="scope">
+          <el-button v-if="scope.row.testprocess" icon="Download" @click="downloadFiles(scope.row.testprocess)"></el-button>
+        </template> 
+      </el-table-column>       
+      <el-table-column label="总结文件" align="center" prop="conclude" >
+        <template v-slot:default="scope">
+          <el-button v-if="scope.row.conclude" icon="Download" @click="downloadFiles(scope.row.conclude)"></el-button>
+        </template> 
+      </el-table-column>        
+      <el-table-column label="其他文件" align="center" prop="other" >
+        <template v-slot:default="scope">
+          <el-button v-if="scope.row.other" icon="Download" @click="downloadFiles(scope.row.other)"></el-button>
+        </template> 
+      </el-table-column>        
       <el-table-column label="备注" align="center" prop="remark" />
 <!--       <el-table-column label="" align="center" prop="a" />
       <el-table-column label="" align="center" prop="b" />
@@ -299,6 +311,35 @@ function handleExport() {
   proxy.download('newproducts/process/export', {
     ...queryParams.value
   }, `process_${new Date().getTime()}.xlsx`)
+}
+
+/** 多文件下载 */
+function downloadFiles(urls) {
+  // 如果 urls 是字符串，则按逗号分隔为数组
+  if (typeof urls === 'string') {
+    urls = urls.split(',');
+  }
+  // 确保 urls 是数组
+  if (!Array.isArray(urls)) {
+    console.error('urls 必须是数组或逗号分隔的字符串');
+    return;
+  }
+  // 遍历每个 URL，下载并保存文件
+  urls.forEach(url => {
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', decodeURIComponent(url.split('/').pop())); // 解码文件名
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+      })
+      .catch(error => console.error('Download error:', error));
+  });
 }
 
 getList();
