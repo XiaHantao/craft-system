@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.mapper.ProcessValidationAndSummaryTableMapper">
+    
+    <resultMap type="ProcessValidationAndSummaryTable" id="ProcessValidationAndSummaryTableResult">
+        <result property="id"    column="id"    />
+        <result property="vehicleModel"    column="vehicle_model"    />
+        <result property="verificationReportName"    column="verification_report_name"    />
+        <result property="verificationReportPath"    column="verification_report_path"    />
+        <result property="verificationReportUploadPerson"    column="verification_report_upload_person"    />
+        <result property="verificationReportUploadTime"    column="verification_report_upload_time"    />
+        <result property="improvementReportName"    column="improvement_report_name"    />
+        <result property="improvementReportPath"    column="improvement_report_path"    />
+        <result property="improvementReportUploadPerson"    column="improvement_report_upload_person"    />
+        <result property="improvementReportUploadTime"    column="improvement_report_upload_time"    />
+        <result property="summaryReportName"    column="summary_report_name"    />
+        <result property="summaryReportPath"    column="summary_report_path"    />
+        <result property="summaryReportUploadPerson"    column="summary_report_upload_person"    />
+        <result property="summaryReportUploadTime"    column="summary_report_upload_time"    />
+        <result property="status"    column="status"    />
+        <result property="newFlag"    column="new_flag"    />
+    </resultMap>
+
+    <sql id="selectProcessValidationAndSummaryTableVo">
+        select id, vehicle_model, verification_report_name, verification_report_path, verification_report_upload_person, verification_report_upload_time, improvement_report_name, improvement_report_path, improvement_report_upload_person, improvement_report_upload_time, summary_report_name, summary_report_path, summary_report_upload_person, summary_report_upload_time, status, new_flag from process_validation_and_summary_table
+    </sql>
+
+    <select id="selectProcessValidationAndSummaryTableList" parameterType="ProcessValidationAndSummaryTable" resultMap="ProcessValidationAndSummaryTableResult">
+        <include refid="selectProcessValidationAndSummaryTableVo"/>
+        <where>  
+            <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model like concat('%', #{vehicleModel}, '%')</if>
+            <if test="verificationReportName != null  and verificationReportName != ''"> and verification_report_name like concat('%', #{verificationReportName}, '%')</if>
+            <if test="verificationReportPath != null  and verificationReportPath != ''"> and verification_report_path = #{verificationReportPath}</if>
+            <if test="verificationReportUploadPerson != null  and verificationReportUploadPerson != ''"> and verification_report_upload_person like concat('%', #{verificationReportUploadPerson}, '%')</if>
+            <if test="verificationReportUploadTime != null "> and verification_report_upload_time = #{verificationReportUploadTime}</if>
+            <if test="improvementReportName != null  and improvementReportName != ''"> and improvement_report_name like concat('%', #{improvementReportName}, '%')</if>
+            <if test="improvementReportPath != null  and improvementReportPath != ''"> and improvement_report_path = #{improvementReportPath}</if>
+            <if test="improvementReportUploadPerson != null  and improvementReportUploadPerson != ''"> and improvement_report_upload_person like concat('%', #{improvementReportUploadPerson}, '%')</if>
+            <if test="improvementReportUploadTime != null "> and improvement_report_upload_time = #{improvementReportUploadTime}</if>
+            <if test="summaryReportName != null  and summaryReportName != ''"> and summary_report_name like concat('%', #{summaryReportName}, '%')</if>
+            <if test="summaryReportPath != null  and summaryReportPath != ''"> and summary_report_path = #{summaryReportPath}</if>
+            <if test="summaryReportUploadPerson != null  and summaryReportUploadPerson != ''"> and summary_report_upload_person like concat('%', #{summaryReportUploadPerson}, '%')</if>
+            <if test="summaryReportUploadTime != null "> and summary_report_upload_time = #{summaryReportUploadTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            and new_flag = 1
+        </where>
+    </select>
+
+    <select id="selectHistoryList" parameterType="ProcessValidationAndSummaryTable" resultMap="ProcessValidationAndSummaryTableResult">
+        <include refid="selectProcessValidationAndSummaryTableVo"/>
+        <where>
+            <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model like concat('%', #{vehicleModel}, '%')</if>
+            <if test="verificationReportName != null  and verificationReportName != ''"> and verification_report_name like concat('%', #{verificationReportName}, '%')</if>
+            <if test="verificationReportPath != null  and verificationReportPath != ''"> and verification_report_path = #{verificationReportPath}</if>
+            <if test="verificationReportUploadPerson != null  and verificationReportUploadPerson != ''"> and verification_report_upload_person like concat('%', #{verificationReportUploadPerson}, '%')</if>
+            <if test="verificationReportUploadTime != null "> and verification_report_upload_time = #{verificationReportUploadTime}</if>
+            <if test="improvementReportName != null  and improvementReportName != ''"> and improvement_report_name like concat('%', #{improvementReportName}, '%')</if>
+            <if test="improvementReportPath != null  and improvementReportPath != ''"> and improvement_report_path = #{improvementReportPath}</if>
+            <if test="improvementReportUploadPerson != null  and improvementReportUploadPerson != ''"> and improvement_report_upload_person like concat('%', #{improvementReportUploadPerson}, '%')</if>
+            <if test="improvementReportUploadTime != null "> and improvement_report_upload_time = #{improvementReportUploadTime}</if>
+            <if test="summaryReportName != null  and summaryReportName != ''"> and summary_report_name like concat('%', #{summaryReportName}, '%')</if>
+            <if test="summaryReportPath != null  and summaryReportPath != ''"> and summary_report_path = #{summaryReportPath}</if>
+            <if test="summaryReportUploadPerson != null  and summaryReportUploadPerson != ''"> and summary_report_upload_person like concat('%', #{summaryReportUploadPerson}, '%')</if>
+            <if test="summaryReportUploadTime != null "> and summary_report_upload_time = #{summaryReportUploadTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            and new_flag = 0
+        </where>
+    </select>
+    
+    <select id="selectProcessValidationAndSummaryTableById" parameterType="Long" resultMap="ProcessValidationAndSummaryTableResult">
+        <include refid="selectProcessValidationAndSummaryTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProcessValidationAndSummaryTable" parameterType="ProcessValidationAndSummaryTable" useGeneratedKeys="true" keyProperty="id">
+        insert into process_validation_and_summary_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vehicleModel != null">vehicle_model,</if>
+            <if test="verificationReportName != null">verification_report_name,</if>
+            <if test="verificationReportPath != null">verification_report_path,</if>
+            <if test="verificationReportUploadPerson != null">verification_report_upload_person,</if>
+            <if test="verificationReportUploadTime != null">verification_report_upload_time,</if>
+            <if test="improvementReportName != null">improvement_report_name,</if>
+            <if test="improvementReportPath != null">improvement_report_path,</if>
+            <if test="improvementReportUploadPerson != null">improvement_report_upload_person,</if>
+            <if test="improvementReportUploadTime != null">improvement_report_upload_time,</if>
+            <if test="summaryReportName != null">summary_report_name,</if>
+            <if test="summaryReportPath != null">summary_report_path,</if>
+            <if test="summaryReportUploadPerson != null">summary_report_upload_person,</if>
+            <if test="summaryReportUploadTime != null">summary_report_upload_time,</if>
+            <if test="status != null">status,</if>
+            <if test="newFlag != null">new_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vehicleModel != null">#{vehicleModel},</if>
+            <if test="verificationReportName != null">#{verificationReportName},</if>
+            <if test="verificationReportPath != null">#{verificationReportPath},</if>
+            <if test="verificationReportUploadPerson != null">#{verificationReportUploadPerson},</if>
+            <if test="verificationReportUploadTime != null">#{verificationReportUploadTime},</if>
+            <if test="improvementReportName != null">#{improvementReportName},</if>
+            <if test="improvementReportPath != null">#{improvementReportPath},</if>
+            <if test="improvementReportUploadPerson != null">#{improvementReportUploadPerson},</if>
+            <if test="improvementReportUploadTime != null">#{improvementReportUploadTime},</if>
+            <if test="summaryReportName != null">#{summaryReportName},</if>
+            <if test="summaryReportPath != null">#{summaryReportPath},</if>
+            <if test="summaryReportUploadPerson != null">#{summaryReportUploadPerson},</if>
+            <if test="summaryReportUploadTime != null">#{summaryReportUploadTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="newFlag != null">#{newFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessValidationAndSummaryTable" parameterType="ProcessValidationAndSummaryTable">
+        update process_validation_and_summary_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vehicleModel != null">vehicle_model = #{vehicleModel},</if>
+            <if test="verificationReportName != null">verification_report_name = #{verificationReportName},</if>
+            <if test="verificationReportPath != null">verification_report_path = #{verificationReportPath},</if>
+            <if test="verificationReportUploadPerson != null">verification_report_upload_person = #{verificationReportUploadPerson},</if>
+            <if test="verificationReportUploadTime != null">verification_report_upload_time = #{verificationReportUploadTime},</if>
+            <if test="improvementReportName != null">improvement_report_name = #{improvementReportName},</if>
+            <if test="improvementReportPath != null">improvement_report_path = #{improvementReportPath},</if>
+            <if test="improvementReportUploadPerson != null">improvement_report_upload_person = #{improvementReportUploadPerson},</if>
+            <if test="improvementReportUploadTime != null">improvement_report_upload_time = #{improvementReportUploadTime},</if>
+            <if test="summaryReportName != null">summary_report_name = #{summaryReportName},</if>
+            <if test="summaryReportPath != null">summary_report_path = #{summaryReportPath},</if>
+            <if test="summaryReportUploadPerson != null">summary_report_upload_person = #{summaryReportUploadPerson},</if>
+            <if test="summaryReportUploadTime != null">summary_report_upload_time = #{summaryReportUploadTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="newFlag != null">new_flag = #{newFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessValidationAndSummaryTableById" parameterType="Long">
+        delete from process_validation_and_summary_table where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessValidationAndSummaryTableByIds" parameterType="String">
+        delete from process_validation_and_summary_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

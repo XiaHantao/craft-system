@@ -1,3 +1,10 @@
+## 项目启动说明[必读项]
+- 启动时间 2025年1月17号 星期五
+- 前端：node版本18.15.0
+- 后端：JDK版本1.8、maven自行配置
+- 其他：代码生成器前缀自行更改
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 <h4 align="center">基于SpringBoot+Vue前后端分离的Java快速开发框架</h4>
 <p align="center">
 	<a href="https://gitee.com/y_project/RuoYi-Vue/stargazers"><img src="https://gitee.com/y_project/RuoYi-Vue/badge/star.svg?theme=dark"></a>

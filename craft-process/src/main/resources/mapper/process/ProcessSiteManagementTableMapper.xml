@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.mapper.ProcessSiteManagementTableMapper">
+    
+    <resultMap type="ProcessSiteManagementTable" id="ProcessSiteManagementTableResult">
+        <result property="id"    column="id"    />
+        <result property="inspectionReportName"    column="inspection_report_name"    />
+        <result property="inspectionReportPath"    column="inspection_report_path"    />
+        <result property="rectificationRequirements"    column="rectification_requirements"    />
+        <result property="inspectionReportUploadPerson"    column="inspection_report_upload_person"    />
+        <result property="inspectionReportUploadTime"    column="inspection_report_upload_time"    />
+        <result property="rectificationReportName"    column="rectification_report_name"    />
+        <result property="rectificationReportPath"    column="rectification_report_path"    />
+        <result property="rectificationReportUploadPerson"    column="rectification_report_upload_person"    />
+        <result property="rectificationReportUploadTime"    column="rectification_report_upload_time"    />
+    </resultMap>
+
+    <sql id="selectProcessSiteManagementTableVo">
+        select id, inspection_report_name, inspection_report_path, rectification_requirements, inspection_report_upload_person, inspection_report_upload_time, rectification_report_name, rectification_report_path, rectification_report_upload_person, rectification_report_upload_time from process_site_management_table
+    </sql>
+
+    <select id="selectProcessSiteManagementTableList" parameterType="ProcessSiteManagementTable" resultMap="ProcessSiteManagementTableResult">
+        <include refid="selectProcessSiteManagementTableVo"/>
+        <where>  
+            <if test="inspectionReportName != null  and inspectionReportName != ''"> and inspection_report_name like concat('%', #{inspectionReportName}, '%')</if>
+            <if test="inspectionReportPath != null  and inspectionReportPath != ''"> and inspection_report_path = #{inspectionReportPath}</if>
+            <if test="rectificationRequirements != null  and rectificationRequirements != ''"> and rectification_requirements = #{rectificationRequirements}</if>
+            <if test="inspectionReportUploadPerson != null  and inspectionReportUploadPerson != ''"> and inspection_report_upload_person like concat('%', #{inspectionReportUploadPerson}, '%')</if>
+            <if test="inspectionReportUploadTime != null "> and inspection_report_upload_time = #{inspectionReportUploadTime}</if>
+            <if test="rectificationReportName != null  and rectificationReportName != ''"> and rectification_report_name like concat('%', #{rectificationReportName}, '%')</if>
+            <if test="rectificationReportPath != null  and rectificationReportPath != ''"> and rectification_report_path = #{rectificationReportPath}</if>
+            <if test="rectificationReportUploadPerson != null  and rectificationReportUploadPerson != ''"> and rectification_report_upload_person like concat('%', #{rectificationReportUploadPerson}, '%')</if>
+            <if test="rectificationReportUploadTime != null "> and rectification_report_upload_time = #{rectificationReportUploadTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectProcessSiteManagementTableById" parameterType="Long" resultMap="ProcessSiteManagementTableResult">
+        <include refid="selectProcessSiteManagementTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProcessSiteManagementTable" parameterType="ProcessSiteManagementTable" useGeneratedKeys="true" keyProperty="id">
+        insert into process_site_management_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="inspectionReportName != null">inspection_report_name,</if>
+            <if test="inspectionReportPath != null">inspection_report_path,</if>
+            <if test="rectificationRequirements != null">rectification_requirements,</if>
+            <if test="inspectionReportUploadPerson != null">inspection_report_upload_person,</if>
+            <if test="inspectionReportUploadTime != null">inspection_report_upload_time,</if>
+            <if test="rectificationReportName != null">rectification_report_name,</if>
+            <if test="rectificationReportPath != null">rectification_report_path,</if>
+            <if test="rectificationReportUploadPerson != null">rectification_report_upload_person,</if>
+            <if test="rectificationReportUploadTime != null">rectification_report_upload_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="inspectionReportName != null">#{inspectionReportName},</if>
+            <if test="inspectionReportPath != null">#{inspectionReportPath},</if>
+            <if test="rectificationRequirements != null">#{rectificationRequirements},</if>
+            <if test="inspectionReportUploadPerson != null">#{inspectionReportUploadPerson},</if>
+            <if test="inspectionReportUploadTime != null">#{inspectionReportUploadTime},</if>
+            <if test="rectificationReportName != null">#{rectificationReportName},</if>
+            <if test="rectificationReportPath != null">#{rectificationReportPath},</if>
+            <if test="rectificationReportUploadPerson != null">#{rectificationReportUploadPerson},</if>
+            <if test="rectificationReportUploadTime != null">#{rectificationReportUploadTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessSiteManagementTable" parameterType="ProcessSiteManagementTable">
+        update process_site_management_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="inspectionReportName != null">inspection_report_name = #{inspectionReportName},</if>
+            <if test="inspectionReportPath != null">inspection_report_path = #{inspectionReportPath},</if>
+            <if test="rectificationRequirements != null">rectification_requirements = #{rectificationRequirements},</if>
+            <if test="inspectionReportUploadPerson != null">inspection_report_upload_person = #{inspectionReportUploadPerson},</if>
+            <if test="inspectionReportUploadTime != null">inspection_report_upload_time = #{inspectionReportUploadTime},</if>
+            <if test="rectificationReportName != null">rectification_report_name = #{rectificationReportName},</if>
+            <if test="rectificationReportPath != null">rectification_report_path = #{rectificationReportPath},</if>
+            <if test="rectificationReportUploadPerson != null">rectification_report_upload_person = #{rectificationReportUploadPerson},</if>
+            <if test="rectificationReportUploadTime != null">rectification_report_upload_time = #{rectificationReportUploadTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessSiteManagementTableById" parameterType="Long">
+        delete from process_site_management_table where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessSiteManagementTableByIds" parameterType="String">
+        delete from process_site_management_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

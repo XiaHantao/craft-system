@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.mapper.ProcessOptimizationAndImprovementTableMapper">
+    
+    <resultMap type="ProcessOptimizationAndImprovementTable" id="ProcessOptimizationAndImprovementTableResult">
+        <result property="id"    column="id"    />
+        <result property="versionNumber"    column="version_number"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateContent"    column="update_content"    />
+        <result property="updatePerson"    column="update_person"    />
+        <result property="newFlag"    column="new_flag"    />
+        <result property="parentId"    column="parent_id"    />
+    </resultMap>
+
+    <sql id="selectProcessOptimizationAndImprovementTableVo">
+        select id, version_number, file_name, file_path, update_time, update_content, update_person, new_flag, parent_id from process_optimization_and_improvement_table
+    </sql>
+
+    <select id="selectProcessOptimizationAndImprovementTableList" parameterType="ProcessOptimizationAndImprovementTable" resultMap="ProcessOptimizationAndImprovementTableResult">
+        <include refid="selectProcessOptimizationAndImprovementTableVo"/>
+        <where>  
+            <if test="versionNumber != null  and versionNumber != ''"> and version_number = #{versionNumber}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+            <if test="updateContent != null  and updateContent != ''"> and update_content = #{updateContent}</if>
+            <if test="updatePerson != null  and updatePerson != ''"> and update_person = #{updatePerson}</if>
+            <if test="newFlag != null "> and new_flag = #{newFlag}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+        </where>
+    </select>
+    
+    <select id="selectProcessOptimizationAndImprovementTableById" parameterType="Long" resultMap="ProcessOptimizationAndImprovementTableResult">
+        <include refid="selectProcessOptimizationAndImprovementTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProcessOptimizationAndImprovementTable" parameterType="ProcessOptimizationAndImprovementTable" useGeneratedKeys="true" keyProperty="id">
+        insert into process_optimization_and_improvement_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="versionNumber != null">version_number,</if>
+            <if test="fileName != null">file_name,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateContent != null">update_content,</if>
+            <if test="updatePerson != null">update_person,</if>
+            <if test="newFlag != null">new_flag,</if>
+            <if test="parentId != null">parent_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="versionNumber != null">#{versionNumber},</if>
+            <if test="fileName != null">#{fileName},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateContent != null">#{updateContent},</if>
+            <if test="updatePerson != null">#{updatePerson},</if>
+            <if test="newFlag != null">#{newFlag},</if>
+            <if test="parentId != null">#{parentId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessOptimizationAndImprovementTable" parameterType="ProcessOptimizationAndImprovementTable">
+        update process_optimization_and_improvement_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="versionNumber != null">version_number = #{versionNumber},</if>
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateContent != null">update_content = #{updateContent},</if>
+            <if test="updatePerson != null">update_person = #{updatePerson},</if>
+            <if test="newFlag != null">new_flag = #{newFlag},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessOptimizationAndImprovementTableById" parameterType="Long">
+        delete from process_optimization_and_improvement_table where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessOptimizationAndImprovementTableByIds" parameterType="String">
+        delete from process_optimization_and_improvement_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

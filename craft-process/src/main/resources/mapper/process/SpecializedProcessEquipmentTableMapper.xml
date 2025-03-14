@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.mapper.SpecializedProcessEquipmentTableMapper">
+    
+    <resultMap type="SpecializedProcessEquipmentTable" id="SpecializedProcessEquipmentTableResult">
+        <result property="id"    column="id"    />
+        <result property="toolNumber"    column="tool_number"    />
+        <result property="toolName"    column="tool_name"    />
+        <result property="toolType"    column="tool_type"    />
+        <result property="productId"    column="product_id"    />
+        <result property="productName"    column="product_name"    />
+        <result property="useTeam"    column="use_team"    />
+        <result property="remark"    column="remark"    />
+        <result property="uploadTime"    column="upload_time"    />
+    </resultMap>
+
+    <sql id="selectSpecializedProcessEquipmentTableVo">
+        select id, tool_number, tool_name, tool_type, product_id, product_name, use_team, remark, upload_time from specialized_process_equipment_table
+    </sql>
+
+    <select id="selectSpecializedProcessEquipmentTableList" parameterType="SpecializedProcessEquipmentTable" resultMap="SpecializedProcessEquipmentTableResult">
+        <include refid="selectSpecializedProcessEquipmentTableVo"/>
+        <where>  
+            <if test="toolNumber != null  and toolNumber != ''"> and tool_number = #{toolNumber}</if>
+            <if test="toolName != null  and toolName != ''"> and tool_name like concat('%', #{toolName}, '%')</if>
+            <if test="toolType != null  and toolType != ''"> and tool_type = #{toolType}</if>
+            <if test="productId != null  and productId != ''"> and product_id = #{productId}</if>
+            <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
+            <if test="useTeam != null  and useTeam != ''"> and use_team = #{useTeam}</if>
+            <if test="params.beginUploadTime != null and params.beginUploadTime != '' and params.endUploadTime != null and params.endUploadTime != ''"> and upload_time between #{params.beginUploadTime} and #{params.endUploadTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectSpecializedProcessEquipmentTableById" parameterType="Long" resultMap="SpecializedProcessEquipmentTableResult">
+        <include refid="selectSpecializedProcessEquipmentTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSpecializedProcessEquipmentTable" parameterType="SpecializedProcessEquipmentTable" useGeneratedKeys="true" keyProperty="id">
+        insert into specialized_process_equipment_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="toolNumber != null">tool_number,</if>
+            <if test="toolName != null">tool_name,</if>
+            <if test="toolType != null">tool_type,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="productName != null">product_name,</if>
+            <if test="useTeam != null">use_team,</if>
+            <if test="remark != null">remark,</if>
+            <if test="uploadTime != null">upload_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="toolNumber != null">#{toolNumber},</if>
+            <if test="toolName != null">#{toolName},</if>
+            <if test="toolType != null">#{toolType},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="productName != null">#{productName},</if>
+            <if test="useTeam != null">#{useTeam},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="uploadTime != null">#{uploadTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSpecializedProcessEquipmentTable" parameterType="SpecializedProcessEquipmentTable">
+        update specialized_process_equipment_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="toolNumber != null">tool_number = #{toolNumber},</if>
+            <if test="toolName != null">tool_name = #{toolName},</if>
+            <if test="toolType != null">tool_type = #{toolType},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="productName != null">product_name = #{productName},</if>
+            <if test="useTeam != null">use_team = #{useTeam},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="uploadTime != null">upload_time = #{uploadTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSpecializedProcessEquipmentTableById" parameterType="Long">
+        delete from specialized_process_equipment_table where id = #{id}
+    </delete>
+
+    <delete id="deleteSpecializedProcessEquipmentTableByIds" parameterType="String">
+        delete from specialized_process_equipment_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

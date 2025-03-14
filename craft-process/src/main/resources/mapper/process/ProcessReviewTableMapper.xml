@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.mapper.ProcessReviewTableMapper">
+    
+    <resultMap type="ProcessReviewTable" id="ProcessReviewTableResult">
+        <result property="id"    column="id"    />
+        <result property="materialNumber"    column="material_number"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="materialFilePath"    column="material_file_path"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="imagePath"    column="image_path"    />
+        <result property="reviewStatus"    column="review_status"    />
+        <result property="reviewRecordPath"    column="review_record_path"    />
+        <result property="reviewer"    column="reviewer"    />
+        <result property="reviewTime"    column="review_time"    />
+    </resultMap>
+
+    <sql id="selectProcessReviewTableVo">
+        select id, material_number, material_name, material_file_path, remarks, image_path, review_status, review_record_path, reviewer, review_time from process_review_table
+    </sql>
+
+    <select id="selectProcessReviewTableList" parameterType="ProcessReviewTable" resultMap="ProcessReviewTableResult">
+        <include refid="selectProcessReviewTableVo"/>
+        <where>  
+            <if test="materialNumber != null  and materialNumber != ''"> and material_number like concat('%', #{materialNumber}, '%')</if>
+            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
+             <if test="materialFilePath != null  and materialFilePath != ''"> and material_file_path = #{materialFilePath}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks like concat('%', #{remarks}, '%')</if>
+            <if test="imagePath != null  and imagePath != ''"> and image_path = #{imagePath}</if>
+             <if test="reviewStatus != null  and reviewStatus != ''"> and review_status = #{reviewStatus}</if>
+            <if test="reviewRecordPath != null  and reviewRecordPath != ''"> and review_record_path = #{reviewRecordPath}</if>
+            <if test="reviewer != null  and reviewer != ''"> and reviewer like concat('%', #{reviewer}, '%')</if>
+            <if test="reviewTime != null "> and review_time = #{reviewTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectProcessReviewTableById" parameterType="Long" resultMap="ProcessReviewTableResult">
+        <include refid="selectProcessReviewTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProcessReviewTable" parameterType="ProcessReviewTable" useGeneratedKeys="true" keyProperty="id">
+        insert into process_review_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="materialNumber != null">material_number,</if>
+            <if test="materialName != null">material_name,</if>
+            <if test="materialFilePath != null">material_file_path,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="imagePath != null">image_path,</if>
+            <if test="reviewStatus != null">review_status,</if>
+            <if test="reviewRecordPath != null">review_record_path,</if>
+            <if test="reviewer != null">reviewer,</if>
+            <if test="reviewTime != null">review_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="materialNumber != null">#{materialNumber},</if>
+            <if test="materialName != null">#{materialName},</if>
+            <if test="materialFilePath != null">#{materialFilePath},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="imagePath != null">#{imagePath},</if>
+            <if test="reviewStatus != null">#{reviewStatus},</if>
+            <if test="reviewRecordPath != null">#{reviewRecordPath},</if>
+            <if test="reviewer != null">#{reviewer},</if>
+            <if test="reviewTime != null">#{reviewTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessReviewTable" parameterType="ProcessReviewTable">
+        update process_review_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="materialNumber != null">material_number = #{materialNumber},</if>
+            <if test="materialName != null">material_name = #{materialName},</if>
+            <if test="materialFilePath != null">material_file_path = #{materialFilePath},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="imagePath != null">image_path = #{imagePath},</if>
+            <if test="reviewStatus != null">review_status = #{reviewStatus},</if>
+            <if test="reviewRecordPath != null">review_record_path = #{reviewRecordPath},</if>
+            <if test="reviewer != null">reviewer = #{reviewer},</if>
+            <if test="reviewTime != null">review_time = #{reviewTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessReviewTableById" parameterType="Long">
+        delete from process_review_table where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessReviewTableByIds" parameterType="String">
+        delete from process_review_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

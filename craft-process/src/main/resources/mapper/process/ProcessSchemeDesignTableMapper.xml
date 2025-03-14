@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.mapper.ProcessSchemeDesignTableMapper">
+    
+    <resultMap type="ProcessSchemeDesignTable" id="ProcessSchemeDesignTableResult">
+        <result property="id"    column="id"    />
+        <result property="vehicleModel"    column="vehicle_model"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="reviewStatus"    column="review_status"    />
+        <result property="reviewTime"    column="review_time"    />
+        <result property="reviewer"    column="reviewer"    />
+    </resultMap>
+
+    <sql id="selectProcessSchemeDesignTableVo">
+        select id, vehicle_model, file_path, review_status, review_time, reviewer from process_scheme_design_table
+    </sql>
+
+    <select id="selectProcessSchemeDesignTableList" parameterType="ProcessSchemeDesignTable" resultMap="ProcessSchemeDesignTableResult">
+        <include refid="selectProcessSchemeDesignTableVo"/>
+        <where>  
+            <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model = #{vehicleModel}</if>
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+            <if test="reviewStatus != null  and reviewStatus != ''"> and review_status = #{reviewStatus}</if>
+            <if test="reviewTime != null "> and review_time = #{reviewTime}</if>
+            <if test="reviewer != null  and reviewer != ''"> and reviewer = #{reviewer}</if>
+        </where>
+    </select>
+    
+    <select id="selectProcessSchemeDesignTableById" parameterType="Long" resultMap="ProcessSchemeDesignTableResult">
+        <include refid="selectProcessSchemeDesignTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProcessSchemeDesignTable" parameterType="ProcessSchemeDesignTable">
+        insert into process_scheme_design_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="vehicleModel != null">vehicle_model,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="reviewStatus != null">review_status,</if>
+            <if test="reviewTime != null">review_time,</if>
+            <if test="reviewer != null">reviewer,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="vehicleModel != null">#{vehicleModel},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="reviewStatus != null">#{reviewStatus},</if>
+            <if test="reviewTime != null">#{reviewTime},</if>
+            <if test="reviewer != null">#{reviewer},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessSchemeDesignTable" parameterType="ProcessSchemeDesignTable">
+        update process_scheme_design_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vehicleModel != null">vehicle_model = #{vehicleModel},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="reviewStatus != null">review_status = #{reviewStatus},</if>
+            <if test="reviewTime != null">review_time = #{reviewTime},</if>
+            <if test="reviewer != null">reviewer = #{reviewer},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessSchemeDesignTableById" parameterType="Long">
+        delete from process_scheme_design_table where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessSchemeDesignTableByIds" parameterType="String">
+        delete from process_scheme_design_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

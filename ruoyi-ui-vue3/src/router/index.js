@@ -83,7 +83,59 @@ export const constantRoutes = [
         meta: { title: '个人中心', icon: 'user' }
       }
     ]
+  },
+
+  {
+    path: '',
+    component: Layout,
+    hidden: true,
+    redirect: 'Detail',
+    children: [
+      {
+        path: '/WorkClothes',
+        component: () => import('@/views/ToolingModule/WorkClothes/detailindex'),
+        name: 'Detail',
+        meta: { title: '工装详情', icon: 'user' }
+      }
+    ]
+  },
+
+  {
+    path: '',
+    component: Layout,
+    hidden: true,
+    redirect: 'maintenance',
+    children: [
+      {
+        path: '/maintenance',
+        component: () => import('@/views/ToolingModule/maintenanceRecord/index.vue'),
+        name: 'mainRecord',
+        meta: { title: '维修记录', icon: 'user' }
+      }
+    ]
+  },
+
+  {
+    path: '',
+    component: Layout,
+    hidden: true,
+    redirect: 'history',
+    children: [
+      {
+        path: '/history',
+        component: () => import('@/views/process/processValidationAndSummary/history.vue'),
+        name: 'history',
+        meta: { title: '历史记录', icon: 'user' }
+      }
+    ]
   }
+
+  // {
+  //   path: '/WorkClothes',
+  //   component: () => import('@/views/ToolingModule/WorkClothes/detailindex'),
+  //   name: 'Detail',
+  //   meta: { title: 'test', icon: 'tooling' }
+  // }
 ]
 
 // 动态路由，基于用户权限动态去加载
