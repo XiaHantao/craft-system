@@ -81,11 +81,19 @@
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
+  <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
+    <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+    <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+    <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+  </el-tabs> -->
+
+
     <el-table v-loading="loading" :data="testList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="${comment}" align="center" prop="testId" />
-      <el-table-column label="${comment}" align="center" prop="testOne" />
-      <el-table-column label="${comment}" align="center" prop="testTwo" />
+      <el-table-column label="123" align="center" prop="testId" />
+      <el-table-column label="223" align="center" prop="123" />
+      <el-table-column label="334" align="center" prop="testTwo" />
       <el-table-column label="${comment}" align="center" prop="testThree" />
       <el-table-column label="${comment}" align="center" prop="testFour" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -95,6 +103,9 @@
         </template>
       </el-table-column>
     </el-table>
+
+
+
     
     <pagination
       v-show="total>0"

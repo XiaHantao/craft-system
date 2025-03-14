@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.myCode.mapper.NewproductsProcessMapper">
+    
+    <resultMap type="NewproductsProcess" id="NewproductsProcessResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="testprocess"    column="testprocess"    />
+        <result property="conclude"    column="conclude"    />
+        <result property="other"    column="other"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+
+        <result property="a"    column="a"    />
+        <result property="b"    column="b"    />
+        <result property="c"    column="c"    />
+        <result property="d"    column="d"    />
+        <result property="e"    column="e"    />
+        <result property="f"    column="f"    />
+        <result property="g"    column="g"    />
+        <result property="h"    column="h"    />
+        <result property="i"    column="i"    />
+    </resultMap>
+
+<!--    <sql id="selectNewproductsProcessVo">
+        select id, name, testprocess, conclude, other, remark, a, b, c, d, e, f, g, h, i from newproducts_process
+    </sql>
+
+    <select id="selectNewproductsProcessList" parameterType="NewproductsProcess" resultMap="NewproductsProcessResult">
+        <include refid="selectNewproductsProcessVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectNewproductsProcessById" parameterType="Long" resultMap="NewproductsProcessResult">
+        <include refid="selectNewproductsProcessVo"/>
+        where id = #{id}
+    </select>-->
+
+<!--通过判断newproducts_submit中核对结果显示-->
+    <sql id="selectNewproductsProcessVo">
+        select np.id, np.name, np.testprocess, np.conclude, np.other, np.remark, np.a, np.b, np.c, np.d, np.e, np.f, np.g, np.h, np.i
+        from newproducts_process np
+        join newproducts_submit ns on np.id = ns.id
+    </sql>
+
+    <select id="selectNewproductsProcessList" parameterType="NewproductsProcess" resultMap="NewproductsProcessResult">
+        <include refid="selectNewproductsProcessVo"/>
+        <where>
+            ns.checked = '通过'
+            <if test="name != null  and name != ''"> and np.name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectNewproductsProcessById" parameterType="Long" resultMap="NewproductsProcessResult">
+        <include refid="selectNewproductsProcessVo"/>
+        where np.id = #{id} and ns.checked = '通过'
+    </select>
+        
+    <insert id="insertNewproductsProcess" parameterType="NewproductsProcess">
+        insert into newproducts_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="testprocess != null">testprocess,</if>
+            <if test="conclude != null">conclude,</if>
+            <if test="other != null">other,</if>
+            <if test="remark != null">remark,</if>
+            <if test="a != null">a,</if>
+            <if test="b != null">b,</if>
+            <if test="c != null">c,</if>
+            <if test="d != null">d,</if>
+            <if test="e != null">e,</if>
+            <if test="f != null">f,</if>
+            <if test="g != null">g,</if>
+            <if test="h != null">h,</if>
+            <if test="i != null">i,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="testprocess != null">#{testprocess},</if>
+            <if test="conclude != null">#{conclude},</if>
+            <if test="other != null">#{other},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="a != null">#{a},</if>
+            <if test="b != null">#{b},</if>
+            <if test="c != null">#{c},</if>
+            <if test="d != null">#{d},</if>
+            <if test="e != null">#{e},</if>
+            <if test="f != null">#{f},</if>
+            <if test="g != null">#{g},</if>
+            <if test="h != null">#{h},</if>
+            <if test="i != null">#{i},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewproductsProcess" parameterType="NewproductsProcess">
+        update newproducts_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="testprocess != null">testprocess = #{testprocess},</if>
+            <if test="conclude != null">conclude = #{conclude},</if>
+            <if test="other != null">other = #{other},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="a != null">a = #{a},</if>
+            <if test="b != null">b = #{b},</if>
+            <if test="c != null">c = #{c},</if>
+            <if test="d != null">d = #{d},</if>
+            <if test="e != null">e = #{e},</if>
+            <if test="f != null">f = #{f},</if>
+            <if test="g != null">g = #{g},</if>
+            <if test="h != null">h = #{h},</if>
+            <if test="i != null">i = #{i},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewproductsProcessById" parameterType="Long">
+        delete from newproducts_process where id = #{id}
+    </delete>
+
+    <delete id="deleteNewproductsProcessByIds" parameterType="String">
+        delete from newproducts_process where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

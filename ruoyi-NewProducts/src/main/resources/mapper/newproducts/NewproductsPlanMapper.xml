@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.myCode.mapper.NewproductsPlanMapper">
+    
+    <resultMap type="NewproductsPlan" id="NewproductsPlanResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="planfile"    column="planfile"    />
+        <result property="technicalcheck"    column="technicalcheck"    />
+        <result property="technicalremark"    column="technicalremark"    />
+        <result property="qualitycheck"    column="qualitycheck"    />
+        <result property="qualityremark"    column="qualityremark"    />
+        <result property="securitycheck"    column="securitycheck"    />
+        <result property="securityremark"    column="securityremark"    />
+        <result property="time"    column="time"    />
+        <result property="testa"    column="testa"    />
+        <result property="testb"    column="testb"    />
+        <result property="testc"    column="testc"    />
+        <result property="testd"    column="testd"    />
+        <result property="teste"    column="teste"    />
+        <result property="testf"    column="testf"    />
+        <result property="testg"    column="testg"    />
+    </resultMap>
+
+    <sql id="selectNewproductsPlanVo">
+        select id, name, planfile, technicalcheck, technicalremark, qualitycheck, qualityremark, securitycheck, securityremark, time, testa, testb, testc, testd, teste, testf, testg from newproducts_plan
+    </sql>
+
+    <select id="selectNewproductsPlanList" parameterType="NewproductsPlan" resultMap="NewproductsPlanResult">
+        <include refid="selectNewproductsPlanVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectNewproductsPlanById" parameterType="Long" resultMap="NewproductsPlanResult">
+        <include refid="selectNewproductsPlanVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNewproductsPlan" parameterType="NewproductsPlan">
+        insert into newproducts_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="planfile != null">planfile,</if>
+            <if test="technicalcheck != null">technicalcheck,</if>
+            <if test="technicalremark != null">technicalremark,</if>
+            <if test="qualitycheck != null">qualitycheck,</if>
+            <if test="qualityremark != null">qualityremark,</if>
+            <if test="securitycheck != null">securitycheck,</if>
+            <if test="securityremark != null">securityremark,</if>
+            <if test="time != null">time,</if>
+            <if test="testa != null">testa,</if>
+            <if test="testb != null">testb,</if>
+            <if test="testc != null">testc,</if>
+            <if test="testd != null">testd,</if>
+            <if test="teste != null">teste,</if>
+            <if test="testf != null">testf,</if>
+            <if test="testg != null">testg,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="planfile != null">#{planfile},</if>
+            <if test="technicalcheck != null">#{technicalcheck},</if>
+            <if test="technicalremark != null">#{technicalremark},</if>
+            <if test="qualitycheck != null">#{qualitycheck},</if>
+            <if test="qualityremark != null">#{qualityremark},</if>
+            <if test="securitycheck != null">#{securitycheck},</if>
+            <if test="securityremark != null">#{securityremark},</if>
+            <if test="time != null">#{time},</if>
+            <if test="testa != null">#{testa},</if>
+            <if test="testb != null">#{testb},</if>
+            <if test="testc != null">#{testc},</if>
+            <if test="testd != null">#{testd},</if>
+            <if test="teste != null">#{teste},</if>
+            <if test="testf != null">#{testf},</if>
+            <if test="testg != null">#{testg},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewproductsPlan" parameterType="NewproductsPlan">
+        update newproducts_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="planfile != null">planfile = #{planfile},</if>
+            <if test="technicalcheck != null">technicalcheck = #{technicalcheck},</if>
+            <if test="technicalremark != null">technicalremark = #{technicalremark},</if>
+            <if test="qualitycheck != null">qualitycheck = #{qualitycheck},</if>
+            <if test="qualityremark != null">qualityremark = #{qualityremark},</if>
+            <if test="securitycheck != null">securitycheck = #{securitycheck},</if>
+            <if test="securityremark != null">securityremark = #{securityremark},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="testa != null">testa = #{testa},</if>
+            <if test="testb != null">testb = #{testb},</if>
+            <if test="testc != null">testc = #{testc},</if>
+            <if test="testd != null">testd = #{testd},</if>
+            <if test="teste != null">teste = #{teste},</if>
+            <if test="testf != null">testf = #{testf},</if>
+            <if test="testg != null">testg = #{testg},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewproductsPlanById" parameterType="Long">
+        delete from newproducts_plan where id = #{id}
+    </delete>
+
+    <delete id="deleteNewproductsPlanByIds" parameterType="String">
+        delete from newproducts_plan where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

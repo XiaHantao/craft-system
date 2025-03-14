@@ -11,6 +11,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.constant.Constants;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import com.ruoyi.common.config.RuoYiConfig;
@@ -104,7 +106,7 @@ public class FileUtils
     }
 
     /**
-     * 删除文件
+     * 删除文件(完整文件路径)
      * 
      * @param filePath 文件
      * @return
@@ -117,6 +119,24 @@ public class FileUtils
         if (file.isFile() && file.exists())
         {
             flag = file.delete();
+        }
+        return flag;
+    }
+
+    /**
+     * 删除文件（相对文件路径）
+     **/
+    public static boolean DeleteFile(String filePath) {
+        // 本地资源路径
+        String localPath = RuoYiConfig.getProfile();
+        // 数据库资源地址
+        String downloadPath = localPath + StringUtils.substringAfter(filePath, Constants.RESOURCE_PREFIX);
+        boolean flag = false;
+        File file = new File(downloadPath);
+        // 路径为文件且不为空则进行删除
+        if (file.isFile() && file.exists()) {
+            file.delete();
+            flag = true;
         }
         return flag;
     }

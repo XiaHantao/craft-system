@@ -81,10 +81,27 @@
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="用户管理" name="first">
+        <el-table :data="userData" style="width: 100%">
+          <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+          <el-table-column prop="age" label="年龄" width="180"></el-table-column>
+          <el-table-column prop="address" label="地址"></el-table-column>
+        </el-table>
+        <el-button type="primary" @click="dialogVisible = true">打开对话框</el-button>
+
+
+      </el-tab-pane>
+
+      <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+      <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+      <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+    </el-tabs>
+
     <el-table v-loading="loading" :data="testList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="${comment}" align="center" prop="testId" />
-      <el-table-column label="${comment}" align="center" prop="testOne" />
+      <el-table-column label="123" align="center" prop="testId" />
+      <el-table-column label="234" align="center" prop="testOne" />
       <el-table-column label="${comment}" align="center" prop="testTwo" />
       <el-table-column label="${comment}" align="center" prop="testThree" />
       <el-table-column label="${comment}" align="center" prop="testFour" />
@@ -95,7 +112,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -144,6 +161,7 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
+const dialogVisible = ref(false);
 
 const data = reactive({
   form: {},
