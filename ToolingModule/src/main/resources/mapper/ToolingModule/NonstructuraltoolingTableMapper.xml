@@ -18,6 +18,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
         <result property="sharedComponents"    column="shared_components"    />
         <result property="toolingDrawings"    column="tooling_drawings"    />
+        <result property="processDocumentsName"    column="process_Documents_name"    />
+        <result property="processDocuments"    column="process_Documents"    />
+        <result property="mbomName"    column="mbom_name"    />
+        <result property="mbomFile"    column="mbom_file"    />
         <result property="verifyFile"    column="verify_file"    />
         <result property="verificationConclusion"    column="verification_conclusion"    />
         <result property="reminderDate"    column="reminder_date"    />
@@ -29,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectNonstructuraltoolingTableVo">
-        select id, serial_number, mold_name, mold_number, mold_type, invest_time, mold_status, quantity_of_tooling, assembling_products, mold_position, remark, shared_components, tooling_drawings, verify_file, verification_conclusion, reminder_date, maintenance_category, create_by, create_time, mold_ownership, mold_usage from NonStructuralTooling_table
+        select id, serial_number, mold_name, mold_number, mold_type, invest_time, mold_status, quantity_of_tooling, assembling_products, mold_position, remark, shared_components, tooling_drawings, verify_file, verification_conclusion,process_Documents_name, process_Documents, mbom_name, mbom_file, reminder_date, maintenance_category, create_by, create_time, mold_ownership, mold_usage from NonStructuralTooling_table
     </sql>
 
     <select id="selectNonstructuraltoolingTableList" parameterType="NonstructuraltoolingTable" resultMap="NonstructuraltoolingTableResult">
@@ -45,6 +49,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="moldPosition != null  and moldPosition != ''"> and mold_position = #{moldPosition}</if>
             <if test="sharedComponents != null  and sharedComponents != ''"> and shared_components = #{sharedComponents}</if>
             <if test="toolingDrawings != null  and toolingDrawings != ''"> and tooling_drawings = #{toolingDrawings}</if>
+            <if test="processDocumentsName != null  and processDocumentsName != ''"> and process_Documents_name like concat('%', #{processDocumentsName}, '%')</if>
+            <if test="processDocuments != null  and processDocuments != ''"> and process_Documents = #{processDocuments}</if>
+            <if test="mbomName != null  and mbomName != ''"> and mbom_name like concat('%', #{mbomName}, '%')</if>
+            <if test="mbomFile != null  and mbomFile != ''"> and mbom_file = #{mbomFile}</if>
             <if test="verifyFile != null  and verifyFile != ''"> and verify_file = #{verifyFile}</if>
             <if test="verificationConclusion != null  and verificationConclusion != ''"> and verification_conclusion = #{verificationConclusion}</if>
             <if test="reminderDate != null "> and reminder_date = #{reminderDate}</if>
@@ -68,6 +76,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="moldPosition != null  and moldPosition != ''"> and mold_position = #{moldPosition}</if>
             <if test="sharedComponents != null  and sharedComponents != ''"> and shared_components = #{sharedComponents}</if>
             <if test="toolingDrawings != null  and toolingDrawings != ''"> and tooling_drawings = #{toolingDrawings}</if>
+            <if test="processDocumentsName != null  and processDocumentsName != ''"> and process_Documents_name like concat('%', #{processDocumentsName}, '%')</if>
+            <if test="processDocuments != null  and processDocuments != ''"> and process_Documents = #{processDocuments}</if>
+            <if test="mbomName != null  and mbomName != ''"> and mbom_name like concat('%', #{mbomName}, '%')</if>
+            <if test="mbomFile != null  and mbomFile != ''"> and mbom_file = #{mbomFile}</if>
             <if test="verifyFile != null  and verifyFile != ''"> and verify_file = #{verifyFile}</if>
             <if test="verificationConclusion != null  and verificationConclusion != ''"> and verification_conclusion = #{verificationConclusion}</if>
             <if test="reminderDate != null "> and reminder_date = #{reminderDate}</if>
@@ -91,6 +103,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="moldPosition != null  and moldPosition != ''"> and mold_position = #{moldPosition}</if>
             <if test="sharedComponents != null  and sharedComponents != ''"> and shared_components = #{sharedComponents}</if>
             <if test="toolingDrawings != null  and toolingDrawings != ''"> and tooling_drawings = #{toolingDrawings}</if>
+            <if test="processDocumentsName != null  and processDocumentsName != ''"> and process_Documents_name like concat('%', #{processDocumentsName}, '%')</if>
+            <if test="processDocuments != null  and processDocuments != ''"> and process_Documents = #{processDocuments}</if>
+            <if test="mbomName != null  and mbomName != ''"> and mbom_name like concat('%', #{mbomName}, '%')</if>
+            <if test="mbomFile != null  and mbomFile != ''"> and mbom_file = #{mbomFile}</if>
             <if test="verifyFile != null  and verifyFile != ''"> and verify_file = #{verifyFile}</if>
             <if test="verificationConclusion != null  and verificationConclusion != ''"> and verification_conclusion = #{verificationConclusion}</if>
             <if test="reminderDate != null "> and reminder_date = #{reminderDate}</if>
@@ -118,6 +134,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quantityOfTooling != null">quantity_of_tooling,</if>
             <if test="assemblingProducts != null">assembling_products,</if>
             <if test="moldPosition != null">mold_position,</if>
+            <if test="processDocumentsName != null">process_Documents_name,</if>
+            <if test="processDocuments != null">process_Documents,</if>
+            <if test="mbomName != null">mbom_name,</if>
+            <if test="mbomFile != null">mbom_file,</if>
             <if test="remark != null">remark,</if>
             <if test="sharedComponents != null">shared_components,</if>
             <if test="toolingDrawings != null">tooling_drawings,</if>
@@ -140,6 +160,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quantityOfTooling != null">#{quantityOfTooling},</if>
             <if test="assemblingProducts != null">#{assemblingProducts},</if>
             <if test="moldPosition != null">#{moldPosition},</if>
+            <if test="processDocumentsName != null">#{processDocumentsName},</if>
+            <if test="processDocuments != null">#{processDocuments},</if>
+            <if test="mbomName != null">#{mbomName},</if>
+            <if test="mbomFile != null">#{mbomFile},</if>
             <if test="remark != null">#{remark},</if>
             <if test="sharedComponents != null">#{sharedComponents},</if>
             <if test="toolingDrawings != null">#{toolingDrawings},</if>
@@ -166,6 +190,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quantityOfTooling != null">quantity_of_tooling = #{quantityOfTooling},</if>
             <if test="assemblingProducts != null">assembling_products = #{assemblingProducts},</if>
             <if test="moldPosition != null">mold_position = #{moldPosition},</if>
+            <if test="processDocumentsName != null">process_Documents_name = #{processDocumentsName},</if>
+            <if test="processDocuments != null">process_Documents = #{processDocuments},</if>
+            <if test="mbomName != null">mbom_name = #{mbomName},</if>
+            <if test="mbomFile != null">mbom_file = #{mbomFile},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="sharedComponents != null">shared_components = #{sharedComponents},</if>
             <if test="toolingDrawings != null">tooling_drawings = #{toolingDrawings},</if>

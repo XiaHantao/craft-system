@@ -114,9 +114,6 @@ public class ToolingLedgerTableServiceImpl implements IToolingLedgerTableService
                 else if ("mbom".equals(fileType)) {
                     updateFilePath(moldNumber, file, "mbom");
                 }
-                else if ("toolingDrawings".equals(fileType)) {
-                    updateFilePath(moldNumber, file, "toolingDrawings");
-                }
                 return 1;
             }
         }
@@ -131,9 +128,6 @@ public class ToolingLedgerTableServiceImpl implements IToolingLedgerTableService
             toolingLedgerTableMapper.updateFilePath(moldNumber, file, "processDocuments");
         } else if ("mbom".equals(fileType)) {
             toolingLedgerTableMapper.updateFilePath(moldNumber, file, "mbom");
-        }
-        else if ("toolingDrawings".equals(fileType)) {
-            toolingLedgerTableMapper.updateFilePath(moldNumber, file, "toolingDrawings");
         }
     }
 

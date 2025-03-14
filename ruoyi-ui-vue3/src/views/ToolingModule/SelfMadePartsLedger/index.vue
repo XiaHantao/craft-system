@@ -215,18 +215,8 @@
         <el-form-item label="模具名称" prop="moldName">
           <el-input v-model="form.moldName" placeholder="请输入模具名称" />
         </el-form-item>
-<!--        <el-form-item label="模具类别" prop="moldCategory">-->
-<!--          <el-input v-model="form.moldCategory" placeholder="请输入模具类别" />-->
-<!--        </el-form-item>-->
         <el-form-item label="模具类别" prop="moldCategory">
-          <el-select v-model="form.moldCategory" placeholder="请选择模具类别" clearable style="width: 50%;">
-            <el-option
-                v-for="item in moldTypeList"
-                :key="item.id"
-                :label="item.label"
-                :value="item.label">
-            </el-option>
-          </el-select>
+          <el-input v-model="form.moldCategory" placeholder="请输入模具类别" />
         </el-form-item>
         <el-form-item label="设计要求" prop="designRequirement">
           <el-input v-model="form.designRequirement" placeholder="请输入设计要求" />
@@ -338,7 +328,6 @@
 import { listSelfMadePartsLedger, getSelfMadePartsLedger, delSelfMadePartsLedger, addSelfMadePartsLedger, updateSelfMadePartsLedger } from "@/api/ToolingModule/SelfMadePartsLedger";
 import {getUserProfile, listUser} from "@/api/system/user";
 import { ElMessage } from 'element-plus';
-import {listMoldTypename} from "@/api/ToolingModule/MoldType";
 
 const { proxy } = getCurrentInstance();
 
@@ -354,7 +343,7 @@ const title = ref("");
 
 const dialogVisible = ref(false);
 const currentStep = ref(1);
-const moldTypeList = ref([]); // 存储后端返回的数组
+
 
 // const userList = ref([]); // 用户信息列表
 const userOptions = ref([]); // 验证人列表
@@ -381,26 +370,7 @@ const data = reactive({
   rules: {
   }
 });
-// 获取工装类型数据
-const fetchMoldTypeList = async () => {
-  try {
-    const response = await listMoldTypename();
-    // moldTypeList.value = response.data || []; // 确保数据是数组
-    moldTypeList.value = response.data.map((item, index) => ({
-      id: index,  // 使用索引作为唯一标识
-      label: item // 使用数组的字符串作为显示的 label
-    }));
-    // console.log('加载中....' , moldTypeList.value)
 
-  } catch (error) {
-    console.error("获取工装类型失败：", error);
-  }
-};
-// 组件加载时调用
-onMounted(() => {
-  fetchMoldTypeList();
-  // console.log('加载中....' , moldTypeList.value)
-});
 const { queryParams, form, rules } = toRefs(data);
 
 const getButtonText = (state) => {

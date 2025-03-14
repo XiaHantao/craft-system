@@ -72,13 +72,55 @@
 <!--            v-hasPermi="['ToolingModule:toolingDetail:export']"-->
 <!--        >导出</el-button>-->
 <!--      </el-col>-->
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+<!--      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>-->
+
+      <!-- 关键部件提示模块 -->
+      <el-col :span="1.5">
+        <div class="right-toolbar">
+          <div class="highlight-color">
+            <div class="color-box1"></div>
+            <span>关键部件</span>
+          </div>
+        </div>
+      </el-col>
+
+      <!-- 关键部件提示模块 -->
+      <el-col :span="1.5">
+        <div class="right-toolbar">
+          <div class="highlight-color">
+            <div class="color-box2"></div>
+            <span>共用部件</span>
+          </div>
+        </div>
+      </el-col>
+
+      <!-- 关键部件提示模块 -->
+      <el-col :span="1.5">
+        <div class="right-toolbar">
+          <div class="highlight-color">
+            <div class="color-box3"></div>
+            <span>关键共用部件</span>
+          </div>
+        </div>
+      </el-col>
+
+<!--      <div class="right-toolbar">-->
+<!--        <div class="highlight-color">-->
+<!--          <div class="color-box"></div>-->
+<!--          <span>关键工装</span>-->
+<!--        </div>-->
+<!--      </div>-->
     </el-row>
 
     <el-table v-loading="loading" :data="toolingDetailList" @selection-change="handleSelectionChange" :row-class-name="rowClassName">
       <el-table-column type="selection" width="55" align="center" />
       <!--      <el-table-column label="id" align="center" prop="id" />-->
-      <el-table-column label="序号" align="center" prop="serialNumber" />
+<!--      <el-table-column label="序号" align="center" prop="serialNumber" />-->
+      <el-table-column label="序号" align="center">
+        <template #default="{ $index }">
+          <span>{{ ($index + 1) + (queryParams.pageNum - 1) * queryParams.pageSize }}</span> <!-- 根据当前页计算序号 -->
+        </template>
+      </el-table-column>
       <el-table-column label="工具编号" align="center" prop="toolNumber" />
       <el-table-column label="工具名称" align="center" prop="toolName" />
       <el-table-column label="合计数量" align="center" prop="totalQuantity" />
@@ -114,11 +156,11 @@
           <span>{{ parseTime(scope.row.changeTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否为关键部件" align="center" prop="keyComponents">
-        <template #default="{ row }">
-          <span>{{ row.keyComponents == 1 ? '是' : '否' }}</span>
-        </template>
-      </el-table-column>
+<!--      <el-table-column label="是否为关键部件" align="center" prop="keyComponents">-->
+<!--        <template #default="{ row }">-->
+<!--          <span>{{ row.keyComponents == 1 ? '是' : '否' }}</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <!--      <el-table-column label="维修记录" align="center" prop="maintenanceRecord" />-->
       <!--      <el-table-column label="模具所属" align="center" prop="moldOwnership" />-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -239,8 +281,17 @@
 
 <style>
 /* 定义高亮样式 */
-.el-table .highlight-row {
-  background: oldlace;
+.el-table .highlight-row1 {
+  background: #f3e68f;
+  border: 1px solid #ccc;
+}
+.el-table .highlight-row2 {
+  background: #2cc461;
+  border: 1px solid #ccc;
+}
+.el-table .highlight-row3 {
+  background: #59a0fc;
+  border: 1px solid #ccc;
 }
 </style>
 
@@ -374,9 +425,16 @@ function previewFile(fileUrl) {
 // 为每一行动态添加class
 // 使用 function 定义函数
 function rowClassName({ row }) {
-  console.log(row.keyComponents);
-  if (row.keyComponents == 1 )
-  return 'highlight-row';
+  // console.log(row.keyComponents);
+  if (row.keyComponents == 1 && row.sharedComponents != 1 ){
+  return 'highlight-row1';
+  }
+  else if (row.keyComponents != 1 && row.sharedComponents == 1){
+    return 'highlight-row2' ;
+  }
+  else if (row.keyComponents == 1 && row.sharedComponents == 1){
+    return 'highlight-row3';
+  }
 }
 
 /** 搜索按钮操作 */
@@ -478,6 +536,56 @@ const handleUpload = async (file) => {
 
 getList();
 </script>
+
+<style scoped>
+
+.right-toolbar {
+  right: 10px;
+  top: 30%;
+  transform: translateY(-5px); /* 向下移动 20px */  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.highlight-color {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.color-box1 {
+  width: 20px;
+  height: 20px;
+  background: #f3e68f; /* 高亮颜色 */
+  margin-right: 8px;
+  border: 1px solid #ccc;
+}
+
+.color-box2 {
+  width: 20px;
+  height: 20px;
+  background: #2cc461; /* 高亮颜色 */
+  margin-right: 8px;
+  border: 1px solid #ccc;
+}
+
+.color-box3 {
+  width: 20px;
+  height: 20px;
+  background: #59a0fc; /* 高亮颜色 */
+  margin-right: 8px;
+  border: 1px solid #ccc;
+}
+
+span {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+</style>
 
 
 
