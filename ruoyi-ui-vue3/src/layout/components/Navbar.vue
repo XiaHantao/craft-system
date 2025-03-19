@@ -8,13 +8,11 @@
       <template v-if="appStore.device !== 'mobile'">
         <header-search id="header-search" class="right-menu-item" />
 
-        <el-tooltip content="源码地址" effect="dark" placement="bottom">
-          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
-        <el-tooltip content="文档地址" effect="dark" placement="bottom">
-          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
-        </el-tooltip>
+<!--        <el-tooltip :content="noticeContent" effect="dark" placement="bottom">-->
+<!--          <el-badge :value="noticeCount" class="right-menu-item hover-effect" :class="{'badge-custom':noticeCount>0}" >-->
+<!--            <el-icon @click="toNoticePage"><Message /></el-icon>-->
+<!--          </el-badge>-->
+<!--        </el-tooltip>-->
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
@@ -60,10 +58,24 @@ import RuoYiDoc from '@/components/RuoYi/Doc'
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
+import { listNotice } from "@/api/system/notice";
+import { onMounted } from 'vue';
+
+const { proxy } = getCurrentInstance();
+const noticeContent = ref("");
+const noticeCount = ref(3);
 
 const appStore = useAppStore()
 const userStore = useUserStore()
 const settingsStore = useSettingsStore()
+
+function getList() {
+  listNotice().then(response => {
+    console.log(response);
+    noticeCount.value = response.total; // 假设返回的通知列表长度
+    noticeContent.value = `您有 ${response.total} 条新通知`;
+  });
+}
 
 function toggleSideBar() {
   appStore.toggleSideBar()
@@ -98,6 +110,13 @@ const emits = defineEmits(['setLayout'])
 function setLayout() {
   emits('setLayout');
 }
+
+function toNoticePage(){
+  //前往通知公告管理页面
+  proxy.$router.push("/system/notice1");
+}
+
+getList();
 </script>
 
 <style lang='scss' scoped>
@@ -188,4 +207,6 @@ function setLayout() {
     }
   }
 }
+
+
 </style>

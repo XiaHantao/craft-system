@@ -343,4 +343,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="getAllMoldNumbers" resultType="String">
+        SELECT tool_number FROM tooling_table
+    </select>
+
+    <update id="updateFilePath">
+        <choose>
+            <when test="field == 'processDocuments'">
+                UPDATE tooling_table SET verify_file = #{file} WHERE tool_number = #{moldNumber}
+            </when>
+            <when test="field == 'mbom'">
+                UPDATE tooling_table SET procurement_list = #{file} WHERE tool_number = #{moldNumber}
+            </when>
+            <when test="field == 'toolingDrawings'">
+                UPDATE tooling_table SET tooling_drawings = #{file} WHERE tool_number = #{moldNumber}
+            </when>
+        </choose>
+    </update>
 </mapper>

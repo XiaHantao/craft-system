@@ -69,18 +69,45 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column v-if="false" label="主键ID" align="center" prop="id" />
       <el-table-column label="新产品名称" align="center" prop="name" />
-      <el-table-column label="任务单文件" align="center" prop="task" />
-      <el-table-column label="技术交底文件" align="center" prop="technical" />
-      <el-table-column label="BOM文件" align="center" prop="bom" />
-      <el-table-column label="其他文件" align="center" prop="other" />
+      <el-table-column label="任务单文件" align="center" prop="task">
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.task" icon="Download" @click="downloadFiles(scope.row.task)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="技术交底文件" align="center" prop="technical" >
+        <template v-slot:default="scope">
+          <el-button v-if="scope.row.technical" icon="Download" @click="downloadFiles(scope.row.technical)"></el-button>
+        </template>
+      </el-table-column>  
+      <el-table-column label="BOM文件" align="center" prop="bom" >
+        <template v-slot:default="scope">
+          <el-button v-if="scope.row.bom" icon="Download" @click="downloadFiles(scope.row.bom)"></el-button>
+        </template>
+      </el-table-column>  
+      <el-table-column label="其他文件" align="center" prop="other" >
+        <template v-slot:default="scope">
+          <el-button v-if="scope.row.other" icon="Download" @click="downloadFiles(scope.row.other)"></el-button>
+        </template> 
+      </el-table-column>  
       <el-table-column label="提交日期" align="center" prop="submissionDate" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.submissionDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="核对文件" align="center" prop="checking" />
-      <el-table-column label="核对结果" align="center" prop="checked" />
+      <el-table-column label="核对文件" align="center" prop="checking" >
+        <template v-slot:default="scope">
+          <el-button v-if="scope.row.checking" icon="Download" @click="downloadFiles(scope.row.checking)"></el-button>
+        </template> 
+      </el-table-column> 
+      <el-table-column label="核对结果" align="center" prop="checked" >
+        <template #default="scope">
+          <el-tag :type="scope.row.checked === '通过' ? 'success' : 'danger'" >
+            {{ scope.row.checked }}
+          </el-tag>
+        </template>
+      </el-table-column>  
       <el-table-column label="核对备注" align="center" prop="checkremark" />
 <!--       <el-table-column label="" align="center" prop="a" />
       <el-table-column label="" align="center" prop="b" />
@@ -101,7 +128,7 @@
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:submit:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:submit:remove']">删除</el-button>
           <el-button link type="primary" icon="Check" @click="handleCheck(scope.row)" v-hasPermi="['newproducts:submit:edit']">核对</el-button>
-          <el-button link type="primary" icon="Check" @click="handleRecord(scope.row)" v-hasPermi="['newproducts:submit:edit']">试制记录</el-button>
+          <el-button link type="primary" icon="UploadFilled" @click="handleRecord(scope.row)" v-hasPermi="['newproducts:submit:edit']">试制记录</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -458,7 +485,34 @@ function handleRecord(row) {
     proxy.$modal.msgError("请先通过核对!");
   }
 }
-
+/** 多文件下载 */
+function downloadFiles(urls) {
+  // 如果 urls 是字符串，则按逗号分隔为数组
+  if (typeof urls === 'string') {
+    urls = urls.split(',');
+  }
+  // 确保 urls 是数组
+  if (!Array.isArray(urls)) {
+    console.error('urls 必须是数组或逗号分隔的字符串');
+    return;
+  }
+  // 遍历每个 URL，下载并保存文件
+  urls.forEach(url => {
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', decodeURIComponent(url.split('/').pop())); // 解码文件名
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+      })
+      .catch(error => console.error('Download error:', error));
+  });
+}
 
 getList();
 </script>

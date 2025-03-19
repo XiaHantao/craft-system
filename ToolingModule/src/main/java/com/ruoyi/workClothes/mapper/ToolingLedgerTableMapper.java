@@ -2,6 +2,8 @@ package com.ruoyi.workClothes.mapper;
 
 import java.util.List;
 import com.ruoyi.workClothes.domain.ToolingLedgerTable;
+import org.apache.ibatis.annotations.Param;
+
 
 /**
  * 工装台账Mapper接口
@@ -58,4 +60,11 @@ public interface ToolingLedgerTableMapper
      * @return 结果
      */
     public int deleteToolingLedgerTableByIds(Long[] ids);
+
+    // 获取所有的 moldNumber
+    List<String> getAllMoldNumbers();
+
+    // 更新processDocuments字段
+    void updateFilePath(@Param("moldNumber") String moldNumber, @Param("file") String file, @Param("field") String field);
+
 }

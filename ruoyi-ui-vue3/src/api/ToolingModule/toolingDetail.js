@@ -26,7 +26,14 @@ export function listToolingnewDetail(query , toolNumber) {
     params: {query , toolNumber}
   })
 }
-
+// 补充工装详细工艺文件及物料清单
+export function updateToolingDetailfile(data) {
+  return request({
+    url: '/ToolingModule/toolingDetail/fileupdate',
+    method: 'put',
+    data: data
+  })
+}
 // 到期工装预警列表
 export function upcomingChangeTime(query) {
   return request({
