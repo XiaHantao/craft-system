@@ -45,7 +45,7 @@
           v-hasPermi="['marketanalysis:media:remove']"
         >删除</el-button>
       </el-col>
-      <!-- <el-col :span="1.5">
+      <el-col :span="1.5">
         <el-button
           type="warning"
           plain
@@ -53,27 +53,24 @@
           @click="handleExport"
           v-hasPermi="['marketanalysis:media:export']"
         >导出</el-button>
-      </el-col> -->
+      </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="mediaList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="编号" align="center" prop="id" />
+      <!-- <el-table-column label="编号" align="center" prop="id" /> -->
       <el-table-column label="文件名称" align="center" prop="fileName" />
+      <el-table-column label="文件类型" align="center" prop="fileType" />
       <el-table-column label="备注" align="center" prop="notes" />
-      <el-table-column label="文件地址" align="center" prop="file" />
-      <el-table-column label="图片" align="center" prop="image" width="100">
-        <template #default="scope">
-          <image-preview :src="scope.row.image" :width="50" :height="50"/>
-        </template>
-      </el-table-column>
+      <el-table-column label="多媒体文件" align="center" prop="file" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:media:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:media:remove']">删除</el-button>
           <el-button size="mini" type="text" icon="Download"
-  @click="handleDownload(scope.row.file)">下载文件</el-button>
+            @click="$download.resource(scope.row.file, false)">下载</el-button>
+            <el-button link type="primary" icon="View" @click="handlePreview(scope.row)">预览图片</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -85,6 +82,10 @@
       v-model:limit="queryParams.pageSize"
       @pagination="getList"
     />
+     <!-- 新增图片预览对话框 -->
+     <el-dialog v-model="previewVisible" title="图片预览" width="60%">
+      <img :src="previewImageUrl" style="width: 100%; max-height: 70vh; object-fit: contain;" alt="预览图片" />
+    </el-dialog>
 
     <!-- 添加或修改多媒体文件对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
@@ -92,14 +93,14 @@
         <el-form-item label="文件名称" prop="fileName">
           <el-input v-model="form.fileName" placeholder="请输入文件名称" />
         </el-form-item>
+        <el-form-item label="文件类型" prop="fileType">
+          <el-input v-model="form.fileType" placeholder="请输入文件类型" />
+        </el-form-item>
         <el-form-item label="备注" prop="notes">
           <el-input v-model="form.notes" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="文件地址" prop="file">
+        <el-form-item label="多媒体文件" prop="file">
           <file-upload v-model="form.file"/>
-        </el-form-item>
-        <el-form-item label="图片地址" prop="image">
-          <image-upload v-model="form.image"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -114,6 +115,9 @@
 
 <script setup name="Media">
 import { listMedia, getMedia, delMedia, addMedia, updateMedia } from "@/api/marketanalysis/media/media";
+// 新增预览相关状态
+const previewVisible = ref(false);
+const previewImageUrl = ref('');
 
 const { proxy } = getCurrentInstance();
 
@@ -133,23 +137,31 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     fileName: null,
-    notes: null,
-    file: null,
-    image: null
   },
   rules: {
+    fileName: [
+      { required: true, message: "文件名称不能为空", trigger: "blur" }
+    ],
+    file: [
+      { required: true, message: "文件不能为空", trigger: "blur" }
+    ],
   }
 });
 
 const { queryParams, form, rules } = toRefs(data);
-// 在setup中添加下载处理方法
-const handleDownload = (fileUrl) => {
-  if (!fileUrl) {
-    proxy.$modal.msgError("未检测到文件，请检查文件上传！");
-    return;
+/** 预览按钮操作 */
+function handlePreview(row) {
+  const fileExtension = row.file.split('.').pop().toLowerCase();
+  const imageExtensions = ['jpg', 'jpeg', 'png'];
+  
+  if (imageExtensions.includes(fileExtension)) {
+    previewImageUrl.value = row.file; // 假设file字段是完整图片URL
+    previewVisible.value = true;
+  } else {
+    proxy.$modal.msgError('未检测到图片，请检查文件格式！');
   }
-  proxy.$download.resource(fileUrl, false);
-};
+}
+
 
 /** 查询多媒体文件列表 */
 function getList() {
@@ -172,9 +184,9 @@ function reset() {
   form.value = {
     id: null,
     fileName: null,
+    fileType: null,
     notes: null,
-    file: null,
-    image: null
+    file: null
   };
   proxy.resetForm("mediaRef");
 }

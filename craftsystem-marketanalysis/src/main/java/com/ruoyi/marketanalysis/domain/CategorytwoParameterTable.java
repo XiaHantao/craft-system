@@ -9,7 +9,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 二类车参数对象 categorytwo_parameter_table
  * 
  * @author ruoyi
- * @date 2025-03-07
+ * @date 2025-03-19
  */
 public class CategorytwoParameterTable extends BaseEntity
 {

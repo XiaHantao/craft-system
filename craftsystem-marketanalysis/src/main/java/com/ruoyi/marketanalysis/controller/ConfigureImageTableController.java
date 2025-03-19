@@ -25,7 +25,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 配置图片表Controller
  * 
  * @author ruoyi
- * @date 2025-03-11
+ * @date 2025-03-19
  */
 @RestController
 @RequestMapping("/marketanalysis/image")

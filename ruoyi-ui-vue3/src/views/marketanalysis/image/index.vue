@@ -59,22 +59,18 @@
 
     <el-table v-loading="loading" :data="imageList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="编号" align="center" prop="id" />
+      <!-- <el-table-column label="编号" align="center" prop="id" /> -->
       <el-table-column label="配置名称" align="center" prop="fileName" />
       <el-table-column label="说明" align="center" prop="notes" />
-      <el-table-column label="视频地址" align="center" prop="file" />
-      <el-table-column label="图片" align="center" prop="image" width="100">
-        <template #default="scope">
-          <image-preview :src="scope.row.image" :width="50" :height="50"/>
-        </template>
-      </el-table-column>
+      <el-table-column label="配置相关文件" align="center" prop="file" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:image:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:image:remove']">删除</el-button>
-          <el-button size="mini" type="text" icon="Download"
-          @click="handleDownload(scope.row.file)">下载视频</el-button>
-          <el-button link type="info" icon="View" @click="handlePreview(scope.row)">预览视频</el-button>
+           <el-button size="mini" type="text" icon="Download"
+                    @click="handleDownload(scope.row.file)">下载视频</el-button>
+                    <el-button link type="info" icon="View" @click="handlePreview(scope.row)">预览视频</el-button>
+                    <el-button link type="info" icon="View" @click="handlePreviewImage(scope.row)">预览图片</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -96,11 +92,8 @@
         <el-form-item label="说明" prop="notes">
           <el-input v-model="form.notes" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="视频地址" prop="file">
+        <el-form-item label="配置相关文件" prop="file">
           <file-upload v-model="form.file"/>
-        </el-form-item>
-        <el-form-item label="图片" prop="image">
-          <image-upload v-model="form.image"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -110,24 +103,38 @@
         </div>
       </template>
     </el-dialog>
+    <el-dialog v-model="previewOpen" title="视频预览" width="60%">
+      <video 
+        :src="previewVideoUrl" 
+        controls 
+        autoplay
+        style="width: 100%; outline: none;"
+        class="video-preview"
+        @error="handleVideoError"
+      >
+        您的浏览器不支持视频播放
+      </video>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="previewOpen = false">关闭</el-button>
+        </span>
+      </template>
+    </el-dialog>
+    <!-- 新增图片预览对话框 -->
+    <el-dialog v-model="previewImageOpen" title="图片预览" width="60%">
+      <img 
+        :src="previewImageUrl" 
+        style="width: 100%; max-height: 70vh; object-fit: contain;"
+        alt="图片预览"
+        @error="handleImageError"
+      >
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="previewImageOpen = false">关闭</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
-  <el-dialog v-model="previewOpen" title="视频预览" width="60%">
-  <video 
-    :src="previewVideoUrl" 
-    controls 
-    autoplay
-    style="width: 100%; outline: none;"
-    class="video-preview"
-    @error="handleVideoError"
-  >
-    您的浏览器不支持视频播放
-  </video>
-  <template #footer>
-    <span class="dialog-footer">
-      <el-button @click="previewOpen = false">关闭</el-button>
-    </span>
-  </template>
-</el-dialog>
 </template>
 
 <script setup name="Image">
@@ -137,31 +144,62 @@ import { getCurrentInstance, ref, reactive, toRefs } from 'vue';
 // 新增预览相关状态
 const previewOpen = ref(false);
 const previewVideoUrl = ref('');
+// 新增图片预览相关状态
+const previewImageOpen = ref(false);
+const previewImageUrl = ref('');
 
-// 在script部分新增错误处理方法，并确保URL有效性
-function handleVideoError(event) {
-  proxy.$modal.msgError('视频加载失败，未检测到上传的视频！');
-  console.error('视频加载错误:', event);
-}
-const handleDownload = (fileUrl) => {
-  if (!fileUrl) {
-    proxy.$modal.msgError("未检测到视频，请检查视频上传！");
+
+function handlePreview(row) {
+  if (!validateFileType(row.file, ['mp4'])) {
+    proxy.$modal.msgError('未检测到视频，请检查文件格式！');
     return;
   }
-  proxy.$download.resource(fileUrl, false);
-};
-function handlePreview(row) {
-  // 确保URL包含协议（如果存储的是相对路径，需要拼接基础URL）
-  const baseUrl = import.meta.env.VITE_APP_BASE_API; // 示例：从环境变量获取
-  previewVideoUrl.value = row.file.startsWith('http') 
-    ? row.file 
-    : `${baseUrl}${row.file}`;
-    
-  // 强制刷新视频源（解决缓存问题）
+  
+  const baseUrl = import.meta.env.VITE_APP_BASE_API;
+  previewVideoUrl.value = formatFileUrl(row.file, baseUrl);
+  
+  // 强制刷新视频源
   previewOpen.value = false;
   nextTick(() => {
     previewOpen.value = true;
   });
+}
+
+// 新增图片预览方法
+function handlePreviewImage(row) {
+  if (!validateFileType(row.file, ['jpg', 'jpeg', 'png'])) {
+    proxy.$modal.msgError('未检测到图片，请检查文件格式！');
+    return;
+  }
+
+  const baseUrl = import.meta.env.VITE_APP_BASE_API;
+  previewImageUrl.value = formatFileUrl(row.file, baseUrl);
+  previewImageOpen.value = true;
+}
+
+// 通用文件类型验证方法
+function validateFileType(fileUrl, allowedTypes) {
+  if (!fileUrl) return false;
+  
+  // 获取干净的文件名（去除查询参数和哈希）
+  const cleanUrl = fileUrl.split(/[?#]/)[0];
+  const extension = cleanUrl.split('.').pop().toLowerCase();
+  
+  return allowedTypes.includes(extension);
+}
+
+// 通用URL格式化方法
+function formatFileUrl(fileUrl, baseUrl) {
+  return fileUrl.startsWith('http') 
+    ? fileUrl 
+    : `${baseUrl}${fileUrl}`;
+}
+
+// 新增图片加载错误处理
+function handleImageError(event) {
+  proxy.$modal.msgError('图片加载失败！');
+  console.error('图片加载错误:', event);
+  previewImageOpen.value = false;
 }
 const { proxy } = getCurrentInstance();
 
@@ -183,6 +221,12 @@ const data = reactive({
     fileName: null,
   },
   rules: {
+    fileName: [
+      { required: true, message: "配置名称不能为空", trigger: "blur" }
+    ],
+    file: [
+      { required: true, message: "文件不能为空", trigger: "blur" }
+    ],
   }
 });
 

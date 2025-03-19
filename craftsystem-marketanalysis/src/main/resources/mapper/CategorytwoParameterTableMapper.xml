@@ -88,7 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertCategorytwoParameterTable" parameterType="CategorytwoParameterTable" useGeneratedKeys="true" keyProperty="id">
         insert into categorytwo_parameter_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="model != null">model,</if>
+            <if test="model != null and model != ''">model,</if>
             <if test="drivingStyle != null">driving_style,</if>
             <if test="ratedLiftingCapacity != null">rated_lifting_capacity,</if>
             <if test="raiseHeight != null">raise_height,</if>
@@ -151,7 +151,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="turn != null">turn,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="model != null">#{model},</if>
+            <if test="model != null and model != ''">#{model},</if>
             <if test="drivingStyle != null">#{drivingStyle},</if>
             <if test="ratedLiftingCapacity != null">#{ratedLiftingCapacity},</if>
             <if test="raiseHeight != null">#{raiseHeight},</if>
@@ -218,7 +218,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateCategorytwoParameterTable" parameterType="CategorytwoParameterTable">
         update categorytwo_parameter_table
         <trim prefix="SET" suffixOverrides=",">
-            <if test="model != null">model = #{model},</if>
+            <if test="model != null and model != ''">model = #{model},</if>
             <if test="drivingStyle != null">driving_style = #{drivingStyle},</if>
             <if test="ratedLiftingCapacity != null">rated_lifting_capacity = #{ratedLiftingCapacity},</if>
             <if test="raiseHeight != null">raise_height = #{raiseHeight},</if>

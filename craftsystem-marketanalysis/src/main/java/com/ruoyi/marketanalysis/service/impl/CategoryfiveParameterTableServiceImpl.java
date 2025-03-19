@@ -8,10 +8,10 @@ import com.ruoyi.marketanalysis.domain.CategoryfiveParameterTable;
 import com.ruoyi.marketanalysis.service.ICategoryfiveParameterTableService;
 
 /**
- * 五类/七类车参数Service业务层处理
+ * 五类车参数Service业务层处理
  * 
  * @author ruoyi
- * @date 2025-02-19
+ * @date 2025-03-19
  */
 @Service
 public class CategoryfiveParameterTableServiceImpl implements ICategoryfiveParameterTableService 
@@ -20,10 +20,10 @@ public class CategoryfiveParameterTableServiceImpl implements ICategoryfiveParam
     private CategoryfiveParameterTableMapper categoryfiveParameterTableMapper;
 
     /**
-     * 查询五类/七类车参数
+     * 查询五类车参数
      * 
-     * @param id 五类/七类车参数主键
-     * @return 五类/七类车参数
+     * @param id 五类车参数主键
+     * @return 五类车参数
      */
     @Override
     public CategoryfiveParameterTable selectCategoryfiveParameterTableById(Long id)
@@ -32,10 +32,10 @@ public class CategoryfiveParameterTableServiceImpl implements ICategoryfiveParam
     }
 
     /**
-     * 查询五类/七类车参数列表
+     * 查询五类车参数列表
      * 
-     * @param categoryfiveParameterTable 五类/七类车参数
-     * @return 五类/七类车参数
+     * @param categoryfiveParameterTable 五类车参数
+     * @return 五类车参数
      */
     @Override
     public List<CategoryfiveParameterTable> selectCategoryfiveParameterTableList(CategoryfiveParameterTable categoryfiveParameterTable)
@@ -44,9 +44,9 @@ public class CategoryfiveParameterTableServiceImpl implements ICategoryfiveParam
     }
 
     /**
-     * 新增五类/七类车参数
+     * 新增五类车参数
      * 
-     * @param categoryfiveParameterTable 五类/七类车参数
+     * @param categoryfiveParameterTable 五类车参数
      * @return 结果
      */
     @Override
@@ -56,9 +56,9 @@ public class CategoryfiveParameterTableServiceImpl implements ICategoryfiveParam
     }
 
     /**
-     * 修改五类/七类车参数
+     * 修改五类车参数
      * 
-     * @param categoryfiveParameterTable 五类/七类车参数
+     * @param categoryfiveParameterTable 五类车参数
      * @return 结果
      */
     @Override
@@ -68,9 +68,9 @@ public class CategoryfiveParameterTableServiceImpl implements ICategoryfiveParam
     }
 
     /**
-     * 批量删除五类/七类车参数
+     * 批量删除五类车参数
      * 
-     * @param ids 需要删除的五类/七类车参数主键
+     * @param ids 需要删除的五类车参数主键
      * @return 结果
      */
     @Override
@@ -80,9 +80,9 @@ public class CategoryfiveParameterTableServiceImpl implements ICategoryfiveParam
     }
 
     /**
-     * 删除五类/七类车参数信息
+     * 删除五类车参数信息
      * 
-     * @param id 五类/七类车参数主键
+     * @param id 五类车参数主键
      * @return 结果
      */
     @Override

@@ -1,7 +1,7 @@
 package com.ruoyi.marketanalysis.domain;
 
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 车型分类对象 vehicle_category_table
  * 
  * @author ruoyi
- * @date 2025-01-20
+ * @date 2025-03-18
  */
 public class VehicleCategoryTable extends BaseEntity
 {
@@ -21,9 +21,11 @@ public class VehicleCategoryTable extends BaseEntity
     private Long id;
 
     /** 车类 */
+    @Excel(name = "车类")
     private String vehicleCategory;
 
     /** 车型 */
+    @Excel(name = "车型")
     private String vehicleType;
 
     /** 系列 */
@@ -79,9 +81,8 @@ public class VehicleCategoryTable extends BaseEntity
     private String developmentClass;
 
     /** 上市时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "上市时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date releaseDate;
+    @Excel(name = "上市时间")
+    private String releaseDate;
 
     /** 备用字段1 */
     private String beiyongOne;
@@ -242,12 +243,12 @@ public class VehicleCategoryTable extends BaseEntity
     {
         return developmentClass;
     }
-    public void setReleaseDate(Date releaseDate) 
+    public void setReleaseDate(String releaseDate) 
     {
         this.releaseDate = releaseDate;
     }
 
-    public Date getReleaseDate() 
+    public String getReleaseDate() 
     {
         return releaseDate;
     }

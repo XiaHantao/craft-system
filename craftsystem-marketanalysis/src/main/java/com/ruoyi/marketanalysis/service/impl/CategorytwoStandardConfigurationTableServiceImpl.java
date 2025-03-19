@@ -11,7 +11,7 @@ import com.ruoyi.marketanalysis.service.ICategorytwoStandardConfigurationTableSe
  * 二类车标准配置Service业务层处理
  * 
  * @author ruoyi
- * @date 2025-03-07
+ * @date 2025-03-19
  */
 @Service
 public class CategorytwoStandardConfigurationTableServiceImpl implements ICategorytwoStandardConfigurationTableService 

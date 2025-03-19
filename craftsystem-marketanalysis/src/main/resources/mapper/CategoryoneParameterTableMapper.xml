@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.marketanalysis.mapper.CategoryoneParameterTableMapper">
-
+    
     <resultMap type="CategoryoneParameterTable" id="CategoryoneParameterTableResult">
         <result property="id"    column="id"    />
         <result property="manufacturer"    column="manufacturer"    />
@@ -51,21 +51,20 @@
 
     <select id="selectCategoryoneParameterTableList" parameterType="CategoryoneParameterTable" resultMap="CategoryoneParameterTableResult">
         <include refid="selectCategoryoneParameterTableVo"/>
-        <where>
+        <where>  
             <if test="manufacturer != null  and manufacturer != ''"> and manufacturer like concat('%', #{manufacturer}, '%')</if>
             <if test="configurationNumber != null  and configurationNumber != ''"> and configuration_number like concat('%', #{configurationNumber}, '%')</if>
         </where>
     </select>
-
+    
     <select id="selectCategoryoneParameterTableById" parameterType="Long" resultMap="CategoryoneParameterTableResult">
         <include refid="selectCategoryoneParameterTableVo"/>
         where id = #{id}
     </select>
-
-    <insert id="insertCategoryoneParameterTable" parameterType="CategoryoneParameterTable">
+        
+    <insert id="insertCategoryoneParameterTable" parameterType="CategoryoneParameterTable" useGeneratedKeys="true" keyProperty="id">
         insert into categoryone_parameter_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">id,</if>
             <if test="manufacturer != null">manufacturer,</if>
             <if test="configurationNumber != null">configuration_number,</if>
             <if test="liftingWeight != null">lifting_weight,</if>
@@ -103,9 +102,8 @@
             <if test="powerOfLiftingMotor != null">power_of_lifting_motor,</if>
             <if test="driveMotorControlMode != null">drive_motor_control_mode,</if>
             <if test="controlModeOfLiftingMotor != null">control_mode_of_lifting_motor,</if>
-        </trim>
+         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id},</if>
             <if test="manufacturer != null">#{manufacturer},</if>
             <if test="configurationNumber != null">#{configurationNumber},</if>
             <if test="liftingWeight != null">#{liftingWeight},</if>
@@ -143,7 +141,7 @@
             <if test="powerOfLiftingMotor != null">#{powerOfLiftingMotor},</if>
             <if test="driveMotorControlMode != null">#{driveMotorControlMode},</if>
             <if test="controlModeOfLiftingMotor != null">#{controlModeOfLiftingMotor},</if>
-        </trim>
+         </trim>
     </insert>
 
     <update id="updateCategoryoneParameterTable" parameterType="CategoryoneParameterTable">
@@ -195,7 +193,7 @@
     </delete>
 
     <delete id="deleteCategoryoneParameterTableByIds" parameterType="String">
-        delete from categoryone_parameter_table where id in
+        delete from categoryone_parameter_table where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

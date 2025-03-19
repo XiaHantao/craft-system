@@ -25,10 +25,10 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 七类车参数Controller
  * 
  * @author ruoyi
- * @date 2025-03-06
+ * @date 2025-03-19
  */
 @RestController
-@RequestMapping("/marketanalysis/parameterseven")
+@RequestMapping("/marketanalysis/parameter_seven")
 public class CategorysevenParameterTableController extends BaseController
 {
     @Autowired
@@ -37,7 +37,7 @@ public class CategorysevenParameterTableController extends BaseController
     /**
      * 查询七类车参数列表
      */
-    @PreAuthorize("@ss.hasPermi('marketanalysis:parameterseven:list')")
+    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_seven:list')")
     @GetMapping("/list")
     public TableDataInfo list(CategorysevenParameterTable categorysevenParameterTable)
     {
@@ -49,7 +49,7 @@ public class CategorysevenParameterTableController extends BaseController
     /**
      * 导出七类车参数列表
      */
-    @PreAuthorize("@ss.hasPermi('marketanalysis:parameterseven:export')")
+    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_seven:export')")
     @Log(title = "七类车参数", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CategorysevenParameterTable categorysevenParameterTable)
@@ -62,7 +62,7 @@ public class CategorysevenParameterTableController extends BaseController
     /**
      * 获取七类车参数详细信息
      */
-    @PreAuthorize("@ss.hasPermi('marketanalysis:parameterseven:query')")
+    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_seven:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -72,7 +72,7 @@ public class CategorysevenParameterTableController extends BaseController
     /**
      * 新增七类车参数
      */
-    @PreAuthorize("@ss.hasPermi('marketanalysis:parameterseven:add')")
+    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_seven:add')")
     @Log(title = "七类车参数", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CategorysevenParameterTable categorysevenParameterTable)
@@ -83,7 +83,7 @@ public class CategorysevenParameterTableController extends BaseController
     /**
      * 修改七类车参数
      */
-    @PreAuthorize("@ss.hasPermi('marketanalysis:parameterseven:edit')")
+    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_seven:edit')")
     @Log(title = "七类车参数", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CategorysevenParameterTable categorysevenParameterTable)
@@ -94,7 +94,7 @@ public class CategorysevenParameterTableController extends BaseController
     /**
      * 删除七类车参数
      */
-    @PreAuthorize("@ss.hasPermi('marketanalysis:parameterseven:remove')")
+    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_seven:remove')")
     @Log(title = "七类车参数", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

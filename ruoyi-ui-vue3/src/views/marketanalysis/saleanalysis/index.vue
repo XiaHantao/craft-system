@@ -49,7 +49,7 @@
 
     <el-table v-loading="loading" :data="saleanalysisList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
+      <!-- <el-table-column label="id" align="center" prop="id" /> -->
       <el-table-column label="网点 " align="center" prop="branch" />
       <el-table-column label="合同号" align="center" prop="contractNumber" />
       <el-table-column label="订单号" align="center" prop="orderNumber" />
@@ -209,6 +209,12 @@ const data = reactive({
     vehicleType: null,
   },
   rules: {
+    branch: [
+      { required: true, message: "网点不能为空", trigger: "blur" }
+    ],
+    vehicleType: [
+      { required: true, message: "车型不能为空", trigger: "blur" }
+    ],
   }
 });
 

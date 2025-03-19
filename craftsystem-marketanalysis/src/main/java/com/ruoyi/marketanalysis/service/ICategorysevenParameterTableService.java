@@ -7,7 +7,7 @@ import com.ruoyi.marketanalysis.domain.CategorysevenParameterTable;
  * 七类车参数Service接口
  * 
  * @author ruoyi
- * @date 2025-03-06
+ * @date 2025-03-19
  */
 public interface ICategorysevenParameterTableService 
 {

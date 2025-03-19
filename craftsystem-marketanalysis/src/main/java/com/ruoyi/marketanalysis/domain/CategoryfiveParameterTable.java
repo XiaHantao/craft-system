@@ -1,16 +1,15 @@
 package com.ruoyi.marketanalysis.domain;
 
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 五类/七类车参数对象 categoryfive_parameter_table
+ * 五类车参数对象 categoryfive_parameter_table
  * 
  * @author ruoyi
- * @date 2025-02-19
+ * @date 2025-03-19
  */
 public class CategoryfiveParameterTable extends BaseEntity
 {
@@ -179,372 +178,372 @@ public class CategoryfiveParameterTable extends BaseEntity
     @Excel(name = "变速箱变速档数", readConverterExp = "前=/后,型=式")
     private String gearsInTheGearbox;
 
-    public void setId(Long id)
+    public void setId(Long id) 
     {
         this.id = id;
     }
 
-    public Long getId()
+    public Long getId() 
     {
         return id;
     }
-    public void setManufacturer(String manufacturer)
+    public void setManufacturer(String manufacturer) 
     {
         this.manufacturer = manufacturer;
     }
 
-    public String getManufacturer()
+    public String getManufacturer() 
     {
         return manufacturer;
     }
-    public void setModel(String model)
+    public void setModel(String model) 
     {
         this.model = model;
     }
 
-    public String getModel()
+    public String getModel() 
     {
         return model;
     }
-    public void setLiftingWeight(String liftingWeight)
+    public void setLiftingWeight(String liftingWeight) 
     {
         this.liftingWeight = liftingWeight;
     }
 
-    public String getLiftingWeight()
+    public String getLiftingWeight() 
     {
         return liftingWeight;
     }
-    public void setLoadCenter(String loadCenter)
+    public void setLoadCenter(String loadCenter) 
     {
         this.loadCenter = loadCenter;
     }
 
-    public String getLoadCenter()
+    public String getLoadCenter() 
     {
         return loadCenter;
     }
-    public void setDrivingStyle(String drivingStyle)
+    public void setDrivingStyle(String drivingStyle) 
     {
         this.drivingStyle = drivingStyle;
     }
 
-    public String getDrivingStyle()
+    public String getDrivingStyle() 
     {
         return drivingStyle;
     }
-    public void setPowerMode(String powerMode)
+    public void setPowerMode(String powerMode) 
     {
         this.powerMode = powerMode;
     }
 
-    public String getPowerMode()
+    public String getPowerMode() 
     {
         return powerMode;
     }
-    public void setLiftingHeight(String liftingHeight)
+    public void setLiftingHeight(String liftingHeight) 
     {
         this.liftingHeight = liftingHeight;
     }
 
-    public String getLiftingHeight()
+    public String getLiftingHeight() 
     {
         return liftingHeight;
     }
-    public void setDoorFrameFullHeight(String doorFrameFullHeight)
+    public void setDoorFrameFullHeight(String doorFrameFullHeight) 
     {
         this.doorFrameFullHeight = doorFrameFullHeight;
     }
 
-    public String getDoorFrameFullHeight()
+    public String getDoorFrameFullHeight() 
     {
         return doorFrameFullHeight;
     }
-    public void setMaximumLiftingHeightOfFork(String maximumLiftingHeightOfFork)
+    public void setMaximumLiftingHeightOfFork(String maximumLiftingHeightOfFork) 
     {
         this.maximumLiftingHeightOfFork = maximumLiftingHeightOfFork;
     }
 
-    public String getMaximumLiftingHeightOfFork()
+    public String getMaximumLiftingHeightOfFork() 
     {
         return maximumLiftingHeightOfFork;
     }
-    public void setFreeElevationHeight(String freeElevationHeight)
+    public void setFreeElevationHeight(String freeElevationHeight) 
     {
         this.freeElevationHeight = freeElevationHeight;
     }
 
-    public String getFreeElevationHeight()
+    public String getFreeElevationHeight() 
     {
         return freeElevationHeight;
     }
-    public void setFullHeight(String fullHeight)
+    public void setFullHeight(String fullHeight) 
     {
         this.fullHeight = fullHeight;
     }
 
-    public String getFullHeight()
+    public String getFullHeight() 
     {
         return fullHeight;
     }
-    public void setMinimumGroundClearance(String minimumGroundClearance)
+    public void setMinimumGroundClearance(String minimumGroundClearance) 
     {
         this.minimumGroundClearance = minimumGroundClearance;
     }
 
-    public String getMinimumGroundClearance()
+    public String getMinimumGroundClearance() 
     {
         return minimumGroundClearance;
     }
-    public void setOverallLength(String overallLength)
+    public void setOverallLength(String overallLength) 
     {
         this.overallLength = overallLength;
     }
 
-    public String getOverallLength()
+    public String getOverallLength() 
     {
         return overallLength;
     }
-    public void setWheelbase(String wheelbase)
+    public void setWheelbase(String wheelbase) 
     {
         this.wheelbase = wheelbase;
     }
 
-    public String getWheelbase()
+    public String getWheelbase() 
     {
         return wheelbase;
     }
-    public void setFrontSuspensionDistance(String frontSuspensionDistance)
+    public void setFrontSuspensionDistance(String frontSuspensionDistance) 
     {
         this.frontSuspensionDistance = frontSuspensionDistance;
     }
 
-    public String getFrontSuspensionDistance()
+    public String getFrontSuspensionDistance() 
     {
         return frontSuspensionDistance;
     }
-    public void setRearSuspensionDistance(String rearSuspensionDistance)
+    public void setRearSuspensionDistance(String rearSuspensionDistance) 
     {
         this.rearSuspensionDistance = rearSuspensionDistance;
     }
 
-    public String getRearSuspensionDistance()
+    public String getRearSuspensionDistance() 
     {
         return rearSuspensionDistance;
     }
-    public void setFullWidth(String fullWidth)
+    public void setFullWidth(String fullWidth) 
     {
         this.fullWidth = fullWidth;
     }
 
-    public String getFullWidth()
+    public String getFullWidth() 
     {
         return fullWidth;
     }
-    public void setTrackWidth(String trackWidth)
+    public void setTrackWidth(String trackWidth) 
     {
         this.trackWidth = trackWidth;
     }
 
-    public String getTrackWidth()
+    public String getTrackWidth() 
     {
         return trackWidth;
     }
-    public void setMinimumOuterTurningRadius(String minimumOuterTurningRadius)
+    public void setMinimumOuterTurningRadius(String minimumOuterTurningRadius) 
     {
         this.minimumOuterTurningRadius = minimumOuterTurningRadius;
     }
 
-    public String getMinimumOuterTurningRadius()
+    public String getMinimumOuterTurningRadius() 
     {
         return minimumOuterTurningRadius;
     }
-    public void setGateFrameInclinationAngle(String gateFrameInclinationAngle)
+    public void setGateFrameInclinationAngle(String gateFrameInclinationAngle) 
     {
         this.gateFrameInclinationAngle = gateFrameInclinationAngle;
     }
 
-    public String getGateFrameInclinationAngle()
+    public String getGateFrameInclinationAngle() 
     {
         return gateFrameInclinationAngle;
     }
-    public void setForkSize(String forkSize)
+    public void setForkSize(String forkSize) 
     {
         this.forkSize = forkSize;
     }
 
-    public String getForkSize()
+    public String getForkSize() 
     {
         return forkSize;
     }
-    public void setMaximumDrivingSpeed(String maximumDrivingSpeed)
+    public void setMaximumDrivingSpeed(String maximumDrivingSpeed) 
     {
         this.maximumDrivingSpeed = maximumDrivingSpeed;
     }
 
-    public String getMaximumDrivingSpeed()
+    public String getMaximumDrivingSpeed() 
     {
         return maximumDrivingSpeed;
     }
-    public void setMaxClimbCapability(String maxClimbCapability)
+    public void setMaxClimbCapability(String maxClimbCapability) 
     {
         this.maxClimbCapability = maxClimbCapability;
     }
 
-    public String getMaxClimbCapability()
+    public String getMaxClimbCapability() 
     {
         return maxClimbCapability;
     }
-    public void setMaximumTractionForce(String maximumTractionForce)
+    public void setMaximumTractionForce(String maximumTractionForce) 
     {
         this.maximumTractionForce = maximumTractionForce;
     }
 
-    public String getMaximumTractionForce()
+    public String getMaximumTractionForce() 
     {
         return maximumTractionForce;
     }
-    public void setLiftingSpeed(String liftingSpeed)
+    public void setLiftingSpeed(String liftingSpeed) 
     {
         this.liftingSpeed = liftingSpeed;
     }
 
-    public String getLiftingSpeed()
+    public String getLiftingSpeed() 
     {
         return liftingSpeed;
     }
-    public void setDescentSpeed(String descentSpeed)
+    public void setDescentSpeed(String descentSpeed) 
     {
         this.descentSpeed = descentSpeed;
     }
 
-    public String getDescentSpeed()
+    public String getDescentSpeed() 
     {
         return descentSpeed;
     }
-    public void setTotalWeight(String totalWeight)
+    public void setTotalWeight(String totalWeight) 
     {
         this.totalWeight = totalWeight;
     }
 
-    public String getTotalWeight()
+    public String getTotalWeight() 
     {
         return totalWeight;
     }
-    public void setWeightDistributionWithFullLoad(String weightDistributionWithFullLoad)
+    public void setWeightDistributionWithFullLoad(String weightDistributionWithFullLoad) 
     {
         this.weightDistributionWithFullLoad = weightDistributionWithFullLoad;
     }
 
-    public String getWeightDistributionWithFullLoad()
+    public String getWeightDistributionWithFullLoad() 
     {
         return weightDistributionWithFullLoad;
     }
-    public void setWeightDistributionEmptyLoad(String weightDistributionEmptyLoad)
+    public void setWeightDistributionEmptyLoad(String weightDistributionEmptyLoad) 
     {
         this.weightDistributionEmptyLoad = weightDistributionEmptyLoad;
     }
 
-    public String getWeightDistributionEmptyLoad()
+    public String getWeightDistributionEmptyLoad() 
     {
         return weightDistributionEmptyLoad;
     }
-    public void setNumberOfWheels(String numberOfWheels)
+    public void setNumberOfWheels(String numberOfWheels) 
     {
         this.numberOfWheels = numberOfWheels;
     }
 
-    public String getNumberOfWheels()
+    public String getNumberOfWheels() 
     {
         return numberOfWheels;
     }
-    public void setTireType(String tireType)
+    public void setTireType(String tireType) 
     {
         this.tireType = tireType;
     }
 
-    public String getTireType()
+    public String getTireType() 
     {
         return tireType;
     }
-    public void setTireSize(String tireSize)
+    public void setTireSize(String tireSize) 
     {
         this.tireSize = tireSize;
     }
 
-    public String getTireSize()
+    public String getTireSize() 
     {
         return tireSize;
     }
-    public void setBatteryVoltageCapacity(String batteryVoltageCapacity)
+    public void setBatteryVoltageCapacity(String batteryVoltageCapacity) 
     {
         this.batteryVoltageCapacity = batteryVoltageCapacity;
     }
 
-    public String getBatteryVoltageCapacity()
+    public String getBatteryVoltageCapacity() 
     {
         return batteryVoltageCapacity;
     }
-    public void setEngineManufacturer(String engineManufacturer)
+    public void setEngineManufacturer(String engineManufacturer) 
     {
         this.engineManufacturer = engineManufacturer;
     }
 
-    public String getEngineManufacturer()
+    public String getEngineManufacturer() 
     {
         return engineManufacturer;
     }
-    public void setRatedPowerSpeed(String ratedPowerSpeed)
+    public void setRatedPowerSpeed(String ratedPowerSpeed) 
     {
         this.ratedPowerSpeed = ratedPowerSpeed;
     }
 
-    public String getRatedPowerSpeed()
+    public String getRatedPowerSpeed() 
     {
         return ratedPowerSpeed;
     }
-    public void setMaximumTorqueSpeed(String maximumTorqueSpeed)
+    public void setMaximumTorqueSpeed(String maximumTorqueSpeed) 
     {
         this.maximumTorqueSpeed = maximumTorqueSpeed;
     }
 
-    public String getMaximumTorqueSpeed()
+    public String getMaximumTorqueSpeed() 
     {
         return maximumTorqueSpeed;
     }
-    public void setNumberOfCylinders(String numberOfCylinders)
+    public void setNumberOfCylinders(String numberOfCylinders) 
     {
         this.numberOfCylinders = numberOfCylinders;
     }
 
-    public String getNumberOfCylinders()
+    public String getNumberOfCylinders() 
     {
         return numberOfCylinders;
     }
-    public void setFuelTankCapacity(String fuelTankCapacity)
+    public void setFuelTankCapacity(String fuelTankCapacity) 
     {
         this.fuelTankCapacity = fuelTankCapacity;
     }
 
-    public String getFuelTankCapacity()
+    public String getFuelTankCapacity() 
     {
         return fuelTankCapacity;
     }
-    public void setEmissionStandard(String emissionStandard)
+    public void setEmissionStandard(String emissionStandard) 
     {
         this.emissionStandard = emissionStandard;
     }
 
-    public String getEmissionStandard()
+    public String getEmissionStandard() 
     {
         return emissionStandard;
     }
-    public void setGearsInTheGearbox(String gearsInTheGearbox)
+    public void setGearsInTheGearbox(String gearsInTheGearbox) 
     {
         this.gearsInTheGearbox = gearsInTheGearbox;
     }
 
-    public String getGearsInTheGearbox()
+    public String getGearsInTheGearbox() 
     {
         return gearsInTheGearbox;
     }

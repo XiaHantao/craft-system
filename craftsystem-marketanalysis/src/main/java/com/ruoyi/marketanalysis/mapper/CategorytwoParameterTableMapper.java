@@ -7,7 +7,7 @@ import com.ruoyi.marketanalysis.domain.CategorytwoParameterTable;
  * 二类车参数Mapper接口
  * 
  * @author ruoyi
- * @date 2025-03-07
+ * @date 2025-03-19
  */
 public interface CategorytwoParameterTableMapper 
 {

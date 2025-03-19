@@ -10,9 +10,9 @@ export function listStandardtwo(query) {
 }
 
 // 查询二类车标准配置详细
-export function getStandardtwo(polyurethaneTires) {
+export function getStandardtwo(id) {
   return request({
-    url: '/marketanalysis/standardtwo/' + polyurethaneTires,
+    url: '/marketanalysis/standardtwo/' + id,
     method: 'get'
   })
 }
@@ -36,9 +36,9 @@ export function updateStandardtwo(data) {
 }
 
 // 删除二类车标准配置
-export function delStandardtwo(polyurethaneTires) {
+export function delStandardtwo(id) {
   return request({
-    url: '/marketanalysis/standardtwo/' + polyurethaneTires,
+    url: '/marketanalysis/standardtwo/' + id,
     method: 'delete'
   })
 }

@@ -11,7 +11,7 @@ import com.ruoyi.marketanalysis.service.ICategoryoneParameterTableService;
  * 一类车参数Service业务层处理
  * 
  * @author ruoyi
- * @date 2025-02-19
+ * @date 2025-03-19
  */
 @Service
 public class CategoryoneParameterTableServiceImpl implements ICategoryoneParameterTableService 

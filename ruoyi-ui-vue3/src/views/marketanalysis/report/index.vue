@@ -38,11 +38,11 @@
 
     <el-table v-loading="loading" :data="reportList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="编号" align="center" prop="id" />
+      <!-- <el-table-column label="编号" align="center" prop="id" /> -->
       <el-table-column label="报告名称" align="center" prop="reportTitle" />
       <el-table-column label="关联车型" align="center" prop="vehicleType" />
       <el-table-column label="报告格式" align="center" prop="reportFormat" />
-      <!-- <el-table-column label="地址" align="center" prop="file" /> -->
+      <el-table-column label="试验报告" align="center" prop="file" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
@@ -110,6 +110,12 @@ const data = reactive({
     reportFormat: null,
   },
   rules: {
+    reportTitle: [
+      { required: true, message: "报告名称不能为空", trigger: "blur" }
+    ],
+    file: [
+      { required: true, message: "试验报告文件不能为空", trigger: "blur" }
+    ],
   }
 });
 
