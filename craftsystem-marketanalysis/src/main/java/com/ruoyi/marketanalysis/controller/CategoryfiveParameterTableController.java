@@ -22,10 +22,10 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 五类/七类车参数Controller
+ * 五类车参数Controller
  * 
  * @author ruoyi
- * @date 2025-02-19
+ * @date 2025-03-19
  */
 @RestController
 @RequestMapping("/marketanalysis/parameter_five")
@@ -35,7 +35,7 @@ public class CategoryfiveParameterTableController extends BaseController
     private ICategoryfiveParameterTableService categoryfiveParameterTableService;
 
     /**
-     * 查询五类/七类车参数列表
+     * 查询五类车参数列表
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_five:list')")
     @GetMapping("/list")
@@ -47,20 +47,20 @@ public class CategoryfiveParameterTableController extends BaseController
     }
 
     /**
-     * 导出五类/七类车参数列表
+     * 导出五类车参数列表
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_five:export')")
-    @Log(title = "五类/七类车参数", businessType = BusinessType.EXPORT)
+    @Log(title = "五类车参数", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CategoryfiveParameterTable categoryfiveParameterTable)
     {
         List<CategoryfiveParameterTable> list = categoryfiveParameterTableService.selectCategoryfiveParameterTableList(categoryfiveParameterTable);
         ExcelUtil<CategoryfiveParameterTable> util = new ExcelUtil<CategoryfiveParameterTable>(CategoryfiveParameterTable.class);
-        util.exportExcel(response, list, "五类/七类车参数数据");
+        util.exportExcel(response, list, "五类车参数数据");
     }
 
     /**
-     * 获取五类/七类车参数详细信息
+     * 获取五类车参数详细信息
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_five:query')")
     @GetMapping(value = "/{id}")
@@ -70,10 +70,10 @@ public class CategoryfiveParameterTableController extends BaseController
     }
 
     /**
-     * 新增五类/七类车参数
+     * 新增五类车参数
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_five:add')")
-    @Log(title = "五类/七类车参数", businessType = BusinessType.INSERT)
+    @Log(title = "五类车参数", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CategoryfiveParameterTable categoryfiveParameterTable)
     {
@@ -81,10 +81,10 @@ public class CategoryfiveParameterTableController extends BaseController
     }
 
     /**
-     * 修改五类/七类车参数
+     * 修改五类车参数
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_five:edit')")
-    @Log(title = "五类/七类车参数", businessType = BusinessType.UPDATE)
+    @Log(title = "五类车参数", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CategoryfiveParameterTable categoryfiveParameterTable)
     {
@@ -92,10 +92,10 @@ public class CategoryfiveParameterTableController extends BaseController
     }
 
     /**
-     * 删除五类/七类车参数
+     * 删除五类车参数
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_five:remove')")
-    @Log(title = "五类/七类车参数", businessType = BusinessType.DELETE)
+    @Log(title = "五类车参数", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {

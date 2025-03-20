@@ -1,6 +1,14 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="制造商" prop="manufacturer">
+        <el-input
+          v-model="queryParams.manufacturer"
+          placeholder="请输入制造商"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -50,76 +58,47 @@
     </el-row>
 
     <el-table v-loading="loading" :data="standardtwoList" @selection-change="handleSelectionChange">
-  <el-table-column type="selection" width="55" align="center" />
-  <el-table-column label="id" align="center" prop="id" />
-  <el-table-column label="制造商" align="center" prop="manufacturer" />
-  <!-- 基本项 -->
-  <el-table-column label="基本项" align="center">
-    <el-table-column label="聚氨酯轮胎" align="center" prop="polyurethaneTires" />
-    <el-table-column label="基本型5米起升高度" align="center" prop="fiveMeterLiftingHeight" />
-    <el-table-column label="其它型及其它起升高度门架" align="center" prop="liftingHeightGantry" />
-    <el-table-column label="标准系列货叉" align="center" prop="standardSeriesFork" />
-    <el-table-column label="非标系列货叉" align="center" prop="nonStandardSeriesFork" />
-    <el-table-column label="标准车身颜色" align="center" prop="standardBodyColor" />
-    <el-table-column label="其它车身颜色" align="center" prop="customizedBodyColor" />
-  </el-table-column>
-
-  <!-- 安全类 -->
-  <el-table-column label="安全类" align="center">
-    <el-table-column label="属具未到位限速" align="center" prop="accessoriesAndSpeedLimit" />
-    <el-table-column label="转弯限速" align="center" prop="turningSpeedLimit" />
-    <el-table-column label="灭火器" align="center" prop="fireExtinguisher" />
-    <el-table-column label="倒车蜂鸣器" align="center" prop="reverseBuzzer" />
-    <el-table-column label="倒车语音喇叭" align="center" prop="reverseVoiceHorn" />
-    <el-table-column label="两侧后视镜" align="center" prop="twoSideRearviewMirrors" />
-    <el-table-column label="逃生包" align="center" prop="escapeBag" />
-    <el-table-column label="后轮制动" align="center" prop="rearWheelBraking" />
-    <el-table-column label="前轮制动" align="center" prop="frontWheelBrake" />
-    <el-table-column label="导向轮" align="center" prop="guideWheel" />
-    <el-table-column label="监控" align="center" prop="monitor" />
-    <el-table-column label="磁导航" align="center" prop="magneticNavigation" />
-  </el-table-column>
-
-  <!-- 舒适类 -->
-  <el-table-column label="舒适类" align="center">
-    <el-table-column label="站驾软包座椅" align="center" prop="stationDrivingSoftPackSeat" />
-    <el-table-column label="座驾式座椅" align="center" prop="carStyleSeats" />
-    <el-table-column label="电风扇" align="center" prop="electricFan" />
-  </el-table-column>
-
-  <!-- 驾驶室/挡风类 -->
-  <el-table-column label="驾驶室/挡风类" align="center">
-    <el-table-column label="前挡风玻璃" align="center" prop="windscreen" />
-    <el-table-column label="后挡风玻璃" align="center" prop="rearWindshield" />
-  </el-table-column>
-
-  <!-- 灯光类 -->
-  <el-table-column label="灯光类" align="center">
-    <el-table-column label="全车LED灯" align="center" prop="fullCarLedLights" />
-    <el-table-column label="阅读灯" align="center" prop="readingLamp" />
-    <el-table-column label="配装LED闪光警示灯" align="center" prop="ledFlashingWarningLight" />
-  </el-table-column>
-
-  <!-- 其他 -->
-  <el-table-column label="其他" align="center">
-    <el-table-column label="公制螺纹" align="center" prop="metric" />
-    <el-table-column label="国标电源接插件" align="center" prop="nationalStandardPowerConnector" />
-    <el-table-column label="中文标识" align="center" prop="chineseIdentification" />
-    <el-table-column label="英文标识" align="center" prop="englishLogo" />
-  </el-table-column>
-
-  <!-- 操作 -->
-  <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-    <template #default="scope">
-      <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:standardtwo:edit']">
-        修改
-      </el-button>
-      <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:standardtwo:remove']">
-        删除
-      </el-button>
-    </template>
-  </el-table-column>
-</el-table>
+      <el-table-column type="selection" width="55" align="center" />
+      <!-- <el-table-column label="id" align="center" prop="id" /> -->
+      <el-table-column label="制造商" align="center" prop="manufacturer" />
+      <el-table-column label="聚氨酯轮胎" align="center" prop="polyurethaneTires" />
+      <el-table-column label="基本型5米起升高度" align="center" prop="fiveMeterLiftingHeight" />
+      <el-table-column label="其它型及其它起升高度门架" align="center" prop="liftingHeightGantry" />
+      <el-table-column label="标准系列货叉" align="center" prop="standardSeriesFork" />
+      <el-table-column label="非标系列货叉" align="center" prop="nonStandardSeriesFork" />
+      <el-table-column label="标准车身颜色" align="center" prop="standardBodyColor" />
+      <el-table-column label="其它车身颜色" align="center" prop="customizedBodyColor" />
+      <el-table-column label="属具未到位限速" align="center" prop="accessoriesAndSpeedLimit" />
+      <el-table-column label="转弯限速" align="center" prop="turningSpeedLimit" />
+      <el-table-column label="灭火器" align="center" prop="fireExtinguisher" />
+      <el-table-column label="倒车蜂鸣器" align="center" prop="reverseBuzzer" />
+      <el-table-column label="倒车语音喇叭" align="center" prop="reverseVoiceHorn" />
+      <el-table-column label="两侧后视镜" align="center" prop="twoSideRearviewMirrors" />
+      <el-table-column label="逃生包" align="center" prop="escapeBag" />
+      <el-table-column label="后轮制动" align="center" prop="rearWheelBraking" />
+      <el-table-column label="前轮制动" align="center" prop="frontWheelBrake" />
+      <el-table-column label="导向轮" align="center" prop="guideWheel" />
+      <el-table-column label="监控" align="center" prop="monitor" />
+      <el-table-column label="磁导航" align="center" prop="magneticNavigation" />
+      <el-table-column label="站驾软包座椅" align="center" prop="stationDrivingSoftPackSeat" />
+      <el-table-column label="座驾式座椅" align="center" prop="carStyleSeats" />
+      <el-table-column label="电风扇" align="center" prop="electricFan" />
+      <el-table-column label="前挡风玻璃" align="center" prop="windscreen" />
+      <el-table-column label="后挡风玻璃" align="center" prop="rearWindshield" />
+      <el-table-column label="全车LED灯" align="center" prop="fullCarLedLights" />
+      <el-table-column label="阅读灯" align="center" prop="readingLamp" />
+      <el-table-column label="配装LED闪光警示灯" align="center" prop="ledFlashingWarningLight" />
+      <el-table-column label="公制螺纹" align="center" prop="metric" />
+      <el-table-column label="国标电源接插件" align="center" prop="nationalStandardPowerConnector" />
+      <el-table-column label="中文标识" align="center" prop="chineseIdentification" />
+      <el-table-column label="英文标识" align="center" prop="englishLogo" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template #default="scope">
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:standardtwo:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:standardtwo:remove']">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     
     <pagination
       v-show="total>0"
@@ -259,8 +238,12 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    manufacturer: null,
   },
   rules: {
+    manufacturer: [
+      { required: true, message: "制造商不能为空", trigger: "blur" }
+    ],
   }
 });
 
@@ -285,6 +268,8 @@ function cancel() {
 // 表单重置
 function reset() {
   form.value = {
+    id: null,
+    manufacturer: null,
     polyurethaneTires: null,
     fiveMeterLiftingHeight: null,
     liftingHeightGantry: null,
@@ -334,7 +319,7 @@ function resetQuery() {
 
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.polyurethaneTires);
+  ids.value = selection.map(item => item.id);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -349,8 +334,8 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  const _polyurethaneTires = row.polyurethaneTires || ids.value
-  getStandardtwo(_polyurethaneTires).then(response => {
+  const _id = row.id || ids.value
+  getStandardtwo(_id).then(response => {
     form.value = response.data;
     open.value = true;
     title.value = "修改二类车标准配置";
@@ -361,7 +346,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["standardtwoRef"].validate(valid => {
     if (valid) {
-      if (form.value.polyurethaneTires != null) {
+      if (form.value.id != null) {
         updateStandardtwo(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
@@ -380,9 +365,9 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const _polyurethaneTiress = row.polyurethaneTires || ids.value;
-  proxy.$modal.confirm('是否确认删除二类车标准配置编号为"' + _polyurethaneTiress + '"的数据项？').then(function() {
-    return delStandardtwo(_polyurethaneTiress);
+  const _ids = row.id || ids.value;
+  proxy.$modal.confirm('是否确认删除二类车标准配置编号为"' + _ids + '"的数据项？').then(function() {
+    return delStandardtwo(_ids);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");

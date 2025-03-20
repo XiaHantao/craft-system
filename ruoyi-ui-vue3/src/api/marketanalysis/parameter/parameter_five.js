@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询五类/七类车参数列表
+// 查询五类车参数列表
 export function listParameter_five(query) {
   return request({
     url: '/marketanalysis/parameter_five/list',
@@ -9,7 +9,7 @@ export function listParameter_five(query) {
   })
 }
 
-// 查询五类/七类车参数详细
+// 查询五类车参数详细
 export function getParameter_five(id) {
   return request({
     url: '/marketanalysis/parameter_five/' + id,
@@ -17,7 +17,7 @@ export function getParameter_five(id) {
   })
 }
 
-// 新增五类/七类车参数
+// 新增五类车参数
 export function addParameter_five(data) {
   return request({
     url: '/marketanalysis/parameter_five',
@@ -26,7 +26,7 @@ export function addParameter_five(data) {
   })
 }
 
-// 修改五类/七类车参数
+// 修改五类车参数
 export function updateParameter_five(data) {
   return request({
     url: '/marketanalysis/parameter_five',
@@ -35,7 +35,7 @@ export function updateParameter_five(data) {
   })
 }
 
-// 删除五类/七类车参数
+// 删除五类车参数
 export function delParameter_five(id) {
   return request({
     url: '/marketanalysis/parameter_five/' + id,

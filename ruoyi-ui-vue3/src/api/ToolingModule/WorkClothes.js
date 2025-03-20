@@ -17,6 +17,15 @@ export function getWorkClothes(id) {
   })
 }
 
+// 补充工艺文件及物料清单
+export function updateWorkClothesfile(data) {
+  return request({
+    url: '/ToolingModule/WorkClothes/fileupdate',
+    method: 'put',
+    data: data
+  })
+}
+
 // 新增工装台账
 export function addWorkClothes(data) {
   return request({

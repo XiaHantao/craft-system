@@ -7,7 +7,7 @@ import com.ruoyi.marketanalysis.domain.MultimediaFileTable;
  * 多媒体文件Mapper接口
  * 
  * @author ruoyi
- * @date 2025-02-27
+ * @date 2025-03-19
  */
 public interface MultimediaFileTableMapper 
 {

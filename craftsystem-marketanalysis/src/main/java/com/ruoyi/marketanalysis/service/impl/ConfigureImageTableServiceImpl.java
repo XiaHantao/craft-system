@@ -11,7 +11,7 @@ import com.ruoyi.marketanalysis.service.IConfigureImageTableService;
  * 配置图片表Service业务层处理
  * 
  * @author ruoyi
- * @date 2025-03-11
+ * @date 2025-03-19
  */
 @Service
 public class ConfigureImageTableServiceImpl implements IConfigureImageTableService 

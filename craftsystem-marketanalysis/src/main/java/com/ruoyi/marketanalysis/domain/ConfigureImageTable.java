@@ -9,7 +9,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 配置图片表对象 configure_image_table
  * 
  * @author ruoyi
- * @date 2025-03-11
+ * @date 2025-03-19
  */
 public class ConfigureImageTable extends BaseEntity
 {
@@ -31,7 +31,6 @@ public class ConfigureImageTable extends BaseEntity
     private String file;
 
     /** 图片地址 */
-    @Excel(name = "图片地址")
     private String image;
 
     public void setId(Long id) 

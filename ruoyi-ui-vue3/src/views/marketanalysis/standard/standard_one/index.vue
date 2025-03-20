@@ -1,11 +1,19 @@
 <template>
   <div class="app-container">
-    <!-- <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="制造商" prop="manufacturer">
+        <el-input
+          v-model="queryParams.manufacturer"
+          placeholder="请输入制造商"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
       </el-form-item>
-    </el-form> -->
+    </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -50,100 +58,70 @@
     </el-row>
 
     <el-table v-loading="loading" :data="standardoneList" @selection-change="handleSelectionChange">
-  <el-table-column type="selection" width="55" align="center" />
-  <el-table-column label="id" align="center" prop="id" />
-  <el-table-column label="制造商" align="center" prop="manufacturer" />
-  <!-- 基本项 -->
-  <el-table-column label="基本项" align="center">
-    <el-table-column label="充气胎" align="center" prop="pneumaticTire" />
-    <el-table-column label="实心胎" align="center" prop="solidTire" />
-    <el-table-column label="单胎" align="center" prop="singleTire" />
-    <el-table-column label="双胎" align="center" prop="dualTire" />
-    <el-table-column label="两片阀" align="center" prop="twoPieceValve" />
-    <el-table-column label="三片或四片阀" align="center" prop="threeOrFourPieceValve" />
-    <el-table-column label="基本型3米起升高度" align="center" prop="threeMeterLiftingHeight" />
-    <el-table-column label="其它型及其它起升高度门架" align="center" prop="liftingHeightGantry" />
-    <el-table-column label="标准系列货叉" align="center" prop="standardSeriesFork" />
-    <el-table-column label="非标系列货叉、属具" align="center" prop="nonStandardSeriesForks" />
-    <el-table-column label="标准车身颜色" align="center" prop="standardBodyColor" />
-    <el-table-column label="其它车身颜色" align="center" prop="customizedBodyColor" />
-  </el-table-column>
-
-  <!-- 安全类 -->
-  <el-table-column label="安全类" align="center">
-    <el-table-column label="全套OPS功能" align="center" prop="completeOpsFunctionality" />
-    <el-table-column label="转弯限速" align="center" prop="turningSpeedLimit" />
-    <el-table-column label="超速报警" align="center" prop="overspeed" />
-    <el-table-column label="倒车扶手带喇叭开关" align="center" prop="reverseArmrestWithHorn" />
-    <el-table-column label="座椅带安全带开关" align="center" prop="seatBeltSwitch" />
-    <el-table-column label="多路阀过载" align="center" prop="overloadOfMultiWayValve" />
-    <el-table-column label="灭火器" align="center" prop="fireExtinguisher" />
-    <el-table-column label="倒车蜂鸣器" align="center" prop="reverseBuzzer" />
-  </el-table-column>
-
-  <!-- 舒适类 -->
-  <el-table-column label="舒适类" align="center">
-    <el-table-column label="半包围座椅" align="center" prop="semiEnclosedSeat" />
-    <el-table-column label="全悬浮座椅" align="center" prop="fullySuspendedSeat" />
-    <el-table-column label="USB接口" align="center" prop="usbInterface" />
-    <el-table-column label="电风扇" align="center" prop="electricFan" />
-    <el-table-column label="方向盘启动转向" align="center" prop="turnTheSteeringWheel" />
-    <el-table-column label="同步转向" align="center" prop="synchronousSteering" />
-  </el-table-column>
-
-  <!-- 护顶架选项 -->
-  <el-table-column label="护顶架选项" align="center">
-    <el-table-column label="标准护顶架" align="center" prop="standardRoofProtectionFrame" />
-    <el-table-column label="非标护顶架" align="center" prop="nonStandardRoofProtectionFrame" />
-  </el-table-column>
-
-  <!-- 驾驶室/挡风类 -->
-  <el-table-column label="驾驶室/挡风类" align="center">
-    <el-table-column label="前挡风玻璃" align="center" prop="windscreen" />
-    <el-table-column label="前耐高温挡风玻璃" align="center" prop="frontHeatresistantWindshield" />
-    <el-table-column label="后挡风玻璃" align="center" prop="rearWindshield" />
-    <el-table-column label="PC耐力板顶棚" align="center" prop="pcEnduranceBoardCeiling" />
-    <el-table-column label="贴片式驾驶室" align="center" prop="surfaceMountedCab" />
-    <el-table-column label="单冷空调" align="center" prop="singleCoolingAirConditioner" />
-    <el-table-column label="冷暖两用空调" align="center" prop="dualPurposeAirConditioner" />
-    <el-table-column label="暖风机" align="center" prop="warmAirBlower" />
-  </el-table-column>
-
-  <!-- 灯光类 -->
-  <el-table-column label="灯光类" align="center">
-    <el-table-column label="全车LED灯" align="center" prop="fullCarLedLights" />
-    <el-table-column label="LED后工作灯" align="center" prop="ledRearWorkLight" />
-    <el-table-column label="车后方蓝光灯" align="center" prop="blueLightBehindTheCar" />
-    <el-table-column label="三边蓝色条形灯" align="center" prop="threeSidedBlueStripLight" />
-    <el-table-column label="三边红色条形灯" align="center" prop="threeSidedRedStripLights" />
-    <el-table-column label="配装LED闪光警示灯" align="center" prop="ledFlashingWarningLight" />
-    <el-table-column label="配装LED旋转式警示灯" align="center" prop="ledRotatingWarningLight" />
-    <el-table-column label="配装LED旋转蜂鸣式警示灯" align="center" prop="ledRotatingBuzzerWarningLight" />
-  </el-table-column>
-
-  <!-- 其他 -->
-  <el-table-column label="其他" align="center">
-    <el-table-column label="公制螺纹" align="center" prop="metric" />
-    <el-table-column label="倾斜油缸护套" align="center" prop="tiltCylinderSleeve" />
-    <el-table-column label="转向油缸护套" align="center" prop="steeringCylinderSleeve" />
-    <el-table-column label="REMA电源接插件" align="center" prop="remaPowerConnector" />
-    <el-table-column label="国标电源接插件" align="center" prop="nationalStandardPowerConnector" />
-    <el-table-column label="国产蓄电池" align="center" prop="domesticBattery" />
-    <el-table-column label="FICS合力车联网基本版" align="center" prop="ficsHeliConnectedCarBasicEdition" />
-  </el-table-column>
-
-  <!-- 操作 -->
-  <el-table-column label="操作" align="center" class-name="smallpadding fixed-width">
-    <template #default="scope">
-      <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:standardone:edit']">
-        修改
-      </el-button>
-      <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:standardone:remove']">
-        删除
-      </el-button>
-    </template>
-  </el-table-column>
-</el-table>
+      <el-table-column type="selection" width="55" align="center" />
+      <!-- <el-table-column label="id" align="center" prop="id" /> -->
+      <el-table-column label="制造商" align="center" prop="manufacturer" />
+      <el-table-column label="充气胎" align="center" prop="pneumaticTire" />
+      <el-table-column label="实心胎" align="center" prop="solidTire" />
+      <el-table-column label="单胎" align="center" prop="singleTire" />
+      <el-table-column label="双胎" align="center" prop="dualTire" />
+      <el-table-column label="两片阀" align="center" prop="twoPieceValve" />
+      <el-table-column label="三片或四片阀" align="center" prop="threeOrFourPieceValve" />
+      <el-table-column label="基本型3米起升高度" align="center" prop="threeMeterLiftingHeight" />
+      <el-table-column label="其它型及其它起升高度门架" align="center" prop="liftingHeightGantry" />
+      <el-table-column label="标准系列货叉" align="center" prop="standardSeriesFork" />
+      <el-table-column label="非标系列货叉、属具" align="center" prop="nonStandardSeriesForks" />
+      <el-table-column label="标准车身颜色" align="center" prop="standardBodyColor" />
+      <el-table-column label="其它车身颜色" align="center" prop="customizedBodyColor" />
+      <el-table-column label="全套OPS功能" align="center" prop="completeOpsFunctionality" />
+      <el-table-column label="转弯限速" align="center" prop="turningSpeedLimit" />
+      <el-table-column label="超速报警" align="center" prop="overspeed" />
+      <el-table-column label="倒车扶手带喇叭开关" align="center" prop="reverseArmrestWithHorn" />
+      <el-table-column label="座椅带安全带开关" align="center" prop="seatBeltSwitch" />
+      <el-table-column label="多路阀过载" align="center" prop="overloadOfMultiWayValve" />
+      <el-table-column label="灭火器" align="center" prop="fireExtinguisher" />
+      <el-table-column label="倒车蜂鸣器" align="center" prop="reverseBuzzer" />
+      <el-table-column label="中央广角后视镜" align="center" prop="centralWideangleRearviewMirror" />
+      <el-table-column label="两侧后视镜" align="center" prop="twoSideRearviewMirrors" />
+      <el-table-column label="倒车雷达" align="center" prop="parkingSensor" />
+      <el-table-column label="半包围座椅" align="center" prop="semiEnclosedSeat" />
+      <el-table-column label="全悬浮座椅" align="center" prop="fullySuspendedSeat" />
+      <el-table-column label="USB接口" align="center" prop="usbInterface" />
+      <el-table-column label="电风扇" align="center" prop="electricFan" />
+      <el-table-column label="方向盘启动转向" align="center" prop="turnTheSteeringWheel" />
+      <el-table-column label="同步转向" align="center" prop="synchronousSteering" />
+      <el-table-column label="标准护顶架" align="center" prop="standardRoofProtectionFrame" />
+      <el-table-column label="非标护顶架" align="center" prop="nonStandardRoofProtectionFrame" />
+      <el-table-column label="前挡风玻璃" align="center" prop="windscreen" />
+      <el-table-column label="前耐高温挡风玻璃" align="center" prop="frontHeatresistantWindshield" />
+      <el-table-column label="后挡风玻璃" align="center" prop="rearWindshield" />
+      <el-table-column label="PC耐力板顶棚" align="center" prop="pcEnduranceBoardCeiling" />
+      <el-table-column label="贴片式驾驶室" align="center" prop="surfaceMountedCab" />
+      <el-table-column label="单冷空调" align="center" prop="singleCoolingAirConditioner" />
+      <el-table-column label="冷暖两用空调" align="center" prop="dualPurposeAirConditioner" />
+      <el-table-column label="暖风机" align="center" prop="warmAirBlower" />
+      <el-table-column label="全车LED灯" align="center" prop="fullCarLedLights" />
+      <el-table-column label="LED后工作灯" align="center" prop="ledRearWorkLight" />
+      <el-table-column label="车后方蓝光灯" align="center" prop="blueLightBehindTheCar" />
+      <el-table-column label="三边蓝色条形灯" align="center" prop="threeSidedBlueStripLight" />
+      <el-table-column label="三边红色条形灯" align="center" prop="threeSidedRedStripLights" />
+      <el-table-column label="配装LED闪光警示灯" align="center" prop="ledFlashingWarningLight" />
+      <el-table-column label="配装LED旋转式警示灯" align="center" prop="ledRotatingWarningLight" />
+      <el-table-column label="配装LED旋转蜂鸣式警示灯" align="center" prop="ledRotatingBuzzerWarningLight" />
+      <el-table-column label="公制螺纹" align="center" prop="metric" />
+      <el-table-column label="倾斜油缸护套" align="center" prop="tiltCylinderSleeve" />
+      <el-table-column label="转向油缸护套" align="center" prop="steeringCylinderSleeve" />
+      <el-table-column label="REMA电源接插件" align="center" prop="remaPowerConnector" />
+      <el-table-column label="国标电源接插件" align="center" prop="nationalStandardPowerConnector" />
+      <el-table-column label="国产蓄电池" align="center" prop="domesticBattery" />
+      <el-table-column label="FICS合力车联网基本版" align="center" prop="ficsHeliConnectedCarBasicEdition" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template #default="scope">
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:standardone:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:standardone:remove']">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     
     <pagination
       v-show="total>0"
@@ -352,8 +330,12 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    manufacturer: null,
   },
   rules: {
+    manufacturer: [
+      { required: true, message: "制造商不能为空", trigger: "blur" }
+    ],
   }
 });
 
@@ -378,6 +360,8 @@ function cancel() {
 // 表单重置
 function reset() {
   form.value = {
+    id: null,
+    manufacturer: null,
     pneumaticTire: null,
     solidTire: null,
     singleTire: null,
@@ -450,7 +434,7 @@ function resetQuery() {
 
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.pneumaticTire);
+  ids.value = selection.map(item => item.id);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -465,8 +449,8 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  const _pneumaticTire = row.pneumaticTire || ids.value
-  getStandardone(_pneumaticTire).then(response => {
+  const _id = row.id || ids.value
+  getStandardone(_id).then(response => {
     form.value = response.data;
     open.value = true;
     title.value = "修改一类车标准配置";
@@ -477,7 +461,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["standardoneRef"].validate(valid => {
     if (valid) {
-      if (form.value.pneumaticTire != null) {
+      if (form.value.id != null) {
         updateStandardone(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
@@ -496,9 +480,9 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const _pneumaticTires = row.pneumaticTire || ids.value;
-  proxy.$modal.confirm('是否确认删除一类车标准配置编号为"' + _pneumaticTires + '"的数据项？').then(function() {
-    return delStandardone(_pneumaticTires);
+  const _ids = row.id || ids.value;
+  proxy.$modal.confirm('是否确认删除一类车标准配置编号为"' + _ids + '"的数据项？').then(function() {
+    return delStandardone(_ids);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");

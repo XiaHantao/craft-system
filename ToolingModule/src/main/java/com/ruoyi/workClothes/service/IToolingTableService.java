@@ -1,6 +1,8 @@
 package com.ruoyi.workClothes.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.workClothes.domain.ToolingTable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -91,4 +93,6 @@ public interface IToolingTableService
      * @return 工装详细集合
      */
     public List<ToolingTable> selectUpcomingChangeTimeToolingTableList(ToolingTable toolingTable);
+
+    int updateWorkClothesfile(Map<String, Object> fileform);
 }

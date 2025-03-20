@@ -31,13 +31,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertConfigureImageTable" parameterType="ConfigureImageTable" useGeneratedKeys="true" keyProperty="id">
         insert into configure_image_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="fileName != null">file_name,</if>
+            <if test="fileName != null and fileName != ''">file_name,</if>
             <if test="notes != null">notes,</if>
             <if test="file != null">file,</if>
             <if test="image != null">image,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="fileName != null">#{fileName},</if>
+            <if test="fileName != null and fileName != ''">#{fileName},</if>
             <if test="notes != null">#{notes},</if>
             <if test="file != null">#{file},</if>
             <if test="image != null">#{image},</if>
@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateConfigureImageTable" parameterType="ConfigureImageTable">
         update configure_image_table
         <trim prefix="SET" suffixOverrides=",">
-            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="fileName != null and fileName != ''">file_name = #{fileName},</if>
             <if test="notes != null">notes = #{notes},</if>
             <if test="file != null">file = #{file},</if>
             <if test="image != null">image = #{image},</if>

@@ -25,7 +25,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 二类车参数Controller
  * 
  * @author ruoyi
- * @date 2025-03-07
+ * @date 2025-03-19
  */
 @RestController
 @RequestMapping("/marketanalysis/parameter_two")

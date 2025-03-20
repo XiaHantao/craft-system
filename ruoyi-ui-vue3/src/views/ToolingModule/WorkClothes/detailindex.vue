@@ -63,6 +63,15 @@
             v-hasPermi="['ToolingModule:toolingDetail:remove']"
         >删除</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+            type="primary"
+            plain
+            icon="Plus"
+            @click="fileAdd"
+            v-hasPermi="['ToolingModule:WorkClothes:add']"
+        >上传</el-button>
+      </el-col>
 <!--      <el-col :span="1.5">-->
 <!--        <el-button-->
 <!--            type="warning"-->
@@ -72,13 +81,55 @@
 <!--            v-hasPermi="['ToolingModule:toolingDetail:export']"-->
 <!--        >导出</el-button>-->
 <!--      </el-col>-->
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+<!--      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>-->
+
+      <!-- 关键部件提示模块 -->
+      <el-col :span="1.5">
+        <div class="right-toolbar">
+          <div class="highlight-color">
+            <div class="color-box1"></div>
+            <span>关键部件</span>
+          </div>
+        </div>
+      </el-col>
+
+      <!-- 关键部件提示模块 -->
+      <el-col :span="1.5">
+        <div class="right-toolbar">
+          <div class="highlight-color">
+            <div class="color-box2"></div>
+            <span>共用部件</span>
+          </div>
+        </div>
+      </el-col>
+
+      <!-- 关键部件提示模块 -->
+      <el-col :span="1.5">
+        <div class="right-toolbar">
+          <div class="highlight-color">
+            <div class="color-box3"></div>
+            <span>关键共用部件</span>
+          </div>
+        </div>
+      </el-col>
+
+<!--      <div class="right-toolbar">-->
+<!--        <div class="highlight-color">-->
+<!--          <div class="color-box"></div>-->
+<!--          <span>关键工装</span>-->
+<!--        </div>-->
+<!--      </div>-->
     </el-row>
 
     <el-table v-loading="loading" :data="toolingDetailList" @selection-change="handleSelectionChange" :row-class-name="rowClassName">
       <el-table-column type="selection" width="55" align="center" />
       <!--      <el-table-column label="id" align="center" prop="id" />-->
-      <el-table-column label="序号" align="center" prop="serialNumber" />
+<!--      <el-table-column label="序号" align="center" prop="serialNumber" />-->
+      <el-table-column label="序号" align="center">
+        <template #default="{ $index }">
+          <span>{{ ($index + 1) + (queryParams.pageNum - 1) * queryParams.pageSize }}</span> <!-- 根据当前页计算序号 -->
+        </template>
+      </el-table-column>
       <el-table-column label="工具编号" align="center" prop="toolNumber" />
       <el-table-column label="工具名称" align="center" prop="toolName" />
       <el-table-column label="合计数量" align="center" prop="totalQuantity" />
@@ -109,22 +160,51 @@
       <!--      <el-table-column label="验证文件" align="center" prop="verifyFile" />-->
       <!--      <el-table-column label="采购清单" align="center" prop="procurementList" />-->
       <!--      <el-table-column label="验证结论" align="center" prop="verificationConclusion" />-->
+      <el-table-column label="工艺文件" align="center" prop="verifyFile" width="180" >
+        <template #default="{ row }">
+            <span v-if="row.verifyFile">
+              <!-- 如果有文件地址，显示预览按钮 -->
+              <!--              <el-button type="text" @click="previewFile(row.verifyFile)">预览</el-button>-->
+              <el-button type="text" @click="previewFile(row.verifyFile)">{{ getFileName(row.verifyFile) }}</el-button>
+            </span>
+          <span v-else>
+            <!-- 如果没有文件地址，显示“无图纸” -->
+            无文件
+          </span>
+        </template>
+      </el-table-column>
+      <!--      <el-table-column label="物料清单" align="center" prop="procurementList" />-->
+      <el-table-column label="物料清单" align="center" prop="procurementList" width="180" >
+        <template #default="{ row }">
+            <span v-if="row.procurementList">
+              <!-- 如果有文件地址，显示预览按钮 -->
+              <!--              <el-button type="text" @click="previewFile(row.procurementList)">预览</el-button>-->
+              <el-button type="text" @click="previewFile(row.procurementList)">{{ getFileName(row.procurementList) }}</el-button>
+            </span>
+          <span v-else>
+            <!-- 如果没有文件地址，显示“无图纸” -->
+            无文件
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="更换时间" align="center" prop="changeTime" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.changeTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否为关键部件" align="center" prop="keyComponents">
-        <template #default="{ row }">
-          <span>{{ row.keyComponents == 1 ? '是' : '否' }}</span>
-        </template>
-      </el-table-column>
+<!--      <el-table-column label="是否为关键部件" align="center" prop="keyComponents">-->
+<!--        <template #default="{ row }">-->
+<!--          <span>{{ row.keyComponents == 1 ? '是' : '否' }}</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <!--      <el-table-column label="维修记录" align="center" prop="maintenanceRecord" />-->
       <!--      <el-table-column label="模具所属" align="center" prop="moldOwnership" />-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['ToolingModule:toolingDetail:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['ToolingModule:toolingDetail:remove']">删除</el-button>
+          <!-- 新增“维修记录”按钮 -->
+          <el-button link type="primary" icon="Search" @click="handlemaintenance(scope.row.toolNumber)">维修记录</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -136,7 +216,29 @@
         v-model:limit="queryParams.pageSize"
         @pagination="getList"
     />
+    <!-- 弹窗 -->
+    <el-dialog v-model="dialogVisible" title="上传文件" width="30%">
+      <el-form :model="fileform" ref="formRef">
+        <!-- 单选框：工艺文件 或 物料清单 -->
+        <el-form-item label="文件类型" prop="fileType">
+          <el-radio-group v-model="fileform.fileType">
+            <el-radio label="processDocuments">工艺文件</el-radio>
+            <el-radio label="mbom">物料清单</el-radio>
+            <el-radio label="toolingDrawings">工装图纸</el-radio>
+          </el-radio-group>
+        </el-form-item>
 
+        <!-- 上传组件 -->
+        <el-form-item label="文件选择" prop="file">
+          <file-upload v-model="fileform.file"/>
+        </el-form-item>
+      </el-form>
+
+      <template #footer>
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleSubmit">提交</el-button>
+      </template>
+    </el-dialog>
     <!-- 添加或修改工装详细对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="toolingDetailRef" :model="form" :rules="rules" label-width="110px">
@@ -194,6 +296,12 @@
         <el-form-item label="工装图纸" prop="toolingDrawings">
           <file-upload v-model="form.toolingDrawings"/>
         </el-form-item>
+        <el-form-item label="工艺文件" prop="verifyFile">
+          <file-upload v-model="form.verifyFile"/>
+        </el-form-item>
+        <el-form-item label="物料清单" prop="procurementList">
+          <file-upload v-model="form.procurementList"/>
+        </el-form-item>
         <!--        <el-form-item label="验证文件" prop="verifyFile">-->
         <!--          <file-upload v-model="form.verifyFile"/>-->
         <!--        </el-form-item>-->
@@ -239,8 +347,17 @@
 
 <style>
 /* 定义高亮样式 */
-.el-table .highlight-row {
-  background: oldlace;
+.el-table .highlight-row1 {
+  background: #f3e68f;
+  border: 1px solid #ccc;
+}
+.el-table .highlight-row2 {
+  background: #2cc461;
+  border: 1px solid #ccc;
+}
+.el-table .highlight-row3 {
+  background: #59a0fc;
+  border: 1px solid #ccc;
 }
 </style>
 
@@ -250,9 +367,10 @@ import {
   getToolingDetail,
   delToolingDetail,
   addToolingDetail,
-  updateToolingDetail, uploadFile, listToolingnewDetail,
+  updateToolingDetail, uploadFile, listToolingnewDetail, updateToolingDetailfile,
 } from "@/api/ToolingModule/toolingDetail";
 import { useRoute } from 'vue-router';
+import {ElMessage} from "element-plus";
 
 
 const { proxy } = getCurrentInstance();
@@ -267,10 +385,17 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
+const dialogVisible = ref(false); // 控制弹框的显示与隐藏
 
 const route = useRoute();
+const router = useRouter();
 
-
+// 定义表单模型和弹窗显示状态
+const fileform = ref({
+  fileType: 'processDocuments', // 默认选中工艺文件
+  file: null, // 上传的文件
+  moldname: null, //工装编号
+});
 
 
 
@@ -362,6 +487,10 @@ function reset() {
   };
   proxy.resetForm("toolingDetailRef");
 }
+// 处理点击“维修记录”按钮
+function handlemaintenance(Number) {
+  router.push({ name: 'mainRecord', query: { Number } }); // 使用路由的 name 来跳转
+}
 
 //预览文件
 function previewFile(fileUrl) {
@@ -370,13 +499,77 @@ function previewFile(fileUrl) {
   console.log('处理中');
   window.open(fullUrl, '_blank');
 }
+/** 获取文件名 */
+function getFileName(name) {
+  if (!name) return "";
+  // 找到最后一个斜杠或反斜杠的位置
+  const lastSlashIndex = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\'));
+  if (lastSlashIndex === -1) {
+    return name; // 如果没有找到斜杠或反斜杠，返回整个字符串
+  }
+  // 提取文件名部分
+  const fileName = name.slice(lastSlashIndex + 1);
+  // 分割文件名
+  const parts = fileName.split('_');
+  // console.log("parts===>",parts);
+  // 如果没有找到版本号部分，返回整个文件名
+  return parts.length > 1 ? parts[0] : fileName;
+}
+
+// 提取文件名中的型号
+function extractModelName(filename) {
+
+
+  // // 正则表达式匹配类似 PJ-24-ZH-10901 格式的型号
+  // const regex = /([A-Za-z]+-\d+-[A-Za-z]+-\d+)/;
+  // const match = filename.match(regex);
+
+  // 正则表达式匹配中英文括号内的内容
+  const regex = /[\(（]([^）\)]+)[\)）]/;
+  const match = filename.match(regex);
+  // console.log('数据' ,match)
+  // 如果匹配成功，返回型号部分，否则返回空字符串
+  return match ? match[1] : '';
+}
+// 弹窗显示控制
+function fileAdd(){
+  dialogVisible.value = true;
+};
+
+// 提交上传的文件
+const handleSubmit = () => {
+  // 在这里处理提交的逻辑
+  // console.log('提交的文件:', fileform.value.fileType);
+  const filename = getFileName(fileform.value.file);
+  const moldname = extractModelName(filename);
+  fileform.value.moldname = moldname;
+  if (moldname == null){
+    ElMessage.error("请确认文件名称");
+  }
+  else {
+    updateToolingDetailfile(fileform.value).then(response => {
+      proxy.$modal.msgSuccess("修改成功");
+      dialogVisible.value = false;
+      getList();
+    });
+  }
+  // console.log('提交的文件:', moldname);
+  dialogVisible.value = false;
+};
 
 // 为每一行动态添加class
 // 使用 function 定义函数
 function rowClassName({ row }) {
-  console.log(row.keyComponents);
-  if (row.keyComponents == 1 )
-  return 'highlight-row';
+  // console.log(row.keyComponents);
+  if (row.keyComponents == 1 && row.sharedComponents != 1 ){
+  return 'highlight-row1';
+  }
+  else if (row.keyComponents != 1 && row.sharedComponents == 1){
+    return 'highlight-row2' ;
+  }
+  else if (row.keyComponents == 1 && row.sharedComponents == 1){
+    return 'highlight-row3';
+  }
 }
 
 /** 搜索按钮操作 */
@@ -478,6 +671,56 @@ const handleUpload = async (file) => {
 
 getList();
 </script>
+
+<style scoped>
+
+.right-toolbar {
+  right: 10px;
+  top: 30%;
+  transform: translateY(-5px); /* 向下移动 20px */  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.highlight-color {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.color-box1 {
+  width: 20px;
+  height: 20px;
+  background: #f3e68f; /* 高亮颜色 */
+  margin-right: 8px;
+  border: 1px solid #ccc;
+}
+
+.color-box2 {
+  width: 20px;
+  height: 20px;
+  background: #2cc461; /* 高亮颜色 */
+  margin-right: 8px;
+  border: 1px solid #ccc;
+}
+
+.color-box3 {
+  width: 20px;
+  height: 20px;
+  background: #59a0fc; /* 高亮颜色 */
+  margin-right: 8px;
+  border: 1px solid #ccc;
+}
+
+span {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+</style>
 
 
 

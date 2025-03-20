@@ -1,6 +1,7 @@
 package com.ruoyi.workClothes.controller;
 
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,19 @@ public class ToolingLedgerTableController extends BaseController
     public AjaxResult edit(@RequestBody ToolingLedgerTable toolingLedgerTable)
     {
         return toAjax(toolingLedgerTableService.updateToolingLedgerTable(toolingLedgerTable));
+    }
+
+    /**
+     * 修改工装台账工艺及物料
+     */
+    @PreAuthorize("@ss.hasPermi('ToolingModule:WorkClothes:edit')")
+    @Log(title = "工装台账", businessType = BusinessType.UPDATE)
+    @PutMapping("/fileupdate")
+    public AjaxResult updateWorkClothesfile(@RequestBody Map<String, Object> fileform)
+    {
+//        System.out.println("传过来的数据: " + fileform);
+
+        return toAjax(toolingLedgerTableService.updateWorkClothesfile(fileform));
     }
 
     /**

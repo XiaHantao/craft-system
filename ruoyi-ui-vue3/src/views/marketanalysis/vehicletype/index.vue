@@ -67,7 +67,7 @@
 
     <el-table v-loading="loading" :data="vehicletypeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
+      <!-- <el-table-column label="id" align="center" prop="id" /> -->
       <el-table-column label="车类" align="center" prop="vehicleCategory" />
       <el-table-column label="车型" align="center" prop="vehicleType" />
       <el-table-column label="系列" align="center" prop="series" />
@@ -103,6 +103,12 @@
     <!-- 添加或修改车型分类对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="vehicletypeRef" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="车类" prop="vehicleCategory">
+          <el-input v-model="form.vehicleCategory" placeholder="请输入车类" />
+        </el-form-item>
+        <el-form-item label="车型" prop="vehicleType">
+          <el-input v-model="form.vehicleType" placeholder="请输入车型" />
+        </el-form-item>
         <el-form-item label="系列" prop="series">
           <el-input v-model="form.series" placeholder="请输入系列" />
         </el-form-item>
@@ -180,6 +186,12 @@ const data = reactive({
     vehicleType: null,
   },
   rules: {
+    vehicleCategory: [
+      { required: true, message: "车类不能为空", trigger: "blur" }
+    ],
+    vehicleType: [
+      { required: true, message: "车型不能为空", trigger: "blur" }
+    ],
   }
 });
 

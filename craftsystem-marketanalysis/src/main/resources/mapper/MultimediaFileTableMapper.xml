@@ -7,22 +7,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="MultimediaFileTable" id="MultimediaFileTableResult">
         <result property="id"    column="id"    />
         <result property="fileName"    column="file_name"    />
+        <result property="fileType"    column="file_type"    />
         <result property="notes"    column="notes"    />
         <result property="file"    column="file"    />
-        <result property="image"    column="image"    />
     </resultMap>
 
     <sql id="selectMultimediaFileTableVo">
-        select id, file_name, notes, file, image from multimedia_file_table
+        select id, file_name, file_type, notes, file from multimedia_file_table
     </sql>
 
     <select id="selectMultimediaFileTableList" parameterType="MultimediaFileTable" resultMap="MultimediaFileTableResult">
         <include refid="selectMultimediaFileTableVo"/>
         <where>  
             <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
-            <if test="notes != null  and notes != ''"> and notes = #{notes}</if>
-            <if test="file != null  and file != ''"> and file = #{file}</if>
-            <if test="image != null  and image != ''"> and image = #{image}</if>
         </where>
     </select>
     
@@ -34,26 +31,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertMultimediaFileTable" parameterType="MultimediaFileTable" useGeneratedKeys="true" keyProperty="id">
         insert into multimedia_file_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="fileName != null">file_name,</if>
+            <if test="fileName != null and fileName != ''">file_name,</if>
+            <if test="fileType != null">file_type,</if>
             <if test="notes != null">notes,</if>
             <if test="file != null">file,</if>
-            <if test="image != null">image,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="fileName != null">#{fileName},</if>
+            <if test="fileName != null and fileName != ''">#{fileName},</if>
+            <if test="fileType != null">#{fileType},</if>
             <if test="notes != null">#{notes},</if>
             <if test="file != null">#{file},</if>
-            <if test="image != null">#{image},</if>
          </trim>
     </insert>
 
     <update id="updateMultimediaFileTable" parameterType="MultimediaFileTable">
         update multimedia_file_table
         <trim prefix="SET" suffixOverrides=",">
-            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="fileName != null and fileName != ''">file_name = #{fileName},</if>
+            <if test="fileType != null">file_type = #{fileType},</if>
             <if test="notes != null">notes = #{notes},</if>
             <if test="file != null">file = #{file},</if>
-            <if test="image != null">image = #{image},</if>
         </trim>
         where id = #{id}
     </update>

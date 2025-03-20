@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.workClothes.mapper.SelfMadePartsLedgerMapper">
+    
+    <resultMap type="SelfMadePartsLedger" id="SelfMadePartsLedgerResult">
+        <result property="id"    column="id"    />
+        <result property="serialNumber"    column="serial_number"    />
+        <result property="moldNumber"    column="mold_number"    />
+        <result property="moldName"    column="mold_name"    />
+        <result property="moldCategory"    column="mold_category"    />
+        <result property="designRequirement"    column="design_requirement"    />
+        <result property="toolingDrawings"    column="tooling_drawings"    />
+        <result property="verifyFile"    column="verify_file"    />
+        <result property="toolUploader"    column="tool_uploader"    />
+        <result property="verificationConclusion"    column="verification_conclusion"    />
+        <result property="reviewer"    column="reviewer"    />
+        <result property="verificationState"    column="verification_state"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSelfMadePartsLedgerVo">
+        select id, serial_number, mold_number, mold_name, mold_category, design_requirement, tooling_drawings, verify_file, tool_uploader, verification_conclusion, reviewer, verification_state, remark from self_made_parts_ledger
+    </sql>
+
+    <select id="selectSelfMadePartsLedgerList" parameterType="SelfMadePartsLedger" resultMap="SelfMadePartsLedgerResult">
+        <include refid="selectSelfMadePartsLedgerVo"/>
+        <where>  
+            <if test="serialNumber != null "> and serial_number = #{serialNumber}</if>
+            <if test="moldNumber != null  and moldNumber != ''"> and mold_number = #{moldNumber}</if>
+            <if test="moldName != null  and moldName != ''"> and mold_name like concat('%', #{moldName}, '%')</if>
+            <if test="moldCategory != null  and moldCategory != ''"> and mold_category = #{moldCategory}</if>
+            <if test="designRequirement != null  and designRequirement != ''"> and design_requirement = #{designRequirement}</if>
+            <if test="toolingDrawings != null  and toolingDrawings != ''"> and tooling_drawings = #{toolingDrawings}</if>
+            <if test="verifyFile != null  and verifyFile != ''"> and verify_file = #{verifyFile}</if>
+            <if test="toolUploader != null  and toolUploader != ''"> and tool_uploader = #{toolUploader}</if>
+            <if test="verificationConclusion != null  and verificationConclusion != ''"> and verification_conclusion = #{verificationConclusion}</if>
+            <if test="reviewer != null  and reviewer != ''"> and reviewer = #{reviewer}</if>
+            <if test="verificationState != null  and verificationState != ''"> and verification_state = #{verificationState}</if>
+        </where>
+    </select>
+    
+    <select id="selectSelfMadePartsLedgerById" parameterType="Long" resultMap="SelfMadePartsLedgerResult">
+        <include refid="selectSelfMadePartsLedgerVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSelfMadePartsLedger" parameterType="SelfMadePartsLedger" useGeneratedKeys="true" keyProperty="id">
+        insert into self_made_parts_ledger
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">serial_number,</if>
+            <if test="moldNumber != null">mold_number,</if>
+            <if test="moldName != null">mold_name,</if>
+            <if test="moldCategory != null">mold_category,</if>
+            <if test="designRequirement != null">design_requirement,</if>
+            <if test="toolingDrawings != null">tooling_drawings,</if>
+            <if test="verifyFile != null">verify_file,</if>
+            <if test="toolUploader != null">tool_uploader,</if>
+            <if test="verificationConclusion != null">verification_conclusion,</if>
+            <if test="reviewer != null">reviewer,</if>
+            <if test="verificationState != null">verification_state,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">#{serialNumber},</if>
+            <if test="moldNumber != null">#{moldNumber},</if>
+            <if test="moldName != null">#{moldName},</if>
+            <if test="moldCategory != null">#{moldCategory},</if>
+            <if test="designRequirement != null">#{designRequirement},</if>
+            <if test="toolingDrawings != null">#{toolingDrawings},</if>
+            <if test="verifyFile != null">#{verifyFile},</if>
+            <if test="toolUploader != null">#{toolUploader},</if>
+            <if test="verificationConclusion != null">#{verificationConclusion},</if>
+            <if test="reviewer != null">#{reviewer},</if>
+            <if test="verificationState != null">#{verificationState},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSelfMadePartsLedger" parameterType="SelfMadePartsLedger">
+        update self_made_parts_ledger
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNumber != null">serial_number = #{serialNumber},</if>
+            <if test="moldNumber != null">mold_number = #{moldNumber},</if>
+            <if test="moldName != null">mold_name = #{moldName},</if>
+            <if test="moldCategory != null">mold_category = #{moldCategory},</if>
+            <if test="designRequirement != null">design_requirement = #{designRequirement},</if>
+            <if test="toolingDrawings != null">tooling_drawings = #{toolingDrawings},</if>
+            <if test="verifyFile != null">verify_file = #{verifyFile},</if>
+            <if test="toolUploader != null">tool_uploader = #{toolUploader},</if>
+            <if test="verificationConclusion != null">verification_conclusion = #{verificationConclusion},</if>
+            <if test="reviewer != null">reviewer = #{reviewer},</if>
+            <if test="verificationState != null">verification_state = #{verificationState},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSelfMadePartsLedgerById" parameterType="Long">
+        delete from self_made_parts_ledger where id = #{id}
+    </delete>
+
+    <delete id="deleteSelfMadePartsLedgerByIds" parameterType="String">
+        delete from self_made_parts_ledger where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
