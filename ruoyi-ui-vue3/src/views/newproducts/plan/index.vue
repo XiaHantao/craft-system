@@ -102,9 +102,10 @@
       <el-table-column label="" align="center" prop="teste" />
       <el-table-column label="" align="center" prop="testf" />
       <el-table-column label="" align="center" prop="testg" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right"  width="200">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:plan:edit']">修改</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:plan:edit']" 
+          v-if="scope.row.technicalcheck != '通过' || scope.row.qualitycheck != '通过' || scope.row.securitycheck !='通过'">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:plan:remove']">删除</el-button>
           <el-button link type="primary" icon="Check" @click="handleCheck(scope.row)" v-hasPermi="['newproducts:submit:edit']">确认</el-button>
         </template>
@@ -192,7 +193,7 @@
         <el-form-item label="技术科确认结果" prop="technicalcheck">
           <el-radio-group v-model="form.technicalcheck">
             <el-radio label="通过" />
-            <el-radio label="不通过" />
+            <el-radio label="拒绝" />
           </el-radio-group>
         </el-form-item>        
         <el-form-item label="技术科备注" prop="technicalremark">
@@ -204,7 +205,7 @@
         <el-form-item label="质量科确认结果" prop="qualitycheck">
           <el-radio-group v-model="form.qualitycheck">
             <el-radio label="通过" />
-            <el-radio label="不通过" />
+            <el-radio label="拒绝" />
           </el-radio-group>
         </el-form-item>        
         <el-form-item label="质量科备注" prop="qualityremark">
@@ -216,7 +217,7 @@
         <el-form-item label="安环科确认结果" prop="securitycheck">          
           <el-radio-group v-model="form.securitycheck">
             <el-radio label="通过" />
-            <el-radio label="不通过" />
+            <el-radio label="拒绝" />
           </el-radio-group>
         </el-form-item>        
         <el-form-item label="安环科备注" prop="securityremark">
@@ -264,6 +265,9 @@ const data = reactive({
     name: null,
   },
   rules: {
+    name: [
+      { required: true, message: "新产品计划名称不能为空", trigger: "blur" }
+    ],    
   }
 });
 
@@ -351,12 +355,18 @@ function submitForm() {
   proxy.$refs["planRef"].validate(valid => {
     if (valid) {
       if (form.value.id != null) {
+          form.value.technicalcheck ="未确认" ;
+          form.value.qualitycheck ="未确认" ;
+          form.value.securitycheck ="未确认" ;
         updatePlan(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
           getList();
         });
       } else {
+          form.value.technicalcheck ="未确认" ;
+          form.value.qualitycheck ="未确认" ;
+          form.value.securitycheck ="未确认" ;
         addPlan(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
