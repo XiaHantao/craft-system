@@ -39,7 +39,7 @@
 
     <el-table v-loading="loading" :data="costpriceList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
+      <!-- <el-table-column label="id" align="center" prop="id" /> -->
       <el-table-column label="制造商" align="center" prop="manufacturer" />
       <el-table-column label="车型" align="center" prop="vehicleType" />
       <el-table-column label="成本（元，不含税）" align="center" prop="cost" />
@@ -143,6 +143,9 @@ const data = reactive({
     vehicleType: null,
   },
   rules: {
+    vehicleType: [
+      { required: true, message: "车型不能为空", trigger: "blur" }
+    ],
   }
 });
 

@@ -7,7 +7,7 @@ import com.ruoyi.marketanalysis.domain.CategorytwoStandardConfigurationTable;
  * 二类车标准配置Service接口
  * 
  * @author ruoyi
- * @date 2025-03-07
+ * @date 2025-03-19
  */
 public interface ICategorytwoStandardConfigurationTableService 
 {

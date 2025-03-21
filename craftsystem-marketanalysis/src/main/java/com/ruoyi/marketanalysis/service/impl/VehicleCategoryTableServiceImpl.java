@@ -12,7 +12,7 @@ import com.ruoyi.marketanalysis.service.IVehicleCategoryTableService;
  * 车型分类Service业务层处理
  * 
  * @author ruoyi
- * @date 2025-01-20
+ * @date 2025-03-18
  */
 @Service
 public class VehicleCategoryTableServiceImpl implements IVehicleCategoryTableService 

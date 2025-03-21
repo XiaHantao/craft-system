@@ -42,23 +42,3 @@ export function delVehicletype(id) {
     method: 'delete'
   })
 }
-// 新增导入方法
-export function importCostprice(data) {
-  return request({
-    url: '/marketanalysis/costprice/importData',
-    method: 'post',
-    data: data,
-    timeout: 60000,
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  })
-}
-
-// 新增检查数据存在方法
-export function checkCostpriceDataExists() {
-  return request({
-    url: '/marketanalysis/costprice/checkDataExists',
-    method: 'get'
-  })
-}

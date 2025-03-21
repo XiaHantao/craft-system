@@ -9,7 +9,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 二类车标准配置对象 categorytwo_standard_configuration_table
  * 
  * @author ruoyi
- * @date 2025-03-07
+ * @date 2025-03-19
  */
 public class CategorytwoStandardConfigurationTable extends BaseEntity
 {

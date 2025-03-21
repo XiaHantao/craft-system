@@ -38,7 +38,7 @@
 
     <el-table v-loading="loading" :data="performanceList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
+      <!-- <el-table-column label="id" align="center" prop="id" /> -->
       <el-table-column label="车类" align="center" prop="vehicleCategory" />
       <el-table-column label="车型" align="center" prop="vehicleType" />
       <el-table-column label="制造商" align="center" prop="manufacturer" />
@@ -190,7 +190,17 @@ const data = reactive({
     vehicleType: null,
     manufacturer: null,
   },
-  rules: {}
+  rules: {
+    vehicleCategory: [
+      { required: true, message: "配置名称不能为空", trigger: "blur" }
+    ],
+    vehicleType: [
+      { required: true, message: "配置名称不能为空", trigger: "blur" }
+    ],
+    manufacturer: [
+      { required: true, message: "配置名称不能为空", trigger: "blur" }
+    ],
+  }
 });
 
 const { queryParams, form, rules } = toRefs(data);

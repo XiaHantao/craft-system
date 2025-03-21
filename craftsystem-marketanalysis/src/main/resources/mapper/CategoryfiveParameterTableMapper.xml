@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.marketanalysis.mapper.CategoryfiveParameterTableMapper">
-
+    
     <resultMap type="CategoryfiveParameterTable" id="CategoryfiveParameterTableResult">
         <result property="id"    column="id"    />
         <result property="manufacturer"    column="manufacturer"    />
@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="gateFrameInclinationAngle"    column="gate_frame_inclination_angle"    />
         <result property="forkSize"    column="fork_size"    />
         <result property="maximumDrivingSpeed"    column="maximum_driving_speed"    />
-        <result property="maxClimbCapability"    column=""    />
+        <result property="maxClimbCapability"    column="max_climb_capability"    />
         <result property="maximumTractionForce"    column="maximum_traction_force"    />
         <result property="liftingSpeed"    column="lifting_speed"    />
         <result property="descentSpeed"    column="descent_speed"    />
@@ -54,21 +54,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCategoryfiveParameterTableList" parameterType="CategoryfiveParameterTable" resultMap="CategoryfiveParameterTableResult">
         <include refid="selectCategoryfiveParameterTableVo"/>
-        <where>
+        <where>  
             <if test="manufacturer != null  and manufacturer != ''"> and manufacturer like concat('%', #{manufacturer}, '%')</if>
             <if test="model != null  and model != ''"> and model like concat('%', #{model}, '%')</if>
         </where>
     </select>
-
+    
     <select id="selectCategoryfiveParameterTableById" parameterType="Long" resultMap="CategoryfiveParameterTableResult">
         <include refid="selectCategoryfiveParameterTableVo"/>
         where id = #{id}
     </select>
-
-    <insert id="insertCategoryfiveParameterTable" parameterType="CategoryfiveParameterTable">
+        
+    <insert id="insertCategoryfiveParameterTable" parameterType="CategoryfiveParameterTable" useGeneratedKeys="true" keyProperty="id">
         insert into categoryfive_parameter_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">id,</if>
             <if test="manufacturer != null">manufacturer,</if>
             <if test="model != null">model,</if>
             <if test="liftingWeight != null">lifting_weight,</if>
@@ -111,7 +110,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="gearsInTheGearbox != null">gears_in_the_gearbox,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id},</if>
             <if test="manufacturer != null">#{manufacturer},</if>
             <if test="model != null">#{model},</if>
             <if test="liftingWeight != null">#{liftingWeight},</if>
@@ -207,7 +205,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteCategoryfiveParameterTableByIds" parameterType="String">
-        delete from categoryfive_parameter_table where id in
+        delete from categoryfive_parameter_table where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

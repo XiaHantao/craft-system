@@ -33,7 +33,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['newproducts:process:edit']"
-        >修改</el-button>
+        >上传文件</el-button>
       </el-col>
 <!--       <el-col :span="1.5">
         <el-button
@@ -86,9 +86,9 @@
       <el-table-column label="" align="center" prop="g" />
       <el-table-column label="" align="center" prop="h" />
       <el-table-column label="" align="center" prop="i" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right"  width="200">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:process:edit']">修改</el-button>
+          <el-button link type="primary" icon="UploadFilled" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:process:edit']">上传文件</el-button>
           <!-- <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:process:remove']">删除</el-button> -->
         </template>
       </el-table-column>
@@ -105,15 +105,19 @@
     <!-- 添加或修改新产品试制过程对话框 -->
     <el-dialog :title="title" v-model="open" width="800px" append-to-body>
       <el-form ref="processRef" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="新产品名称" prop="name">
+<!--         <el-form-item label="新产品名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入新产品名称" />
-        </el-form-item>
+        </el-form-item> -->
+        <div v-if="users =='生产科' || users =='老实人科技' ">
         <el-form-item label="试验记录文件" prop="testprocess">
           <file-upload v-model="form.testprocess"/>
         </el-form-item>
+        </div>
+        <div v-if="users =='技术科' || users =='老实人科技' ">
         <el-form-item label="总结文件" prop="conclude">
           <file-upload v-model="form.conclude"/>
         </el-form-item>
+        </div>
         <el-form-item label="其他文件" prop="other">
           <file-upload v-model="form.other"/>
         </el-form-item>
@@ -160,6 +164,7 @@
 
 <script setup name="Process">
 import { listProcess, getProcess, delProcess, addProcess, updateProcess } from "@/api/newproducts/process";
+import { getUserProfile } from "@/api/system/user";
 
 const { proxy } = getCurrentInstance();
 const processList = ref([]);
@@ -171,6 +176,7 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
+const users = ref({}); //  初始化 users根据其值显示不同确认框
 
 const data = reactive({
   form: {},
@@ -266,12 +272,19 @@ function handleSelectionChange(selection) {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
+  getUserProfile().then(response => {
+  users.value = response.data.dept.deptName;  //获得用户部门
+  });
+  if(users == '技术科' && !queryParams.testprocess) {
+    proxy.$modal.msgError("请先上传试验记录文件");
+  } else {
   const _id = row.id || ids.value
   getProcess(_id).then(response => {
     form.value = response.data;
     open.value = true;
     title.value = "修改新产品试制过程";
   });
+  }
 }
 
 /** 提交按钮 */

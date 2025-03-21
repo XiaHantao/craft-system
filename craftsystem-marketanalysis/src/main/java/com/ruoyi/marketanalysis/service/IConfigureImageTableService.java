@@ -7,7 +7,7 @@ import com.ruoyi.marketanalysis.domain.ConfigureImageTable;
  * 配置图片表Service接口
  * 
  * @author ruoyi
- * @date 2025-03-11
+ * @date 2025-03-19
  */
 public interface IConfigureImageTableService 
 {

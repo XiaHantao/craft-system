@@ -67,7 +67,7 @@
 
     <el-table v-loading="loading" :data="parameter_oneList" @selection-change="handleSelectionChange">
   <el-table-column type="selection" width="55" align="center" />
-  <el-table-column label="id" align="center" prop="id" />
+  <!-- <el-table-column label="id" align="center" prop="id" /> -->
   <!-- 特性 -->
   <el-table-column label="特性" align="center">
     <el-table-column label="制造商" align="center" prop="manufacturer" />
@@ -80,44 +80,44 @@
 
   <!-- 尺寸 -->
   <el-table-column label="尺寸" align="center">
-    <el-table-column label="起升高度（标准）" align="center" prop="liftingHeight" />
-    <el-table-column label="门架全高（货叉落地、门架垂直）" align="center" prop="doorframeHeight" />
-    <el-table-column label="货叉起升最大高度（带挡货架）" align="center" prop="maximumLiftingHeightOfFork" />
+    <el-table-column label="起升高度" align="center" prop="liftingHeight" />
+    <el-table-column label="门架全高" align="center" prop="doorframeHeight" />
+    <el-table-column label="货叉起升最大高度" align="center" prop="maximumLiftingHeightOfFork" />
     <el-table-column label="自由提升高度" align="center" prop="freeElevationHeight" />
-    <el-table-column label="全高（护顶架）" align="center" prop="fullHeight" />
-    <el-table-column label="最小离地间隙（门架处）" align="center" prop="minimumGroundClearance" />
-    <el-table-column label="全长（含货叉/不含货叉）" align="center" prop="overallLength" />
+    <el-table-column label="全高" align="center" prop="fullHeight" />
+    <el-table-column label="最小离地间隙" align="center" prop="minimumGroundClearance" />
+    <el-table-column label="全长" align="center" prop="overallLength" />
     <el-table-column label="轴距" align="center" prop="wheelbase" />
     <el-table-column label="前悬距" align="center" prop="frontSuspensionDistance" />
     <el-table-column label="后悬距" align="center" prop="rearSuspensionDistance" />
     <el-table-column label="全宽" align="center" prop="fullWidth" />
-    <el-table-column label="轮距（前轮距/后轮距）" align="center" prop="trackWidth" />
+    <el-table-column label="轮距" align="center" prop="trackWidth" />
     <el-table-column label="最小外侧转弯半径" align="center" prop="minimumOuterTurningRadius" />
-    <el-table-column label="门架倾角（前/后）" align="center" prop="gateFrameInclinationAngle" />
+    <el-table-column label="门架倾角" align="center" prop="gateFrameInclinationAngle" />
     <el-table-column label="货叉尺寸" align="center" prop="forkSize" />
   </el-table-column>
 
   <!-- 性能 -->
   <el-table-column label="性能" align="center">
-    <el-table-column label="最高行驶速度（满载/空载）" align="center" prop="maximumDrivingSpeed" />
-    <el-table-column label="最大爬坡能力（满载/空载）" align="center" prop="maxClimbCapability" />
-    <el-table-column label="最大牵引力（满载/空载）" align="center" prop="maximumTractionForce" />
-    <el-table-column label="起升速度（满载/空载）" align="center" prop="liftingSpeed" />
-    <el-table-column label="下降速度（满载/空载）" align="center" prop="descentSpeed" />
+    <el-table-column label="最高行驶速度" align="center" prop="maximumDrivingSpeed" />
+    <el-table-column label="最大爬坡能力" align="center" prop="maxClimbCapability" />
+    <el-table-column label="最大牵引力" align="center" prop="maximumTractionForce" />
+    <el-table-column label="起升速度" align="center" prop="liftingSpeed" />
+    <el-table-column label="下降速度" align="center" prop="descentSpeed" />
   </el-table-column>
 
   <!-- 重量 -->
   <el-table-column label="重量" align="center">
     <el-table-column label="总重" align="center" prop="totalWeight" />
-    <el-table-column label="重量分配 满载（前/后）" align="center" prop="weightDistributionWithFullLoad" />
-    <el-table-column label="重量分配 空载（前/后）" align="center" prop="weightDistributionEmptyLoad" />
+    <el-table-column label="重量分配 满载" align="center" prop="weightDistributionWithFullLoad" />
+    <el-table-column label="重量分配 空载" align="center" prop="weightDistributionEmptyLoad" />
   </el-table-column>
 
   <!-- 车轮和轮胎 -->
   <el-table-column label="车轮和轮胎" align="center">
-    <el-table-column label="车轮数量  X=驱动轮（前/后）" align="center" prop="numberOfWheels" />
-    <el-table-column label="轮胎类型（前/后）" align="center" prop="tireType" />
-    <el-table-column label="轮胎尺寸（前/后）" align="center" prop="tireSize" />
+    <el-table-column label="车轮数量 X=驱动轮" align="center" prop="numberOfWheels" />
+    <el-table-column label="轮胎类型" align="center" prop="tireType" />
+    <el-table-column label="轮胎尺寸" align="center" prop="tireSize" />
   </el-table-column>
 
   <!-- 电池 -->
@@ -243,6 +243,9 @@
         <el-form-item label="车轮数量  X=驱动轮" prop="numberOfWheels">
           <el-input v-model="form.numberOfWheels" placeholder="请输入车轮数量  X=驱动轮" />
         </el-form-item>
+        <el-form-item label="轮胎类型" prop="tireType">
+          <el-input v-model="form.tireType" placeholder="请输入轮胎类型" />
+        </el-form-item>
         <el-form-item label="轮胎尺寸" prop="tireSize">
           <el-input v-model="form.tireSize" placeholder="请输入轮胎尺寸" />
         </el-form-item>
@@ -296,6 +299,12 @@ const data = reactive({
     configurationNumber: null,
   },
   rules: {
+    manufacturer: [
+      { required: true, message: "制造商不能为空", trigger: "blur" }
+    ],
+    configurationNumber: [
+      { required: true, message: "配置号不能为空", trigger: "blur" }
+    ],
   }
 });
 

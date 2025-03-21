@@ -9,38 +9,6 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <!-- <el-form-item label="货叉架安装等级" prop="installationLevelOfForkFrame">
-        <el-input
-          v-model="queryParams.installationLevelOfForkFrame"
-          placeholder="请输入货叉架安装等级"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="货叉架宽度" prop="forkliftWidth">
-        <el-input
-          v-model="queryParams.forkliftWidth"
-          placeholder="请输入货叉架宽度"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="跨货叉宽度" prop="crossForkWidth">
-        <el-input
-          v-model="queryParams.crossForkWidth"
-          placeholder="请输入跨货叉宽度"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="导轮间距" prop="distanceBetweenGuideWheels">
-        <el-input
-          v-model="queryParams.distanceBetweenGuideWheels"
-          placeholder="请输入导轮间距"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -91,9 +59,10 @@
 
     <el-table v-loading="loading" :data="parameter_twoList" @selection-change="handleSelectionChange">
   <el-table-column type="selection" width="55" align="center" />
-  <el-table-column label="id" align="center" prop="id" />
+
   <!-- 特性 -->
   <el-table-column label="特性" align="center">
+    <!-- <el-table-column label="id" align="center" prop="id" /> -->
     <el-table-column label="型号" align="center" prop="model" />
     <el-table-column label="驾驶方式" align="center" prop="drivingStyle" />
     <el-table-column label="额定起重量" align="center" prop="ratedLiftingCapacity" />
@@ -103,7 +72,8 @@
     <el-table-column label="前悬距" align="center" prop="frontSuspensionDistance" />
     <el-table-column label="轴距" align="center" prop="wheelbase" />
     <el-table-column label="后悬距" align="center" prop="rearSuspensionDistance" />
-    <el-table-column label="自重（含电池）" align="center" prop="deadWeight" />
+    <el-table-column label="自重" align="center" prop="deadWeight" />
+    <el-table-column label="蓄电池重量" align="center" prop="weightOfBattery" />
   </el-table-column>
 
   <!-- 轮胎 -->
@@ -125,7 +95,7 @@
     <el-table-column label="辅助提升高度" align="center" prop="assistInRaisingHeight" />
     <el-table-column label="提升后站台高度" align="center" prop="raisePlatformHeightAfterLifting" />
     <el-table-column label="总长" align="center" prop="totalLength" />
-    <el-table-column label="车体长度（至货叉竖面）" align="center" prop="vehicleLength" />
+    <el-table-column label="车体长度" align="center" prop="vehicleLength" />
     <el-table-column label="总宽" align="center" prop="overallWidth" />
     <el-table-column label="货叉尺寸" align="center" prop="forkSize" />
     <el-table-column label="货叉架安装等级" align="center" prop="installationLevelOfForkFrame" />
@@ -147,7 +117,7 @@
     <el-table-column label="驾驶仓外部总宽" align="center" prop="overallWidthOfTheCockpitExterior" />
     <el-table-column label="旋转前伸叉架宽度" align="center" prop="rotatingForkFrameWidth" />
     <el-table-column label="悬臂宽度" align="center" prop="cantileverWidth" />
-    <el-table-column label="下降速度（满载/空载）" align="center" prop="descentSpeedR" />
+    <el-table-column label="下降速度" align="center" prop="descentSpeedR" />
   </el-table-column>
 
   <!-- 性能 -->
@@ -158,8 +128,8 @@
     <el-table-column label="侧移速度，满/空载" align="center" prop="lateralMovementSpeed" />
     <el-table-column label="行程制动" align="center" prop="travelBrake" />
     <el-table-column label="停车制动" align="center" prop="parkingBrake" />
-    <el-table-column label="桥负荷，（满载）前/后" align="center" prop="bridgeLoadFullyLoaded" />
-    <el-table-column label="桥负荷，（空载）前/后" align="center" prop="bridgeLoadUnloaded" />
+    <el-table-column label="桥负荷，满载" align="center" prop="bridgeLoadFullyLoaded" />
+    <el-table-column label="桥负荷，空载" align="center" prop="bridgeLoadUnloaded" />
   </el-table-column>
 
   <!-- 电机和电池 -->
@@ -167,7 +137,7 @@
     <el-table-column label="驱动电机功率" align="center" prop="driveMotorPower" />
     <el-table-column label="提升电机功率" align="center" prop="increaseMotorPower" />
     <el-table-column label="电压/额定容量" align="center" prop="voltageRatedCapacity" />
-    <el-table-column label="蓄电池重量（含辅配重）" align="center" prop="weightOfBattery" />
+    <el-table-column label="蓄电池重量" align="center" prop="weightOfBattery" />
   </el-table-column>
 
   <!-- 其他 -->
@@ -226,6 +196,9 @@
         </el-form-item>
         <el-form-item label="自重" prop="deadWeight">
           <el-input v-model="form.deadWeight" placeholder="请输入自重" />
+        </el-form-item>
+        <el-form-item label="轮胎类型" prop="tireType">
+          <el-input v-model="form.tireType" placeholder="请输入轮胎类型" />
         </el-form-item>
         <el-form-item label="轮胎尺寸—前轮" prop="tireSizeFrontWheel">
           <el-input v-model="form.tireSizeFrontWheel" placeholder="请输入轮胎尺寸—前轮" />
@@ -368,6 +341,9 @@
         <el-form-item label="蓄电池重量" prop="weightOfBattery">
           <el-input v-model="form.weightOfBattery" placeholder="请输入蓄电池重量" />
         </el-form-item>
+        <el-form-item label="驱动控制类型" prop="driveControlType">
+          <el-input v-model="form.driveControlType" placeholder="请输入驱动控制类型" />
+        </el-form-item>
         <el-form-item label="驾驶员耳边噪声" prop="driverEarNoise">
           <el-input v-model="form.driverEarNoise" placeholder="请输入驾驶员耳边噪声" />
         </el-form-item>
@@ -406,12 +382,11 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     model: null,
-    installationLevelOfForkFrame: null,
-    forkliftWidth: null,
-    crossForkWidth: null,
-    distanceBetweenGuideWheels: null,
   },
   rules: {
+    model: [
+      { required: true, message: "型号不能为空", trigger: "blur" }
+    ],
   }
 });
 
@@ -483,7 +458,7 @@ function reset() {
     rotatingForkFrameWidth: null,
     cantileverWidth: null,
     descentSpeedR: null,
-    toBeFilledIn: null,
+    runningSpeed: null,
     increaseSpeed: null,
     descentSpeed: null,
     lateralMovementSpeed: null,

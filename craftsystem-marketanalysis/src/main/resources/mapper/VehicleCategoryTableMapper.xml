@@ -48,10 +48,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
-    <insert id="insertVehicleCategoryTable" parameterType="VehicleCategoryTable">
+    <insert id="insertVehicleCategoryTable" parameterType="VehicleCategoryTable" useGeneratedKeys="true" keyProperty="id">
         insert into vehicle_category_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">id,</if>
             <if test="vehicleCategory != null">vehicle_category,</if>
             <if test="vehicleType != null">vehicle_type,</if>
             <if test="series != null">series,</if>
@@ -77,7 +76,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="beiyongFive != null">beiyong_five,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id},</if>
             <if test="vehicleCategory != null">#{vehicleCategory},</if>
             <if test="vehicleType != null">#{vehicleType},</if>
             <if test="series != null">#{series},</if>

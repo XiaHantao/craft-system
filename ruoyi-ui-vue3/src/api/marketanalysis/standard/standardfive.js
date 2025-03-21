@@ -10,9 +10,9 @@ export function listStandardfive(query) {
 }
 
 // 查询五类/七类车标准配置详细
-export function getStandardfive(pneumaticTire) {
+export function getStandardfive(id) {
   return request({
-    url: '/marketanalysis/standardfive/' + pneumaticTire,
+    url: '/marketanalysis/standardfive/' + id,
     method: 'get'
   })
 }
@@ -36,9 +36,9 @@ export function updateStandardfive(data) {
 }
 
 // 删除五类/七类车标准配置
-export function delStandardfive(pneumaticTire) {
+export function delStandardfive(id) {
   return request({
-    url: '/marketanalysis/standardfive/' + pneumaticTire,
+    url: '/marketanalysis/standardfive/' + id,
     method: 'delete'
   })
 }
