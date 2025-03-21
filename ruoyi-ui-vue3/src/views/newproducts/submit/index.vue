@@ -17,6 +17,18 @@
           placeholder="请选择提交日期">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="核对结果" prop="checked">
+        <el-select
+           v-model="queryParams.checked"
+          placeholder="请选择"
+          clearable
+          @change="handleQuery"
+        >
+          <el-option label="通过" value="通过" />
+          <el-option label="拒绝" value="拒绝" />
+          <el-option label="待审核" value="待审核" />
+        </el-select>     
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -123,12 +135,12 @@
       <el-table-column label="" align="center" prop="l" />
       <el-table-column label="" align="center" prop="m" />
       <el-table-column label="" align="center" prop="n" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right"  width="200">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:submit:edit']">修改</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:submit:edit']" v-if="scope.row.checked != '通过'">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:submit:remove']">删除</el-button>
           <el-button link type="primary" icon="Check" @click="handleCheck(scope.row)" v-hasPermi="['newproducts:submit:edit']">核对</el-button>
-          <el-button link type="primary" icon="UploadFilled" @click="handleRecord(scope.row)" v-hasPermi="['newproducts:submit:edit']">试制记录</el-button>
+          <el-button link type="primary" icon="Position" @click="handleRecord(scope.row)" v-hasPermi="['newproducts:submit:edit']">试制记录</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -252,7 +264,7 @@
         <el-form-item label="核对结果" prop="checked">
             <el-radio-group v-model="form.checked">
             <el-radio label="通过" />
-            <el-radio label="不通过" />
+            <el-radio label="拒绝" />
             </el-radio-group>
         </el-form-item>
 
@@ -301,6 +313,7 @@ const data = reactive({
     pageSize: 10,
     name: null,
     submissionDate: null,
+    checked: null,
   },
   rules: {
     name: [
@@ -390,13 +403,13 @@ function handleAdd() {
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
-  reset();
-  const _id = row.id || ids.value
-  getSubmit(_id).then(response => {
-    form.value = response.data;
-    openEditDialog.value = true;
-    title.value = "修改新产品提交";
-  });
+      reset();
+      const _id = row.id || ids.value
+      getSubmit(_id).then(response => {
+      form.value = response.data;
+      openEditDialog.value = true;
+      title.value = "修改新产品提交";
+      });
 }
 
 /** 提交按钮 */
@@ -404,12 +417,14 @@ function submitForm() {
   proxy.$refs["submitRef"].validate(valid => {   
     if (valid) {     
       if (form.value.id != null) {
+          form.value.checked = "待审核"; 
         updateSubmit(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           openEditDialog.value = false;
-          getList();         
+          getList();       
         });
       } else {       
+          form.value.checked = "待审核";
         addSubmit(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           openEditDialog.value = false;
