@@ -63,13 +63,17 @@
       <el-table-column label="文件名称" align="center" prop="fileName" />
       <el-table-column label="文件类型" align="center" prop="fileType" />
       <el-table-column label="备注" align="center" prop="notes" />
-      <el-table-column label="多媒体文件" align="center" prop="file" />
+      <el-table-column label="多媒体文件" align="center" prop="file" >
+        <template v-slot:default="scope">
+          <el-button v-if="scope.row.file" icon="Download" @click="downloadFiles(scope.row.file)"></el-button>
+        </template>
+      </el-table-column> 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:media:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:media:remove']">删除</el-button>
-          <el-button size="mini" type="text" icon="Download"
-            @click="$download.resource(scope.row.file, false)">下载</el-button>
+          <!-- <el-button size="mini" type="text" icon="Download"
+            @click="$download.resource(scope.row.file, false)">下载</el-button> -->
             <el-button link type="primary" icon="View" @click="handlePreview(scope.row)">预览图片</el-button>
         </template>
       </el-table-column>
@@ -89,7 +93,7 @@
 
     <!-- 添加或修改多媒体文件对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="mediaRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="mediaRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="文件名称" prop="fileName">
           <el-input v-model="form.fileName" placeholder="请输入文件名称" />
         </el-form-item>
@@ -100,7 +104,7 @@
           <el-input v-model="form.notes" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="多媒体文件" prop="file">
-          <file-upload v-model="form.file"/>
+          <file-upload :limit="1"  v-model="form.file"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -266,6 +270,33 @@ function handleExport() {
     ...queryParams.value
   }, `media_${new Date().getTime()}.xlsx`)
 }
-
+/** 多文件下载 */
+function downloadFiles(urls) {
+  // 如果 urls 是字符串，则按逗号分隔为数组
+  if (typeof urls === 'string') {
+    urls = urls.split(',');
+  }
+  // 确保 urls 是数组
+  if (!Array.isArray(urls)) {
+    console.error('urls 必须是数组或逗号分隔的字符串');
+    return;
+  }
+  // 遍历每个 URL，下载并保存文件
+  urls.forEach(url => {
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', decodeURIComponent(url.split('/').pop())); // 解码文件名
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+      })
+      .catch(error => console.error('Download error:', error));
+  });
+}
 getList();
 </script>

@@ -79,7 +79,7 @@
 
     <!-- 添加或修改性能表对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="performanceRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="performanceRef" :model="form" :rules="rules" label-width="155px">
         <el-form-item label="车类" prop="vehicleCategory">
           <el-input v-model="form.vehicleCategory" placeholder="请输入车类" />
         </el-form-item>

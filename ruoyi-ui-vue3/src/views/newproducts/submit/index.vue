@@ -273,6 +273,7 @@
 <script setup name="Submit">
 import { listSubmit, getSubmit, delSubmit, addSubmit, updateSubmit } from "@/api/newproducts/submit";
 
+
 const { proxy } = getCurrentInstance();
 const submitList = ref([]);
 const openEditDialog = ref(false);
@@ -487,16 +488,13 @@ function handleRecord(row) {
 }
 /** 多文件下载 */
 function downloadFiles(urls) {
-  // 如果 urls 是字符串，则按逗号分隔为数组
   if (typeof urls === 'string') {
     urls = urls.split(',');
   }
-  // 确保 urls 是数组
   if (!Array.isArray(urls)) {
     console.error('urls 必须是数组或逗号分隔的字符串');
     return;
   }
-  // 遍历每个 URL，下载并保存文件
   urls.forEach(url => {
     fetch(url)
       .then(response => response.blob())
@@ -504,13 +502,16 @@ function downloadFiles(urls) {
         const downloadUrl = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = downloadUrl;
-        link.setAttribute('download', decodeURIComponent(url.split('/').pop())); // 解码文件名
+        // 修改文件名解码逻辑
+        const encodedFilename = url.split('/').pop();
+        const decodedFilename = decodeURIComponent(encodedFilename);
+        link.setAttribute('download', decodedFilename);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(downloadUrl);
       })
-      .catch(error => console.error('Download error:', error));
+      .catch(error => console.error('下载错误:', error));
   });
 }
 

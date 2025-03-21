@@ -66,8 +66,8 @@
       <el-table-column label="其它型及其它起升高度门架" align="center" prop="liftingHeightGantry" />
       <el-table-column label="标准系列货叉" align="center" prop="standardSeriesFork" />
       <el-table-column label="非标系列货叉" align="center" prop="nonStandardSeriesFork" />
-      <el-table-column label="标准车身颜色" align="center" prop="standardBodyColor" />
-      <el-table-column label="其它车身颜色" align="center" prop="customizedBodyColor" />
+      <el-table-column label="标准车身颜色（蓝灰色+合力红）" align="center" prop="standardBodyColor" />
+      <el-table-column label="其它车身颜色（客户定制）" align="center" prop="customizedBodyColor" />
       <el-table-column label="属具未到位限速" align="center" prop="accessoriesAndSpeedLimit" />
       <el-table-column label="转弯限速" align="center" prop="turningSpeedLimit" />
       <el-table-column label="灭火器" align="center" prop="fireExtinguisher" />
@@ -78,7 +78,7 @@
       <el-table-column label="后轮制动" align="center" prop="rearWheelBraking" />
       <el-table-column label="前轮制动" align="center" prop="frontWheelBrake" />
       <el-table-column label="导向轮" align="center" prop="guideWheel" />
-      <el-table-column label="监控" align="center" prop="monitor" />
+      <el-table-column label="监控（货叉、倒车影像）" align="center" prop="monitor" />
       <el-table-column label="磁导航" align="center" prop="magneticNavigation" />
       <el-table-column label="站驾软包座椅" align="center" prop="stationDrivingSoftPackSeat" />
       <el-table-column label="座驾式座椅" align="center" prop="carStyleSeats" />
@@ -87,7 +87,7 @@
       <el-table-column label="后挡风玻璃" align="center" prop="rearWindshield" />
       <el-table-column label="全车LED灯" align="center" prop="fullCarLedLights" />
       <el-table-column label="阅读灯" align="center" prop="readingLamp" />
-      <el-table-column label="配装LED闪光警示灯" align="center" prop="ledFlashingWarningLight" />
+      <el-table-column label="配装LED闪光警示灯（装配式）" align="center" prop="ledFlashingWarningLight" />
       <el-table-column label="公制螺纹" align="center" prop="metric" />
       <el-table-column label="国标电源接插件" align="center" prop="nationalStandardPowerConnector" />
       <el-table-column label="中文标识" align="center" prop="chineseIdentification" />
@@ -110,102 +110,319 @@
 
     <!-- 添加或修改二类车标准配置对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="standardtwoRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="standardtwoRef" :model="form" :rules="rules" label-width="140px">
         <el-form-item label="制造商" prop="manufacturer">
           <el-input v-model="form.manufacturer" placeholder="请输入制造商" />
         </el-form-item>
         <el-form-item label="聚氨酯轮胎" prop="polyurethaneTires">
-          <el-input v-model="form.polyurethaneTires" placeholder="请输入聚氨酯轮胎" />
+          <el-select v-model="form.polyurethaneTires" placeholder="请选择聚氨酯轮胎" >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>    
         </el-form-item>
         <el-form-item label="基本型5米起升高度" prop="fiveMeterLiftingHeight">
-          <el-input v-model="form.fiveMeterLiftingHeight" placeholder="请输入基本型5米起升高度" />
+          <el-select v-model="form.fiveMeterLiftingHeight" placeholder="请选择基本型5米起升高度">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
-        <el-form-item label="其它型及其它起升高度门架" prop="liftingHeightGantry">
-          <el-input v-model="form.liftingHeightGantry" placeholder="请输入其它型及其它起升高度门架" />
+        <el-form-item label="其它型起升高度门架" prop="liftingHeightGantry">
+          <el-select v-model="form.liftingHeightGantry" placeholder="请选择其它型及其它起升高度门架">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>       
         </el-form-item>
         <el-form-item label="标准系列货叉" prop="standardSeriesFork">
-          <el-input v-model="form.standardSeriesFork" placeholder="请输入标准系列货叉" />
+          <el-select v-model="form.standardSeriesFork" placeholder="请选择标准系列货叉">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="非标系列货叉" prop="nonStandardSeriesFork">
-          <el-input v-model="form.nonStandardSeriesFork" placeholder="请输入非标系列货叉" />
+          <el-select v-model="form.nonStandardSeriesFork" placeholder="请选择非标系列货叉">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="标准车身颜色" prop="standardBodyColor">
-          <el-input v-model="form.standardBodyColor" placeholder="请输入标准车身颜色" />
+          <el-select v-model="form.standardBodyColor" placeholder="请选择标准车身颜色">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="其它车身颜色" prop="customizedBodyColor">
-          <el-input v-model="form.customizedBodyColor" placeholder="请输入其它车身颜色" />
+          <el-select v-model="form.customizedBodyColor" placeholder="请选择其它车身颜色">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="属具未到位限速" prop="accessoriesAndSpeedLimit">
-          <el-input v-model="form.accessoriesAndSpeedLimit" placeholder="请输入属具未到位限速" />
+          <el-select v-model="form.accessoriesAndSpeedLimit" placeholder="请选择属具未到位限速">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="转弯限速" prop="turningSpeedLimit">
-          <el-input v-model="form.turningSpeedLimit" placeholder="请输入转弯限速" />
+          <el-select v-model="form.turningSpeedLimit" placeholder="请选择转弯限速">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="灭火器" prop="fireExtinguisher">
-          <el-input v-model="form.fireExtinguisher" placeholder="请输入灭火器" />
+          <el-select v-model="form.fireExtinguisher" placeholder="请选择灭火器">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="倒车蜂鸣器" prop="reverseBuzzer">
-          <el-input v-model="form.reverseBuzzer" placeholder="请输入倒车蜂鸣器" />
+          <el-select v-model="form.reverseBuzzer" placeholder="请选择倒车蜂鸣器">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="倒车语音喇叭" prop="reverseVoiceHorn">
-          <el-input v-model="form.reverseVoiceHorn" placeholder="请输入倒车语音喇叭" />
+          <el-select v-model="form.reverseVoiceHorn" placeholder="请选择倒车语音喇叭">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="两侧后视镜" prop="twoSideRearviewMirrors">
-          <el-input v-model="form.twoSideRearviewMirrors" placeholder="请输入两侧后视镜" />
+          <el-select v-model="form.twoSideRearviewMirrors" placeholder="请选择两侧后视镜">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="逃生包" prop="escapeBag">
-          <el-input v-model="form.escapeBag" placeholder="请输入逃生包" />
+          <el-select v-model="form.escapeBag" placeholder="请选择逃生包">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="后轮制动" prop="rearWheelBraking">
-          <el-input v-model="form.rearWheelBraking" placeholder="请输入后轮制动" />
+          <el-select v-model="form.rearWheelBraking" placeholder="请选择后轮制动">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="前轮制动" prop="frontWheelBrake">
-          <el-input v-model="form.frontWheelBrake" placeholder="请输入前轮制动" />
+          <el-select v-model="form.frontWheelBrake" placeholder="请选择前轮制动">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="导向轮" prop="guideWheel">
-          <el-input v-model="form.guideWheel" placeholder="请输入导向轮" />
+          <el-select v-model="form.guideWheel" placeholder="请选择导向轮">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
-        <el-form-item label="监控" prop="monitor">
-          <el-input v-model="form.monitor" placeholder="请输入监控" />
+        <el-form-item label="监控（货叉、倒车影像）" prop="monitor">
+          <el-select v-model="form.monitor" placeholder="请选择监控（货叉、倒车影像）">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="磁导航" prop="magneticNavigation">
-          <el-input v-model="form.magneticNavigation" placeholder="请输入磁导航" />
+          <el-select v-model="form.magneticNavigation" placeholder="请选择磁导航">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="站驾软包座椅" prop="stationDrivingSoftPackSeat">
-          <el-input v-model="form.stationDrivingSoftPackSeat" placeholder="请输入站驾软包座椅" />
+          <el-select v-model="form.stationDrivingSoftPackSeat" placeholder="请选择站驾软包座椅">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="座驾式座椅" prop="carStyleSeats">
-          <el-input v-model="form.carStyleSeats" placeholder="请输入座驾式座椅" />
+          <el-select v-model="form.carStyleSeats" placeholder="请选择座驾式座椅">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="电风扇" prop="electricFan">
-          <el-input v-model="form.electricFan" placeholder="请输入电风扇" />
+          <el-select v-model="form.electricFan" placeholder="请选择电风扇">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="前挡风玻璃" prop="windscreen">
-          <el-input v-model="form.windscreen" placeholder="请输入前挡风玻璃" />
+          <el-select v-model="form.windscreen" placeholder="请选择前挡风玻璃">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="后挡风玻璃" prop="rearWindshield">
-          <el-input v-model="form.rearWindshield" placeholder="请输入后挡风玻璃" />
+          <el-select v-model="form.rearWindshield" placeholder="请选择后挡风玻璃">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="全车LED灯" prop="fullCarLedLights">
-          <el-input v-model="form.fullCarLedLights" placeholder="请输入全车LED灯" />
+          <el-select v-model="form.fullCarLedLights" placeholder="请选择全车LED灯">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="阅读灯" prop="readingLamp">
-          <el-input v-model="form.readingLamp" placeholder="请输入阅读灯" />
+          <el-select v-model="form.readingLamp" placeholder="请选择阅读灯">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
-        <el-form-item label="配装LED闪光警示灯" prop="ledFlashingWarningLight">
-          <el-input v-model="form.ledFlashingWarningLight" placeholder="请输入配装LED闪光警示灯" />
+        <el-form-item label="LED闪光警示灯" prop="ledFlashingWarningLight">
+          <el-select v-model="form.ledFlashingWarningLight" placeholder="请选择LED闪光警示灯">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="公制螺纹" prop="metric">
-          <el-input v-model="form.metric" placeholder="请输入公制螺纹" />
+          <el-select v-model="form.metric" placeholder="请选择公制螺纹">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="国标电源接插件" prop="nationalStandardPowerConnector">
-          <el-input v-model="form.nationalStandardPowerConnector" placeholder="请输入国标电源接插件" />
+          <el-select v-model="form.nationalStandardPowerConnector" placeholder="请选择国标电源接插件">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="中文标识" prop="chineseIdentification">
-          <el-input v-model="form.chineseIdentification" placeholder="请输入中文标识" />
+          <el-select v-model="form.chineseIdentification" placeholder="请选择中文标识">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
         <el-form-item label="英文标识" prop="englishLogo">
-          <el-input v-model="form.englishLogo" placeholder="请输入英文标识" />
+          <el-select v-model="form.englishLogo" placeholder="请选择英文标识">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>   
         </el-form-item>
       </el-form>
       <template #footer>
@@ -222,6 +439,12 @@
 import { listStandardtwo, getStandardtwo, delStandardtwo, addStandardtwo, updateStandardtwo } from "@/api/marketanalysis/standard/standardtwo";
 
 const { proxy } = getCurrentInstance();
+// 添加选项数据
+const options = ref([
+  { value: '标配', label: '标配' },
+  { value: '选配', label: '选配' },
+  { value: '无', label: '无' }
+]);
 
 const standardtwoList = ref([]);
 const open = ref(false);

@@ -4,7 +4,7 @@
       <div class="selector-item" v-for="n in 2" :key="n">
         <el-select
           v-model="selectedVehicleType[n-1]"
-          placeholder="请选择车类"
+          placeholder="请选择车类（相同车类）"
           @change="handleVehicleTypeChange(n)"
           style="margin-bottom: 10px"
           clearable

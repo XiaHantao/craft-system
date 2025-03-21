@@ -2,12 +2,7 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="配置名称" prop="fileName">
-        <el-input
-          v-model="queryParams.fileName"
-          placeholder="请输入配置名称"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-input v-model="queryParams.fileName" placeholder="请输入配置名称" clearable @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -17,42 +12,20 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['marketanalysis:image:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="Plus" @click="handleAdd"
+          v-hasPermi="['marketanalysis:image:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['marketanalysis:image:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['marketanalysis:image:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['marketanalysis:image:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['marketanalysis:image:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['marketanalysis:image:export']"
-        >导出</el-button>
+        <el-button type="warning" plain icon="Download" @click="handleExport"
+          v-hasPermi="['marketanalysis:image:export']">导出</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -61,31 +34,31 @@
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="编号" align="center" prop="id" /> -->
       <el-table-column label="配置名称" align="center" prop="fileName" />
-      <el-table-column label="说明" align="center" prop="notes" />
-      <el-table-column label="配置相关文件" align="center" prop="file" />
+      <el-table-column label="相关说明" align="center" prop="notes" />
+      <el-table-column label="配置相关文件" align="center" prop="file" >
+      <template v-slot:default="scope">
+          <el-button v-if="scope.row.file" icon="Download" @click="downloadFiles(scope.row.file)"></el-button>
+        </template> 
+      </el-table-column>  
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:image:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:image:remove']">删除</el-button>
-           <el-button size="mini" type="text" icon="Download"
-                    @click="handleDownload(scope.row.file)">下载视频</el-button>
-                    <el-button link type="info" icon="View" @click="handlePreview(scope.row)">预览视频</el-button>
-                    <el-button link type="info" icon="View" @click="handlePreviewImage(scope.row)">预览图片</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['marketanalysis:image:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['marketanalysis:image:remove']">删除</el-button>
+            <!-- <el-button size="mini" type="text" icon="Download" @click="download.resource(scope.row.file)">下载</el-button> -->
+          <el-button link type="info" icon="View" @click="handlePreview(scope.row)">预览视频</el-button>
+          <el-button link type="info" icon="View" @click="handlePreviewImage(scope.row)">预览图片</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
+
+    <pagination v-show="total>0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改配置图片表对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="imageRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="imageRef" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="配置名称" prop="fileName">
           <el-input v-model="form.fileName" placeholder="请输入配置名称" />
         </el-form-item>
@@ -93,7 +66,7 @@
           <el-input v-model="form.notes" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="配置相关文件" prop="file">
-          <file-upload v-model="form.file"/>
+          <file-upload v-model="form.file" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -104,14 +77,8 @@
       </template>
     </el-dialog>
     <el-dialog v-model="previewOpen" title="视频预览" width="60%">
-      <video 
-        :src="previewVideoUrl" 
-        controls 
-        autoplay
-        style="width: 100%; outline: none;"
-        class="video-preview"
-        @error="handleVideoError"
-      >
+      <video :src="previewVideoUrl" controls autoplay style="width: 100%; outline: none;" class="video-preview"
+        @error="handleVideoError">
         您的浏览器不支持视频播放
       </video>
       <template #footer>
@@ -122,12 +89,8 @@
     </el-dialog>
     <!-- 新增图片预览对话框 -->
     <el-dialog v-model="previewImageOpen" title="图片预览" width="60%">
-      <img 
-        :src="previewImageUrl" 
-        style="width: 100%; max-height: 70vh; object-fit: contain;"
-        alt="图片预览"
-        @error="handleImageError"
-      >
+      <img :src="previewImageUrl" style="width: 100%; max-height: 70vh; object-fit: contain;" alt="图片预览"
+        @error="handleImageError">
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="previewImageOpen = false">关闭</el-button>
@@ -140,6 +103,7 @@
 <script setup name="Image">
 import { listImage, getImage, delImage, addImage, updateImage } from "@/api/marketanalysis/image/image";
 import { getCurrentInstance, ref, reactive, toRefs } from 'vue';
+import download from "@/plugins/download"; 
 
 // 新增预览相关状态
 const previewOpen = ref(false);
@@ -335,6 +299,33 @@ function handleExport() {
     ...queryParams.value
   }, `image_${new Date().getTime()}.xlsx`)
 }
-
+/** 多文件下载 */
+function downloadFiles(urls) {
+  // 如果 urls 是字符串，则按逗号分隔为数组
+  if (typeof urls === 'string') {
+    urls = urls.split(',');
+  }
+  // 确保 urls 是数组
+  if (!Array.isArray(urls)) {
+    console.error('urls 必须是数组或逗号分隔的字符串');
+    return;
+  }
+  // 遍历每个 URL，下载并保存文件
+  urls.forEach(url => {
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', decodeURIComponent(url.split('/').pop())); // 解码文件名
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+      })
+      .catch(error => console.error('Download error:', error));
+  });
+}
 getList();
 </script>

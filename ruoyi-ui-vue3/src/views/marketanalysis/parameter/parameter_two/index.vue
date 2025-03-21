@@ -72,7 +72,7 @@
     <el-table-column label="前悬距" align="center" prop="frontSuspensionDistance" />
     <el-table-column label="轴距" align="center" prop="wheelbase" />
     <el-table-column label="后悬距" align="center" prop="rearSuspensionDistance" />
-    <el-table-column label="自重" align="center" prop="deadWeight" />
+    <el-table-column label="自重（含电池）" align="center" prop="deadWeight" />
     <el-table-column label="蓄电池重量" align="center" prop="weightOfBattery" />
   </el-table-column>
 
@@ -95,7 +95,7 @@
     <el-table-column label="辅助提升高度" align="center" prop="assistInRaisingHeight" />
     <el-table-column label="提升后站台高度" align="center" prop="raisePlatformHeightAfterLifting" />
     <el-table-column label="总长" align="center" prop="totalLength" />
-    <el-table-column label="车体长度" align="center" prop="vehicleLength" />
+    <el-table-column label="车体长度（至货叉竖面）" align="center" prop="vehicleLength" />
     <el-table-column label="总宽" align="center" prop="overallWidth" />
     <el-table-column label="货叉尺寸" align="center" prop="forkSize" />
     <el-table-column label="货叉架安装等级" align="center" prop="installationLevelOfForkFrame" />
@@ -117,7 +117,7 @@
     <el-table-column label="驾驶仓外部总宽" align="center" prop="overallWidthOfTheCockpitExterior" />
     <el-table-column label="旋转前伸叉架宽度" align="center" prop="rotatingForkFrameWidth" />
     <el-table-column label="悬臂宽度" align="center" prop="cantileverWidth" />
-    <el-table-column label="下降速度" align="center" prop="descentSpeedR" />
+    <el-table-column label="下降速度（满载/空载）" align="center" prop="descentSpeedR" />
   </el-table-column>
 
   <!-- 性能 -->
@@ -128,8 +128,8 @@
     <el-table-column label="侧移速度，满/空载" align="center" prop="lateralMovementSpeed" />
     <el-table-column label="行程制动" align="center" prop="travelBrake" />
     <el-table-column label="停车制动" align="center" prop="parkingBrake" />
-    <el-table-column label="桥负荷，满载" align="center" prop="bridgeLoadFullyLoaded" />
-    <el-table-column label="桥负荷，空载" align="center" prop="bridgeLoadUnloaded" />
+    <el-table-column label="桥负荷，（满载）前/后" align="center" prop="bridgeLoadFullyLoaded" />
+    <el-table-column label="桥负荷，（空载）前/后" align="center" prop="bridgeLoadUnloaded" />
   </el-table-column>
 
   <!-- 电机和电池 -->
@@ -137,7 +137,7 @@
     <el-table-column label="驱动电机功率" align="center" prop="driveMotorPower" />
     <el-table-column label="提升电机功率" align="center" prop="increaseMotorPower" />
     <el-table-column label="电压/额定容量" align="center" prop="voltageRatedCapacity" />
-    <el-table-column label="蓄电池重量" align="center" prop="weightOfBattery" />
+    <el-table-column label="蓄电池重量（含辅配重）" align="center" prop="weightOfBattery" />
   </el-table-column>
 
   <!-- 其他 -->
@@ -166,7 +166,7 @@
 
     <!-- 添加或修改二类车参数对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="parameter_twoRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="parameter_twoRef" :model="form" :rules="rules" label-width="150px">
         <el-form-item label="型号" prop="model">
           <el-input v-model="form.model" placeholder="请输入型号" />
         </el-form-item>
@@ -323,11 +323,11 @@
         <el-form-item label="停车制动" prop="parkingBrake">
           <el-input v-model="form.parkingBrake" placeholder="请输入停车制动" />
         </el-form-item>
-        <el-form-item label="桥负荷，" prop="bridgeLoadFullyLoaded">
-          <el-input v-model="form.bridgeLoadFullyLoaded" placeholder="请输入桥负荷，" />
+        <el-form-item label="桥负荷（满载）前/后" prop="bridgeLoadFullyLoaded">
+          <el-input v-model="form.bridgeLoadFullyLoaded" placeholder="请输入桥负荷（满载）前/后" />
         </el-form-item>
-        <el-form-item label="桥负荷，" prop="bridgeLoadUnloaded">
-          <el-input v-model="form.bridgeLoadUnloaded" placeholder="请输入桥负荷，" />
+        <el-form-item label="桥负荷（空载）前/后" prop="bridgeLoadUnloaded">
+          <el-input v-model="form.bridgeLoadUnloaded" placeholder="请输入桥负荷（空载）前/后" />
         </el-form-item>
         <el-form-item label="驱动电机功率" prop="driveMotorPower">
           <el-input v-model="form.driveMotorPower" placeholder="请输入驱动电机功率" />
