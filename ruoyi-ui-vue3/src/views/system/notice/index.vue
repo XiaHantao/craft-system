@@ -181,6 +181,8 @@ const data = reactive({
     pageSize: 10,
     noticeTitle: undefined,
     createBy: undefined,
+    executor: undefined,
+    path: undefined,
     status: undefined
   },
   rules: {

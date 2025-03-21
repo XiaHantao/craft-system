@@ -66,4 +66,8 @@ public interface ProcessValidationAndSummaryTableMapper
      * @return 结果
      */
     public int deleteProcessValidationAndSummaryTableByIds(Long[] ids);
+
+    //查找最新一条记录
+    public ProcessValidationAndSummaryTable selectLatestRecord();
+
 }

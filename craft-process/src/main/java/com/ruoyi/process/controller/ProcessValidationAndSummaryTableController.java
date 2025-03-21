@@ -89,7 +89,7 @@ public class ProcessValidationAndSummaryTableController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody ProcessValidationAndSummaryTable processValidationAndSummaryTable)
     {
-        return toAjax(processValidationAndSummaryTableService.insertProcessValidationAndSummaryTable(processValidationAndSummaryTable));
+        return success(processValidationAndSummaryTableService.insertProcessValidationAndSummaryTable(processValidationAndSummaryTable));
     }
 
     /**
@@ -113,4 +113,16 @@ public class ProcessValidationAndSummaryTableController extends BaseController
     {
         return toAjax(processValidationAndSummaryTableService.deleteProcessValidationAndSummaryTableByIds(ids));
     }
+
+    /**
+     * 查询最新的一条记录
+     */
+    @PreAuthorize("@ss.hasPermi('process:processValidationAndSummary:query')")
+    @GetMapping("/latest")
+    public AjaxResult getLatestRecord()
+    {
+        ProcessValidationAndSummaryTable latestRecord = processValidationAndSummaryTableService.selectLatestRecord();
+        return success(latestRecord);
+    }
+
 }

@@ -2,6 +2,8 @@ package com.ruoyi.system.domain;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -12,6 +14,7 @@ import com.ruoyi.common.xss.Xss;
  * 
  * @author ruoyi
  */
+@Data
 public class SysNotice extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -27,6 +30,12 @@ public class SysNotice extends BaseEntity
 
     /** 公告内容 */
     private String noticeContent;
+
+    /** 执行人 */
+    private String executor;
+
+    /** 路由 */
+    private String path;
 
     /** 公告状态（0正常 1关闭） */
     private String status;

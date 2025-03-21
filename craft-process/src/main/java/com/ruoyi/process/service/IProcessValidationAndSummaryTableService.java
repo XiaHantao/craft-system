@@ -66,4 +66,7 @@ public interface IProcessValidationAndSummaryTableService
      * @return 结果
      */
     public int deleteProcessValidationAndSummaryTableById(Long id);
+
+    public ProcessValidationAndSummaryTable selectLatestRecord();
+
 }

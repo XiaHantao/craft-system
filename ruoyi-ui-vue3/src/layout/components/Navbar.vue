@@ -8,11 +8,12 @@
       <template v-if="appStore.device !== 'mobile'">
         <header-search id="header-search" class="right-menu-item" />
 
-<!--        <el-tooltip :content="noticeContent" effect="dark" placement="bottom">-->
-<!--          <el-badge :value="noticeCount" class="right-menu-item hover-effect" :class="{'badge-custom':noticeCount>0}" >-->
-<!--            <el-icon @click="toNoticePage"><Message /></el-icon>-->
-<!--          </el-badge>-->
-<!--        </el-tooltip>-->
+        <el-tooltip :content="noticeContent" effect="dark" placement="bottom">
+          <el-badge :value="noticeCount" class="right-menu-item hover-effect" :class="{'badge-custom': noticeCount > 0}">
+            <el-icon @click="toNoticePage" class="icon-down"><BellFilled /></el-icon>
+          </el-badge>
+        </el-tooltip>
+
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
@@ -59,7 +60,8 @@ import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
 import { listNotice } from "@/api/system/notice";
-import { onMounted } from 'vue';
+import {onMounted, onUnmounted} from 'vue';
+import {listSysMessageNotification} from "@/api/system/sysMessageNotification";
 
 const { proxy } = getCurrentInstance();
 const noticeContent = ref("");
@@ -70,7 +72,9 @@ const userStore = useUserStore()
 const settingsStore = useSettingsStore()
 
 function getList() {
-  listNotice().then(response => {
+  listSysMessageNotification({
+    status: 0,
+  }).then(response => {
     console.log(response);
     noticeCount.value = response.total; // 假设返回的通知列表长度
     noticeContent.value = `您有 ${response.total} 条新通知`;
@@ -112,11 +116,22 @@ function setLayout() {
 }
 
 function toNoticePage(){
-  //前往通知公告管理页面
-  proxy.$router.push("/system/notice1");
+  proxy.$router.push("/system/sysMessageNotification");
 }
 
-getList();
+// 轮询定时器
+let pollInterval;
+
+// 组件挂载时启动轮询
+onMounted(() => {
+  getList();
+  pollInterval = setInterval(getList, 5000); // 每5秒轮询一次
+});
+
+// 组件卸载时清除轮询
+onUnmounted(() => {
+  clearInterval(pollInterval);
+});
 </script>
 
 <style lang='scss' scoped>
@@ -207,6 +222,27 @@ getList();
     }
   }
 }
+.right-menu-item .el-icon {
+  font-size: 22px; /* 图标大小 */
+}
+.icon-down {
+  margin-top: 13px; /* 图标位置 */
+}
+
+::v-deep .el-badge__content {
+  margin-top: 9px;/* 消息条数位置 */
+  margin-right: 7px;
+}
+
+.badge-custom {
+  animation: blink-animation 0.5s infinite alternate; /* 设置闪烁动画 */
+}
+
+@keyframes blink-animation {
+  0% { opacity: 1; } /* 定义动画起始状态 */
+  100% { opacity: 0.1; } /* 定义动画结束状态 */
+}
+
 
 
 </style>

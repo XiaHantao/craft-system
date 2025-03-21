@@ -102,4 +102,9 @@ public class ProcessValidationAndSummaryTableServiceImpl implements IProcessVali
     {
         return processValidationAndSummaryTableMapper.deleteProcessValidationAndSummaryTableById(id);
     }
+
+    public ProcessValidationAndSummaryTable selectLatestRecord()
+    {
+        return processValidationAndSummaryTableMapper.selectLatestRecord();
+    }
 }

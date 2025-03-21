@@ -35,11 +35,16 @@ export default defineConfig(({ mode, command }) => {
           changeOrigin: true,
           rewrite: (p) => p.replace(/^\/dev-api/, '')
         },
-        '/profile/upload': { // 文件下载路径代理
-          target: 'http://localhost:8080',
-          changeOrigin: true,
-          rewrite: (p) => p.replace(/^\/profile\/upload/, '/profile/upload')
-        }
+        // '/profile/upload': { // 本地文件下载路径代理
+        //   target: 'http://localhost:8080',
+        //   changeOrigin: true,
+        //   rewrite: (p) => p.replace(/^\/profile\/upload/, '/profile/upload')
+        // },
+        // '/profile/upload': { // 服务器文件下载路径代理
+        //   target: 'http://8.153.37.12:8080',
+        //   changeOrigin: true,
+        //   rewrite: (p) => p.replace(/^\/profile\/upload/, '/profile/upload')
+        // }
       }
     },
     //fix:error:stdin>:7356:1: warning: "@charset" must be the first rule in the file

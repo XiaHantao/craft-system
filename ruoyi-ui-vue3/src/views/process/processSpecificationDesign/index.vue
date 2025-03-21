@@ -311,6 +311,9 @@ const data = reactive({
     tabFlag: null
   },
   rules: {
+    vehicleModel: [
+      { required: true, message: "车型不能为空", trigger: "blur" }
+    ],
   }
 });
 

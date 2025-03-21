@@ -144,4 +144,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectLatestRecord" resultMap="ProcessValidationAndSummaryTableResult">
+        <include refid="selectProcessValidationAndSummaryTableVo"/>
+        order by verification_report_upload_time desc
+        limit 1
+    </select>
+
 </mapper>
