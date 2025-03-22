@@ -102,6 +102,8 @@
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['process:processResearchTable:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['process:processResearchTable:remove']">删除</el-button>
+          <el-button size="mini" type="text" icon="Download"
+            @click="$download.resource(scope.row.filePath, false)">下载</el-button>
         </template>
       </el-table-column>
     </el-table>

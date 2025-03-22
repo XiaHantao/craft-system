@@ -106,7 +106,7 @@
           <el-input v-model="form.outletSellingPrice" placeholder="请输入网点售价" />
         </el-form-item>
         <el-form-item label="毛利（含税）" prop="grossProfitIncludingTax">
-          <el-input v-model="form.grossProfitIncludingTax" placeholder="请输入毛利" />
+          <el-input v-model="form.grossProfitIncludingTax" placeholder="请输入毛利（含税）" />
         </el-form-item>
       </el-form>
       <template #footer>

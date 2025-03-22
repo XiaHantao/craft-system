@@ -41,16 +41,20 @@
       <!-- <el-table-column label="编号" align="center" prop="id" /> -->
       <el-table-column label="报告名称" align="center" prop="reportTitle" />
       <el-table-column label="关联车型" align="center" prop="vehicleType" />
-      <el-table-column label="报告格式" align="center" prop="reportFormat" />
-      <el-table-column label="试验报告" align="center" prop="file" />
+      <el-table-column label="报告说明" align="center" prop="reportFormat" />
+      <el-table-column label="试验报告" align="center" prop="file" >
+      <template v-slot:default="scope">
+          <el-button v-if="scope.row.file" icon="Download" @click="downloadFiles(scope.row.file)"></el-button>
+        </template>
+      </el-table-column> 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
             v-hasPermi="['marketanalysis:report:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
             v-hasPermi="['marketanalysis:report:remove']">删除</el-button>
-          <el-button size="mini" type="text" icon="Download"
-            @click="$download.resource(scope.row.file, false)">下载报告</el-button>
+          <!-- <el-button size="mini" type="text" icon="Download"
+            @click="$download.resource(scope.row.file, false)">下载报告</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -67,11 +71,11 @@
         <el-form-item label="关联车型" prop="vehicleType">
           <el-input v-model="form.vehicleType" placeholder="请输入关联车型" />
         </el-form-item>
-        <el-form-item label="报告格式" prop="reportFormat">
-          <el-input v-model="form.reportFormat" placeholder="请输入报告格式" />
+        <el-form-item label="报告说明" prop="reportFormat">
+          <el-input v-model="form.reportFormat" placeholder="请输入报告说明" />
         </el-form-item>
-        <el-form-item label="地址" prop="file">
-          <file-upload v-model="form.file" />
+        <el-form-item label="试验报告" prop="file">
+          <file-upload :limit="1"  v-model="form.file"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -229,6 +233,33 @@ function handleExport() {
     ...queryParams.value
   }, `report_${new Date().getTime()}.xlsx`)
 }
-
+/** 多文件下载 */
+function downloadFiles(urls) {
+  // 如果 urls 是字符串，则按逗号分隔为数组
+  if (typeof urls === 'string') {
+    urls = urls.split(',');
+  }
+  // 确保 urls 是数组
+  if (!Array.isArray(urls)) {
+    console.error('urls 必须是数组或逗号分隔的字符串');
+    return;
+  }
+  // 遍历每个 URL，下载并保存文件
+  urls.forEach(url => {
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', decodeURIComponent(url.split('/').pop())); // 解码文件名
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+      })
+      .catch(error => console.error('Download error:', error));
+  });
+}
 getList();
 </script>

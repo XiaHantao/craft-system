@@ -94,7 +94,7 @@
 
     <!-- 添加或修改销售分析对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="saleanalysisRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="saleanalysisRef" :model="form" :rules="rules" label-width="130px">
         <el-form-item label="网点 " prop="branch">
           <el-input v-model="form.branch" placeholder="请输入网点 " />
         </el-form-item>
@@ -132,7 +132,7 @@
           <el-input v-model="form.tyre" placeholder="请输入轮胎" />
         </el-form-item>
         <el-form-item label="配置" prop="configuration">
-          <el-input v-model="form.configuration" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.configuration"  placeholder="请输入配置" />
         </el-form-item>
         <el-form-item label="车号" prop="carNumber">
           <el-input v-model="form.carNumber" placeholder="请输入车号" />
