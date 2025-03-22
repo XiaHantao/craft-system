@@ -121,7 +121,7 @@ public class ProcessValidationAndSummaryTableController extends BaseController
 
 
 
-    @GetMapping(value = "/{tableName}")
+    @GetMapping(value = "/latest02/{tableName}")
     public AjaxResult getLatestRecord(@PathVariable("tableName") String tableName) {
         Map<String, Object> latestRecord = processValidationAndSummaryTableService.selectLatestRecord02(tableName);
         return success(latestRecord);

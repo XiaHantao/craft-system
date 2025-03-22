@@ -255,7 +255,7 @@ import {
   delProcessValidationAndSummary,
   addProcessValidationAndSummary,
   updateProcessValidationAndSummary,
-  getLatestRecord
+  getLatestRecord, getLatestRecord02
 } from "@/api/process/processValidationAndSummary";
 import {listModelTable} from "@/api/process/modelTable";
 import {getUserProfile, listUser} from "@/api/system/user";
@@ -516,7 +516,7 @@ function submitForm() {
       } else {
         addProcessValidationAndSummary(form.value).then(response => {
           //新增消息通知
-          getLatestRecord().then(response => {
+          getLatestRecord02("process_validation_and_summary_table").then(response => {
             console.log("response3333===>",response)
             addSysMessageNotification({
               noticeTitle: "工艺验证与总结",
@@ -550,7 +550,7 @@ function improvementSubmitForm() {
       if (form.value.id != null) {
         updateProcessValidationAndSummary(form.value).then(response => {
           //新增消息通知
-          getLatestRecord().then(response => {
+          getLatestRecord02("process_validation_and_summary_table").then(response => {
             console.log("response3333===>",response)
             addSysMessageNotification({
               noticeTitle: "工艺验证与总结",
@@ -589,7 +589,7 @@ function examineSubmitForm () {
       status: newStatus
     }).then(response => {
       //新增消息通知
-      getLatestRecord().then(response => {
+      getLatestRecord02("process_validation_and_summary_table").then(response => {
         console.log("response3333===>",response)
         addSysMessageNotification({
           noticeTitle: "工艺验证与总结",
@@ -626,7 +626,7 @@ function examineSubmitForm () {
       };
       addProcessValidationAndSummary(newRow).then(response => {
         //新增消息通知
-        getLatestRecord().then(response => {
+        getLatestRecord02("process_validation_and_summary_table").then(response => {
           console.log("response3333===>",response)
           addSysMessageNotification({
             noticeTitle: "工艺验证与总结",
