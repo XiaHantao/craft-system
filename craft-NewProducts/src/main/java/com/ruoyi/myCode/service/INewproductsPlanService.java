@@ -58,4 +58,9 @@ public interface INewproductsPlanService
      * @return 结果
      */
     public int deleteNewproductsPlanById(Long id);
+
+    /**
+     * 查询任意表单最新数据
+     */
+
 }

@@ -93,3 +93,7 @@ public class NewproductsPlanServiceImpl implements INewproductsPlanService
         return newproductsPlanMapper.deleteNewproductsPlanById(id);
     }
 }
+
+    /**
+     * 查询任意表单最新数据
+     * */

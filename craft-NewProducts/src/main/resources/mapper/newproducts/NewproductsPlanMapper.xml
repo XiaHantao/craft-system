@@ -32,6 +32,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectNewproductsPlanVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="technicalcheck != null  and technicalcheck != ''"> and technicalcheck =( #{technicalcheck} )</if>
+            <if test="qualitycheck != null  and qualitycheck != ''"> and qualitycheck =( #{qualitycheck} )</if>
+            <if test="securitycheck != null  and securitycheck != ''"> and securitycheck =( #{securitycheck} )</if>
         </where>
     </select>
     
