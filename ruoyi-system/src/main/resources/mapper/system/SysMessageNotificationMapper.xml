@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysMessageNotificationMapper">
+    
+    <resultMap type="SysMessageNotification" id="SysMessageNotificationResult">
+        <result property="noticeId"    column="notice_id"    />
+        <result property="noticeTitle"    column="notice_title"    />
+        <result property="noticeContent"    column="notice_content"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="executedBy"    column="executed_by"    />
+        <result property="executedTime"    column="executed_time"    />
+        <result property="path"    column="path"    />
+        <result property="pathId"    column="path_id"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectSysMessageNotificationVo">
+        select notice_id, notice_title, notice_content, created_by, created_time, executed_by, executed_time, path, path_id, status from sys_message_notification
+    </sql>
+
+    <select id="selectSysMessageNotificationList" parameterType="SysMessageNotification" resultMap="SysMessageNotificationResult">
+        <include refid="selectSysMessageNotificationVo"/>
+        <where>  
+            <if test="noticeTitle != null  and noticeTitle != ''"> and notice_title like concat('%', #{noticeTitle}, '%')</if>
+            <if test="noticeContent != null  and noticeContent != ''"> and notice_content like concat('%', #{noticeContent}, '%')</if>
+            <if test="createdBy != null  and createdBy != ''"> and created_by like concat('%', #{createdBy}, '%')</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="executedBy != null  and executedBy != ''"> and executed_by like concat('%', #{executedBy}, '%')</if>
+            <if test="executedTime != null "> and executed_time = #{executedTime}</if>
+            <if test="path != null  and path != ''"> and path = #{path}</if>
+             <if test="pathId != null  and pathId != ''"> and path_id = #{pathId}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by notice_id desc
+    </select>
+    
+    <select id="selectSysMessageNotificationByNoticeId" parameterType="Long" resultMap="SysMessageNotificationResult">
+        <include refid="selectSysMessageNotificationVo"/>
+        where notice_id = #{noticeId}
+    </select>
+        
+    <insert id="insertSysMessageNotification" parameterType="SysMessageNotification">
+        insert into sys_message_notification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="noticeId != null">notice_id,</if>
+            <if test="noticeTitle != null">notice_title,</if>
+            <if test="noticeContent != null">notice_content,</if>
+            <if test="createdBy != null">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="executedBy != null">executed_by,</if>
+            <if test="executedTime != null">executed_time,</if>
+            <if test="path != null">path,</if>
+            <if test="pathId != null">path_id,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="noticeId != null">#{noticeId},</if>
+            <if test="noticeTitle != null">#{noticeTitle},</if>
+            <if test="noticeContent != null">#{noticeContent},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="executedBy != null">#{executedBy},</if>
+            <if test="executedTime != null">#{executedTime},</if>
+            <if test="path != null">#{path},</if>
+            <if test="pathId != null">#{pathId},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysMessageNotification" parameterType="SysMessageNotification">
+        update sys_message_notification
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="noticeTitle != null">notice_title = #{noticeTitle},</if>
+            <if test="noticeContent != null">notice_content = #{noticeContent},</if>
+            <if test="createdBy != null">created_by = #{createdBy},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="executedBy != null">executed_by = #{executedBy},</if>
+            <if test="executedTime != null">executed_time = #{executedTime},</if>
+            <if test="path != null">path = #{path},</if>
+            <if test="pathId != null">path_id = #{pathId},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where notice_id = #{noticeId}
+    </update>
+
+    <delete id="deleteSysMessageNotificationByNoticeId" parameterType="Long">
+        delete from sys_message_notification where notice_id = #{noticeId}
+    </delete>
+
+    <delete id="deleteSysMessageNotificationByNoticeIds" parameterType="String">
+        delete from sys_message_notification where notice_id in 
+        <foreach item="noticeId" collection="array" open="(" separator="," close=")">
+            #{noticeId}
+        </foreach>
+    </delete>
+</mapper>
