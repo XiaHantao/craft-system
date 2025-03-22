@@ -1,7 +1,11 @@
 package com.ruoyi.process.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.process.domain.ProcessValidationAndSummaryTable;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 工艺验证与总结Mapper接口
@@ -69,5 +73,8 @@ public interface ProcessValidationAndSummaryTableMapper
 
     //查找最新一条记录
     public ProcessValidationAndSummaryTable selectLatestRecord();
+
+    @Select("SELECT * FROM ${tableName} ORDER BY id DESC LIMIT 1")
+    public Map<String, Object> selectLatestRecord02(@Param("tableName") String tableName);
 
 }
