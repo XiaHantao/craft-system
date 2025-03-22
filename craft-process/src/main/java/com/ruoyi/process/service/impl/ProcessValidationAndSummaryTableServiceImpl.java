@@ -11,6 +11,8 @@ import com.ruoyi.process.mapper.ProcessValidationAndSummaryTableMapper;
 import com.ruoyi.process.domain.ProcessValidationAndSummaryTable;
 import com.ruoyi.process.service.IProcessValidationAndSummaryTableService;
 
+import javax.annotation.Resource;
+
 /**
  * 工艺验证与总结Service业务层处理
  * 
@@ -20,7 +22,7 @@ import com.ruoyi.process.service.IProcessValidationAndSummaryTableService;
 @Service
 public class ProcessValidationAndSummaryTableServiceImpl implements IProcessValidationAndSummaryTableService 
 {
-    @Autowired
+    @Resource
     private ProcessValidationAndSummaryTableMapper processValidationAndSummaryTableMapper;
 
     /**
