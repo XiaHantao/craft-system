@@ -325,9 +325,9 @@ const data = reactive({
     name: [
       { required: true, message: "新产品名称不能为空", trigger: "blur" }
     ],
-    // checked: [
-    //   { required: true, message: '请选择核对结果', trigger: 'change' }
-    // ]    
+    checked: [
+      { required: true, message: '请选择核对结果', trigger: 'change' }
+    ]    
   }
 });
 
