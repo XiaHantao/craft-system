@@ -254,9 +254,9 @@
 <script setup name="Plan">
 import { listPlan, getPlan, delPlan, addPlan, updatePlan,getLatestRecord02 } from "@/api/newproducts/plan";
 import { getUserProfile, listUser } from "@/api/system/user";
-import {  getLatestRecord } from "@/api/process/processValidationAndSummary";
 import {addSysMessageNotification} from "@/api/system/sysMessageNotification";
 import {listDept} from "@/api/system/dept";
+//import { id } from "element-plus/es/locale";
 
 const { proxy } = getCurrentInstance();
 
@@ -390,6 +390,42 @@ function submitForm() {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
           getList();
+ 
+      // 修改后待确认通知
+      listDept().then(response => {
+        deptList.value = response.data;
+        // 获取用户列表
+        listUser().then(response => {
+          userList.value = response.rows;
+          // 定义目标部门名称
+          const targetDepts = ["技术科", "质量科", "安环科","老实人科技"];
+          // 过滤出目标部门的ID
+          const targetDeptIds = deptList.value
+            .filter(dept => targetDepts.includes(dept.deptName))
+            .map(dept => dept.deptId);
+          // 过滤出目标部门下的用户
+          const targetUsers = userList.value
+            .filter(user => targetDeptIds.includes(user.deptId));
+          //获取当前用户昵称
+          getUserProfile().then(response => {
+          usernickName.value = response.data.nickName;
+          // 对目标用户执行通知函数
+          targetUsers.forEach(users => {
+            addSysMessageNotification({
+              noticeTitle: "新产品生产计划通知",
+              noticeContent: "有一条新产品生产计划需要确认，请及时处理。",
+              createdBy: usernickName.value,
+              createdTime: new Date(),
+              executedBy: users.nickName,
+              path: "/newproducts/plan",
+              pathId: form.value.id,
+              status: 0
+            });
+          });
+          });
+        });
+      });
+
         });
       } else {
           form.value.technicalcheck ="待确认" ;
@@ -399,6 +435,44 @@ function submitForm() {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
           getList();
+
+      // 新增后待确认通知
+        getLatestRecord02("newproducts_plan").then(response1 => {
+        listDept().then(response => {
+          deptList.value = response.data;
+        // 获取用户列表
+        listUser().then(response => {
+          userList.value = response.rows;
+          // 定义目标部门名称
+          const targetDepts = ["技术科", "质量科", "安环科","老实人科技"];
+          // 过滤出目标部门的ID
+          const targetDeptIds = deptList.value
+            .filter(dept => targetDepts.includes(dept.deptName))
+            .map(dept => dept.deptId);
+          // 过滤出目标部门下的用户
+          const targetUsers = userList.value
+            .filter(user => targetDeptIds.includes(user.deptId));
+          //获取当前用户昵称
+          getUserProfile().then(response => {
+          usernickName.value = response.data.nickName;
+          // 对目标用户执行通知函数
+          targetUsers.forEach(users => {
+            addSysMessageNotification({
+              noticeTitle: "新产品生产计划通知",
+              noticeContent: "有一条新产品生产计划需要确认，请及时处理。",
+              createdBy: usernickName.value,
+              createdTime: new Date(),
+              executedBy: users.nickName,
+              path: "/newproducts/plan",
+              pathId: response1.data.id,
+              status: 0
+            });
+          });
+          });
+        });
+      });
+        });
+          
         });
       }
     }
@@ -469,12 +543,11 @@ function submitCheckForm() {
           //获取当前用户昵称
           getUserProfile().then(response => {
           usernickName.value = response.data.nickName;
-          console.log(usernickName.value);
           // 对目标用户执行通知函数
           targetUsers.forEach(users => {
             addSysMessageNotification({
-              noticeTitle: "新产品1",
-              noticeContent: "生产计划1",
+              noticeTitle: "新产品生产计划通知",
+              noticeContent: "有一条新产品生产计划可以生产，请及时处理。",
               createdBy: usernickName.value,
               createdTime: new Date(),
               executedBy: users.nickName,
@@ -487,6 +560,7 @@ function submitCheckForm() {
         });
       });
     }
+
       });
     } 
     }
@@ -527,6 +601,17 @@ function downloadFiles(urls) {
       .catch(error => console.error('Download error:', error));
   });
 }
+
+// 监听试制记录按钮路由，实时跳转
+watch(
+  () => proxy.$route.query,  
+  (newQuery) => {
+    // 更新查询参数
+    queryParams.value.id = newQuery.id;
+    getList(); // 重新查询数据
+  },
+  { immediate: true } // 立即执行一次
+);
 
 getList();
 </script>

@@ -96,9 +96,7 @@ public class NewproductsPlanController extends BaseController
         return toAjax(newproductsPlanService.deleteNewproductsPlanByIds(ids));
     }
 
-    /**
-     * 查询任意一张表单最新数据
-     **/
+
 
 
 

@@ -30,7 +30,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectNewproductsPlanList" parameterType="NewproductsPlan" resultMap="NewproductsPlanResult">
         <include refid="selectNewproductsPlanVo"/>
-        <where>  
+        <where>
+            <if test="id != null"> and id = #{id}</if>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="technicalcheck != null  and technicalcheck != ''"> and technicalcheck =( #{technicalcheck} )</if>
             <if test="qualitycheck != null  and qualitycheck != ''"> and qualitycheck =( #{qualitycheck} )</if>
