@@ -245,7 +245,7 @@
     </el-dialog>
     <!-- 核对对话框 -->
     <el-dialog :title="checkTitle" v-model="openCheckDialog" width="800px" append-to-body>
-      <el-form ref="submitRef" :model="form" :rules="rules" label-width="100px">
+      <el-form ref="checkRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="核对文件" prop="checking">
           <file-upload v-model="form.checking"/>
         </el-form-item>
@@ -468,7 +468,8 @@ function submitForm() {
       });         
 
         });
-      } else {       
+      } else {   
+          //reset(); 
           form.value.checked = "待审核";
         addSubmit(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
@@ -514,7 +515,7 @@ function submitForm() {
 
         });
       }
-    }
+    } else{console.log("error submit!!")}
   });
 }
 
@@ -548,15 +549,15 @@ function handleCheck(row) {
 }
 /* 核对提交按钮 */
 function submitCheckForm() {
-  proxy.$refs["submitRef"].validate(valid => {
-  //if(valid){  
+  proxy.$refs["checkRef"].validate(valid => {
+  if(valid){  
     if (form.value.id != null) {
       updateSubmit(form.value).then(response => {
         proxy.$modal.msgSuccess("核对完成");
         openCheckDialog.value = false;
         getList();
       });
-   // } 
+    } 
     }
   });
 }
