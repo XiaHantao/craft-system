@@ -249,10 +249,20 @@
 </template>
 
 <script setup name="ProcessValidationAndSummary">
-import { listProcessValidationAndSummary, getProcessValidationAndSummary, delProcessValidationAndSummary, addProcessValidationAndSummary, updateProcessValidationAndSummary } from "@/api/process/processValidationAndSummary";
+import {
+  listProcessValidationAndSummary,
+  getProcessValidationAndSummary,
+  delProcessValidationAndSummary,
+  addProcessValidationAndSummary,
+  updateProcessValidationAndSummary,
+  getLatestRecord, getLatestRecord02
+} from "@/api/process/processValidationAndSummary";
 import {listModelTable} from "@/api/process/modelTable";
 import {getUserProfile, listUser} from "@/api/system/user";
 import {listDept} from "@/api/system/dept";
+import {onMounted, watch} from "vue";
+import {useRouter, onBeforeRouteUpdate} from "vue-router";
+import {addSysMessageNotification} from "@/api/system/sysMessageNotification";
 
 const { proxy } = getCurrentInstance();
 
@@ -304,6 +314,9 @@ const data = reactive({
     newFlag: null
   },
   rules: {
+    vehicleModel: [
+      { required: true, message: "车型不能为空", trigger: "blur" }
+    ],
   }
 });
 
@@ -311,18 +324,48 @@ const { queryParams, form, rules } = toRefs(data);
 
 /** 查询工艺验证与总结列表 */
 function getList() {
+  const id = proxy.$route.query.id;
+  console.log('id', id);
+  if(id) {
+    getSpecificRecord(id);
+    proxy.$route.query.id = null;
+  } else {
+    loading.value = true;
+    listProcessValidationAndSummary(queryParams.value).then(response => {
+      processValidationAndSummaryList.value = response.rows;
+      total.value = Number(response.total);
+      loading.value = false;
+    });
+  }
+  getUserInfo();
+  getDepartments();
+
+}
+
+/** 查询特定工艺验证与总结记录 */
+function getSpecificRecord(id) {
   loading.value = true;
-  listProcessValidationAndSummary(queryParams.value).then(response => {
-    processValidationAndSummaryList.value = response.rows;
-    total.value = Number(response.total);
+  getProcessValidationAndSummary(id).then(response => {
+    processValidationAndSummaryList.value = [response.data];
+    total.value = 1;
     loading.value = false;
   });
+}
 
-  //获取当前用户信息
+/** 查询车型列表 */
+function getModelList() {
+  listModelTable().then(response => {
+    modelList.value = response.rows;
+  });
+}
+
+// 获取当前用户信息
+function getUserInfo() {
   getUserProfile().then(response => {
     userInfoList.value = response.data;
   });
-
+}
+function getDepartments() {
   // 获取部门列表
   listDept().then(response => {
     deptList.value = response.data;
@@ -342,13 +385,6 @@ function getList() {
         }))
       }));
     });
-  });
-}
-
-/** 查询车型列表 */
-function getModelList() {
-  listModelTable().then(response => {
-    modelList.value = response.rows;
   });
 }
 
@@ -479,6 +515,20 @@ function submitForm() {
         });
       } else {
         addProcessValidationAndSummary(form.value).then(response => {
+          //新增消息通知
+          getLatestRecord02("process_validation_and_summary_table").then(response => {
+            console.log("response3333===>",response)
+            addSysMessageNotification({
+              noticeTitle: "工艺验证与总结",
+              noticeContent: "请上传改进报告",
+              createdBy: form.value.verificationReportUploadPerson,
+              createdTime: form.value.verificationReportUploadTime,
+              executedBy: form.value.improvementReportUploadPerson,
+              path: "/processManagement/ProcessValidationAndSummary",
+              pathId: response.data.id,
+              status: 0
+            })
+          })
           proxy.$modal.msgSuccess("上传成功");
           open.value = false;
           getList();
@@ -499,6 +549,20 @@ function improvementSubmitForm() {
       } else form.value.improvementReportUploadTime = null;
       if (form.value.id != null) {
         updateProcessValidationAndSummary(form.value).then(response => {
+          //新增消息通知
+          getLatestRecord02("process_validation_and_summary_table").then(response => {
+            console.log("response3333===>",response)
+            addSysMessageNotification({
+              noticeTitle: "工艺验证与总结",
+              noticeContent: "请审核改进报告",
+              createdBy: form.value.improvementReportUploadPerson,
+              createdTime: form.value.improvementReportUploadTime,
+              executedBy: form.value.verificationReportUploadPerson,
+              path: "/processManagement/ProcessValidationAndSummary",
+              pathId: response.data.id,
+              status: 0
+            })
+          })
           proxy.$modal.msgSuccess("上传成功");
           openImprovment.value = false;
           getList();
@@ -524,6 +588,20 @@ function examineSubmitForm () {
       id: currentRow.value.id,
       status: newStatus
     }).then(response => {
+      //新增消息通知
+      getLatestRecord02("process_validation_and_summary_table").then(response => {
+        console.log("response3333===>",response)
+        addSysMessageNotification({
+          noticeTitle: "工艺验证与总结",
+          noticeContent: "改进报告审核通过",
+          createdBy: currentRow.value.verificationReportUploadPerson,
+          createdTime: currentRow.value.verificationReportUploadTime,
+          executedBy: currentRow.value.improvementReportUploadPerson,
+          path: "/processManagement/ProcessValidationAndSummary",
+          pathId: response.data.id,
+          status: 0
+        })
+      })
       proxy.$modal.msgSuccess("审核成功");
       openExamine.value = false;
       getList(); // 刷新列表
@@ -547,6 +625,20 @@ function examineSubmitForm () {
         newFlag: 1
       };
       addProcessValidationAndSummary(newRow).then(response => {
+        //新增消息通知
+        getLatestRecord02("process_validation_and_summary_table").then(response => {
+          console.log("response3333===>",response)
+          addSysMessageNotification({
+            noticeTitle: "工艺验证与总结",
+            noticeContent: "改进报告已驳回，请重新上传",
+            createdBy: currentRow.value.verificationReportUploadPerson,
+            createdTime: currentRow.value.verificationReportUploadTime,
+            executedBy: currentRow.value.improvementReportUploadPerson,
+            path: "/processManagement/ProcessValidationAndSummary",
+            pathId: response.data.id,
+            status: 0
+          })
+        })
         proxy.$modal.msgSuccess("已驳回");
         openExamine.value = false;
         getList(); // 刷新列表
@@ -651,6 +743,26 @@ function downloadFile(url) {
 
 
 
-getModelList();
-getList();
+// 页面加载时执行
+onMounted(() => {
+  getList();
+  getModelList();
+});
+
+// 监听路由变化
+watch(
+    () => router.currentRoute.value.name,
+    (newName, oldName) => {
+      if (newName === 'ProcessValidationAndSummary') {
+        getList();
+      }
+    },
+    { immediate: true }
+);
+
+
+
+
+
+
 </script>

@@ -1,6 +1,42 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="128px">
+      <el-form-item label="技术科确认结果" prop="technicalcheck">
+        <el-select
+           v-model="queryParams.technicalcheck"
+          placeholder="请选择"
+          clearable
+          @change="handleQuery"
+        >
+          <el-option label="通过" value="通过" />
+          <el-option label="拒绝" value="拒绝" />
+          <el-option label="待确认" value="待确认" />
+        </el-select>     
+      </el-form-item>
+      <el-form-item label="质量科确认结果" prop="qulitycheck">
+        <el-select
+           v-model="queryParams.qualitycheck"
+          placeholder="请选择"
+          clearable
+          @change="handleQuery"
+        >
+          <el-option label="通过" value="通过" />
+          <el-option label="拒绝" value="拒绝" />
+          <el-option label="待确认" value="待确认" />
+        </el-select>     
+      </el-form-item>
+      <el-form-item label="安环科确认结果" prop="securitycheck">
+        <el-select
+           v-model="queryParams.securitycheck"
+          placeholder="请选择"
+          clearable
+          @change="handleQuery"
+        >
+          <el-option label="通过" value="通过" />
+          <el-option label="拒绝" value="拒绝" />
+          <el-option label="待确认" value="待确认" />
+        </el-select>     
+      </el-form-item>
       <el-form-item label="新产品计划名称" prop="name">
         <el-input
           v-model="queryParams.name"
@@ -8,7 +44,7 @@
           clearable
           @keyup.enter="handleQuery"
         />
-      </el-form-item>
+      </el-form-item>                      
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -129,24 +165,6 @@
         <el-form-item label="生产计划" prop="planfile">
           <file-upload v-model="form.planfile"/>
         </el-form-item>
-<!--         <el-form-item label="技术科确认" prop="technicalcheck">
-          <el-input v-model="form.technicalcheck" placeholder="请输入技术科确认" />
-        </el-form-item>
-        <el-form-item label="技术科备注" prop="technicalremark">
-          <el-input v-model="form.technicalremark" placeholder="请输入技术科备注" />
-        </el-form-item>
-        <el-form-item label="质量科确认" prop="qualitycheck">
-          <el-input v-model="form.qualitycheck" placeholder="请输入质量科确认" />
-        </el-form-item>
-        <el-form-item label="质量科备注" prop="qualityremark">
-          <el-input v-model="form.qualityremark" placeholder="请输入质量科备注" />
-        </el-form-item>
-        <el-form-item label="安环科确认" prop="securitycheck">
-          <el-input v-model="form.securitycheck" placeholder="请输入安环科确认" />
-        </el-form-item>
-        <el-form-item label="安环科备注" prop="securityremark">
-          <el-input v-model="form.securityremark" placeholder="请输入安环科备注" />
-        </el-form-item> -->
 <!--         <el-form-item label="" prop="time">
           <el-date-picker clearable
             v-model="form.time"
@@ -189,7 +207,7 @@
     <el-dialog :title="checkTitle" v-model="openCheckDialog" width="800px" append-to-body>
       <el-form ref="submitRef" :model="form" :rules="rules" label-width="150px">
         
-        <div v-if="users =='老实人科技' || users =='技术科'">        
+        <div v-if="userdep =='老实人科技' || userdep =='技术科'">        
         <el-form-item label="技术科确认结果" prop="technicalcheck">
           <el-radio-group v-model="form.technicalcheck">
             <el-radio label="通过" />
@@ -200,8 +218,7 @@
           <el-input v-model="form.technicalremark" placeholder="请输入备注" />
         </el-form-item>
         </div>
-
-        <div v-if="users =='老实人科技' || users =='质量科'"> 
+        <div v-if="userdep !=='老实人科技' || userdep =='质量科'"> 
         <el-form-item label="质量科确认结果" prop="qualitycheck">
           <el-radio-group v-model="form.qualitycheck">
             <el-radio label="通过" />
@@ -212,8 +229,7 @@
           <el-input v-model="form.qualityremark" placeholder="请输入备注" />
         </el-form-item>
         </div>
-
-       <div v-if="users =='老实人科技' || users =='安环科'"> 
+       <div v-if="userdep !=='老实人科技' || userdep =='安环科'"> 
         <el-form-item label="安环科确认结果" prop="securitycheck">          
           <el-radio-group v-model="form.securitycheck">
             <el-radio label="通过" />
@@ -224,7 +240,6 @@
           <el-input v-model="form.securityremark" placeholder="请输入备注" />
         </el-form-item>
         </div>
-
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -233,13 +248,15 @@
         </div>
       </template>
     </el-dialog>
-
   </div>
 </template>
 
 <script setup name="Plan">
-import { listPlan, getPlan, delPlan, addPlan, updatePlan } from "@/api/newproducts/plan";
-import { getUserProfile } from "@/api/system/user";
+import { listPlan, getPlan, delPlan, addPlan, updatePlan,getLatestRecord02 } from "@/api/newproducts/plan";
+import { getUserProfile, listUser } from "@/api/system/user";
+import {addSysMessageNotification} from "@/api/system/sysMessageNotification";
+import {listDept} from "@/api/system/dept";
+//import { id } from "element-plus/es/locale";
 
 const { proxy } = getCurrentInstance();
 
@@ -254,8 +271,10 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 const checkTitle = ref("");
-const users = ref({}); //  初始化 users根据其值显示不同确认框
-
+const userdep = ref({}); //  初始化 userdep用户部门根据其值显示不同确认框
+const deptList = ref([]);  // 部门列表
+const userList = ref([]);  // 用户列表
+const usernickName = ref(""); // 用户昵称
 
 const data = reactive({
   form: {},
@@ -267,7 +286,16 @@ const data = reactive({
   rules: {
     name: [
       { required: true, message: "新产品计划名称不能为空", trigger: "blur" }
-    ],    
+    ],
+    technicalcheck: [
+        { required: true, message: '请选择技术科确认结果', trigger: 'change' }
+      ],
+      qualitycheck: [
+        { required: true, message: '请选择质量科确认结果', trigger: 'change' }
+      ],
+      securitycheck: [
+        { required: true, message: '请选择安环科确认结果', trigger: 'change' }
+      ]    
   }
 });
 
@@ -355,22 +383,96 @@ function submitForm() {
   proxy.$refs["planRef"].validate(valid => {
     if (valid) {
       if (form.value.id != null) {
-          form.value.technicalcheck ="未确认" ;
-          form.value.qualitycheck ="未确认" ;
-          form.value.securitycheck ="未确认" ;
+          form.value.technicalcheck ="待确认" ;
+          form.value.qualitycheck ="待确认" ;
+          form.value.securitycheck ="待确认" ;
         updatePlan(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
           getList();
+ 
+      // 修改后待确认通知
+      listDept().then(response => {
+        deptList.value = response.data;
+        // 获取用户列表
+        listUser().then(response => {
+          userList.value = response.rows;
+          // 定义目标部门名称
+          const targetDepts = ["技术科", "质量科", "安环科","老实人科技"];
+          // 过滤出目标部门的ID
+          const targetDeptIds = deptList.value
+            .filter(dept => targetDepts.includes(dept.deptName))
+            .map(dept => dept.deptId);
+          // 过滤出目标部门下的用户
+          const targetUsers = userList.value
+            .filter(user => targetDeptIds.includes(user.deptId));
+          //获取当前用户昵称
+          getUserProfile().then(response => {
+          usernickName.value = response.data.nickName;
+          // 对目标用户执行通知函数
+          targetUsers.forEach(users => {
+            addSysMessageNotification({
+              noticeTitle: "新产品生产计划通知",
+              noticeContent: "有一条新产品生产计划需要确认，请及时处理。",
+              createdBy: usernickName.value,
+              createdTime: new Date(),
+              executedBy: users.nickName,
+              path: "/newproducts/plan",
+              pathId: form.value.id,
+              status: 0
+            });
+          });
+          });
+        });
+      });
+
         });
       } else {
-          form.value.technicalcheck ="未确认" ;
-          form.value.qualitycheck ="未确认" ;
-          form.value.securitycheck ="未确认" ;
+          form.value.technicalcheck ="待确认" ;
+          form.value.qualitycheck ="待确认" ;
+          form.value.securitycheck ="待确认" ;
         addPlan(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
           getList();
+
+      // 新增后待确认通知
+        getLatestRecord02("newproducts_plan").then(response1 => {
+        listDept().then(response => {
+          deptList.value = response.data;
+        // 获取用户列表
+        listUser().then(response => {
+          userList.value = response.rows;
+          // 定义目标部门名称
+          const targetDepts = ["技术科", "质量科", "安环科","老实人科技"];
+          // 过滤出目标部门的ID
+          const targetDeptIds = deptList.value
+            .filter(dept => targetDepts.includes(dept.deptName))
+            .map(dept => dept.deptId);
+          // 过滤出目标部门下的用户
+          const targetUsers = userList.value
+            .filter(user => targetDeptIds.includes(user.deptId));
+          //获取当前用户昵称
+          getUserProfile().then(response => {
+          usernickName.value = response.data.nickName;
+          // 对目标用户执行通知函数
+          targetUsers.forEach(users => {
+            addSysMessageNotification({
+              noticeTitle: "新产品生产计划通知",
+              noticeContent: "有一条新产品生产计划需要确认，请及时处理。",
+              createdBy: usernickName.value,
+              createdTime: new Date(),
+              executedBy: users.nickName,
+              path: "/newproducts/plan",
+              pathId: response1.data.id,
+              status: 0
+            });
+          });
+          });
+        });
+      });
+        });
+          
         });
       }
     }
@@ -398,10 +500,8 @@ function handleExport() {
 /** 确认按钮操作 */
 function handleCheck(row) {
   reset();
-  // const _id = row.id || ids.value;
-  // getSubmit(_id).then(response => {
     getUserProfile().then(response => {
-      users.value = response.data.dept.deptName;  //获得用户部门
+    userdep.value = response.data.dept.deptName;  //获得用户部门
     });
     openCheckDialog.value = true;
     checkTitle.value = "确认新产品生产计划提交";
@@ -414,13 +514,58 @@ function submitCheckForm() {
     if(valid){    
     if (form.value.id != null) {
       updatePlan(form.value).then(response => {
+        console.log(form.value);
         proxy.$modal.msgSuccess("确认完成");
         openCheckDialog.value = false;
         getList();
+
+     // 判断是否满足通知条件
+    if (
+      form.value.technicalcheck === "通过" &&
+      form.value.qualitycheck === "通过" &&
+      form.value.securitycheck === "通过"
+    ) { 
+      // 满足条件后执行逻辑
+      listDept().then(response => {
+        deptList.value = response.data;
+        // 获取用户列表
+        listUser().then(response => {
+          userList.value = response.rows;
+          // 定义目标部门名称
+          const targetDepts = ["生产科", "市场科", "供应科","老实人科技"];
+          // 过滤出目标部门的ID
+          const targetDeptIds = deptList.value
+            .filter(dept => targetDepts.includes(dept.deptName))
+            .map(dept => dept.deptId);
+          // 过滤出目标部门下的用户
+          const targetUsers = userList.value
+            .filter(user => targetDeptIds.includes(user.deptId));
+          //获取当前用户昵称
+          getUserProfile().then(response => {
+          usernickName.value = response.data.nickName;
+          // 对目标用户执行通知函数
+          targetUsers.forEach(users => {
+            addSysMessageNotification({
+              noticeTitle: "新产品生产计划通知",
+              noticeContent: "有一条新产品生产计划可以生产，请及时处理。",
+              createdBy: usernickName.value,
+              createdTime: new Date(),
+              executedBy: users.nickName,
+              path: "/newproducts/plan",
+              pathId: form.value.id,
+              status: 0
+            });
+          });
+          });
+        });
+      });
+    }
+
       });
     } 
     }
   });
+  
 }
 // 取消确认对话框
 function cancelCheck() {
@@ -457,6 +602,16 @@ function downloadFiles(urls) {
   });
 }
 
+// 监听试制记录按钮路由，实时跳转
+watch(
+  () => proxy.$route.query,  
+  (newQuery) => {
+    // 更新查询参数
+    queryParams.value.id = newQuery.id;
+    getList(); // 重新查询数据
+  },
+  { immediate: true } // 立即执行一次
+);
 
 getList();
 </script>

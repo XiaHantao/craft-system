@@ -1,6 +1,8 @@
 package com.ruoyi.process.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.process.domain.ProcessValidationAndSummaryTable;
 
 /**
@@ -66,4 +68,10 @@ public interface IProcessValidationAndSummaryTableService
      * @return 结果
      */
     public int deleteProcessValidationAndSummaryTableById(Long id);
+
+    public ProcessValidationAndSummaryTable selectLatestRecord();
+
+    public Map<String, Object> selectLatestRecord02(String tableName);
+
+
 }

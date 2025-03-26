@@ -45,16 +45,16 @@
           v-hasPermi="['newproducts:submit:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+<!--       <el-col :span="1.5">
         <el-button
           type="success"
           plain
           icon="Edit"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['newproducts:submit:edit']"
+          v-hasPermi="['newproducts:submit:edit']"          
         >修改</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -245,7 +245,7 @@
     </el-dialog>
     <!-- 核对对话框 -->
     <el-dialog :title="checkTitle" v-model="openCheckDialog" width="800px" append-to-body>
-      <el-form ref="submitRef" :model="form" :rules="rules" label-width="100px">
+      <el-form ref="checkRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="核对文件" prop="checking">
           <file-upload v-model="form.checking"/>
         </el-form-item>
@@ -284,7 +284,10 @@
 
 <script setup name="Submit">
 import { listSubmit, getSubmit, delSubmit, addSubmit, updateSubmit } from "@/api/newproducts/submit";
-
+import { getLatestRecord02 } from "@/api/newproducts/plan";
+import { getUserProfile, listUser } from "@/api/system/user";
+import {addSysMessageNotification} from "@/api/system/sysMessageNotification";
+import {listDept} from "@/api/system/dept";
 
 const { proxy } = getCurrentInstance();
 const submitList = ref([]);
@@ -299,6 +302,9 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 const checkTitle = ref("");
+const deptList = ref([]);  // 部门列表
+const userList = ref([]);  // 用户列表
+const usernickName = ref(""); // 用户昵称
 
 /* 添加核对结果的可选项
 const checkOptions = ref([
@@ -319,6 +325,9 @@ const data = reactive({
     name: [
       { required: true, message: "新产品名称不能为空", trigger: "blur" }
     ],
+    checked: [
+      { required: true, message: '请选择核对结果', trigger: 'change' }
+    ]    
   }
 });
 
@@ -421,17 +430,92 @@ function submitForm() {
         updateSubmit(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           openEditDialog.value = false;
-          getList();       
+          getList();   
+          
+      // 修改后待核对通知
+      listDept().then(response => {
+        deptList.value = response.data;
+        // 获取用户列表
+        listUser().then(response => {
+          userList.value = response.rows;
+          // 定义目标部门名称
+          const targetDepts = ["质量科", "生产科","老实人科技"];
+          // 过滤出目标部门的ID
+          const targetDeptIds = deptList.value
+            .filter(dept => targetDepts.includes(dept.deptName))
+            .map(dept => dept.deptId);
+          // 过滤出目标部门下的用户
+          const targetUsers = userList.value
+            .filter(user => targetDeptIds.includes(user.deptId));
+          //获取当前用户昵称
+          getUserProfile().then(response => {
+          usernickName.value = response.data.nickName;
+          // 对目标用户执行通知函数
+          targetUsers.forEach(users => {
+            addSysMessageNotification({
+              noticeTitle: "新产品提交审核通知",
+              noticeContent: "有一条新产品提交需要审核，请及时处理。",
+              createdBy: usernickName.value,
+              createdTime: new Date(),
+              executedBy: users.nickName,
+              path: "/newproducts/submit",
+              pathId: form.value.id,
+              status: 0
+            });
+          });
+          });
         });
-      } else {       
+      });         
+
+        });
+      } else {   
+          //reset(); 
           form.value.checked = "待审核";
         addSubmit(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           openEditDialog.value = false;
           getList();
+
+      // 新增后待审核通知
+        getLatestRecord02("newproducts_submit").then(response => {
+        listDept().then(response => {
+          deptList.value = response.data;
+        // 获取用户列表
+        listUser().then(response => {
+          userList.value = response.rows;
+          // 定义目标部门名称
+          const targetDepts = ["质量科","生产科", "老实人科技"];
+          // 过滤出目标部门的ID
+          const targetDeptIds = deptList.value
+            .filter(dept => targetDepts.includes(dept.deptName))
+            .map(dept => dept.deptId);
+          // 过滤出目标部门下的用户
+          const targetUsers = userList.value
+            .filter(user => targetDeptIds.includes(user.deptId));
+          //获取当前用户昵称
+          getUserProfile().then(response => {
+          usernickName.value = response.data.nickName;
+          // 对目标用户执行通知函数
+          targetUsers.forEach(users => {
+            addSysMessageNotification({
+              noticeTitle: "新产品提交审核通知",
+              noticeContent: "有一条新产品提交需要审核，请及时处理。",
+              createdBy: usernickName.value,
+              createdTime: new Date(),
+              executedBy: users.nickName,
+              path: "/newproducts/submit",
+              pathId: form.value.id,
+              status: 0
+            });
+          });
+          });
+        });
+      });
+        });
+
         });
       }
-    }
+    } else{console.log("error submit!!")}
   });
 }
 
@@ -465,15 +549,15 @@ function handleCheck(row) {
 }
 /* 核对提交按钮 */
 function submitCheckForm() {
-  proxy.$refs["submitRef"].validate(valid => {
-  //if(valid){  
+  proxy.$refs["checkRef"].validate(valid => {
+  if(valid){  
     if (form.value.id != null) {
       updateSubmit(form.value).then(response => {
         proxy.$modal.msgSuccess("核对完成");
         openCheckDialog.value = false;
         getList();
       });
-   // } 
+    } 
     }
   });
 }
@@ -529,6 +613,18 @@ function downloadFiles(urls) {
       .catch(error => console.error('下载错误:', error));
   });
 }
+
+// 监听通知处理按钮路由，实时跳转
+watch(
+  () => proxy.$route.query,  
+  (newQuery) => {
+    // 更新查询参数
+    queryParams.value.id = newQuery.id;
+    getList(); // 重新查询数据
+  },
+  { immediate: true } // 立即执行一次
+);
+
 
 getList();
 </script>

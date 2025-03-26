@@ -274,6 +274,9 @@ const data = reactive({
     uploadTime: null
   },
   rules: {
+    vehicleModel: [
+      { required: true, message: "车型不能为空", trigger: "blur" }
+    ],
   },
 });
 
@@ -528,10 +531,14 @@ function quotaSubmitForm() {
 function handleDelete(row) {
   const vehicleModels = row.vehicleModel ? [row.vehicleModel] : selectedVehicleModel.value;
   proxy.$modal.confirm('是否确认删除车型为"' + vehicleModels.join(", ") + '"的数据项？').then(function() {
-    return Promise.all([
-      delProcessQuotaTable(vehicleModels),
-      delProcessQuotaValue(vehicleModels)
-    ]);
+    // 查询 delProcessQuotaValue 对应的表中是否存在该车型信息
+    return Promise.all(vehicleModels.map(vehicleModel => {
+      return listProcessQuotaValue({ vehicleModel: vehicleModel }).then(response => {
+        return response.rows.length > 0 ? delProcessQuotaValue(vehicleModel) : Promise.resolve();
+      });
+    })).then(() => {
+      return delProcessQuotaTable(vehicleModels);
+    });
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");

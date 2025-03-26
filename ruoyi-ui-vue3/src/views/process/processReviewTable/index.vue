@@ -236,6 +236,12 @@ const data = reactive({
   rules: {
     materialNumber: [
       { required: true, message: "物料号不能为空", trigger: "blur" }
+    ],
+    materialName: [
+      { required: true, message: "物料名称不能为空", trigger: "blur" }
+    ],
+    materialFilePath: [
+      { required: true, message: "BOM文件不能为空", trigger: "blur" }
     ]
   }
 });

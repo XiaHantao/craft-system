@@ -199,6 +199,9 @@ const data = reactive({
     uploadTime: null
   },
   rules: {
+    toolNumber: [
+      { required: true, message: "工装编号不能为空", trigger: "blur" }
+    ],
   }
 });
 

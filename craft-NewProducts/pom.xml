@@ -9,7 +9,7 @@
         <version>3.8.5</version>
     </parent>
 
-    <artifactId>ruoyi-NewProducts</artifactId>
+    <artifactId>craft-NewProducts</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

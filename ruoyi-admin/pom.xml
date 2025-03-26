@@ -20,7 +20,7 @@
         <!--新产品试制模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-NewProducts</artifactId>
+            <artifactId>craft-NewProducts</artifactId>
             <version>3.8.5</version>
         </dependency>
 

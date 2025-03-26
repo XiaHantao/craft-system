@@ -83,7 +83,7 @@
       </el-table-column>
       <el-table-column label="评审状态" align="center" prop="reviewStatus">
         <template #default="scope">
-          <el-tag :type="scope.row.reviewStatus === '已评审' ? 'success' : 'danger'" >
+          <el-tag v-if="scope.row.reviewStatus" :type="scope.row.reviewStatus === '已评审' ? 'success' : 'danger'" >
             {{ scope.row.reviewStatus }}
           </el-tag>
         </template>
@@ -201,6 +201,9 @@ const data = reactive({
     reviewer: null
   },
   rules: {
+    vehicleModel: [
+      { required: true, message: "车型不能为空", trigger: "blur" }
+    ]
   }
 });
 

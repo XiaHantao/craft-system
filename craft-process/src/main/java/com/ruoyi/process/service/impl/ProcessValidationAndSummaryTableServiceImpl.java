@@ -1,11 +1,17 @@
 package com.ruoyi.process.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.process.mapper.ProcessValidationAndSummaryTableMapper;
 import com.ruoyi.process.domain.ProcessValidationAndSummaryTable;
 import com.ruoyi.process.service.IProcessValidationAndSummaryTableService;
+
+import javax.annotation.Resource;
 
 /**
  * 工艺验证与总结Service业务层处理
@@ -16,7 +22,7 @@ import com.ruoyi.process.service.IProcessValidationAndSummaryTableService;
 @Service
 public class ProcessValidationAndSummaryTableServiceImpl implements IProcessValidationAndSummaryTableService 
 {
-    @Autowired
+    @Resource
     private ProcessValidationAndSummaryTableMapper processValidationAndSummaryTableMapper;
 
     /**
@@ -102,4 +108,15 @@ public class ProcessValidationAndSummaryTableServiceImpl implements IProcessVali
     {
         return processValidationAndSummaryTableMapper.deleteProcessValidationAndSummaryTableById(id);
     }
+
+    public ProcessValidationAndSummaryTable selectLatestRecord()
+    {
+        return processValidationAndSummaryTableMapper.selectLatestRecord();
+    }
+
+    public Map<String, Object> selectLatestRecord02(String tableName) {
+        // 这里可以添加对表名的校验
+        return processValidationAndSummaryTableMapper.selectLatestRecord02(tableName);
+    }
+
 }

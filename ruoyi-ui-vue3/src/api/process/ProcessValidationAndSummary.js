@@ -51,3 +51,10 @@ export function delProcessValidationAndSummary(id) {
     method: 'delete'
   })
 }
+
+export function getLatestRecord() {
+  return request({
+    url: '/process/processValidationAndSummary/latest',
+    method: 'get'
+  })
+}
