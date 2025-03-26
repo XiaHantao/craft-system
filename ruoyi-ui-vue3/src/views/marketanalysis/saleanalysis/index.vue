@@ -105,7 +105,12 @@
           <el-input v-model="form.orderNumber" placeholder="请输入订单号" />
         </el-form-item>
         <el-form-item label="接单日期" prop="orderAcceptanceDate">
-          <el-input v-model="form.orderAcceptanceDate" placeholder="请输入接单日期" />
+          <el-date-picker clearable
+            v-model="form.orderAcceptanceDate"
+            type="date"
+            value-format="YYYY-MM-DD"
+            placeholder="请选择接单日期">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="车型" prop="vehicleType">
           <el-input v-model="form.vehicleType" placeholder="请输入车型" />
@@ -153,22 +158,47 @@
           <el-input v-model="form.phoneNumber" placeholder="请输入电话" />
         </el-form-item>
         <el-form-item label="订单系统交货期" prop="deliveryTime">
-          <el-input v-model="form.deliveryTime" placeholder="请输入订单系统交货期" />
+          <el-date-picker clearable
+            v-model="form.deliveryTime"
+            type="date"
+            value-format="YYYY-MM-DD"
+            placeholder="请选择订单系统交货期">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="计划发车日期" prop="planDepartureDate">
-          <el-input v-model="form.planDepartureDate" placeholder="请输入计划发车日期" />
+          <el-date-picker clearable
+            v-model="form.planDepartureDate"
+            type="date"
+            value-format="YYYY-MM-DD"
+            placeholder="请选择计划发车日期">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="实际发车日期" prop="actualDepartureDate">
-          <el-input v-model="form.actualDepartureDate" placeholder="请输入实际发车日期" />
+          <el-date-picker clearable
+            v-model="form.actualDepartureDate"
+            type="date"
+            value-format="YYYY-MM-DD"
+            placeholder="请选择实际发车日期">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="系统交货期" prop="systemDeliveryTime">
-          <el-input v-model="form.systemDeliveryTime" placeholder="请输入系统交货期" />
+          <el-date-picker clearable
+            v-model="form.systemDeliveryTime"
+            type="date"
+            value-format="YYYY-MM-DD"
+            placeholder="请选择系统交货期">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="交货单号" prop="deliveryOrderNumber">
           <el-input v-model="form.deliveryOrderNumber" placeholder="请输入交货单号" />
         </el-form-item>
         <el-form-item label="技术准备完成时间" prop="completionTime">
-          <el-input v-model="form.completionTime" placeholder="请输入技术准备完成时间" />
+          <el-date-picker clearable
+            v-model="form.completionTime"
+            type="date"
+            value-format="YYYY-MM-DD"
+            placeholder="请选择技术准备完成时间">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="兑现率" prop="redemptionRate">
           <el-input v-model="form.redemptionRate" placeholder="请输入兑现率" />

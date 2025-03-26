@@ -1,62 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- 车型选择区域 -->
-    <div class="compare-selectors">
-      <div class="selector-item" v-for="n in 2" :key="n">
-        <div class="mode-switcher">
-          <el-button 
-            size="mini" 
-            @click="switchMode(n)"
-            :type="inputMode[n-1] ? 'success' : ''"
-          >
-            {{ inputMode[n-1] ? '切换选择' : '手动输入' }}
-          </el-button>
-        </div>
-
-        <!-- 下拉模式 -->
-        <div v-if="!inputMode[n-1]" class="select-wrapper">
-          <el-select
-            v-model="selectedProducts[n-1]"
-            filterable
-            remote
-            :placeholder="`请选择车型-制造商作为车型${n}`"
-            :remote-method="searchProducts"
-            @change="val => handleSelectChange(n, val)"
-          >
-            <el-option
-              v-for="item in productOptions"
-              :key="item.id"
-              :label="`${item.vehicleType} - ${item.manufacturer}`"
-              :value="item.id"
-            />
-          </el-select>
-        </div>
-
-        <!-- 输入模式 -->
-        <div v-else class="manual-input">
-          <el-input
-            v-model="manualInputs[n-1].vehicleType"
-            placeholder="输入车型"
-            style="margin-bottom: 5px"
-          />
-          <el-input
-            v-model="manualInputs[n-1].manufacturer"
-            placeholder="输入制造商"
-            style="margin-bottom: 5px"
-          />
-          <el-button
-            type="primary"
-            size="mini"
-            @click="handleManualConfirm(n)"
-          >确认</el-button>
-          <el-button
-            size="mini"
-            @click="inputMode[n-1] = false"
-          >取消</el-button>
-        </div>
-      </div>
-    </div>
-
     <!-- 参数选择区域 -->
     <div class="param-selector compact">
       <div class="selector-title">对比参数选择：</div>
@@ -80,6 +23,67 @@
         >
           生成图表
         </el-button>
+      </div>
+    </div>
+
+    <!-- 对比选择框 -->
+    <div class="compare-selectors">
+      <div class="selector-item" v-for="n in 2" :key="n">
+        <div class="selector-container">
+          <div class="mode-switcher">
+            <el-button 
+              size="mini" 
+              @click="switchMode(n)"
+              :type="inputMode[n-1] ? 'success' : ''"
+            >
+              {{ inputMode[n-1] ? '切换选择' : '手动输入' }}
+            </el-button>
+          </div>
+
+          <!-- 下拉模式 -->
+          <div v-if="!inputMode[n-1]" class="input-wrapper">
+            <el-select
+              v-model="selectedProducts[n-1]"
+              filterable
+              remote
+              :placeholder="`请选择车型-制造商作为车型${n}`"
+              :remote-method="searchProducts"
+              @change="val => handleSelectChange(n, val)"
+            >
+              <el-option
+                v-for="item in productOptions"
+                :key="item.id"
+                :label="`${item.vehicleType} - ${item.manufacturer}`"
+                :value="item.id"
+              />
+            </el-select>
+          </div>
+
+          <!-- 输入模式 -->
+          <div v-else class="input-wrapper">
+            <el-input
+              v-model="manualInputs[n-1].vehicleType"
+              placeholder="输入车型"
+              style="margin-bottom: 5px"
+            />
+            <el-input
+              v-model="manualInputs[n-1].manufacturer"
+              placeholder="输入制造商"
+              style="margin-bottom: 5px"
+            />
+            <div class="btn-group">
+              <el-button
+                type="primary"
+                size="mini"
+                @click="handleManualConfirm(n)"
+              >确认</el-button>
+              <el-button
+                size="mini"
+                @click="inputMode[n-1] = false"
+              >取消</el-button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -305,7 +309,6 @@ export default {
 </script>
 
 <style scoped>
-/* 原有样式保持不变 */
 .app-container {
   max-width: 1200px;
   margin: 20px auto;
@@ -320,6 +323,32 @@ export default {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
+.param-selector.compact .selector-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.compact-checkbox-group {
+  flex: 1;
+  display: flex;
+  gap: 15px;
+  row-gap: 12px;
+  flex-wrap: wrap;
+}
+
+.selector-title {
+  font-weight: 600;
+  color: #606266;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.confirm-btn {
+  margin-left: auto;
+  min-width: 80px;
+}
+
 .compare-selectors {
   display: flex;
   gap: 20px;
@@ -329,53 +358,68 @@ export default {
 
 .selector-item {
   flex: 1;
-  min-width: 300px;
+  min-width: 500px;
 }
 
-.el-select {
-  width: 400px !important; /* 覆盖原有100%宽度 */
+.selector-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
 }
 
-.compact-checkbox-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.compact-checkbox-group ::v-deep .el-checkbox {
-  margin-right: 0;
-  min-width: 180px;
-}
-
-.confirm-btn {
-  margin-left: 15px;
-}
-
-.manual-input {
-  display: flex;
-  flex-direction: column;
-}
-
 .mode-switcher {
-  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.input-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.el-select {
+  width: 100% !important;
+}
+
+.btn-group {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
 }
 
 @media (max-width: 768px) {
-  [ref="chartContainer"] {
-    width: 95% !important;
-    height: 300px !important;
+  .app-container {
+    padding: 0 10px;
   }
   
   .param-selector {
     padding: 12px;
   }
   
+  .compact-checkbox-group {
+    gap: 10px !important;
+  }
+  
   .selector-item {
     min-width: 100%;
   }
-  .param-selector {
-    margin-bottom: 15px;
+  
+  .selector-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .mode-switcher {
+    margin-bottom: 10px;
+  }
+  
+  .input-wrapper {
+    width: 100%;
+  }
+
+  [ref="chartContainer"] {
+    width: 95% !important;
+    height: 300px !important;
   }
 }
 </style>

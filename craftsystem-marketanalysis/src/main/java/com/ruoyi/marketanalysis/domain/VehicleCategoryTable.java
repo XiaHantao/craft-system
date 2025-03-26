@@ -1,7 +1,7 @@
 package com.ruoyi.marketanalysis.domain;
 
 import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 车型分类对象 vehicle_category_table
  * 
  * @author ruoyi
- * @date 2025-03-18
+ * @date 2025-03-25
  */
 public class VehicleCategoryTable extends BaseEntity
 {
@@ -81,23 +81,9 @@ public class VehicleCategoryTable extends BaseEntity
     private String developmentClass;
 
     /** 上市时间 */
-    @Excel(name = "上市时间")
-    private String releaseDate;
-
-    /** 备用字段1 */
-    private String beiyongOne;
-
-    /** 备用字段2 */
-    private String beiyongTwo;
-
-    /** 备用字段3 */
-    private String beiyongThree;
-
-    /** 备用字段4 */
-    private Date beiyongFour;
-
-    /** 备用字段5 */
-    private Date beiyongFive;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "上市时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date releaseDate;
 
     public void setId(Long id) 
     {
@@ -243,59 +229,14 @@ public class VehicleCategoryTable extends BaseEntity
     {
         return developmentClass;
     }
-    public void setReleaseDate(String releaseDate) 
+    public void setReleaseDate(Date releaseDate) 
     {
         this.releaseDate = releaseDate;
     }
 
-    public String getReleaseDate() 
+    public Date getReleaseDate() 
     {
         return releaseDate;
-    }
-    public void setBeiyongOne(String beiyongOne) 
-    {
-        this.beiyongOne = beiyongOne;
-    }
-
-    public String getBeiyongOne() 
-    {
-        return beiyongOne;
-    }
-    public void setBeiyongTwo(String beiyongTwo) 
-    {
-        this.beiyongTwo = beiyongTwo;
-    }
-
-    public String getBeiyongTwo() 
-    {
-        return beiyongTwo;
-    }
-    public void setBeiyongThree(String beiyongThree) 
-    {
-        this.beiyongThree = beiyongThree;
-    }
-
-    public String getBeiyongThree() 
-    {
-        return beiyongThree;
-    }
-    public void setBeiyongFour(Date beiyongFour) 
-    {
-        this.beiyongFour = beiyongFour;
-    }
-
-    public Date getBeiyongFour() 
-    {
-        return beiyongFour;
-    }
-    public void setBeiyongFive(Date beiyongFive) 
-    {
-        this.beiyongFive = beiyongFive;
-    }
-
-    public Date getBeiyongFive() 
-    {
-        return beiyongFive;
     }
 
     @Override
@@ -318,13 +259,6 @@ public class VehicleCategoryTable extends BaseEntity
             .append("businessPersonnel", getBusinessPersonnel())
             .append("developmentClass", getDevelopmentClass())
             .append("releaseDate", getReleaseDate())
-            .append("createTime", getCreateTime())
-            .append("updateTime", getUpdateTime())
-            .append("beiyongOne", getBeiyongOne())
-            .append("beiyongTwo", getBeiyongTwo())
-            .append("beiyongThree", getBeiyongThree())
-            .append("beiyongFour", getBeiyongFour())
-            .append("beiyongFive", getBeiyongFive())
             .toString();
     }
 }

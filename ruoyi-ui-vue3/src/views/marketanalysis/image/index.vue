@@ -47,8 +47,8 @@
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
             v-hasPermi="['marketanalysis:image:remove']">删除</el-button>
             <!-- <el-button size="mini" type="text" icon="Download" @click="download.resource(scope.row.file)">下载</el-button> -->
-          <el-button link type="info" icon="View" @click="handlePreview(scope.row)">预览视频</el-button>
-          <el-button link type="info" icon="View" @click="handlePreviewImage(scope.row)">预览图片</el-button>
+          <el-button link type="primary" icon="View" @click="handlePreview(scope.row)">预览视频</el-button>
+          <el-button link type="primary" icon="View" @click="handlePreviewImage(scope.row)">预览图片</el-button>
         </template>
       </el-table-column>
     </el-table>

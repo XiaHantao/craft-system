@@ -25,7 +25,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 车型分类Controller
  * 
  * @author ruoyi
- * @date 2025-03-18
+ * @date 2025-03-25
  */
 @RestController
 @RequestMapping("/marketanalysis/vehicletype")

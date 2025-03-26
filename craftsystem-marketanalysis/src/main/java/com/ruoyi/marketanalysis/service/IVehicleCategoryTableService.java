@@ -7,7 +7,7 @@ import com.ruoyi.marketanalysis.domain.VehicleCategoryTable;
  * 车型分类Service接口
  * 
  * @author ruoyi
- * @date 2025-03-18
+ * @date 2025-03-25
  */
 public interface IVehicleCategoryTableService 
 {

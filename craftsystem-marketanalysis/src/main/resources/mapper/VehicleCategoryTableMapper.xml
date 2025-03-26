@@ -22,17 +22,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="businessPersonnel"    column="business_personnel"    />
         <result property="developmentClass"    column="development_class"    />
         <result property="releaseDate"    column="release_date"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="beiyongOne"    column="beiyong_one"    />
-        <result property="beiyongTwo"    column="beiyong_two"    />
-        <result property="beiyongThree"    column="beiyong_three"    />
-        <result property="beiyongFour"    column="beiyong_four"    />
-        <result property="beiyongFive"    column="beiyong_five"    />
     </resultMap>
 
     <sql id="selectVehicleCategoryTableVo">
-        select id, vehicle_category, vehicle_type, series, tonnage, engine_type, enginebattery_capacity, power_rating, torque_rotationalspeed, fuel_injection_system, effluent_standard, valveplate_number, battery_capacity, tire_specification, business_personnel, development_class, release_date, create_time, update_time, beiyong_one, beiyong_two, beiyong_three, beiyong_four, beiyong_five from vehicle_category_table
+        select id, vehicle_category, vehicle_type, series, tonnage, engine_type, enginebattery_capacity, power_rating, torque_rotationalspeed, fuel_injection_system, effluent_standard, valveplate_number, battery_capacity, tire_specification, business_personnel, development_class, release_date from vehicle_category_table
     </sql>
 
     <select id="selectVehicleCategoryTableList" parameterType="VehicleCategoryTable" resultMap="VehicleCategoryTableResult">
@@ -51,8 +44,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertVehicleCategoryTable" parameterType="VehicleCategoryTable" useGeneratedKeys="true" keyProperty="id">
         insert into vehicle_category_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="vehicleCategory != null">vehicle_category,</if>
-            <if test="vehicleType != null">vehicle_type,</if>
+            <if test="vehicleCategory != null and vehicleCategory != ''">vehicle_category,</if>
+            <if test="vehicleType != null and vehicleType != ''">vehicle_type,</if>
             <if test="series != null">series,</if>
             <if test="tonnage != null">tonnage,</if>
             <if test="engineType != null">engine_type,</if>
@@ -67,17 +60,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="businessPersonnel != null">business_personnel,</if>
             <if test="developmentClass != null">development_class,</if>
             <if test="releaseDate != null">release_date,</if>
-            <if test="createTime != null">create_time,</if>
-            <if test="updateTime != null">update_time,</if>
-            <if test="beiyongOne != null">beiyong_one,</if>
-            <if test="beiyongTwo != null">beiyong_two,</if>
-            <if test="beiyongThree != null">beiyong_three,</if>
-            <if test="beiyongFour != null">beiyong_four,</if>
-            <if test="beiyongFive != null">beiyong_five,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="vehicleCategory != null">#{vehicleCategory},</if>
-            <if test="vehicleType != null">#{vehicleType},</if>
+            <if test="vehicleCategory != null and vehicleCategory != ''">#{vehicleCategory},</if>
+            <if test="vehicleType != null and vehicleType != ''">#{vehicleType},</if>
             <if test="series != null">#{series},</if>
             <if test="tonnage != null">#{tonnage},</if>
             <if test="engineType != null">#{engineType},</if>
@@ -92,21 +78,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="businessPersonnel != null">#{businessPersonnel},</if>
             <if test="developmentClass != null">#{developmentClass},</if>
             <if test="releaseDate != null">#{releaseDate},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-            <if test="beiyongOne != null">#{beiyongOne},</if>
-            <if test="beiyongTwo != null">#{beiyongTwo},</if>
-            <if test="beiyongThree != null">#{beiyongThree},</if>
-            <if test="beiyongFour != null">#{beiyongFour},</if>
-            <if test="beiyongFive != null">#{beiyongFive},</if>
          </trim>
     </insert>
 
     <update id="updateVehicleCategoryTable" parameterType="VehicleCategoryTable">
         update vehicle_category_table
         <trim prefix="SET" suffixOverrides=",">
-            <if test="vehicleCategory != null">vehicle_category = #{vehicleCategory},</if>
-            <if test="vehicleType != null">vehicle_type = #{vehicleType},</if>
+            <if test="vehicleCategory != null and vehicleCategory != ''">vehicle_category = #{vehicleCategory},</if>
+            <if test="vehicleType != null and vehicleType != ''">vehicle_type = #{vehicleType},</if>
             <if test="series != null">series = #{series},</if>
             <if test="tonnage != null">tonnage = #{tonnage},</if>
             <if test="engineType != null">engine_type = #{engineType},</if>
@@ -121,13 +100,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="businessPersonnel != null">business_personnel = #{businessPersonnel},</if>
             <if test="developmentClass != null">development_class = #{developmentClass},</if>
             <if test="releaseDate != null">release_date = #{releaseDate},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
-            <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="beiyongOne != null">beiyong_one = #{beiyongOne},</if>
-            <if test="beiyongTwo != null">beiyong_two = #{beiyongTwo},</if>
-            <if test="beiyongThree != null">beiyong_three = #{beiyongThree},</if>
-            <if test="beiyongFour != null">beiyong_four = #{beiyongFour},</if>
-            <if test="beiyongFive != null">beiyong_five = #{beiyongFive},</if>
         </trim>
         where id = #{id}
     </update>
