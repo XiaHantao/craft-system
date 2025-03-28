@@ -99,7 +99,7 @@
       <el-table-column label="新产品计划名称" align="center" prop="name" />
       <el-table-column label="生产计划" align="center" prop="planfile" >
         <template v-slot:default="scope">
-          <el-button v-if="scope.row.planfile" icon="Download" @click="downloadFiles(scope.row.planfile)"></el-button>
+          <el-button v-if="scope.row.planfile" icon="Download" @click="downloadFiles(scope.row)"></el-button>
         </template> 
       </el-table-column>  
       <el-table-column label="技术科确认" align="center" prop="technicalcheck" >
@@ -574,34 +574,36 @@ function cancelCheck() {
 }
 
 /** 多文件下载 */
+/** 多文件下载 */
+const formatFileUrl = (url) => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_API;
+  if (url.startsWith('http')) return url;
+  return `${baseUrl}/${url}`;
+};
+
 function downloadFiles(urls) {
-  // 如果 urls 是字符串，则按逗号分隔为数组
+  // 统一处理输入为数组
   if (typeof urls === 'string') {
-    urls = urls.split(',');
+    urls = decodeURIComponent(urls).split(',').map(url => url.trim());
   }
-  // 确保 urls 是数组
+  
+  // 确保是数组格式
   if (!Array.isArray(urls)) {
     console.error('urls 必须是数组或逗号分隔的字符串');
     return;
   }
-  // 遍历每个 URL，下载并保存文件
+
+  // 遍历下载每个文件
   urls.forEach(url => {
-    fetch(url)
-      .then(response => response.blob())
-      .then(blob => {
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.setAttribute('download', decodeURIComponent(url.split('/').pop())); // 解码文件名
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(downloadUrl);
-      })
-      .catch(error => console.error('Download error:', error));
+    const formattedUrl = formatFileUrl(url);
+    const link = document.createElement('a');
+    link.href = formattedUrl;
+    link.download = decodeURIComponent(url.split('/').pop());
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   });
 }
-
 // 监听试制记录按钮路由，实时跳转
 watch(
   () => proxy.$route.query,  

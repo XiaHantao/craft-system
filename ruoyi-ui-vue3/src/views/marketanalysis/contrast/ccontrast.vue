@@ -24,7 +24,7 @@
           :remote-method="query => searchManufacturers(n, query)"
           :loading="loadingManufacturer"
           :disabled="!selectedVehicleType[n-1]"
-          :placeholder="selectedVehicleType[n-1] ? '请输入制造商名称' : '请先选择车类'"
+          :placeholder="selectedVehicleType[n-1] ? '请选择制造商' : '请先选择车类'"
           style="width: 100%"
           clearable
           @change="handleManufacturerChange"

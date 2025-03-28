@@ -21,7 +21,7 @@ public interface CategoryoneStandardConfigurationTableMapper
 
     /**
      * 查询一类车标准配置列表
-     * 
+     *
      * @param categoryoneStandardConfigurationTable 一类车标准配置
      * @return 一类车标准配置集合
      */

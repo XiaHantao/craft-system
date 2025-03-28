@@ -95,7 +95,7 @@
       <el-table-column label="物料名称" align="center" prop="materialName" />
       <el-table-column label="BOM文件" align="center" prop="materialFilePath">
         <template v-slot:default="scope">
-          <el-button v-if="scope.row.materialFilePath" icon="Download" @click="downloadFile(scope.row.materialFilePath)"></el-button>
+          <el-button v-if="scope.row.materialFilePath" icon="Download" @click="downloadFiles(scope.row.materialFilePath)"></el-button>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remarks" />
@@ -368,21 +368,35 @@ function handleExport() {
   }, `processReviewTable_${new Date().getTime()}.xlsx`)
 }
 
-/** 文件下载 */
-function downloadFile(url) {
-  fetch(url)
-      .then(response => response.blob())
-      .then(blob => {
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.setAttribute('download', decodeURIComponent(url.split('/').pop())); // 解码文件名
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(downloadUrl);
-      })
-      .catch(error => console.error('Download error:', error));
+/** 多文件下载 */
+const formatFileUrl = (url) => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_API;
+  if (url.startsWith('http')) return url;
+  return `${baseUrl}/${url}`;
+};
+
+function downloadFiles(urls) {
+  // 统一处理输入为数组
+  if (typeof urls === 'string') {
+    urls = decodeURIComponent(urls).split(',').map(url => url.trim());
+  }
+  
+  // 确保是数组格式
+  if (!Array.isArray(urls)) {
+    console.error('urls 必须是数组或逗号分隔的字符串');
+    return;
+  }
+
+  // 遍历下载每个文件
+  urls.forEach(url => {
+    const formattedUrl = formatFileUrl(url);
+    const link = document.createElement('a');
+    link.href = formattedUrl;
+    link.download = decodeURIComponent(url.split('/').pop());
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
 }
 
 /** 工艺审查文件上传 */
