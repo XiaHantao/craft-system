@@ -320,20 +320,8 @@ function getStatusType(status) {
 
 
 /** 文件下载 */
-function downloadFile(url) {
-  fetch(url)
-      .then(response => response.blob())
-      .then(blob => {
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.setAttribute('download', decodeURIComponent(url.split('/').pop())); // 解码文件名
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(downloadUrl);
-      })
-      .catch(error => console.error('Download error:', error));
+function downloadFile(filePath) {
+  proxy.$download.resource(filePath);
 }
 
 

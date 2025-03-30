@@ -149,10 +149,14 @@ public class CommonController
             }
             // 本地资源路径
             String localPath = RuoYiConfig.getProfile();
+            System.out.println("localPath====>"+localPath);
             // 数据库资源地址
             String downloadPath = localPath + StringUtils.substringAfter(resource, Constants.RESOURCE_PREFIX);
-            // 下载名称
-            String downloadName = StringUtils.substringAfterLast(downloadPath, "/");
+            System.out.println("downloadPath====>"+downloadPath);
+            // 提取文件名部分，去除日期时间戳
+            String  downloadName = StringUtils.substringAfterLast(downloadPath, "/");
+            downloadName = downloadName.replaceAll("_\\d{14}[A-Z0-9]+", "");
+            System.out.println("downloadName====>"+downloadName);
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             FileUtils.setAttachmentResponseHeader(response, downloadName);
             FileUtils.writeBytes(downloadPath, response.getOutputStream());

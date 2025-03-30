@@ -314,7 +314,7 @@ function handleExport() {
 
 /** 文件下载 */
 function downloadFile(filePath) {
-  proxy.$download.resource(filePath); // 使用 download.js 中的 name 方法
+  proxy.$download.resource(filePath);
 }
 
 

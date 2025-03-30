@@ -58,3 +58,10 @@ export function getLatestRecord() {
     method: 'get'
   })
 }
+
+export function getLatestRecord02(tableName) {
+  return request({
+    url: '/process/processValidationAndSummary/latest02/'+tableName,
+    method: 'get'
+  })
+}
