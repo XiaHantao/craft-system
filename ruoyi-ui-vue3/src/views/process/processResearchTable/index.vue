@@ -83,7 +83,6 @@
 
     <el-table v-loading="loading" :data="processResearchTableList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
       <el-table-column label="车型" align="center" prop="vehicleModel" />
       <el-table-column label="报告标题" align="center" prop="reportTitle" />
       <el-table-column label="文件下载" align="center" prop="filePath">

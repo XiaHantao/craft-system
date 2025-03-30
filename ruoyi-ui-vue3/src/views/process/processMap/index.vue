@@ -75,7 +75,6 @@
 
     <el-table v-loading="loading" :data="processMapList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
       <el-table-column label="工艺地图名称" align="center" prop="craftMapName" />
       <el-table-column label="工艺地图路径" align="center" prop="craftMapPath">
         <template v-slot:default="scope">
