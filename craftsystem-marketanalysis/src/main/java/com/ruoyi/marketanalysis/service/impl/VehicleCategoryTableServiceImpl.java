@@ -1,7 +1,6 @@
 package com.ruoyi.marketanalysis.service.impl;
 
 import java.util.List;
-import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.marketanalysis.mapper.VehicleCategoryTableMapper;
@@ -12,7 +11,7 @@ import com.ruoyi.marketanalysis.service.IVehicleCategoryTableService;
  * 车型分类Service业务层处理
  * 
  * @author ruoyi
- * @date 2025-03-18
+ * @date 2025-03-25
  */
 @Service
 public class VehicleCategoryTableServiceImpl implements IVehicleCategoryTableService 
@@ -53,7 +52,6 @@ public class VehicleCategoryTableServiceImpl implements IVehicleCategoryTableSer
     @Override
     public int insertVehicleCategoryTable(VehicleCategoryTable vehicleCategoryTable)
     {
-        vehicleCategoryTable.setCreateTime(DateUtils.getNowDate());
         return vehicleCategoryTableMapper.insertVehicleCategoryTable(vehicleCategoryTable);
     }
 
@@ -66,7 +64,6 @@ public class VehicleCategoryTableServiceImpl implements IVehicleCategoryTableSer
     @Override
     public int updateVehicleCategoryTable(VehicleCategoryTable vehicleCategoryTable)
     {
-        vehicleCategoryTable.setUpdateTime(DateUtils.getNowDate());
         return vehicleCategoryTableMapper.updateVehicleCategoryTable(vehicleCategoryTable);
     }
 

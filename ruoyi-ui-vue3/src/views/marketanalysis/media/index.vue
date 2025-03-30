@@ -59,7 +59,6 @@
 
     <el-table v-loading="loading" :data="mediaList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="编号" align="center" prop="id" /> -->
       <el-table-column label="文件名称" align="center" prop="fileName" />
       <el-table-column label="文件类型" align="center" prop="fileType" />
       <el-table-column label="备注" align="center" prop="notes" />
@@ -72,9 +71,8 @@
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:media:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:media:remove']">删除</el-button>
-          <!-- <el-button size="mini" type="text" icon="Download"
-            @click="$download.resource(scope.row.file, false)">下载</el-button> -->
-            <el-button link type="primary" icon="View" @click="handlePreview(scope.row)">预览图片</el-button>
+          <el-button link type="primary" icon="View" @click="handlePreviewVideo(scope.row)">预览视频</el-button>
+          <el-button link type="primary" icon="Picture" @click="handlePreviewImage(scope.row)">预览图片</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -86,12 +84,56 @@
       v-model:limit="queryParams.pageSize"
       @pagination="getList"
     />
-     <!-- 新增图片预览对话框 -->
-     <el-dialog v-model="previewVisible" title="图片预览" width="60%">
-      <img :src="previewImageUrl" style="width: 100%; max-height: 70vh; object-fit: contain;" alt="预览图片" />
+
+    <!-- 视频预览对话框 -->
+    <el-dialog v-model="previewOpen" title="视频预览" width="60%">
+      <video :src="previewVideoUrl" controls autoplay style="width: 100%;" class="video-preview">
+        您的浏览器不支持视频播放
+      </video>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="previewOpen = false">关闭</el-button>
+        </span>
+      </template>
     </el-dialog>
 
-    <!-- 添加或修改多媒体文件对话框 -->
+    <!-- 图片预览对话框 -->
+    <el-dialog v-model="previewImageOpen" title="图片预览" width="60%">
+      <img :src="previewImageUrl" style="width: 100%; max-height: 70vh; object-fit: contain;" alt="图片预览"
+        @error="handleImageError">
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="previewImageOpen = false">关闭</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
+    <!-- 文件选择对话框 -->
+    <el-dialog v-model="fileSelectVisible" :title="fileSelectTitle" width="500px">
+      <el-scrollbar height="300px">
+        <el-radio-group v-model="selectedFileIndex" class="file-select-group">
+          <el-radio 
+            v-for="(file, index) in filteredFiles" 
+            :key="index" 
+            :label="index"
+            class="file-item"
+          >
+            <div class="file-info">
+              <el-icon class="file-type-icon">
+                <component :is="getFileIcon(file)"/>
+              </el-icon>
+              <span class="file-name">{{ getFileName(file) }}</span>
+            </div>
+          </el-radio>
+        </el-radio-group>
+      </el-scrollbar>
+      <template #footer>
+        <el-button @click="fileSelectVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmPreview">确认预览</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- 新增/修改对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="mediaRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="文件名称" prop="fileName">
@@ -119,9 +161,7 @@
 
 <script setup name="Media">
 import { listMedia, getMedia, delMedia, addMedia, updateMedia } from "@/api/marketanalysis/media/media";
-// 新增预览相关状态
-const previewVisible = ref(false);
-const previewImageUrl = ref('');
+import { getCurrentInstance, ref, reactive, toRefs } from 'vue';
 
 const { proxy } = getCurrentInstance();
 
@@ -134,6 +174,15 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
+const previewOpen = ref(false);
+const previewImageOpen = ref(false);
+const previewVideoUrl = ref("");
+const previewImageUrl = ref("");
+const fileSelectVisible = ref(false);
+const selectedFileIndex = ref(0);
+const currentPreviewType = ref('');
+const filteredFiles = ref([]);
+const fileSelectTitle = ref('请选择预览文件');
 
 const data = reactive({
   form: {},
@@ -153,20 +202,110 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
-/** 预览按钮操作 */
-function handlePreview(row) {
-  const fileExtension = row.file.split('.').pop().toLowerCase();
-  const imageExtensions = ['jpg', 'jpeg', 'png'];
-  
-  if (imageExtensions.includes(fileExtension)) {
-    previewImageUrl.value = row.file; // 假设file字段是完整图片URL
-    previewVisible.value = true;
-  } else {
-    proxy.$modal.msgError('未检测到图片，请检查文件格式！');
+
+// 视频预览相关方法
+const handlePreviewVideo = (row) => {
+  const files = parseFileUrls(row.file);
+  const videoFiles = filterFilesByType(files, ['mp4', 'webm', 'mov']);
+  if (videoFiles.length === 0) {
+    proxy.$modal.msgError('未找到可预览的视频文件');
+    return;
   }
+  handleMultiFilePreview(videoFiles, 'video');
+};
+
+const parseFileUrls = (fileString) => {
+  if (!fileString) return [];
+  return decodeURIComponent(fileString)
+    .split(',')
+    .map(url => url.trim().replace(/^\/+/, ''))
+    .filter(url => url.length > 0);
+};
+
+const filterFilesByType = (files, allowedExtensions) => {
+  return files.filter(file => {
+    const ext = getFileExtension(file).toLowerCase();
+    return allowedExtensions.includes(ext);
+  });
+};
+
+const handleMultiFilePreview = (files, type) => {
+  if (files.length === 1) {
+    type === 'video' ? showVideoPreview(files[0]) : showImagePreview(files[0]);
+  } else {
+    showFileSelection(files, type);
+  }
+};
+
+const showFileSelection = (files, type) => {
+  filteredFiles.value = files;
+  currentPreviewType.value = type;
+  fileSelectTitle.value = `请选择要预览的${type === 'video' ? '视频' : '图片'}（共 ${files.length} 个）`;
+  selectedFileIndex.value = 0;
+  fileSelectVisible.value = true;
+};
+
+const getFileExtension = (url) => {
+  const filename = url.split(/[\\/]/).pop();
+  return filename.split('.').pop() || '';
+};
+
+const getFileName = (url) => {
+  const filename = url.split(/[\\/]/).pop();
+  return filename.split('_').slice(0, -1).join('_');
+};
+
+const getFileIcon = (url) => {
+  const ext = getFileExtension(url).toLowerCase();
+  const iconMap = {
+    mp4: 'VideoPlay', webm: 'VideoPlay', mov: 'VideoPlay',
+    jpg: 'Picture', jpeg: 'Picture', png: 'Picture', gif: 'Picture', webp: 'Picture'
+  };
+  return iconMap[ext] || 'Document';
+};
+
+const showVideoPreview = (fileUrl) => {
+  previewVideoUrl.value = formatFileUrl(fileUrl);
+  previewOpen.value = true;
+};
+
+const confirmPreview = () => {
+  const selectedFile = filteredFiles.value[selectedFileIndex.value];
+  currentPreviewType.value === 'video' 
+    ? showVideoPreview(selectedFile)
+    : showImagePreview(selectedFile);
+  fileSelectVisible.value = false;
+};
+
+const formatFileUrl = (url) => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_API;
+  if (url.startsWith('http')) return url;
+  return `${baseUrl}/${url}`;
+};
+
+// 图片预览相关方法
+function handlePreviewImage(row) {
+  const files = parseFileUrls(row.file);
+  const imageFiles = filterFilesByType(files, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+  if (imageFiles.length === 0) {
+    proxy.$modal.msgError('未找到可预览的图片文件');
+    return;
+  }
+  handleMultiFilePreview(imageFiles, 'image');
 }
 
+function showImagePreview(fileUrl) {
+  previewImageUrl.value = formatFileUrl(fileUrl);
+  previewImageOpen.value = true;
+}
 
+function handleImageError(event) {
+  proxy.$modal.msgError('图片加载失败！');
+  console.error('图片加载错误:', event);
+  previewImageOpen.value = false;
+}
+
+// 其他原有方法保持不变
 /** 查询多媒体文件列表 */
 function getList() {
   loading.value = true;
@@ -177,13 +316,11 @@ function getList() {
   });
 }
 
-// 取消按钮
 function cancel() {
   open.value = false;
   reset();
 }
 
-// 表单重置
 function reset() {
   form.value = {
     id: null,
@@ -195,33 +332,28 @@ function reset() {
   proxy.resetForm("mediaRef");
 }
 
-/** 搜索按钮操作 */
 function handleQuery() {
   queryParams.value.pageNum = 1;
   getList();
 }
 
-/** 重置按钮操作 */
 function resetQuery() {
   proxy.resetForm("queryRef");
   handleQuery();
 }
 
-// 多选框选中数据
 function handleSelectionChange(selection) {
   ids.value = selection.map(item => item.id);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
 
-/** 新增按钮操作 */
 function handleAdd() {
   reset();
   open.value = true;
   title.value = "添加多媒体文件";
 }
 
-/** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
   const _id = row.id || ids.value
@@ -232,7 +364,6 @@ function handleUpdate(row) {
   });
 }
 
-/** 提交按钮 */
 function submitForm() {
   proxy.$refs["mediaRef"].validate(valid => {
     if (valid) {
@@ -253,7 +384,6 @@ function submitForm() {
   });
 }
 
-/** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
   proxy.$modal.confirm('是否确认删除多媒体文件编号为"' + _ids + '"的数据项？').then(function() {
@@ -264,39 +394,62 @@ function handleDelete(row) {
   }).catch(() => {});
 }
 
-/** 导出按钮操作 */
 function handleExport() {
   proxy.download('marketanalysis/media/export', {
     ...queryParams.value
   }, `media_${new Date().getTime()}.xlsx`)
 }
-/** 多文件下载 */
+
 function downloadFiles(urls) {
-  // 如果 urls 是字符串，则按逗号分隔为数组
   if (typeof urls === 'string') {
-    urls = urls.split(',');
+    urls = decodeURIComponent(urls).split(',').map(url => url.trim());
   }
-  // 确保 urls 是数组
+  
   if (!Array.isArray(urls)) {
     console.error('urls 必须是数组或逗号分隔的字符串');
     return;
   }
-  // 遍历每个 URL，下载并保存文件
+
   urls.forEach(url => {
-    fetch(url)
-      .then(response => response.blob())
-      .then(blob => {
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.setAttribute('download', decodeURIComponent(url.split('/').pop())); // 解码文件名
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(downloadUrl);
-      })
-      .catch(error => console.error('Download error:', error));
+    const formattedUrl = formatFileUrl(url);
+    const link = document.createElement('a');
+    link.href = formattedUrl;
+    link.download = decodeURIComponent(url.split('/').pop());
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   });
 }
+
 getList();
 </script>
+
+<style scoped>
+.file-select-group {
+  width: 100%;
+}
+.file-item {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+}
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.file-type-icon {
+  font-size: 20px;
+  color: #409eff;
+}
+.file-name {
+  flex: 1;
+  word-break: break-all;
+}
+.video-preview {
+  background-color: #000;
+  border-radius: 4px;
+}
+</style>

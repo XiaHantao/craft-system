@@ -233,32 +233,35 @@ function handleExport() {
     ...queryParams.value
   }, `report_${new Date().getTime()}.xlsx`)
 }
+
 /** 多文件下载 */
+const formatFileUrl = (url) => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_API;
+  if (url.startsWith('http')) return url;
+  return `${baseUrl}/${url}`;
+};
+
 function downloadFiles(urls) {
-  // 如果 urls 是字符串，则按逗号分隔为数组
+  // 统一处理输入为数组
   if (typeof urls === 'string') {
-    urls = urls.split(',');
+    urls = decodeURIComponent(urls).split(',').map(url => url.trim());
   }
-  // 确保 urls 是数组
+  
+  // 确保是数组格式
   if (!Array.isArray(urls)) {
     console.error('urls 必须是数组或逗号分隔的字符串');
     return;
   }
-  // 遍历每个 URL，下载并保存文件
+
+  // 遍历下载每个文件
   urls.forEach(url => {
-    fetch(url)
-      .then(response => response.blob())
-      .then(blob => {
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.setAttribute('download', decodeURIComponent(url.split('/').pop())); // 解码文件名
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(downloadUrl);
-      })
-      .catch(error => console.error('Download error:', error));
+    const formattedUrl = formatFileUrl(url);
+    const link = document.createElement('a');
+    link.href = formattedUrl;
+    link.download = decodeURIComponent(url.split('/').pop());
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   });
 }
 getList();

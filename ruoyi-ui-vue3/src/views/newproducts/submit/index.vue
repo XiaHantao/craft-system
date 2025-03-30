@@ -45,16 +45,16 @@
           v-hasPermi="['newproducts:submit:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+<!--       <el-col :span="1.5">
         <el-button
           type="success"
           plain
           icon="Edit"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['newproducts:submit:edit']"
+          v-hasPermi="['newproducts:submit:edit']"          
         >修改</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -245,7 +245,7 @@
     </el-dialog>
     <!-- 核对对话框 -->
     <el-dialog :title="checkTitle" v-model="openCheckDialog" width="800px" append-to-body>
-      <el-form ref="submitRef" :model="form" :rules="rules" label-width="100px">
+      <el-form ref="checkRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="核对文件" prop="checking">
           <file-upload v-model="form.checking"/>
         </el-form-item>
@@ -284,7 +284,10 @@
 
 <script setup name="Submit">
 import { listSubmit, getSubmit, delSubmit, addSubmit, updateSubmit } from "@/api/newproducts/submit";
-
+import { getLatestRecord02 } from "@/api/newproducts/plan";
+import { getUserProfile, listUser } from "@/api/system/user";
+import {addSysMessageNotification} from "@/api/system/sysMessageNotification";
+import {listDept} from "@/api/system/dept";
 
 const { proxy } = getCurrentInstance();
 const submitList = ref([]);
@@ -299,6 +302,9 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 const checkTitle = ref("");
+const deptList = ref([]);  // 部门列表
+const userList = ref([]);  // 用户列表
+const usernickName = ref(""); // 用户昵称
 
 /* 添加核对结果的可选项
 const checkOptions = ref([
@@ -319,6 +325,9 @@ const data = reactive({
     name: [
       { required: true, message: "新产品名称不能为空", trigger: "blur" }
     ],
+    checked: [
+      { required: true, message: '请选择核对结果', trigger: 'change' }
+    ]    
   }
 });
 
@@ -421,17 +430,92 @@ function submitForm() {
         updateSubmit(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           openEditDialog.value = false;
-          getList();       
+          getList();   
+          
+      // 修改后待核对通知
+      listDept().then(response => {
+        deptList.value = response.data;
+        // 获取用户列表
+        listUser().then(response => {
+          userList.value = response.rows;
+          // 定义目标部门名称
+          const targetDepts = ["质量科", "生产科","老实人科技"];
+          // 过滤出目标部门的ID
+          const targetDeptIds = deptList.value
+            .filter(dept => targetDepts.includes(dept.deptName))
+            .map(dept => dept.deptId);
+          // 过滤出目标部门下的用户
+          const targetUsers = userList.value
+            .filter(user => targetDeptIds.includes(user.deptId));
+          //获取当前用户昵称
+          getUserProfile().then(response => {
+          usernickName.value = response.data.nickName;
+          // 对目标用户执行通知函数
+          targetUsers.forEach(users => {
+            addSysMessageNotification({
+              noticeTitle: "新产品提交审核通知",
+              noticeContent: "有一条新产品提交需要审核，请及时处理。",
+              createdBy: usernickName.value,
+              createdTime: new Date(),
+              executedBy: users.nickName,
+              path: "/newproducts/submit",
+              pathId: form.value.id,
+              status: 0
+            });
+          });
+          });
         });
-      } else {       
+      });         
+
+        });
+      } else {   
+          //reset(); 
           form.value.checked = "待审核";
         addSubmit(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           openEditDialog.value = false;
           getList();
+
+      // 新增后待审核通知
+        getLatestRecord02("newproducts_submit").then(response => {
+        listDept().then(response => {
+          deptList.value = response.data;
+        // 获取用户列表
+        listUser().then(response => {
+          userList.value = response.rows;
+          // 定义目标部门名称
+          const targetDepts = ["质量科","生产科", "老实人科技"];
+          // 过滤出目标部门的ID
+          const targetDeptIds = deptList.value
+            .filter(dept => targetDepts.includes(dept.deptName))
+            .map(dept => dept.deptId);
+          // 过滤出目标部门下的用户
+          const targetUsers = userList.value
+            .filter(user => targetDeptIds.includes(user.deptId));
+          //获取当前用户昵称
+          getUserProfile().then(response => {
+          usernickName.value = response.data.nickName;
+          // 对目标用户执行通知函数
+          targetUsers.forEach(users => {
+            addSysMessageNotification({
+              noticeTitle: "新产品提交审核通知",
+              noticeContent: "有一条新产品提交需要审核，请及时处理。",
+              createdBy: usernickName.value,
+              createdTime: new Date(),
+              executedBy: users.nickName,
+              path: "/newproducts/submit",
+              pathId: form.value.id,
+              status: 0
+            });
+          });
+          });
+        });
+      });
+        });
+
         });
       }
-    }
+    } else{console.log("error submit!!")}
   });
 }
 
@@ -465,15 +549,15 @@ function handleCheck(row) {
 }
 /* 核对提交按钮 */
 function submitCheckForm() {
-  proxy.$refs["submitRef"].validate(valid => {
-  //if(valid){  
+  proxy.$refs["checkRef"].validate(valid => {
+  if(valid){  
     if (form.value.id != null) {
       updateSubmit(form.value).then(response => {
         proxy.$modal.msgSuccess("核对完成");
         openCheckDialog.value = false;
         getList();
       });
-   // } 
+    } 
     }
   });
 }
@@ -502,33 +586,46 @@ function handleRecord(row) {
   }
 }
 /** 多文件下载 */
+const formatFileUrl = (url) => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_API;
+  if (url.startsWith('http')) return url;
+  return `${baseUrl}/${url}`;
+};
+
 function downloadFiles(urls) {
+  // 统一处理输入为数组
   if (typeof urls === 'string') {
-    urls = urls.split(',');
+    urls = decodeURIComponent(urls).split(',').map(url => url.trim());
   }
+  
+  // 确保是数组格式
   if (!Array.isArray(urls)) {
     console.error('urls 必须是数组或逗号分隔的字符串');
     return;
   }
+
+  // 遍历下载每个文件
   urls.forEach(url => {
-    fetch(url)
-      .then(response => response.blob())
-      .then(blob => {
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        // 修改文件名解码逻辑
-        const encodedFilename = url.split('/').pop();
-        const decodedFilename = decodeURIComponent(encodedFilename);
-        link.setAttribute('download', decodedFilename);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(downloadUrl);
-      })
-      .catch(error => console.error('下载错误:', error));
+    const formattedUrl = formatFileUrl(url);
+    const link = document.createElement('a');
+    link.href = formattedUrl;
+    link.download = decodeURIComponent(url.split('/').pop());
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   });
 }
+// 监听通知处理按钮路由，实时跳转
+watch(
+  () => proxy.$route.query,  
+  (newQuery) => {
+    // 更新查询参数
+    queryParams.value.id = newQuery.id;
+    getList(); // 重新查询数据
+  },
+  { immediate: true } // 立即执行一次
+);
+
 
 getList();
 </script>

@@ -199,7 +199,7 @@
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
         <module>craftsystem-marketanalysis</module>
-        <module>ruoyi-NewProducts</module>
+        <module>craft-NewProducts</module>
         <module>ToolingModule</module>
         <module>craft-process</module>
     </modules>

@@ -40,7 +40,6 @@
     <el-table v-loading="loading" :data="costpriceList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="id" align="center" prop="id" /> -->
-      <el-table-column label="制造商" align="center" prop="manufacturer" />
       <el-table-column label="车型" align="center" prop="vehicleType" />
       <el-table-column label="成本（元，不含税）" align="center" prop="cost" />
       <el-table-column label="车体（元，不含税）" align="center" prop="carBody" />
@@ -53,6 +52,7 @@
       <el-table-column label="股份定价（元，含税）" align="center" prop="stockPricing" />
       <el-table-column label="网点售价（元，含税）" align="center" prop="outletSellingPrice" />
       <el-table-column label="毛利（元，含税）" align="center" prop="grossProfitIncludingTax" />
+      <el-table-column label="制造商" align="center" prop="manufacturer" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"

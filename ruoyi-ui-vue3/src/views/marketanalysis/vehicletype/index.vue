@@ -83,7 +83,11 @@
       <el-table-column label="轮胎规格" align="center" prop="tireSpecification" />
       <el-table-column label="业务支持人员" align="center" prop="businessPersonnel" />
       <el-table-column label="开发类别" align="center" prop="developmentClass" />
-      <el-table-column label="上市时间" align="center" prop="releaseDate" />
+      <el-table-column label="上市时间" align="center" prop="releaseDate" width="180">
+        <template #default="scope">
+          <span>{{ parseTime(scope.row.releaseDate, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:vehicletype:edit']">修改</el-button>
@@ -102,7 +106,7 @@
 
     <!-- 添加或修改车型分类对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="vehicletypeRef" :model="form" :rules="rules" label-width="130px">
+      <el-form ref="vehicletypeRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="车类" prop="vehicleCategory">
           <el-input v-model="form.vehicleCategory" placeholder="请输入车类" />
         </el-form-item>
@@ -114,9 +118,6 @@
         </el-form-item>
         <el-form-item label="吨位" prop="tonnage">
           <el-input v-model="form.tonnage" placeholder="请输入吨位" />
-        </el-form-item>
-        <el-form-item label="发动机型号" prop="engineType">
-          <el-input v-model="form.engineType" placeholder="请输入发动机型号" />
         </el-form-item>
         <el-form-item label="发动机电池容量" prop="enginebatteryCapacity">
           <el-input v-model="form.enginebatteryCapacity" placeholder="请输入发动机电池容量" />
@@ -149,7 +150,12 @@
           <el-input v-model="form.developmentClass" placeholder="请输入开发类别" />
         </el-form-item>
         <el-form-item label="上市时间" prop="releaseDate">
-          <el-input v-model="form.releaseDate" placeholder="请输入上市时间" />
+          <el-date-picker clearable
+            v-model="form.releaseDate"
+            type="date"
+            value-format="YYYY-MM-DD"
+            placeholder="请选择上市时间">
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -232,14 +238,7 @@ function reset() {
     tireSpecification: null,
     businessPersonnel: null,
     developmentClass: null,
-    releaseDate: null,
-    createTime: null,
-    updateTime: null,
-    beiyongOne: null,
-    beiyongTwo: null,
-    beiyongThree: null,
-    beiyongFour: null,
-    beiyongFive: null
+    releaseDate: null
   };
   proxy.resetForm("vehicletypeRef");
 }
