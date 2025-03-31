@@ -21,24 +21,45 @@
           >
             {{ inputMode.vehicle ? '切换选择' : '手动输入' }}
           </el-button>
-          <el-select
-            v-if="!inputMode.vehicle"
-            v-model="selectedVehicle"
-            @change="initChart"
-            clearable
-            placeholder="全部车型"
-            filterable
-            class="filter-select"
-          >
-            <el-option v-for="v in vehicleTypes" :key="v" :label="v" :value="v"/>
-          </el-select>
-          <el-input
-            v-else
-            v-model="manualVehicle"
-            placeholder="输入车型"
-            @keyup.enter="handleManualInput('vehicle')"
-            class="manual-input"
-          />
+          <template v-if="!inputMode.vehicle">
+            <el-select
+              v-model="selectedVehicle"
+              @change="initChart"
+              clearable
+              placeholder="全部车型"
+              filterable
+              class="filter-select"
+            >
+              <el-option v-for="v in vehicleTypes" :key="v" :label="v" :value="v"/>
+            </el-select>
+            <el-button
+              v-if="selectedVehicle"
+              type="danger"
+              size="mini"
+              @click="clearSelection('vehicle')"
+              class="clear-btn"
+            >清除</el-button>
+          </template>
+          <div v-else class="input-with-buttons">
+            <el-input
+              v-model="manualVehicle"
+              placeholder="输入车型"
+              class="manual-input"
+            />
+            <div class="action-buttons">
+              <el-button 
+                type="primary" 
+                size="mini" 
+                @click="handleManualInput('vehicle')"
+                class="confirm-btn"
+              >确定</el-button>
+              <el-button 
+                type="danger" 
+                size="mini" 
+                @click="clearInput('vehicle')"
+              >清除</el-button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -54,24 +75,45 @@
           >
             {{ inputMode.branch ? '切换选择' : '手动输入' }}
           </el-button>
-          <el-select
-            v-if="!inputMode.branch"
-            v-model="selectedBranch"
-            @change="initChart"
-            clearable
-            placeholder="全部网点"
-            filterable
-            class="filter-select"
-          >
-            <el-option v-for="b in branches" :key="b" :label="b" :value="b"/>
-          </el-select>
-          <el-input
-            v-else
-            v-model="manualBranch"
-            placeholder="输入网点"
-            @keyup.enter="handleManualInput('branch')"
-            class="manual-input"
-          />
+          <template v-if="!inputMode.branch">
+            <el-select
+              v-model="selectedBranch"
+              @change="initChart"
+              clearable
+              placeholder="全部网点"
+              filterable
+              class="filter-select"
+            >
+              <el-option v-for="b in branches" :key="b" :label="b" :value="b"/>
+            </el-select>
+            <el-button
+              v-if="selectedBranch"
+              type="danger"
+              size="mini"
+              @click="clearSelection('branch')"
+              class="clear-btn"
+            >清除</el-button>
+          </template>
+          <div v-else class="input-with-buttons">
+            <el-input
+              v-model="manualBranch"
+              placeholder="输入网点"
+              class="manual-input"
+            />
+            <div class="action-buttons">
+              <el-button 
+                type="primary" 
+                size="mini" 
+                @click="handleManualInput('branch')"
+                class="confirm-btn"
+              >确定</el-button>
+              <el-button 
+                type="danger" 
+                size="mini" 
+                @click="clearInput('branch')"
+              >清除</el-button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -137,6 +179,25 @@ export default {
       this.initChart();
     },
 
+    clearInput(type) {
+      if (type === 'vehicle') {
+        this.manualVehicle = '';
+      } else {
+        this.manualBranch = '';
+      }
+      this.initChart();
+    },
+
+    // 新增方法：清除选择模式的值
+    clearSelection(type) {
+      if (type === 'vehicle') {
+        this.selectedVehicle = null;
+      } else {
+        this.selectedBranch = null;
+      }
+      this.initChart();
+    },
+
     async initChart() {
       try {
         if (myChart) {
@@ -167,7 +228,6 @@ export default {
 
         myChart = echarts.init(this.$refs.chart);
         myChart.setOption({
-          // 保持原有图表配置不变
           title: {
             text: '销售数据同比环比柱状图',
             left: 'center',
@@ -262,12 +322,29 @@ export default {
   padding: 7px 10px;
 }
 
+.input-with-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 4px;
+}
+
 .filter-select {
   width: 180px;
 }
 
 .manual-input {
   width: 180px;
+}
+
+/* 新增清除按钮样式 */
+.clear-btn {
+  margin-left: 8px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
@@ -278,10 +355,26 @@ export default {
   
   .input-container {
     width: 100%;
+    flex-wrap: nowrap;
   }
   
   .filter-select, .manual-input {
     flex: 1;
+  }
+
+  .input-with-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .action-buttons {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  /* 移动端清除按钮适配 */
+  .clear-btn {
+    margin-left: 4px;
   }
 }
 </style>
