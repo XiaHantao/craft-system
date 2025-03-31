@@ -99,7 +99,7 @@
       <el-table-column label="新产品计划名称" align="center" prop="name" />
       <el-table-column label="生产计划" align="center" prop="planfile" >
         <template v-slot:default="scope">
-          <el-button v-if="scope.row.planfile" icon="Download" @click="downloadFiles(scope.row)"></el-button>
+          <el-button v-if="scope.row.planfile" icon="Download" @click="downloadFiles(scope.row.planfile)"></el-button>
         </template> 
       </el-table-column>  
       <el-table-column label="技术科确认" align="center" prop="technicalcheck" >
