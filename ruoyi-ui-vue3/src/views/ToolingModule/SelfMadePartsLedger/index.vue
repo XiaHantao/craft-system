@@ -215,8 +215,18 @@
         <el-form-item label="模具名称" prop="moldName">
           <el-input v-model="form.moldName" placeholder="请输入模具名称" />
         </el-form-item>
+<!--        <el-form-item label="模具类别" prop="moldCategory">-->
+<!--          <el-input v-model="form.moldCategory" placeholder="请输入模具类别" />-->
+<!--        </el-form-item>-->
         <el-form-item label="模具类别" prop="moldCategory">
-          <el-input v-model="form.moldCategory" placeholder="请输入模具类别" />
+          <el-select v-model="form.moldCategory" placeholder="请选择模具类别" clearable style="width: 50%;">
+            <el-option
+                v-for="item in moldTypeList"
+                :key="item.id"
+                :label="item.label"
+                :value="item.label">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="设计要求" prop="designRequirement">
           <el-input v-model="form.designRequirement" placeholder="请输入设计要求" />
@@ -285,15 +295,24 @@
           <!--        <el-form-item label="审核人" prop="reviewer">-->
           <!--          <el-input v-model="form.reviewer" placeholder="请输入审核人" />-->
           <!--        </el-form-item>-->
-          <el-form-item label="指定审核人">
-            <el-select v-model="form.reviewer" placeholder="请选择审核人">
-              <el-option
-                  v-for="user in userOptions"
-                  :key="user.value"
-                  :label="user.label"
-                  :value="user.value"
-              />
-            </el-select>
+<!--          <el-form-item label="指定审核人">-->
+<!--            <el-select v-model="form.reviewer" placeholder="请选择审核人">-->
+<!--              <el-option-->
+<!--                  v-for="user in userOptions"-->
+<!--                  :key="user.value"-->
+<!--                  :label="user.label"-->
+<!--                  :value="user.value"-->
+<!--              />-->
+<!--            </el-select>-->
+<!--          </el-form-item>-->
+          <el-form-item label="指定审核人" prop="reviewer">
+            <el-cascader
+                v-model="form.reviewer"
+                :options="cascaderOptions"
+                :props="{ expandTrigger: 'hover' }"
+                @change="handleUserChange"
+                placeholder="请选择审核人"
+            />
           </el-form-item>
         </el-form>
         <div style="text-align: right;">
@@ -328,6 +347,10 @@
 import { listSelfMadePartsLedger, getSelfMadePartsLedger, delSelfMadePartsLedger, addSelfMadePartsLedger, updateSelfMadePartsLedger } from "@/api/ToolingModule/SelfMadePartsLedger";
 import {getUserProfile, listUser} from "@/api/system/user";
 import { ElMessage } from 'element-plus';
+import {listMoldTypename} from "@/api/ToolingModule/MoldType";
+import {getLatestRecord02} from "@/api/process/ProcessValidationAndSummary";
+import {addSysMessageNotification} from "@/api/system/sysMessageNotification";
+import {listDept} from "@/api/system/dept";
 
 const { proxy } = getCurrentInstance();
 
@@ -343,9 +366,12 @@ const title = ref("");
 
 const dialogVisible = ref(false);
 const currentStep = ref(1);
-
+const moldTypeList = ref([]); // 存储后端返回的数组
 
 // const userList = ref([]); // 用户信息列表
+const deptList = ref([]);  // 部门列表
+const userList = ref([]);  // 用户列表
+const cascaderOptions = ref([]); // 级联选择器选项
 const userOptions = ref([]); // 验证人列表
 const currentUserId = ref(0); // 假设当前用户 ID
 const userMap = ref({}); // 存储用户 ID -> 姓名 映射
@@ -370,7 +396,26 @@ const data = reactive({
   rules: {
   }
 });
+// 获取工装类型数据
+const fetchMoldTypeList = async () => {
+  try {
+    const response = await listMoldTypename();
+    // moldTypeList.value = response.data || []; // 确保数据是数组
+    moldTypeList.value = response.data.map((item, index) => ({
+      id: index,  // 使用索引作为唯一标识
+      label: item // 使用数组的字符串作为显示的 label
+    }));
+    // console.log('加载中....' , moldTypeList.value)
 
+  } catch (error) {
+    console.error("获取工装类型失败：", error);
+  }
+};
+// 组件加载时调用
+onMounted(() => {
+  fetchMoldTypeList();
+  // console.log('加载中....' , moldTypeList.value)
+});
 const { queryParams, form, rules } = toRefs(data);
 
 const getButtonText = (state) => {
@@ -443,16 +488,17 @@ const fetchUserList = async () => {
   try {
     const response = await listUser();
 
+
     if (response.code === 200 ) {
-      // console.log('API 返回完整数据:', response.rows);
+      console.log('API 返回完整数据:', response.rows);
       // userList.value = response.rows;
       // console.log('API 返回完整数据:', userList.value[0] ); // 调试日志
       userOptions.value = response.rows.map(user => ({
-        label: user.userName,
+        label: user.nickName,
         value: user.userId
       }));
       userMap.value = response.rows.reduce((acc, user) => {
-        acc[user.userId] = user.userName; // 存储 ID 到姓名的映射
+        acc[user.userId] = user.nickName; // 存储 ID 到姓名的映射
         return acc;
       }, {});
     }
@@ -477,16 +523,29 @@ const fecthuser = async () => {
 
   }catch (error){
     ElMessage.error("获取信息失败");
-
   }
-
 };
+
 
 const submitStepOne = () => {
   // console.log("步骤一提交:", form.value);
   form.value.verificationState = '审核中';
   console.log("步骤一提交:", form.value.verificationState);
   updateSelfMadePartsLedger(form.value).then(response => {
+    //新增消息通知
+    // getLatestRecord02("self_made_parts_ledger").then(response => {
+    //   console.log("response3333===>",response)
+      addSysMessageNotification({
+        noticeTitle: "自制件审核通知",
+        noticeContent: "请进行自制件审核",
+        createdBy: form.value.toolUploader,
+        createdTime: form.value.verificationReportUploadTime,
+        executedBy: getReviewerName(form.value.reviewer),
+        path: "/ToolingModule/SelfMadePartsLedger",
+        pathId: form.value.id,
+        status: 0
+      })
+    // })
     // proxy.$modal.msgSuccess("修改成功");
     ElMessage.success("提交成功，进入审核阶段");
     dialogVisible.value = false;
@@ -503,6 +562,39 @@ const submitStepTwo = () => {
     getList();
   });
 };
+
+
+function getDepartments() {
+  // 获取部门列表
+  listDept().then(response => {
+    deptList.value = response.data;
+    console.log("response===>",response);
+    console.log("deptList.value===>",deptList.value);
+    // 获取用户列表
+    listUser().then(response => {
+      userList.value = response.rows;
+      console.log("userList.value===>",userList.value);
+      // 组织级联选择器选项
+      cascaderOptions.value = deptList.value.map(dept => ({
+        value: dept.deptId,
+        label: dept.deptName,
+        children: userList.value.filter(user => user.deptId === dept.deptId).map(user => ({
+          value: user.userId,
+          label: user.nickName
+        }))
+      }));
+    });
+  });
+}
+
+// 选择 improvementReportUploadPerson
+function handleUserChange(value) {
+  if (value && value.length === 2) {
+    form.value.reviewer = value[1];
+  } else {
+    form.value.reviewer = null;
+  }
+}
 
 //预览文件
 function previewFile(fileUrl) {
@@ -521,6 +613,7 @@ function getList() {
     total.value = Number(response.total);
     loading.value = false;
   });
+  getDepartments();
 }
 
 // 取消按钮
