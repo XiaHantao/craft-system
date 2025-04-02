@@ -143,7 +143,7 @@
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:plan:edit']" 
           v-if="scope.row.technicalcheck != '通过' || scope.row.qualitycheck != '通过' || scope.row.securitycheck !='通过'">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:plan:remove']">删除</el-button>
-          <el-button link type="primary" icon="Check" @click="handleCheck(scope.row)" v-hasPermi="['newproducts:submit:edit']">确认</el-button>
+          <el-button link type="primary" icon="Check" @click="handleCheck(scope.row)" v-hasPermi="['newproducts:submit:edita']">确认</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -218,7 +218,7 @@
           <el-input v-model="form.technicalremark" placeholder="请输入备注" />
         </el-form-item>
         </div>
-        <div v-if="userdep !=='老实人科技' || userdep =='质量科'"> 
+        <div v-if="userdep =='老实人科技' || userdep =='质量科'"> 
         <el-form-item label="质量科确认结果" prop="qualitycheck">
           <el-radio-group v-model="form.qualitycheck">
             <el-radio label="通过" />
@@ -229,7 +229,7 @@
           <el-input v-model="form.qualityremark" placeholder="请输入备注" />
         </el-form-item>
         </div>
-       <div v-if="userdep !=='老实人科技' || userdep =='安环科'"> 
+       <div v-if="userdep =='老实人科技' || userdep =='安环科'"> 
         <el-form-item label="安环科确认结果" prop="securitycheck">          
           <el-radio-group v-model="form.securitycheck">
             <el-radio label="通过" />
