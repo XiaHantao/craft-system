@@ -77,7 +77,7 @@ public class NewproductsPlanController extends BaseController
     /**
      * 修改新产品生产计划
      */
-    @PreAuthorize("@ss.hasPermi('newproducts:plan:edit')")
+    @PreAuthorize("@ss.hasPermi('newproducts:plan:checka') or @ss.hasPermi('newproducts:plan:checkb') or @ss.hasPermi('newproducts:plan:checkc')")
     @Log(title = "新产品生产计划", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody NewproductsPlan newproductsPlan)

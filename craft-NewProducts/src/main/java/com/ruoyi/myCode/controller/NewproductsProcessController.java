@@ -83,7 +83,7 @@ public class NewproductsProcessController extends BaseController
     /**
      * 修改新产品试制过程
      */
-    @PreAuthorize("@ss.hasPermi('newproducts:process:edit')")
+    @PreAuthorize("@ss.hasPermi('newproducts:process:edit') or @ss.hasPermi('newproducts:process:updatea') or @ss.hasPermi('newproducts:process:updateb')")
     @Log(title = "新产品试制过程", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody NewproductsProcess newproductsProcess)
