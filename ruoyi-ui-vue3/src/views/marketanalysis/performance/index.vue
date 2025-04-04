@@ -327,7 +327,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/performance/export', {
     ...queryParams.value
-  }, `performance_${new Date().getTime()}.xlsx`)
+  }, `性能参数表.xlsx`)
 }
 
 getList();

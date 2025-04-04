@@ -601,7 +601,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/standardtwo/export', {
     ...queryParams.value
-  }, `standardtwo_${new Date().getTime()}.xlsx`)
+  }, `二类车标准配置表.xlsx`)
 }
 
 getList();

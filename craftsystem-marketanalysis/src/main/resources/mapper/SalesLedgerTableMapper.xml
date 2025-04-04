@@ -45,7 +45,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="vehicleType != null  and vehicleType != ''"> and vehicle_type like concat('%', #{vehicleType}, '%')</if>
         </where>
     </select>
-    
+    <select id="selectSalesLedgerTableById" parameterType="Long" resultMap="SalesLedgerTableResult">
+        <include refid="selectSalesLedgerTableVo"/>
+        where id = #{id}
+    </select>
     <select id="selectSalesLedgerTableByBranch" parameterType="String" resultMap="SalesLedgerTableResult">
         <include refid="selectSalesLedgerTableVo"/>
         where branch = #{branch}

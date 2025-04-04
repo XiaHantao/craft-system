@@ -432,7 +432,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/saleanalysis/export', {
     ...queryParams.value
-  }, `saleanalysis_${new Date().getTime()}.xlsx`)
+  }, `销售台账.xlsx`)
 }
 
 getList();

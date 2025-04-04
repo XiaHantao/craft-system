@@ -111,7 +111,7 @@ public class CategorytwoParameterTable extends BaseEntity
     private String totalLength;
 
     /** 车体长度（至货叉竖面） */
-    @Excel(name = "车体长度", readConverterExp = "至=货叉竖面")
+    @Excel(name = "车体长度（至货叉竖面）")
     private String vehicleLength;
 
     /** 总宽 */
@@ -199,7 +199,7 @@ public class CategorytwoParameterTable extends BaseEntity
     private String cantileverWidth;
 
     /** 下降速度（满载/空载） */
-    @Excel(name = "下降速度", readConverterExp = "满=载/空载")
+    @Excel(name = "下降速度（满载/空载）")
     private String descentSpeedR;
 
     /** 运行速度，满/空载 */
@@ -227,11 +227,11 @@ public class CategorytwoParameterTable extends BaseEntity
     private String parkingBrake;
 
     /** 桥负荷，（满载）前/后 */
-    @Excel(name = "桥负荷，", readConverterExp = "满=载")
+    @Excel(name = "桥负荷，（满载）前/后")
     private String bridgeLoadFullyLoaded;
 
     /** 桥负荷，（空载）前/后 */
-    @Excel(name = "桥负荷，", readConverterExp = "空=载")
+    @Excel(name = "桥负荷，（空载）前/后")
     private String bridgeLoadUnloaded;
 
     /** 驱动电机功率 */
@@ -247,7 +247,7 @@ public class CategorytwoParameterTable extends BaseEntity
     private String voltageRatedCapacity;
 
     /** 蓄电池重量（含辅配重） */
-    @Excel(name = "蓄电池重量", readConverterExp = "含=辅配重")
+    @Excel(name = "蓄电池重量（含辅配重）")
     private String weightOfBattery;
 
     /** 驱动控制类型 */

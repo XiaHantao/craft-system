@@ -550,7 +550,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/parameter_two/export', {
     ...queryParams.value
-  }, `parameter_two_${new Date().getTime()}.xlsx`)
+  }, `二类车参数表.xlsx`)
 }
 
 getList();
