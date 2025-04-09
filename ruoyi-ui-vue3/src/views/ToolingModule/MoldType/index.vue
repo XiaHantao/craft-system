@@ -137,6 +137,9 @@ const data = reactive({
     moldDescribe: null
   },
   rules: {
+    moldType: [
+      { required: true, message: "类别不能为空", trigger: "blur" }
+    ],
   }
 });
 

@@ -282,7 +282,7 @@
 
       <div v-if="currentStep === 1">
         <!-- 步骤 1：上传图纸、验证结论、指定验证人 -->
-        <el-form ref="SelfMadePartsLedgerRef" :model="form" label-width="120px">
+        <el-form ref="SelfMadePartsLedgerRef" :model="form" :rules="rules" label-width="120px">
           <el-form-item label="工装图纸" prop="toolingDrawings">
             <file-upload v-model="form.toolingDrawings"/>
           </el-form-item>
@@ -314,6 +314,7 @@
                 placeholder="请选择审核人"
             />
           </el-form-item>
+
         </el-form>
         <div style="text-align: right;">
           <el-button type="primary" @click="submitStepOne">提交</el-button>
@@ -394,6 +395,10 @@ const data = reactive({
     verificationState: null,
   },
   rules: {
+    reviewer: [
+      { required: true, message: "审核人不能为空", trigger: 'change'}
+    ],
+
   }
 });
 // 获取工装类型数据
@@ -414,6 +419,7 @@ const fetchMoldTypeList = async () => {
 // 组件加载时调用
 onMounted(() => {
   fetchMoldTypeList();
+  // proxy.$refs.form.validate();
   // console.log('加载中....' , moldTypeList.value)
 });
 const { queryParams, form, rules } = toRefs(data);
@@ -527,14 +533,42 @@ const fecthuser = async () => {
 };
 
 
+// const submitStepOne = () => {
+//
+//   // console.log("步骤一提交:", form.value);
+//   form.value.verificationState = '审核中';
+//   // console.log("步骤一提交:", form.value.verificationState);
+//   updateSelfMadePartsLedger(form.value).then(response => {
+//     //新增消息通知
+//     // getLatestRecord02("self_made_parts_ledger").then(response => {
+//     //   console.log("response3333===>",response)
+//       addSysMessageNotification({
+//         noticeTitle: "自制件审核通知",
+//         noticeContent: "请进行自制件审核",
+//         createdBy: form.value.toolUploader,
+//         createdTime: form.value.verificationReportUploadTime,
+//         executedBy: getReviewerName(form.value.reviewer),
+//         path: "/ToolingModule/SelfMadePartsLedger",
+//         pathId: form.value.id,
+//         status: 0
+//       })
+//     // })
+//     // proxy.$modal.msgSuccess("修改成功");
+//     ElMessage.success("提交成功，进入审核阶段");
+//     dialogVisible.value = false;
+//     getList();
+//   });
+// };
 const submitStepOne = () => {
-  // console.log("步骤一提交:", form.value);
-  form.value.verificationState = '审核中';
-  console.log("步骤一提交:", form.value.verificationState);
-  updateSelfMadePartsLedger(form.value).then(response => {
-    //新增消息通知
-    // getLatestRecord02("self_made_parts_ledger").then(response => {
-    //   console.log("response3333===>",response)
+  proxy.$refs["SelfMadePartsLedgerRef"].validate((valid) => {
+    if (!valid) {
+      return;
+    }
+
+    // 设置状态
+    form.value.verificationState = '审核中';
+
+    updateSelfMadePartsLedger(form.value).then(response => {
       addSysMessageNotification({
         noticeTitle: "自制件审核通知",
         noticeContent: "请进行自制件审核",
@@ -544,14 +578,16 @@ const submitStepOne = () => {
         path: "/ToolingModule/SelfMadePartsLedger",
         pathId: form.value.id,
         status: 0
-      })
-    // })
-    // proxy.$modal.msgSuccess("修改成功");
-    ElMessage.success("提交成功，进入审核阶段");
-    dialogVisible.value = false;
-    getList();
+      });
+
+      ElMessage.success("提交成功，进入审核阶段");
+      dialogVisible.value = false;
+      getList();
+    });
   });
 };
+
+
 
 const submitStepTwo = () => {
   // console.log("步骤二审核提交:", stepTwoData.value);

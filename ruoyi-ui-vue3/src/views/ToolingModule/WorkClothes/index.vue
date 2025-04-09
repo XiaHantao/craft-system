@@ -412,6 +412,9 @@ const data = reactive({
     assemblingProducts: null,
   },
   rules: {
+    moldNumber: [
+      { required: true, message: "模具号不能为空", trigger: "blur" }
+    ],
   }
 });
 

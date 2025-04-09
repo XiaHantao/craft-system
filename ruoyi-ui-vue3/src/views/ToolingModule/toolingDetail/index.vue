@@ -291,6 +291,9 @@ const data = reactive({
     moldOwnership: null
   },
   rules: {
+    toolNumber: [
+      { required: true, message: "编号不能为空", trigger: "blur" }
+    ],
   }
 });
 
