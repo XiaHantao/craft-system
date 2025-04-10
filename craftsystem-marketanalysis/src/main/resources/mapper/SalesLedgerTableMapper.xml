@@ -49,10 +49,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSalesLedgerTableVo"/>
         where id = #{id}
     </select>
-    <select id="selectSalesLedgerTableByBranch" parameterType="String" resultMap="SalesLedgerTableResult">
-        <include refid="selectSalesLedgerTableVo"/>
-        where branch = #{branch}
-    </select>
+<!--    <select id="selectSalesLedgerTableByBranch" parameterType="String" resultMap="SalesLedgerTableResult">-->
+<!--        <include refid="selectSalesLedgerTableVo"/>-->
+<!--        where branch = #{branch}-->
+<!--    </select>-->
         
     <insert id="insertSalesLedgerTable" parameterType="SalesLedgerTable">
         insert into sales_ledger_table
@@ -143,7 +143,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="completionTime != null">completion_time = #{completionTime},</if>
             <if test="redemptionRate != null">redemption_rate = #{redemptionRate},</if>
         </trim>
-        where branch = #{branch}
+        where id = #{id}
     </update>
 
     <delete id="deleteSalesLedgerTableById" parameterType="Long">

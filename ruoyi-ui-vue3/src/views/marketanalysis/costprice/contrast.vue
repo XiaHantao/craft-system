@@ -18,7 +18,7 @@
           @click="applyParameters"
           class="confirm-btn"
         >
-          确定
+          生成对比表格
         </el-button>
       </div>
     </div>
@@ -45,6 +45,7 @@
             :placeholder="`请选择车型-制造商作为车型${n}`"
             :remote-method="searchProducts"
             @change="val => handleSelectChange(n, val)"
+            clearable
           >
             <el-option
               v-for="item in productOptions"
@@ -61,11 +62,13 @@
             v-model="manualInputs[n-1].vehicleType"
             placeholder="输入车型"
             style="margin-bottom: 5px"
+            clearable
           />
           <el-input
             v-model="manualInputs[n-1].manufacturer"
             placeholder="输入制造商"
             style="margin-bottom: 5px"
+            clearable
           />
           <el-button
             type="primary"
@@ -133,13 +136,11 @@ export default {
         grossMarginRate: '毛利率',
         grossProfitIncludingTax: '毛利（含税）'
       },
-      comparisonData: []
+      comparisonData: [],
+      showComparison: false // 新增控制显示的状态
     };
   },
   computed: {
-    showComparison() {
-      return !!this.product1 && !!this.product2;
-    },
     product1Label() {
       return this.product1 ? `${this.product1.vehicleType} (${this.product1.manufacturer})` : '';
     },
@@ -167,25 +168,26 @@ export default {
     async loadProduct1(id) {
       const res = await getCostprice(id);
       this.product1 = res.data;
-      this.generateComparison();
     },
 
     async loadProduct2(id) {
       const res = await getCostprice(id);
       this.product2 = res.data;
-      this.generateComparison();
     },
 
     applyParameters() {
+      if (!this.product1 || !this.product2) {
+        this.$message.warning('请先选择两个对比车型');
+        return;
+      }
+      
       this.selectedFields = [...this.tempSelectedFields];
       this.tableKey++;
-      if (this.product1 && this.product2) {
-        this.generateComparison();
-      }
+      this.generateComparison();
+      this.showComparison = true; // 点击确定后显示表格
     },
 
     generateComparison() {
-      if (!this.product1 || !this.product2) return;
       this.comparisonData = this.selectedFields
         .filter(field => this.availableFields[field])
         .map((field) => this.createRow(this.availableFields[field], field));
@@ -228,7 +230,7 @@ export default {
       this.selectedProducts[n-1] = null;
       if(n === 1) this.product1 = null;
       else this.product2 = null;
-      this.generateComparison();
+      this.showComparison = false; // 切换模式时隐藏表格
     },
 
     async handleManualConfirm(n) {
@@ -258,6 +260,7 @@ export default {
             await this.loadProduct2(productId);
           }
           this.inputMode[n-1] = false;
+          this.showComparison = false; // 手动确认后隐藏表格
         }
       } catch (error) {
         this.$message.error('查询失败');

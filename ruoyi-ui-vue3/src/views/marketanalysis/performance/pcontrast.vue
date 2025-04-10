@@ -23,7 +23,7 @@
           @click="applyParameters"
           class="confirm-btn"
         >
-          确定
+          生成对比表格
         </el-button>
       </div>
     </div>
@@ -51,6 +51,7 @@
               :placeholder="`请选择车型-制造商作为车型${n}`"
               :remote-method="searchProducts"
               @change="val => handleSelectChange(n, val)"
+              clearable
             >
               <el-option
                 v-for="item in productOptions"
@@ -67,11 +68,13 @@
               v-model="manualInputs[n-1].vehicleType"
               placeholder="输入车型"
               style="margin-bottom: 5px"
+              clearable
             />
             <el-input
               v-model="manualInputs[n-1].manufacturer"
               placeholder="输入制造商"
               style="margin-bottom: 5px"
+              clearable
             />
             <div class="btn-group">
               <el-button
@@ -185,12 +188,18 @@ export default {
   },
   methods: {
     applyParameters() {
+      if (!this.product1 || !this.product2) {
+        this.$message.warning('请先选择两个对比车型');
+        return;
+      }
+
       // 强制保留必选字段
       this.selectedFields = [...new Set([
         ...this.mandatoryFields,
         ...this.tempSelectedFields
       ])];
       this.generateComparison();
+      this.showComparison = true;
     },
 
     async searchProducts(query) {
@@ -210,18 +219,12 @@ export default {
         } else {
           this.product2 = res.data;
         }
-        this.generateComparison();
       } catch (error) {
         this.$message.error('获取数据失败');
       }
     },
 
     generateComparison() {
-      if (!this.product1 || !this.product2) {
-        this.showComparison = false;
-        return;
-      }
-
       const dynamicFields = this.selectedFields
         .filter(field => this.availableFields[field] && !this.mandatoryFields.includes(field));
 
@@ -231,7 +234,6 @@ export default {
       ];
 
       this.tableKey = Date.now();
-      this.showComparison = true;
     },
 
     createRow(fieldKey) {
@@ -273,7 +275,7 @@ export default {
       this.selectedProducts[n-1] = null;
       if(n === 1) this.product1 = null;
       else this.product2 = null;
-      this.generateComparison();
+      this.showComparison = false;
     },
 
     async handleManualConfirm(n) {
@@ -304,7 +306,6 @@ export default {
             this.product2 = productRes.data;
           }
           this.inputMode[n-1] = false;
-          this.generateComparison();
         }
       } catch (error) {
         this.$message.error('查询失败');

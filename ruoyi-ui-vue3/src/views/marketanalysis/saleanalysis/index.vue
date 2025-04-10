@@ -215,7 +215,7 @@
 </template>
 
 <script setup name="Saleanalysis">
-import { listSaleanalysis, getSaleanalysis, delSaleanalysis, addSaleanalysis, importSaleanalysis,checkDataExists } from "@/api/marketanalysis/saleanalysis/saleanalysis";
+import { listSaleanalysis, getSaleanalysis, delSaleanalysis, addSaleanalysis,updateSaleanalysis, importSaleanalysis,checkDataExists } from "@/api/marketanalysis/saleanalysis/saleanalysis";
 
 
 const { proxy } = getCurrentInstance();
@@ -224,7 +224,7 @@ const saleanalysisList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
-const ids = ref([])
+const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
@@ -392,7 +392,7 @@ function handleUpdate(row) {
   getSaleanalysis(_id).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改销售分析";
+    title.value = "修改销售台账";
   });
 }
 
