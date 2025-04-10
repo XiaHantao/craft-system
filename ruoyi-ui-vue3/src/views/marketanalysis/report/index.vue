@@ -7,9 +7,9 @@
       <el-form-item label="关联车型" prop="vehicleType">
         <el-input v-model="queryParams.vehicleType" placeholder="请输入关联车型" clearable @keyup.enter="handleQuery" />
       </el-form-item>
-      <el-form-item label="报告格式" prop="reportFormat">
+      <!-- <el-form-item label="报告格式" prop="reportFormat">
         <el-input v-model="queryParams.reportFormat" placeholder="请输入报告格式" clearable @keyup.enter="handleQuery" />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
