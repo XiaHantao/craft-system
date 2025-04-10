@@ -93,7 +93,7 @@ public class NewproductsSubmitController extends BaseController
     /**
      * 修改新产品提交
      */
-    @PreAuthorize("@ss.hasPermi('newproducts:submit:edit')")
+    @PreAuthorize("@ss.hasPermi('newproducts:submit:edit') or @ss.hasPermi('newproducts:submit:check')")
     @Log(title = "新产品提交", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody NewproductsSubmit newproductsSubmit)

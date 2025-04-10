@@ -143,7 +143,10 @@
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:plan:edit']" 
           v-if="scope.row.technicalcheck != '通过' || scope.row.qualitycheck != '通过' || scope.row.securitycheck !='通过'">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:plan:remove']">删除</el-button>
-          <el-button link type="primary" icon="Check" @click="handleCheck(scope.row)" v-hasPermi="['newproducts:submit:edit']">确认</el-button>
+          <el-button link type="primary" icon="Check" @click="handleChecka(scope.row)" v-hasPermi="['newproducts:plan:checka']">技术科确认</el-button>
+           <el-button link type="primary" icon="Check" @click="handleCheckb(scope.row)" v-hasPermi="['newproducts:plan:checkb']">质量科确认</el-button>
+          <el-button link type="primary" icon="Check" @click="handleCheckc(scope.row)" v-hasPermi="['newproducts:plan:checkc']">安环科确认</el-button>
+       
         </template>
       </el-table-column>
     </el-table>
@@ -204,10 +207,11 @@
     </el-dialog>
 
     <!-- 确认对话框 -->
-    <el-dialog :title="checkTitle" v-model="openCheckDialog" width="800px" append-to-body>
+    <!-- 技术科确认 -->
+    <el-dialog :title="checkTitlea" v-model="openCheckDialoga" width="800px" append-to-body>
       <el-form ref="submitRef" :model="form" :rules="rules" label-width="150px">
         
-        <div v-if="userdep =='老实人科技' || userdep =='技术科'">        
+      
         <el-form-item label="技术科确认结果" prop="technicalcheck">
           <el-radio-group v-model="form.technicalcheck">
             <el-radio label="通过" />
@@ -217,8 +221,8 @@
         <el-form-item label="技术科备注" prop="technicalremark">
           <el-input v-model="form.technicalremark" placeholder="请输入备注" />
         </el-form-item>
-        </div>
-        <div v-if="userdep !=='老实人科技' || userdep =='质量科'"> 
+
+<!--         <div v-if="userdep =='老实人科技' || userdep =='质量科'"> 
         <el-form-item label="质量科确认结果" prop="qualitycheck">
           <el-radio-group v-model="form.qualitycheck">
             <el-radio label="通过" />
@@ -229,7 +233,7 @@
           <el-input v-model="form.qualityremark" placeholder="请输入备注" />
         </el-form-item>
         </div>
-       <div v-if="userdep !=='老实人科技' || userdep =='安环科'"> 
+       <div v-if="userdep =='老实人科技' || userdep =='安环科'"> 
         <el-form-item label="安环科确认结果" prop="securitycheck">          
           <el-radio-group v-model="form.securitycheck">
             <el-radio label="通过" />
@@ -239,7 +243,7 @@
         <el-form-item label="安环科备注" prop="securityremark">
           <el-input v-model="form.securityremark" placeholder="请输入备注" />
         </el-form-item>
-        </div>
+        </div> -->
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -248,6 +252,51 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 质量科确认 -->
+    <el-dialog :title="checkTitleb" v-model="openCheckDialogb" width="800px" append-to-body>
+      <el-form ref="submitRef" :model="form" :rules="rules" label-width="150px">
+        <el-form-item label="质量科确认结果" prop="qualitycheck">
+          <el-radio-group v-model="form.qualitycheck">
+            <el-radio label="通过" />
+            <el-radio label="拒绝" />
+          </el-radio-group>
+        </el-form-item>        
+        <el-form-item label="质量科备注" prop="qualityremark">
+          <el-input v-model="form.qualityremark" placeholder="请输入备注" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitCheckForm">确 定</el-button>
+          <el-button @click="cancelCheck">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <!-- 安环科确认 -->
+    <el-dialog :title="checkTitlec" v-model="openCheckDialogc" width="800px" append-to-body>
+      <el-form ref="submitRef" :model="form" :rules="rules" label-width="150px">
+        <el-form-item label="安环科确认结果" prop="securitycheck">
+          <el-radio-group v-model="form.securitycheck">
+            <el-radio label="通过" />
+            <el-radio label="拒绝" />
+          </el-radio-group>
+        </el-form-item>        
+        <el-form-item label="安环科备注" prop="securityremark">
+          <el-input v-model="form.securityremark" placeholder="请输入备注" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitCheckForm">确 定</el-button>
+          <el-button @click="cancelCheck">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+
+
   </div>
 </template>
 
@@ -262,7 +311,9 @@ const { proxy } = getCurrentInstance();
 
 const planList = ref([]);
 const open = ref(false);
-const openCheckDialog = ref(false);
+const openCheckDialoga = ref(false);//技术科确认对话框初始化
+const openCheckDialogb = ref(false);//质量科确认对话框初始化
+const openCheckDialogc = ref(false);//安环科确认对话框初始化
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
@@ -270,7 +321,9 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-const checkTitle = ref("");
+const checkTitlea = ref("");
+const checkTitleb = ref("");
+const checkTitlec = ref("");
 const userdep = ref({}); //  初始化 userdep用户部门根据其值显示不同确认框
 const deptList = ref([]);  // 部门列表
 const userList = ref([]);  // 用户列表
@@ -314,6 +367,9 @@ function getList() {
 // 取消按钮
 function cancel() {
   open.value = false;
+  openCheckDialoga.value = false;
+  openCheckDialogb.value = false;
+  openCheckDialogc.value = false;
   reset();
 }
 
@@ -498,16 +554,43 @@ function handleExport() {
 }
 
 /** 确认按钮操作 */
-function handleCheck(row) {
+/* 技术科确认 */
+function handleChecka(row) {
   reset();
     getUserProfile().then(response => {
     userdep.value = response.data.dept.deptName;  //获得用户部门
     });
-    openCheckDialog.value = true;
-    checkTitle.value = "确认新产品生产计划提交";
+    openCheckDialoga.value = true;
+    checkTitlea.value = "技术科确认";
     form.value.id = row.id;
   // });
 }
+
+/* 质量科确认 */
+function handleCheckb(row) {
+  reset();
+/*     getUserProfile().then(response => {
+    userdep.value = response.data.dept.deptName;  //获得用户部门
+    }); */
+    openCheckDialogb.value = true;
+    checkTitleb.value = "质量科确认";
+    form.value.id = row.id;
+  // });
+}
+
+/* 安环科确认 */
+function handleCheckc(row) {
+  reset();
+/*     getUserProfile().then(response => {
+    userdep.value = response.data.dept.deptName;  //获得用户部门
+    }); */
+    openCheckDialogc.value = true;
+    checkTitlec.value = "安环科确认";
+    form.value.id = row.id;
+  // });
+}
+
+
 /* 确认提交按钮 */
 function submitCheckForm() {
   proxy.$refs["submitRef"].validate(valid => {
@@ -516,7 +599,9 @@ function submitCheckForm() {
       updatePlan(form.value).then(response => {
         console.log(form.value);
         proxy.$modal.msgSuccess("确认完成");
-        openCheckDialog.value = false;
+        openCheckDialoga.value = false;
+        openCheckDialogb.value = false;
+        openCheckDialogc.value = false;
         getList();
 
      // 判断是否满足通知条件
@@ -569,7 +654,9 @@ function submitCheckForm() {
 }
 // 取消确认对话框
 function cancelCheck() {
-  openCheckDialog.value = false;
+  openCheckDialoga.value = false;
+  openCheckDialogb.value = false;
+  openCheckDialogc.value = false;
   reset();
 }
 
