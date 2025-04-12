@@ -94,7 +94,4 @@ public interface ToolingTableMapper
     public List<ToolingTable> selectUpcomingChangeTimeToolingTableList(ToolingTable toolingTable);
 
 
-    List<String> getAllMoldNumbers();
-
-    void updateFilePath(@Param("moldNumber")String moldNumber, @Param("file")String file,@Param("field") String processDocuments);
 }

@@ -58,6 +58,4 @@ public interface MoldTypeTableMapper
      * @return 结果
      */
     public int deleteMoldTypeTableByIds(Long[] ids);
-
-    List<String> selectAllIds();
 }

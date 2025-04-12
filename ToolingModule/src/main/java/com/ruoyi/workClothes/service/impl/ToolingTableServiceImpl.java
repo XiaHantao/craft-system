@@ -3,7 +3,10 @@ package com.ruoyi.workClothes.service.impl;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -282,49 +285,7 @@ public class ToolingTableServiceImpl implements IToolingTableService
 
         return toolingTableMapper.selectUpcomingChangeTimeToolingTableList(toolingTable);    }
 
-    @Override
-    public int updateWorkClothesfile(Map<String, Object> fileform) {
-        String fileType = (String) fileform.get("fileType");
-        String file = (String)fileform.get("file");
-        String moldname = (String)fileform.get("moldname");
-        System.out.println("传入数据" + fileform);
-        // 1. 获取数据库中所有的moldNumber
-        List<String> moldNumbers = toolingTableMapper.getAllMoldNumbers(); // 假设你有方法来获取所有moldNumbers
 
-        // 2. 遍历moldNumbers与moldname进行对比
-        for (String moldNumber : moldNumbers) {
-            // 假设这里有一个方法获取模具信息，根据 moldname 匹配
-            if (moldname.equals(moldNumber)) {
-                // 如果 fileType 是 processDocuments
-                if ("processDocuments".equals(fileType)) {
-                    updateFilePath(moldNumber, file, "processDocuments");
-                }
-                // 如果 fileType 是 mbom
-                else if ("mbom".equals(fileType)) {
-                    updateFilePath(moldNumber, file, "mbom");
-                }
-                else if ("toolingDrawings".equals(fileType)) {
-                    updateFilePath(moldNumber, file, "toolingDrawings");
-                }
-                return 1;
-            }
-        }
-        return 0;
-    }
-    // 更新文件路径的具体方法
-    private void updateFilePath(String moldNumber, String file, String fileType) {
-        // 根据moldNumber和fileType更新数据库中的路径
-        // 在这个方法中可以使用MyBatis的update方法来执行数据库更新操作
-
-        if ("processDocuments".equals(fileType)) {
-            toolingTableMapper.updateFilePath(moldNumber, file, "processDocuments");
-        } else if ("mbom".equals(fileType)) {
-            toolingTableMapper.updateFilePath(moldNumber, file, "mbom");
-        }
-        else if ("toolingDrawings".equals(fileType)) {
-            toolingTableMapper.updateFilePath(moldNumber, file, "toolingDrawings");
-        }
-    }
 
     // 获取单元格的内容，处理数字和字符串类型的情况
     public String getStringCellValue(Row row, int columnIndex) {

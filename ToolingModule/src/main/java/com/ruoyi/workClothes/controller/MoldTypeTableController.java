@@ -45,16 +45,6 @@ public class MoldTypeTableController extends BaseController
         List<MoldTypeTable> list = moldTypeTableService.selectMoldTypeTableList(moldTypeTable);
         return getDataTable(list);
     }
-    /**
-     * 查询所有工装类别字典的名称
-     */
-    @PreAuthorize("@ss.hasPermi('ToolingModule:MoldType:list')")
-    @GetMapping("/listname")
-    public AjaxResult getAllIds() {
-        List<String> list = moldTypeTableService.listname();
-        return success(list);
-    }
-
 
     /**
      * 导出工装类别字典列表

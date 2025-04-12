@@ -9,14 +9,6 @@ export function listMoldType(query) {
   })
 }
 
-// 查询工装类别字典列表
-export function listMoldTypename(query) {
-  return request({
-    url: '/ToolingModule/MoldType/listname',
-    method: 'get',
-  })
-}
-
 // 查询工装类别字典详细
 export function getMoldType(id) {
   return request({

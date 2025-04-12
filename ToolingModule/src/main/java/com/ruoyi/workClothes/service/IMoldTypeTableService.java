@@ -58,6 +58,4 @@ public interface IMoldTypeTableService
      * @return 结果
      */
     public int deleteMoldTypeTableById(Long id);
-
-    List<String> listname();
 }

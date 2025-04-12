@@ -165,6 +165,7 @@ function uploadedSuccessfully() {
     uploadList.value = [];
     number.value = 0;
     emit("update:modelValue", listToString(fileList.value));
+    // console.log('打印2' ,listToString(fileList.value))
     proxy.$modal.closeLoading();
   }
 }
