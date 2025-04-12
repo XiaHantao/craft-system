@@ -137,7 +137,7 @@
       <el-table-column label="" align="center" prop="n" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right"  width="200">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:submit:edit']" v-if="scope.row.checked != '通过'">修改</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:submit:edit']" v-if="scope.row.checked == '待审核' ">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:submit:remove']">删除</el-button>
           <el-button link type="primary" icon="Check" @click="handleCheck(scope.row)" v-hasPermi="['newproducts:submit:check']">核对</el-button>
           <el-button link type="primary" icon="Position" @click="handleRecord(scope.row)" v-hasPermi="['newproducts:submit:edit']">试制记录</el-button>
