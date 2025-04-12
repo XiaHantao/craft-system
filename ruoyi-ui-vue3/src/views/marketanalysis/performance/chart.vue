@@ -49,6 +49,7 @@
               :placeholder="`请选择车型-制造商作为车型${n}`"
               :remote-method="searchProducts"
               @change="val => handleSelectChange(n, val)"
+              clearable
             >
               <el-option
                 v-for="item in productOptions"
@@ -65,11 +66,13 @@
               v-model="manualInputs[n-1].vehicleType"
               placeholder="输入车型"
               style="margin-bottom: 5px"
+              clearable
             />
             <el-input
               v-model="manualInputs[n-1].manufacturer"
               placeholder="输入制造商"
               style="margin-bottom: 5px"
+              clearable
             />
             <div class="btn-group">
               <el-button

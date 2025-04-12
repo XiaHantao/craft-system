@@ -31,67 +31,67 @@ public class PerformanceTable extends BaseEntity
     private String manufacturer;
 
     /** 最高行驶速度（满载） */
-    @Excel(name = "最高行驶速度", readConverterExp = "满=载")
+    @Excel(name = "最高行驶速度（满载）")
     private String maximumDrivingSpeedFull;
 
     /** 最高行驶速度（空载） */
-    @Excel(name = "最高行驶速度", readConverterExp = "空=载")
+    @Excel(name = "最高行驶速度（空载）")
     private String maximumDrivingSpeedEmpty;
 
     /** 最大爬坡能力（满载） */
-    @Excel(name = "最大爬坡能力", readConverterExp = "满=载")
+    @Excel(name = "最大爬坡能力（满载）")
     private String maxClimbCapabilityFull;
 
     /** 最大爬坡能力（空载） */
-    @Excel(name = "最大爬坡能力", readConverterExp = "空=载")
+    @Excel(name = "最大爬坡能力（空载）")
     private String maxClimbCapabilityEmpty;
 
     /** 最大牵引力（满载） */
-    @Excel(name = "最大牵引力", readConverterExp = "满=载")
+    @Excel(name = "最大牵引力（满载）")
     private String maximumTractionForceFull;
 
     /** 最大牵引力（空载） */
-    @Excel(name = "最大牵引力", readConverterExp = "空=载")
+    @Excel(name = "最大牵引力（空载）")
     private String maximumTractionForceEmpty;
 
     /** 起升速度（满载） */
-    @Excel(name = "起升速度", readConverterExp = "满=载")
+    @Excel(name = "起升速度（满载）")
     private String liftingSpeedFull;
 
     /** 起升速度（空载） */
-    @Excel(name = "起升速度", readConverterExp = "空=载")
+    @Excel(name = "起升速度（空载）")
     private String liftingSpeedEmpty;
 
     /** 下降速度（满载） */
-    @Excel(name = "下降速度", readConverterExp = "满=载")
+    @Excel(name = "下降速度（满载）")
     private String descentSpeedFull;
 
     /** 下降速度（空载） */
-    @Excel(name = "下降速度", readConverterExp = "空=载")
+    @Excel(name = "下降速度（空载）")
     private String descentSpeedEmpty;
 
     /** 运行速度（满载） */
-    @Excel(name = "运行速度", readConverterExp = "满=载")
+    @Excel(name = "运行速度（满载）")
     private String runningSpeedFull;
 
     /** 运行速度（空载） */
-    @Excel(name = "运行速度", readConverterExp = "空=载")
+    @Excel(name = "运行速度（空载）")
     private String runningSpeedEmpty;
 
     /** 提升速度（满载） */
-    @Excel(name = "提升速度", readConverterExp = "满=载")
+    @Excel(name = "提升速度（满载）")
     private String increaseSpeedFull;
 
     /** 提升速度（空载） */
-    @Excel(name = "提升速度", readConverterExp = "空=载")
+    @Excel(name = "提升速度（空载）")
     private String increaseSpeedEmpty;
 
     /** 侧移速度（满载） */
-    @Excel(name = "侧移速度", readConverterExp = "满=载")
+    @Excel(name = "侧移速度（满载）")
     private String lateralMovementSpeedFull;
 
     /** 侧移速度（空载） */
-    @Excel(name = "侧移速度", readConverterExp = "空=载")
+    @Excel(name = "侧移速度（空载）")
     private String lateralMovementSpeedEmpty;
 
     /** 行程制动 */
@@ -103,19 +103,19 @@ public class PerformanceTable extends BaseEntity
     private String parkingBrake;
 
     /** 桥负荷（满载）前 */
-    @Excel(name = "桥负荷", readConverterExp = "满=载")
+    @Excel(name = "桥负荷（满载）前")
     private String bridgeLoadFullyLoadedFront;
 
     /** 桥负荷（满载）后 */
-    @Excel(name = "桥负荷", readConverterExp = "满=载")
+    @Excel(name = "桥负荷（满载）后")
     private String bridgeLoadFullyLoadedBehind;
 
     /** 桥负荷（空载）前 */
-    @Excel(name = "桥负荷", readConverterExp = "空=载")
+    @Excel(name = "桥负荷（空载）前 ")
     private String bridgeLoadUnloadedFront;
 
     /** 桥负荷（空载）后 */
-    @Excel(name = "桥负荷", readConverterExp = "空=载")
+    @Excel(name = "桥负荷（空载）后")
     private String bridgeLoadUnloadedBehind;
 
     public void setId(Long id) 

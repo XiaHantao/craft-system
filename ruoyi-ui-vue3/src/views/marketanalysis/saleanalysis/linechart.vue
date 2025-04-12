@@ -109,13 +109,10 @@ import {
 export default {
   data() {
     return {
-      // 车型相关
       inputMode: { vehicle: false, branch: false },
       selectedVehicle: '',
       manualVehicle: '',
       vehicleOptions: [],
-      
-      // 地区相关
       selectedBranch: '',
       manualBranch: '',
       branchOptions: [],
@@ -127,7 +124,6 @@ export default {
   },
   methods: {
     async initOptions() {
-      // 初始化选项
       const [vehicles, branches] = await Promise.all([
         getVehicleTypes(),
         getBranches()
@@ -199,7 +195,6 @@ export default {
         return
       }
 
-      // 保持原有图表逻辑不变
       let response
       switch(chartType) {
         case 'month':
@@ -213,10 +208,12 @@ export default {
           break
       }
 
-      const xData = response.data.map(item => item.month || item.name)
-      const yData = response.data.map(item => item.value)
+      // 新增数据过滤逻辑
+      const filteredData = this.filterLastTwoYears(response.data)
+      
+      const xData = filteredData.map(item => item.month || item.name)
+      const yData = filteredData.map(item => item.value)
 
-      // 保持原有图表配置
       const option = {
         title: {
           text: this.getChartTitle(chartType),
@@ -244,6 +241,36 @@ export default {
         this.myChart = echarts.init(this.$refs.chartContainer)
       }
       this.myChart.setOption(option)
+    },
+
+    // 新增数据过滤方法
+    filterLastTwoYears(data) {
+      if (!data.length) return []
+      
+      // 统一处理日期格式为YYYY-MM
+      const parseDate = (item) => {
+        const dateStr = item.month || item.name
+        const [year, month] = String(dateStr).split('-')
+        return new Date(`${year}-${month.padStart(2, '0')}-01`)
+      }
+
+      // 按日期排序
+      const sortedData = [...data].sort((a, b) => 
+        parseDate(b) - parseDate(a)
+      )
+
+      // 获取最新日期
+      const latestDate = parseDate(sortedData[0])
+      
+      // 计算两年前的同月（保持月份一致性）
+      const twoYearsAgo = new Date(latestDate)
+      twoYearsAgo.setFullYear(latestDate.getFullYear() - 2)
+      
+      // 筛选数据并恢复时间顺序
+      return sortedData
+        .filter(item => parseDate(item) >= twoYearsAgo)
+        .reverse()
+        .sort((a, b) => parseDate(a) - parseDate(b))
     },
 
     getChartTitle(type) {

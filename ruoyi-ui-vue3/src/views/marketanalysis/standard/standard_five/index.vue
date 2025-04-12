@@ -925,7 +925,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/standardfive/export', {
     ...queryParams.value
-  }, `standardfive_${new Date().getTime()}.xlsx`)
+  }, `五类/七类车标准配置表.xlsx`)
 }
 
 getList();

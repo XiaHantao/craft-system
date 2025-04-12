@@ -31,11 +31,11 @@ public class CategoryfiveStandardConfigurationTable extends BaseEntity
     private String solidTire;
 
     /** 单胎（前轮） */
-    @Excel(name = "单胎", readConverterExp = "前=轮")
+    @Excel(name = "单胎（前轮）")
     private String singleTire;
 
     /** 双胎（前轮） */
-    @Excel(name = "双胎", readConverterExp = "前=轮")
+    @Excel(name = "双胎（前轮）")
     private String twinTires;
 
     /** 两片阀 */
@@ -63,11 +63,11 @@ public class CategoryfiveStandardConfigurationTable extends BaseEntity
     private String nonStandardSeriesForks;
 
     /** 标准车身颜色（蓝灰色+合力红） */
-    @Excel(name = "标准车身颜色", readConverterExp = "蓝=灰色+合力红")
+    @Excel(name = "标准车身颜色（蓝灰色+合力红）")
     private String standardBodyColor;
 
     /** 其它车身颜色（客户定制） */
-    @Excel(name = "其它车身颜色", readConverterExp = "客=户定制")
+    @Excel(name = "其它车身颜色（客户定制）")
     private String customizedBodyColor;
 
     /** 全套OPS功能 */
@@ -147,15 +147,15 @@ public class CategoryfiveStandardConfigurationTable extends BaseEntity
     private String nonStandardRoofProtectionFrame;
 
     /** 前挡风玻璃（带雨刮器） */
-    @Excel(name = "前挡风玻璃", readConverterExp = "带=雨刮器")
+    @Excel(name = "前挡风玻璃（带雨刮器）")
     private String windscreen;
 
     /** 前耐高温挡风玻璃（带雨刮器） */
-    @Excel(name = "前耐高温挡风玻璃", readConverterExp = "带=雨刮器")
+    @Excel(name = "前耐高温挡风玻璃（带雨刮器）")
     private String frontHeatresistantWindshield;
 
     /** 后挡风玻璃（不带雨刮器） */
-    @Excel(name = "后挡风玻璃", readConverterExp = "不=带雨刮器")
+    @Excel(name = "后挡风玻璃（不带雨刮器）")
     private String rearWindshield;
 
     /** PC耐力板顶棚 */
@@ -199,15 +199,15 @@ public class CategoryfiveStandardConfigurationTable extends BaseEntity
     private String threeSidedRedStripLights;
 
     /** 配装LED闪光警示灯（装配式） */
-    @Excel(name = "配装LED闪光警示灯", readConverterExp = "装=配式")
+    @Excel(name = "配装LED闪光警示灯（装配式）")
     private String ledFlashingWarningLight;
 
     /** 配装LED旋转式警示灯（装配式） */
-    @Excel(name = "配装LED旋转式警示灯", readConverterExp = "装=配式")
+    @Excel(name = "配装LED旋转式警示灯（装配式）")
     private String ledRotatingWarningLight;
 
     /** 配装LED旋转蜂鸣式警示灯（装配式） */
-    @Excel(name = "配装LED旋转蜂鸣式警示灯", readConverterExp = "装=配式")
+    @Excel(name = "配装LED旋转蜂鸣式警示灯（装配式）")
     private String ledRotatingBuzzerWarningLight;
 
     /** 公制螺纹 */
@@ -251,7 +251,7 @@ public class CategoryfiveStandardConfigurationTable extends BaseEntity
     private String manualDifferentialLock;
 
     /** FICS合力车联网基本版（国内） */
-    @Excel(name = "FICS合力车联网基本版", readConverterExp = "国=内")
+    @Excel(name = "FICS合力车联网基本版（国内）")
     private String ficsHeliConnectedCarBasicEdition;
 
     public void setId(Long id) 

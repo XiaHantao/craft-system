@@ -321,7 +321,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/costprice/export', {
     ...queryParams.value
-  }, `costprice_${new Date().getTime()}.xlsx`)
+  }, `成本售价表.xlsx`)
 }
 
 getList();

@@ -25,10 +25,10 @@
         <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete"
           v-hasPermi="['marketanalysis:image:remove']">删除</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button type="warning" plain icon="Download" @click="handleExport"
           v-hasPermi="['marketanalysis:image:export']">导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -317,6 +317,11 @@ function reset() {
 function handleQuery() {
   queryParams.value.pageNum = 1;
   getList();
+}
+
+function cancel() {
+  open.value = false;
+  reset();
 }
 
 function resetQuery() {

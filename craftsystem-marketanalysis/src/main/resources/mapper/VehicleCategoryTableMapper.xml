@@ -33,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="vehicleCategory != null  and vehicleCategory != ''"> and vehicle_category like concat('%', #{vehicleCategory}, '%')</if>
             <if test="vehicleType != null  and vehicleType != ''"> and vehicle_type like concat('%', #{vehicleType}, '%')</if>
+            <if test="series != null  and series != ''"> and series like concat('%', #{series}, '%')</if>
         </where>
     </select>
     

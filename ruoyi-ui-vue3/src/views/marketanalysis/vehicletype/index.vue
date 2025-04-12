@@ -17,6 +17,14 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="系列" prop="series">
+        <el-input
+          v-model="queryParams.series"
+          placeholder="请输入系列"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -190,6 +198,7 @@ const data = reactive({
     pageSize: 10,
     vehicleCategory: null,
     vehicleType: null,
+    series: null,
   },
   rules: {
     vehicleCategory: [
@@ -316,7 +325,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/vehicletype/export', {
     ...queryParams.value
-  }, `vehicletype_${new Date().getTime()}.xlsx`)
+  }, `车型分类表.xlsx`)
 }
 
 getList();

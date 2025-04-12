@@ -188,7 +188,6 @@ export default {
       this.initChart();
     },
 
-    // 新增方法：清除选择模式的值
     clearSelection(type) {
       if (type === 'vehicle') {
         this.selectedVehicle = null;
@@ -226,16 +225,39 @@ export default {
           }
         });
 
+        // 计算增长率数据
+        const growthRateData = [];   // 同比增长率
+        const chainGrowthRateData = []; // 环比增长率
+        for (let i = 0; i < 12; i++) {
+          const current = currentYearData[i] || 0;
+          const last = lastYearData[i] || 0;
+          
+          // 计算同比
+          const yoyRate = last !== 0 ? 
+            Number(((current - last) / last * 100).toFixed(2)) : 0;
+          growthRateData.push(yoyRate);
+
+          // 计算环比（第一个月无环比）
+          if (i === 0) {
+            chainGrowthRateData.push(0);
+          } else {
+            const prev = currentYearData[i - 1] || 0;
+            const momRate = prev !== 0 ? 
+              Number(((current - prev) / prev * 100).toFixed(2)) : 0;
+            chainGrowthRateData.push(momRate);
+          }
+        }
+
         myChart = echarts.init(this.$refs.chart);
         myChart.setOption({
           title: {
-            text: '销售数据同比环比柱状图',
+            text: '销售数据同比环比分析',
             left: 'center',
             top: 20,
             textStyle: { fontSize: 16 }
           },
           legend: {
-            data: ['本年销量', '去年同期销量'],
+            data: ['本年销量', '去年同期销量', '同比增长率', '环比增长率'],
             top: 50,
             right: '10%'
           },
@@ -247,13 +269,38 @@ export default {
           tooltip: {
             trigger: 'axis',
             axisPointer: { type: 'shadow' },
+            formatter: function (params) {
+              const current = params[0].value;
+              const lastYear = params[1].value;
+              const yoy = params[2].value;
+              const mom = params[3].value;
+              
+              return `
+                ${params[0].name}<br>
+                ${params[0].marker} ${params[0].seriesName}: ${current} 台<br>
+                ${params[1].marker} ${params[1].seriesName}: ${lastYear} 台<br>
+                ${params[2].marker} 同比增长率: ${yoy}%<br>
+                ${params[3].marker} 环比增长率: ${mom}%
+              `;
+            }
           },
           xAxis: { 
             type: 'category',
             data: months,
             axisLabel: { rotate: 45 }
           },
-          yAxis: { type: 'value' },
+          yAxis: [
+            { 
+              type: 'value',
+              name: '销量',
+              axisLabel: { formatter: '{value} 台' }
+            },
+            {
+              type: 'value',
+              name: '增长率',
+              axisLabel: { formatter: '{value}%' }
+            }
+          ],
           series: [
             {
               name: '本年销量',
@@ -266,6 +313,26 @@ export default {
               type: 'bar',
               data: lastYearData,
               itemStyle: { color: '#91CC75' }
+            },
+            {
+              name: '同比增长率',
+              type: 'line',
+              data: growthRateData,
+              yAxisIndex: 1,
+              symbol: 'circle',
+              symbolSize: 8,
+              itemStyle: { color: '#EE6666' },
+              lineStyle: { width: 3 }
+            },
+            {
+              name: '环比增长率',
+              type: 'line',
+              data: chainGrowthRateData,
+              yAxisIndex: 1,
+              symbol: 'circle',
+              symbolSize: 8,
+              itemStyle: { color: '#FAC858' },
+              lineStyle: { width: 3, type: 'dashed' }
             }
           ]
         });

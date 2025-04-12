@@ -43,11 +43,11 @@ public class CategorytwoStandardConfigurationTable extends BaseEntity
     private String nonStandardSeriesFork;
 
     /** 标准车身颜色（蓝灰色+合力红） */
-    @Excel(name = "标准车身颜色", readConverterExp = "蓝=灰色+合力红")
+    @Excel(name = "标准车身颜色（蓝灰色+合力红）")
     private String standardBodyColor;
 
     /** 其它车身颜色（客户定制） */
-    @Excel(name = "其它车身颜色", readConverterExp = "客=户定制")
+    @Excel(name = "其它车身颜色（客户定制）")
     private String customizedBodyColor;
 
     /** 属具未到位限速 */
@@ -91,7 +91,7 @@ public class CategorytwoStandardConfigurationTable extends BaseEntity
     private String guideWheel;
 
     /** 监控（货叉、倒车影像） */
-    @Excel(name = "监控", readConverterExp = "货=叉、倒车影像")
+    @Excel(name = "监控（货叉、倒车影像）")
     private String monitor;
 
     /** 磁导航 */
@@ -127,7 +127,7 @@ public class CategorytwoStandardConfigurationTable extends BaseEntity
     private String readingLamp;
 
     /** 配装LED闪光警示灯（装配式） */
-    @Excel(name = "配装LED闪光警示灯", readConverterExp = "装=配式")
+    @Excel(name = "配装LED闪光警示灯（装配式）")
     private String ledFlashingWarningLight;
 
     /** 公制螺纹 */

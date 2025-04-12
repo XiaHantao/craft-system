@@ -46,13 +46,13 @@
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
+        <!-- <el-button
           type="warning"
           plain
           icon="Download"
           @click="handleExport"
           v-hasPermi="['marketanalysis:media:export']"
-        >导出</el-button>
+        >导出</el-button> -->
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -60,8 +60,8 @@
     <el-table v-loading="loading" :data="mediaList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="文件名称" align="center" prop="fileName" />
-      <el-table-column label="文件类型" align="center" prop="fileType" />
-      <el-table-column label="备注" align="center" prop="notes" />
+      <!-- <el-table-column label="文件类型" align="center" prop="fileType" /> -->
+      <el-table-column label="文件说明" align="center" prop="notes" />
       <el-table-column label="多媒体文件" align="center" prop="file" >
         <template v-slot:default="scope">
           <el-button v-if="scope.row.file" icon="Download" @click="downloadFiles(scope.row.file)"></el-button>
@@ -139,10 +139,10 @@
         <el-form-item label="文件名称" prop="fileName">
           <el-input v-model="form.fileName" placeholder="请输入文件名称" />
         </el-form-item>
-        <el-form-item label="文件类型" prop="fileType">
+        <!-- <el-form-item label="文件类型" prop="fileType">
           <el-input v-model="form.fileType" placeholder="请输入文件类型" />
-        </el-form-item>
-        <el-form-item label="备注" prop="notes">
+        </el-form-item> -->
+        <el-form-item label="文件说明" prop="notes">
           <el-input v-model="form.notes" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="多媒体文件" prop="file">

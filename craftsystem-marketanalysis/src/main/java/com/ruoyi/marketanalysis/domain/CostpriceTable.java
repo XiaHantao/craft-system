@@ -27,31 +27,31 @@ public class CostpriceTable extends BaseEntity
     private String vehicleType;
 
     /** 成本（元，不含税） */
-    @Excel(name = "成本", readConverterExp = "元=，不含税")
+    @Excel(name = "成本（元，不含税）")
     private String cost;
 
     /** 车体（元，不含税） */
-    @Excel(name = "车体", readConverterExp = "元=，不含税")
+    @Excel(name = "车体（元，不含税）")
     private String carBody;
 
     /** 起重（元，不含税） */
-    @Excel(name = "起重", readConverterExp = "元=，不含税")
+    @Excel(name = "起重（元，不含税）")
     private String lifting;
 
     /** 其它（元，不含税） */
-    @Excel(name = "其它", readConverterExp = "元=，不含税")
+    @Excel(name = "其它（元，不含税）")
     private String other;
 
     /** 盘锦定价（元，含税） */
-    @Excel(name = "盘锦定价", readConverterExp = "元=，含税")
+    @Excel(name = "盘锦定价（元，含税）")
     private String panjinPricing;
 
     /** 收入（元，不含税） */
-    @Excel(name = "收入", readConverterExp = "元=，不含税")
+    @Excel(name = "收入（元，不含税）")
     private String income;
 
     /** 毛利（元，不含税） */
-    @Excel(name = "毛利", readConverterExp = "元=，不含税")
+    @Excel(name = "毛利（元，不含税）")
     private String grossMargin;
 
     /** 毛利率 */
@@ -59,15 +59,15 @@ public class CostpriceTable extends BaseEntity
     private String grossMarginRate;
 
     /** 股份定价（元，含税） */
-    @Excel(name = "股份定价", readConverterExp = "元=，含税")
+    @Excel(name = "股份定价（元，含税）")
     private String stockPricing;
 
     /** 网点售价（元，含税） */
-    @Excel(name = "网点售价", readConverterExp = "元=，含税")
+    @Excel(name = "网点售价（元，含税）")
     private String outletSellingPrice;
 
     /** 毛利（元，含税） */
-    @Excel(name = "毛利", readConverterExp = "元=，含税")
+    @Excel(name = "毛利（元，含税）")
     private String grossProfitIncludingTax;
 
     public void setId(Long id) 

@@ -878,7 +878,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/standardone/export', {
     ...queryParams.value
-  }, `standardone_${new Date().getTime()}.xlsx`)
+  }, `一类车标准配置表.xlsx`)
 }
 
 getList();

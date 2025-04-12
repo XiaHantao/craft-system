@@ -43,15 +43,15 @@ public class CategoryfiveParameterTable extends BaseEntity
     private String powerMode;
 
     /** 起升高度（标准） */
-    @Excel(name = "起升高度", readConverterExp = "标=准")
+    @Excel(name = "起升高度（标准）")
     private String liftingHeight;
 
     /** 门架全高（货叉落地、门架垂直） */
-    @Excel(name = "门架全高", readConverterExp = "货=叉落地、门架垂直")
+    @Excel(name = "门架全高（货叉落地、门架垂直）")
     private String doorFrameFullHeight;
 
     /** 货叉起升最大高度（带挡货架） */
-    @Excel(name = "货叉起升最大高度", readConverterExp = "带=挡货架")
+    @Excel(name = "货叉起升最大高度（带挡货架）")
     private String maximumLiftingHeightOfFork;
 
     /** 自由提升高度 */
@@ -59,15 +59,15 @@ public class CategoryfiveParameterTable extends BaseEntity
     private String freeElevationHeight;
 
     /** 全高（护顶架） */
-    @Excel(name = "全高", readConverterExp = "护=顶架")
+    @Excel(name = "全高（护顶架）")
     private String fullHeight;
 
     /** 最小离地间隙（门架处） */
-    @Excel(name = "最小离地间隙", readConverterExp = "门=架处")
+    @Excel(name = "最小离地间隙（门架处）")
     private String minimumGroundClearance;
 
     /** 全长（含货叉/不含货叉） */
-    @Excel(name = "全长", readConverterExp = "含=货叉/不含货叉")
+    @Excel(name = "全长（含货叉/不含货叉）")
     private String overallLength;
 
     /** 轴距 */
@@ -87,7 +87,7 @@ public class CategoryfiveParameterTable extends BaseEntity
     private String fullWidth;
 
     /** 轮距（前轮距/后轮距） */
-    @Excel(name = "轮距", readConverterExp = "前=轮距/后轮距")
+    @Excel(name = "轮距（前轮距/后轮距）")
     private String trackWidth;
 
     /** 最小外侧转弯半径 */
@@ -95,7 +95,7 @@ public class CategoryfiveParameterTable extends BaseEntity
     private String minimumOuterTurningRadius;
 
     /** 门架倾角（前/后） */
-    @Excel(name = "门架倾角", readConverterExp = "前=/后")
+    @Excel(name = "门架倾角（前/后）")
     private String gateFrameInclinationAngle;
 
     /** 货叉尺寸 */
@@ -103,23 +103,23 @@ public class CategoryfiveParameterTable extends BaseEntity
     private String forkSize;
 
     /** 最高行驶速度（满载/空载） */
-    @Excel(name = "最高行驶速度", readConverterExp = "满=载/空载")
+    @Excel(name = "最高行驶速度（满载/空载）")
     private String maximumDrivingSpeed;
 
     /** 最大爬坡能力（满载/空载） */
-    @Excel(name = "最大爬坡能力", readConverterExp = "满=载/空载")
+    @Excel(name = "最大爬坡能力（满载/空载）")
     private String maxClimbCapability;
 
     /** 最大牵引力（满载/空载） */
-    @Excel(name = "最大牵引力", readConverterExp = "满=载/空载")
+    @Excel(name = "最大牵引力（满载/空载）")
     private String maximumTractionForce;
 
     /** 起升速度（满载/空载） */
-    @Excel(name = "起升速度", readConverterExp = "满=载/空载")
+    @Excel(name = "起升速度（满载/空载）")
     private String liftingSpeed;
 
     /** 下降速度（满载/空载） */
-    @Excel(name = "下降速度", readConverterExp = "满=载/空载")
+    @Excel(name = "下降速度（满载/空载）")
     private String descentSpeed;
 
     /** 总重 */
@@ -127,27 +127,27 @@ public class CategoryfiveParameterTable extends BaseEntity
     private String totalWeight;
 
     /** 重量分配 满载（前/后） */
-    @Excel(name = "重量分配 满载", readConverterExp = "前=/后")
+    @Excel(name = "重量分配 满载（前/后）")
     private String weightDistributionWithFullLoad;
 
     /** 重量分配 空载（前/后） */
-    @Excel(name = "重量分配 空载", readConverterExp = "前=/后")
+    @Excel(name = "重量分配 空载（前/后）")
     private String weightDistributionEmptyLoad;
 
     /** 车轮数量  X=驱动轮（前/后） */
-    @Excel(name = "车轮数量  X=驱动轮", readConverterExp = "前=/后")
+    @Excel(name = "车轮数量  X=驱动轮（前/后）")
     private String numberOfWheels;
 
     /** 轮胎类型（前/后） */
-    @Excel(name = "轮胎类型", readConverterExp = "前=/后")
+    @Excel(name = "轮胎类型（前/后）")
     private String tireType;
 
     /** 轮胎尺寸（前/后） */
-    @Excel(name = "轮胎尺寸", readConverterExp = "前=/后")
+    @Excel(name = "轮胎尺寸（前/后）")
     private String tireSize;
 
     /** 蓄电池（电压/容量） */
-    @Excel(name = "蓄电池", readConverterExp = "电=压/容量")
+    @Excel(name = "蓄电池（电压/容量）")
     private String batteryVoltageCapacity;
 
     /** 发动机制造厂商/型号 */
@@ -174,8 +174,8 @@ public class CategoryfiveParameterTable extends BaseEntity
     @Excel(name = "排放标准")
     private String emissionStandard;
 
-    /** 变速箱变速档数（前/后 型式） */
-    @Excel(name = "变速箱变速档数", readConverterExp = "前=/后,型=式")
+    /** 变速箱变速档数（前/后型式） */
+    @Excel(name = "变速箱变速档数（前/后型式）")
     private String gearsInTheGearbox;
 
     public void setId(Long id) 

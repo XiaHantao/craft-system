@@ -56,7 +56,7 @@ public class CategoryfiveStandardConfigurationTableController extends BaseContro
     {
         List<CategoryfiveStandardConfigurationTable> list = categoryfiveStandardConfigurationTableService.selectCategoryfiveStandardConfigurationTableList(categoryfiveStandardConfigurationTable);
         ExcelUtil<CategoryfiveStandardConfigurationTable> util = new ExcelUtil<CategoryfiveStandardConfigurationTable>(CategoryfiveStandardConfigurationTable.class);
-        util.exportExcel(response, list, "五类/七类车标准配置数据");
+        util.exportExcel(response, list, "五类七类车标准配置数据");
     }
 
     /**

@@ -456,7 +456,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/parameter_five/export', {
     ...queryParams.value
-  }, `parameter_five_${new Date().getTime()}.xlsx`)
+  }, `五类车参数表.xlsx`)
 }
 
 getList();
