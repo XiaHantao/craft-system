@@ -203,6 +203,9 @@ const data = reactive({
   rules: {
     vehicleModel: [
       { required: true, message: "车型不能为空", trigger: "blur" }
+    ],
+    filePath: [
+      { required: true, message: "工艺方案文件不能为空", trigger: "blur" }
     ]
   }
 });

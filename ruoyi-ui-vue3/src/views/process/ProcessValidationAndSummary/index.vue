@@ -317,6 +317,27 @@ const data = reactive({
     vehicleModel: [
       { required: true, message: "车型不能为空", trigger: "blur" }
     ],
+    verificationReportName: [
+      { required: true, message: "验证报告名称不能为空", trigger: "blur" }
+    ],
+    verificationReportPath: [
+      { required: true, message: "验证报告不能为空", trigger: "blur" }
+    ],
+    improvementReportUploadPerson: [
+      { required: true, message: "改进报告上传人不能为空", trigger: "blur" }
+    ],
+    improvementReportName: [
+      { required: true, message: "改进报告名称不能为空", trigger: "blur" }
+    ],
+    improvementReportPath: [
+      { required: true, message: "改进报告不能为空", trigger: "blur" }
+    ],
+    summaryReportName: [
+      { required: true, message: "总结报告名称不能为空", trigger: "blur" }
+    ],
+    summaryReportPath: [
+      { required: true, message: "总结报告不能为空", trigger: "blur" }
+    ]
   }
 });
 

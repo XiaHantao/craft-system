@@ -319,19 +319,19 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-/** 查询专用规程列表 */
+/** 查询规程列表 */
 function getList() {
   loading.value = true;
   // 查询专用规程列表
   listProcessSpecificationDesign(queryParams.value).then(response => {
-    processSpecificationDesignList.value = response.rows.filter(row => row.tabFlag === 1);
-    total.value = processSpecificationDesignList.value.length;
+    processSpecificationDesignList.value = response.rows;
+    total.value = response.total;
   });
 
   // 查询通用规程列表
   listGeneral(queryParams.value).then(response => {
-    generalList.value = response.rows.filter(row => row.tabFlag === 2);
-    generalTotal.value = generalList.value.length;
+    generalList.value = response.rows;
+    generalTotal.value = response.total;
   });
 
   getUserProfile().then(response => {

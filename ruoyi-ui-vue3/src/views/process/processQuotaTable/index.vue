@@ -242,6 +242,7 @@ const formList = ref([]); // 用于存储每个步骤的表单数据
 const steps = ref([]);  // 步骤信息
 const  activeStep = ref(0); // 当前激活的步骤
 
+const existingVehicleModels = ref([]); //已有的车型列表
 const modelList = ref([]); // 车型列表
 const processQuotaTableList = ref([]);
 const open = ref(false);
@@ -292,6 +293,9 @@ function getList() {
   loading.value = true;
   listProcessQuotaTable(queryParams.value).then(response => {
     processQuotaTableList.value = response.rows;
+    // 提取已经存在的车型列表
+    existingVehicleModels.value = processQuotaTableList.value.map(row => row.vehicleModel);
+    getModelList();
     total.value = Number(response.total);
     loading.value = false;
   });
@@ -558,7 +562,7 @@ function handleExport() {
 /** 查询车型列表 */
 function getModelList() {
   listModelTable().then(response => {
-    modelList.value = response.rows;
+    modelList.value = response.rows.filter(model => !existingVehicleModels.value.includes(model.vehicleModel));
   });
 }
 
@@ -647,7 +651,6 @@ function downloadFile(filePath) {
 }
 
 
-getModelList();
 getList();
 </script>
 

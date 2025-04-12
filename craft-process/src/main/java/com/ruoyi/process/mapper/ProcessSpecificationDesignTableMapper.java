@@ -28,7 +28,7 @@ public interface ProcessSpecificationDesignTableMapper
     public List<ProcessSpecificationDesignTable> selectProcessSpecificationDesignTableList(ProcessSpecificationDesignTable processSpecificationDesignTable);
 
     /**
-     * 查询工艺规程设计列表
+     * 查询通用工艺规程设计列表
      *
      * @param processSpecificationDesignTable 工艺规程设计
      * @return 工艺规程设计集合

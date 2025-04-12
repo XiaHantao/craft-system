@@ -44,7 +44,7 @@ public class ProcessSpecificationDesignTableServiceImpl implements IProcessSpeci
     }
 
     /**
-     * 查询工艺规程设计列表
+     * 查询通用工艺规程设计列表
      *
      * @param processSpecificationDesignTable 工艺规程设计
      * @return 工艺规程设计
