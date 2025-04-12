@@ -348,7 +348,7 @@
 import { listSelfMadePartsLedger, getSelfMadePartsLedger, delSelfMadePartsLedger, addSelfMadePartsLedger, updateSelfMadePartsLedger } from "@/api/ToolingModule/SelfMadePartsLedger";
 import {getUserProfile, listUser} from "@/api/system/user";
 import { ElMessage } from 'element-plus';
-import {listMoldTypename} from "@/api/ToolingModule/MoldType";
+import {listMoldType} from "@/api/ToolingModule/MoldType";
 import {getLatestRecord02} from "@/api/process/ProcessValidationAndSummary";
 import {addSysMessageNotification} from "@/api/system/sysMessageNotification";
 import {listDept} from "@/api/system/dept";
@@ -402,20 +402,38 @@ const data = reactive({
   }
 });
 // 获取工装类型数据
+// const fetchMoldTypeList = async () => {
+//   try {
+//     const response = await listMoldType();
+//
+//     // moldTypeList.value = response.data || []; // 确保数据是数组
+//     console.log('类别获取数据' ,response.rows)
+//     moldTypeList.value = response.rows.map((moldType, id) => ({
+//       id: id,  // 使用索引作为唯一标识
+//       label: moldType // 使用数组的字符串作为显示的 label
+//     }));
+//     // console.log('加载中....' , moldTypeList.value)
+//
+//   } catch (error) {
+//     console.error("获取工装类型失败：", error);
+//   }
+// };
 const fetchMoldTypeList = async () => {
   try {
-    const response = await listMoldTypename();
-    // moldTypeList.value = response.data || []; // 确保数据是数组
-    moldTypeList.value = response.data.map((item, index) => ({
-      id: index,  // 使用索引作为唯一标识
-      label: item // 使用数组的字符串作为显示的 label
+    const response = await listMoldType();
+
+    console.log('类别获取数据', response.rows);
+
+    moldTypeList.value = (response.rows || []).map(item => ({
+      id: item.id,
+      label: item.moldType  // 只取 moldType 作为显示字段
     }));
-    // console.log('加载中....' , moldTypeList.value)
 
   } catch (error) {
     console.error("获取工装类型失败：", error);
   }
 };
+
 // 组件加载时调用
 onMounted(() => {
   fetchMoldTypeList();
