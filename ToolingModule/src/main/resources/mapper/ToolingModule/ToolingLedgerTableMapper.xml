@@ -163,6 +163,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <when test="field == 'mbom'">
                 UPDATE tooling_ledger_table SET mbom_file = #{file} WHERE mold_number = #{moldNumber}
             </when>
+            <when test="field == 'toolingDrawings'">
+                UPDATE tooling_ledger_table SET tooling_drawings = #{file} WHERE mold_number = #{moldNumber}
+            </when>
         </choose>
     </update>
 

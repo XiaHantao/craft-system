@@ -219,4 +219,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="getAllMoldNumbers" resultType="String">
+        SELECT mold_number FROM NonStructuralTooling_table
+    </select>
+
+    <update id="updateFilePath">
+        <choose>
+            <when test="processDocuments == 'processDocuments'">
+                UPDATE NonStructuralTooling_table SET process_Documents = #{file}, mold_ownership = #{moldownership} WHERE mold_number = #{moldNumber}
+            </when>
+            <when test="processDocuments == 'mbom'">
+                UPDATE NonStructuralTooling_table SET mbom_file = #{file}, mold_ownership = #{moldownership} WHERE mold_number = #{moldNumber}
+            </when>
+            <when test="processDocuments == 'toolingDrawings'">
+                UPDATE NonStructuralTooling_table SET tooling_drawings = #{file}, mold_ownership = #{moldownership} WHERE mold_number = #{moldNumber}
+            </when>
+        </choose>
+    </update>
 </mapper>

@@ -35,6 +35,15 @@ export function getNonStructuralTooling(id) {
   })
 }
 
+// 补充工艺文件及物料清单
+export function updateWorkClothesfile(data) {
+  return request({
+    url: '/ToolingModule/NonStructuralTooling/fileupdate',
+    method: 'put',
+    data: data
+  })
+}
+
 // 新增非结构工装台账
 export function addNonStructuralTooling(data) {
   return request({

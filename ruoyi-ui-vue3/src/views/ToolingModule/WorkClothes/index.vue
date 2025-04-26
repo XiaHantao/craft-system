@@ -198,6 +198,7 @@
         <!-- 单选框：工艺文件 或 物料清单 -->
         <el-form-item label="文件类型" prop="fileType">
           <el-radio-group v-model="fileform.fileType">
+            <el-radio label="toolingDrawings">工装图纸</el-radio>
             <el-radio label="processDocuments">工艺文件</el-radio>
             <el-radio label="mbom">物料清单</el-radio>
           </el-radio-group>
@@ -273,9 +274,19 @@
         <el-form-item label="模具号" prop="moldNumber">
           <el-input v-model="form.moldNumber" placeholder="请输入模具号" />
         </el-form-item>
-        <el-form-item label="种类" prop="moldType">
-          <el-input v-model="form.moldType" placeholder="请输入模具种类" />
+        <el-form-item label="模具种类" prop="moldType">
+          <el-select v-model="form.moldType" placeholder="请选择模具种类" clearable style="width: 50%;">
+            <el-option
+                v-for="item in moldTypeList"
+                :key="item.id"
+                :label="item.label"
+                :value="item.label">
+            </el-option>
+          </el-select>
         </el-form-item>
+<!--        <el-form-item label="种类" prop="moldType">-->
+<!--          <el-input v-model="form.moldType" placeholder="请输入模具种类" />-->
+<!--        </el-form-item>-->
         <el-form-item label="投入时间" prop="investTime">
           <el-date-picker clearable
             v-model="form.investTime"
@@ -362,6 +373,7 @@ import {
   updateWorkClothesfile
 } from "@/api/ToolingModule/WorkClothes";
 import {ElMessage} from "element-plus";
+import {listMoldType} from "@/api/ToolingModule/MoldType";
 
 
 const { proxy } = getCurrentInstance();
@@ -374,6 +386,8 @@ const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
+const moldTypeList = ref([]); // 存储后端返回的数组
+
 // const total1 = ref(0);
 const title = ref("");
 const dialogVisible = ref(false); // 控制弹框的显示与隐藏
@@ -420,6 +434,28 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
+const fetchMoldTypeList = async () => {
+  try {
+    const response = await listMoldType();
+
+    console.log('类别获取数据', response.rows);
+
+    moldTypeList.value = (response.rows || []).map(item => ({
+      id: item.id,
+      label: item.moldType  // 只取 moldType 作为显示字段
+    }));
+
+  } catch (error) {
+    console.error("获取工装类型失败：", error);
+  }
+};
+
+// 组件加载时调用
+onMounted(() => {
+  fetchMoldTypeList();
+  // proxy.$refs.form.validate();
+  // console.log('加载中....' , moldTypeList.value)
+});
 // const handleFileChange = (file) => {
 //   if (!file) return;
 //   console.log("处理后的文件名:", file);
@@ -466,6 +502,8 @@ const handleSubmit = () => {
   // console.log('提交的文件:', moldname);
   dialogVisible.value = false;
 };
+
+
 
 /** 查询工装台账列表 */
 function getList() {
@@ -550,13 +588,15 @@ function getFileName(name) {
 // 提取文件名中的型号
 function extractModelName(filename) {
 
-
+  console.log('Huoqu' ,filename);
   // 正则表达式匹配类似 PJ-24-ZH-10901 格式的型号
-  const regex = /([A-Za-z]+-\d+-[A-Za-z]+-\d+)/;
-  const match = filename.match(regex);
-
+// 基础版（支持任意括号类型）
+  const regexBasic = /[（(]([^）)]+)[）)]/;
+  const matchBasic = filename.match(regexBasic);
+  // const contentBasic = matchBasic ? matchBasic[1] : null;
+  // console.log('Xiugai' ,contentBasic);
   // 如果匹配成功，返回型号部分，否则返回空字符串
-  return match ? match[0] : '';
+  return matchBasic ? matchBasic[1] : '';
 }
 
 /** 搜索按钮操作 */

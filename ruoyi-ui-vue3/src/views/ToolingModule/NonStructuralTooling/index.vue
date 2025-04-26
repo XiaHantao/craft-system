@@ -133,14 +133,23 @@
           v-hasPermi="['ToolingModule:NonStructuralTooling:remove']"
         >删除</el-button>
       </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="warning"-->
+<!--          plain-->
+<!--          icon="Download"-->
+<!--          @click="handleExport"-->
+<!--          v-hasPermi="['ToolingModule:NonStructuralTooling:export']"-->
+<!--        >导出</el-button>-->
+<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['ToolingModule:NonStructuralTooling:export']"
-        >导出</el-button>
+            type="primary"
+            plain
+            icon="Plus"
+            @click="fileAdd"
+            v-hasPermi="['ToolingModule:WorkClothes:add']"
+        >上传</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -229,7 +238,29 @@
       v-model:limit="queryParams.pageSize"
       @pagination="getList"
     />
+    <!-- 弹窗 -->
+    <el-dialog v-model="dialogVisible" title="上传文件" width="30%">
+      <el-form :model="fileform" ref="formRef">
+        <!-- 单选框：工艺文件 或 物料清单 -->
+        <el-form-item label="文件类型" prop="fileType">
+          <el-radio-group v-model="fileform.fileType">
+            <el-radio label="toolingDrawings">工装图纸</el-radio>
+            <el-radio label="processDocuments">工艺文件</el-radio>
+            <el-radio label="mbom">物料清单</el-radio>
+          </el-radio-group>
+        </el-form-item>
 
+        <!-- 上传组件 -->
+        <el-form-item :label="fileform.fileType === '工艺文件' ? '工艺文件' : '物料清单'" prop="file">
+          <file-upload v-model="fileform.file"/>
+        </el-form-item>
+      </el-form>
+
+      <template #footer>
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleSubmit">提交</el-button>
+      </template>
+    </el-dialog>
     <!-- 添加或修改非结构工装台账对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="NonStructuralToolingRef" :model="form" :rules="rules" label-width="120px">
@@ -320,7 +351,9 @@
 </template>
 
 <script setup name="NonStructuralTooling">
-import { listNonStructuralTooling, getNonStructuralTooling, delNonStructuralTooling, addNonStructuralTooling, updateNonStructuralTooling } from "@/api/ToolingModule/NonStructuralTooling";
+import { listNonStructuralTooling, getNonStructuralTooling, delNonStructuralTooling, addNonStructuralTooling, updateNonStructuralTooling, updateWorkClothesfile } from "@/api/ToolingModule/NonStructuralTooling";
+import {ElMessage} from "element-plus";
+import {getCurrentInstance, reactive, ref, toRefs} from "vue";
 
 const { proxy } = getCurrentInstance();
 
@@ -333,9 +366,17 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-
+const dialogVisible = ref(false); // 控制弹框的显示与隐藏
 // 获取路由实例
 const router = useRouter()
+
+// 定义表单模型和弹窗显示状态
+const fileform = ref({
+  fileType: 'processDocuments', // 默认选中工艺文件
+  file: null, // 上传的文件
+  moldname: null, //工装编号
+  moldOwnership: 'externalTooling', //工装所属班组
+});
 
 const data = reactive({
   form: {},
@@ -369,6 +410,43 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
+// 弹窗显示控制
+function fileAdd(){
+  dialogVisible.value = true;
+};
+// 提交上传的文件
+const handleSubmit = () => {
+  // 在这里处理提交的逻辑
+  // console.log('提交的文件:', fileform.value.fileType);
+  const filename = getFileName(fileform.value.file);
+  const moldname = extractModelName(filename);
+  fileform.value.moldname = moldname;
+  if (moldname == null){
+    ElMessage.error("请确认文件名称");
+  }
+  else {
+    updateWorkClothesfile(fileform.value).then(response => {
+      proxy.$modal.msgSuccess("修改成功");
+      dialogVisible.value = false;
+      getList();
+    });
+  }
+  // console.log('提交的文件:', moldname);
+  dialogVisible.value = false;
+};
+// 提取文件名中的型号
+function extractModelName(filename) {
+
+  console.log('Huoqu' ,filename);
+  // 正则表达式匹配类似 PJ-24-ZH-10901 格式的型号
+// 基础版（支持任意括号类型）
+  const regexBasic = /[（(]([^）)]+)[）)]/;
+  const matchBasic = filename.match(regexBasic);
+  // const contentBasic = matchBasic ? matchBasic[1] : null;
+  // console.log('Xiugai' ,contentBasic);
+  // 如果匹配成功，返回型号部分，否则返回空字符串
+  return matchBasic ? matchBasic[1] : '';
+}
 /** 查询非结构工装台账列表 */
 function getList() {
   loading.value = true;
