@@ -237,4 +237,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </when>
         </choose>
     </update>
+
+    <insert id="upsertBatch">
+        INSERT INTO NonStructuralTooling_table
+        (mold_name, mold_number, mold_type, invest_time, mold_status, quantity_of_tooling, assembling_products, mold_position,  remark, mold_ownership, mold_usage)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.moldName},
+            #{item.moldNumber},
+            #{item.moldType},      <!-- 修正：添加 item. 前缀 -->
+            #{item.investTime},    <!-- 修正：添加 item. 前缀 -->
+            #{item.moldStatus},
+            #{item.quantityOfTooling}, <!-- 修正：添加 item. 前缀 -->
+            #{item.assemblingProducts},
+            #{item.moldPosition},
+            #{item.remark},
+            #{item.moldOwnership} ,
+            #{item.moldUsage}<!-- 修正：添加 item. 前缀 -->
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        mold_name = VALUES(mold_name),
+        mold_type = VALUES(mold_type),
+        invest_time = VALUES(invest_time),
+        mold_status = VALUES(mold_status),
+        quantity_of_tooling = VALUES(quantity_of_tooling),
+        assembling_products = VALUES(assembling_products),
+        mold_position = VALUES(mold_position),
+        remark = VALUES(remark),
+        mold_ownership = VALUES(mold_ownership),
+        mold_usage = VALUES(mold_usage)
+    </insert>
+
 </mapper>

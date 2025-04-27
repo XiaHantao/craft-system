@@ -149,7 +149,7 @@
             icon="Plus"
             @click="fileAdd"
             v-hasPermi="['ToolingModule:WorkClothes:add']"
-        >上传</el-button>
+        >上传文件</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -158,6 +158,12 @@
       <el-table-column type="selection" width="55" align="center" />
       <!--      <el-table-column label="id" align="center" prop="id" />-->
 <!--      <el-table-column label="用途" align="center" prop="moldUsage" />-->
+      <!-- 添加序号列 -->
+      <el-table-column label="序号" align="center">
+        <template #default="{ $index }">
+          <span>{{ ($index + 1) + (queryParams.pageNum - 1) * queryParams.pageSize }}</span> <!-- 根据当前页计算序号 -->
+        </template>
+      </el-table-column>
       <el-table-column label="模具名称" align="center" prop="moldName" />
       <el-table-column label="模具号" align="center" prop="moldNumber" />
       <el-table-column label="种类" align="center" prop="moldType" />

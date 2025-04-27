@@ -101,8 +101,20 @@
             icon="Plus"
             @click="fileAdd"
             v-hasPermi="['ToolingModule:WorkClothes:add']"
-        >上传</el-button>
+        >文件上传</el-button>
       </el-col>
+      <el-upload
+          class="upload-demo"
+          action=""
+          :http-request="handleUpload"
+          :show-file-list="true"
+          :limit="1"
+          accept=".xls,.xlsx"
+      >
+        <el-button type="primary"
+                   plain
+                   icon="Plus" >台账上传</el-button>
+      </el-upload>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -370,6 +382,7 @@ import {
   delWorkClothes,
   addWorkClothes,
   updateWorkClothes,
+  uploadFile,
   updateWorkClothesfile
 } from "@/api/ToolingModule/WorkClothes";
 import {ElMessage} from "element-plus";
@@ -675,6 +688,22 @@ function handleExport() {
     ...queryParams.value
   }, `WorkClothes_${new Date().getTime()}.xlsx`)
 }
+
+const handleUpload = async (file) => {
+  try {
+    const response = await uploadFile(file.file);
+    getList();
+
+    // console.log("Response:", response); // 查看响应数据
+    // console.log("Response:", response.code); // 查看响应数据
+    if (response.code === 200) {
+      proxy.$modal.msgSuccess(response.data.msg || "上传成功");
+    } else {
+      proxy.$modal.msgError(response.data.msg || "文件导入失败");
+    }
+  } catch (error) {
+  }
+};
 
 getList();
 </script>

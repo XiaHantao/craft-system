@@ -79,4 +79,6 @@ public interface NonstructuraltoolingTableMapper
     List<String> getAllMoldNumbers();
 
     void updateFilePath(@Param("moldNumber") String moldNumber,@Param("file") String file, @Param("moldownership")String moldownership,@Param("processDocuments") String processDocuments);
+
+    int upsertBatch(List<NonstructuraltoolingTable> batch);
 }

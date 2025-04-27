@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.workClothes.domain.ToolingLedgerTable;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 工装台账Service接口
@@ -62,4 +63,7 @@ public interface IToolingLedgerTableService
     public int deleteToolingLedgerTableById(Long id);
 
     int updateWorkClothesfile(Map<String, Object> fileform);
+
+    int loadImport(MultipartFile file);
+
 }
