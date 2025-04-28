@@ -133,15 +133,15 @@
             v-hasPermi="['ToolingModule:NonStructuralTooling:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="warning"
-            plain
-            icon="Download"
-            @click="handleExport"
-            v-hasPermi="['ToolingModule:NonStructuralTooling:export']"
-        >导出</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--            type="warning"-->
+<!--            plain-->
+<!--            icon="Download"-->
+<!--            @click="handleExport"-->
+<!--            v-hasPermi="['ToolingModule:NonStructuralTooling:export']"-->
+<!--        >导出</el-button>-->
+<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
             type="primary"
@@ -149,7 +149,7 @@
             icon="Plus"
             @click="fileAdd"
             v-hasPermi="['ToolingModule:WorkClothes:add']"
-        >上传</el-button>
+        >上传文件</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -158,6 +158,12 @@
       <el-table-column type="selection" width="55" align="center" />
       <!--      <el-table-column label="id" align="center" prop="id" />-->
       <!--      <el-table-column label="用途" align="center" prop="moldUsage" />-->
+      <!-- 添加序号列 -->
+      <el-table-column label="序号" align="center">
+        <template #default="{ $index }">
+          <span>{{ ($index + 1) + (queryParams.pageNum - 1) * queryParams.pageSize }}</span> <!-- 根据当前页计算序号 -->
+        </template>
+      </el-table-column>
       <el-table-column label="模具名称" align="center" prop="moldName" />
       <el-table-column label="模具号" align="center" prop="moldNumber" />
       <el-table-column label="种类" align="center" prop="moldType" />
@@ -239,21 +245,19 @@
         v-model:limit="queryParams.pageSize"
         @pagination="getList"
     />
-
-    <!-- 弹窗 -->
     <el-dialog v-model="dialogVisible" title="上传文件" width="30%">
       <el-form :model="fileform" ref="formRef">
         <!-- 单选框：工艺文件 或 物料清单 -->
         <el-form-item label="文件类型" prop="fileType">
           <el-radio-group v-model="fileform.fileType">
+            <el-radio label="toolingDrawings">工装图纸</el-radio>
             <el-radio label="processDocuments">工艺文件</el-radio>
             <el-radio label="mbom">物料清单</el-radio>
-            <el-radio label="toolingDrawings">工装图纸</el-radio>
           </el-radio-group>
         </el-form-item>
 
         <!-- 上传组件 -->
-        <el-form-item label="文件选择" prop="file">
+        <el-form-item :label="fileform.fileType === '工艺文件' ? '工艺文件' : '物料清单'" prop="file">
           <file-upload v-model="fileform.file"/>
         </el-form-item>
       </el-form>
@@ -360,8 +364,9 @@ import {
   delNonStructuralTooling,
   addNonStructuralTooling,
   updateNonStructuralTooling,
-  updateNonStructuralfile
+  updateWorkClothesfile
 } from "@/api/ToolingModule/NonStructuralTooling";
+import {getCurrentInstance, reactive, ref, toRefs} from "vue";
 import {ElMessage} from "element-plus";
 
 const { proxy } = getCurrentInstance();
@@ -376,7 +381,6 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 const dialogVisible = ref(false); // 控制弹框的显示与隐藏
-
 // 获取路由实例
 const router = useRouter()
 
@@ -385,7 +389,7 @@ const fileform = ref({
   fileType: 'processDocuments', // 默认选中工艺文件
   file: null, // 上传的文件
   moldname: null, //工装编号
-  owner: 'materialPreparationTeamTooling',
+  moldOwnership: 'materialPreparationTeamTooling', //工装所属班组
 });
 
 const data = reactive({
@@ -419,6 +423,43 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
+// 弹窗显示控制
+function fileAdd(){
+  dialogVisible.value = true;
+};
+// 提交上传的文件
+const handleSubmit = () => {
+  // 在这里处理提交的逻辑
+  // console.log('提交的文件:', fileform.value.fileType);
+  const filename = getFileName(fileform.value.file);
+  const moldname = extractModelName(filename);
+  fileform.value.moldname = moldname;
+  if (moldname == null){
+    ElMessage.error("请确认文件名称");
+  }
+  else {
+    updateWorkClothesfile(fileform.value).then(response => {
+      proxy.$modal.msgSuccess("修改成功");
+      dialogVisible.value = false;
+      getList();
+    });
+  }
+  // console.log('提交的文件:', moldname);
+  dialogVisible.value = false;
+};
+// 提取文件名中的型号
+function extractModelName(filename) {
+
+  console.log('Huoqu' ,filename);
+  // 正则表达式匹配类似 PJ-24-ZH-10901 格式的型号
+// 基础版（支持任意括号类型）
+  const regexBasic = /[（(]([^）)]+)[）)]/;
+  const matchBasic = filename.match(regexBasic);
+  // const contentBasic = matchBasic ? matchBasic[1] : null;
+  // console.log('Xiugai' ,contentBasic);
+  // 如果匹配成功，返回型号部分，否则返回空字符串
+  return matchBasic ? matchBasic[1] : '';
+}
 
 //预览文件
 function previewFile(fileUrl) {
@@ -501,48 +542,6 @@ function getFileName(name) {
   // 如果没有找到版本号部分，返回整个文件名
   return parts.length > 1 ? parts[0] : fileName;
 }
-
-// 提交上传的文件
-const handleSubmit = () => {
-  // 在这里处理提交的逻辑
-  // console.log('提交的文件:', fileform.value.fileType);
-  const filename = getFileName(fileform.value.file);
-  const moldname = extractModelName(filename);
-  fileform.value.moldname = moldname;
-  if (moldname == null){
-    ElMessage.error("请确认文件名称");
-  }
-  else {
-    updateNonStructuralfile(fileform.value).then(response => {
-      proxy.$modal.msgSuccess("修改成功");
-      dialogVisible.value = false;
-      getList();
-    });
-  }
-  // console.log('提交的文件:', moldname);
-  dialogVisible.value = false;
-};
-// 提取文件名中的型号
-function extractModelName(filename) {
-
-
-  // // 正则表达式匹配类似 PJ-24-ZH-10901 格式的型号
-  // const regex = /([A-Za-z]+-\d+-[A-Za-z]+-\d+)/;
-  // const match = filename.match(regex);
-
-  // 正则表达式匹配中英文括号内的内容
-  const regex = /[\(（]([^）\)]+)[\)）]/;
-  const match = filename.match(regex);
-  // console.log('数据' ,match)
-  // 如果匹配成功，返回型号部分，否则返回空字符串
-  return match ? match[1] : '';
-}
-
-// 弹窗显示控制
-function fileAdd(){
-  dialogVisible.value = true;
-};
-
 /** 搜索按钮操作 */
 function handleQuery() {
   queryParams.value.pageNum = 1;

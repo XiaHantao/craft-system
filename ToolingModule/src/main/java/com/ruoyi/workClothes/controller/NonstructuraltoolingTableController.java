@@ -71,7 +71,7 @@ public class NonstructuraltoolingTableController extends BaseController
     }
 
     /**
-     * 修改非结构工装台账工艺及物料
+     * 修改工装台账工艺及物料
      */
     @PreAuthorize("@ss.hasPermi('ToolingModule:NonStructuralTooling:edit')")
     @Log(title = "工装台账", businessType = BusinessType.UPDATE)
@@ -82,6 +82,7 @@ public class NonstructuraltoolingTableController extends BaseController
 
         return toAjax(nonstructuraltoolingTableService.updateWorkClothesfile(fileform));
     }
+
     /**
      * 导出非结构工装台账列表
      */

@@ -125,7 +125,7 @@ public class NonstructuraltoolingTableServiceImpl implements INonstructuraltooli
         String fileType = (String) fileform.get("fileType");
         String file = (String)fileform.get("file");
         String moldname = (String)fileform.get("moldname");
-        String owner = (String)fileform.get("owner");
+        String moldownership = (String)fileform.get("moldOwnership");
         System.out.println("传入数据" + fileform);
         // 1. 获取数据库中所有的moldNumber
         List<String> moldNumbers = nonstructuraltoolingTableMapper.getAllMoldNumbers(); // 假设你有方法来获取所有moldNumbers
@@ -136,14 +136,15 @@ public class NonstructuraltoolingTableServiceImpl implements INonstructuraltooli
             if (moldname.equals(moldNumber)) {
                 // 如果 fileType 是 processDocuments
                 if ("processDocuments".equals(fileType)) {
-                    updateFilePath(moldNumber, file, "processDocuments");
+                    updateFilePath(moldNumber, file, moldownership,"processDocuments");
                 }
                 // 如果 fileType 是 mbom
                 else if ("mbom".equals(fileType)) {
-                    updateFilePath(moldNumber, file, "mbom");
+                    updateFilePath(moldNumber, file, moldownership, "mbom");
                 }
+                // 如果 fileType 是 toolingDrawings
                 else if ("toolingDrawings".equals(fileType)) {
-                    updateFilePath(moldNumber, file, "toolingDrawings");
+                    updateFilePath(moldNumber, file, moldownership,"toolingDrawings");
                 }
                 return 1;
             }
@@ -152,19 +153,17 @@ public class NonstructuraltoolingTableServiceImpl implements INonstructuraltooli
     }
 
     // 更新文件路径的具体方法
-    private void updateFilePath(String moldNumber, String file, String fileType) {
+    private void updateFilePath(String moldNumber, String file, String moldownership, String fileType) {
         // 根据moldNumber和fileType更新数据库中的路径
         // 在这个方法中可以使用MyBatis的update方法来执行数据库更新操作
 
         if ("processDocuments".equals(fileType)) {
-            nonstructuraltoolingTableMapper.updateFilePath(moldNumber, file, "processDocuments");
+            nonstructuraltoolingTableMapper.updateFilePath(moldNumber, file, moldownership, "processDocuments");
         } else if ("mbom".equals(fileType)) {
-            nonstructuraltoolingTableMapper.updateFilePath(moldNumber, file, "mbom");
+            nonstructuraltoolingTableMapper.updateFilePath(moldNumber, file, moldownership,"mbom");
         }
         else if ("toolingDrawings".equals(fileType)) {
-            nonstructuraltoolingTableMapper.updateFilePath(moldNumber, file, "toolingDrawings");
+            nonstructuraltoolingTableMapper.updateFilePath(moldNumber, file, moldownership,"toolingDrawings");
         }
     }
-
-
 }

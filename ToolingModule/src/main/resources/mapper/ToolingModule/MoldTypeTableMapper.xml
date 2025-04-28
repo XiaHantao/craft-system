@@ -63,9 +63,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
-
-    <!-- 查询所有工装类别字典的ID -->
-    <select id="selectAllIds" resultType="java.lang.String">
-        SELECT mold_type FROM mold_type_table
-    </select>
 </mapper>

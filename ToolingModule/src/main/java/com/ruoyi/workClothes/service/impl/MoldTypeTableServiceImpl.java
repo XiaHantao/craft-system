@@ -1,6 +1,5 @@
 package com.ruoyi.workClothes.service.impl;
 
-import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,10 +89,5 @@ public class MoldTypeTableServiceImpl implements IMoldTypeTableService
     public int deleteMoldTypeTableById(Long id)
     {
         return moldTypeTableMapper.deleteMoldTypeTableById(id);
-    }
-
-    @Override
-    public List<String> listname() {
-        return moldTypeTableMapper.selectAllIds();
     }
 }

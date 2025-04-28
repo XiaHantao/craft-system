@@ -101,8 +101,20 @@
             icon="Plus"
             @click="fileAdd"
             v-hasPermi="['ToolingModule:WorkClothes:add']"
-        >上传</el-button>
+        >文件上传</el-button>
       </el-col>
+      <el-upload
+          class="upload-demo"
+          action=""
+          :http-request="handleUpload"
+          :show-file-list="true"
+          :limit="1"
+          accept=".xls,.xlsx"
+      >
+        <el-button type="primary"
+                   plain
+                   icon="Plus" >台账上传</el-button>
+      </el-upload>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -198,14 +210,14 @@
         <!-- 单选框：工艺文件 或 物料清单 -->
         <el-form-item label="文件类型" prop="fileType">
           <el-radio-group v-model="fileform.fileType">
+            <el-radio label="toolingDrawings">工装图纸</el-radio>
             <el-radio label="processDocuments">工艺文件</el-radio>
             <el-radio label="mbom">物料清单</el-radio>
-            <el-radio label="toolingDrawings">工装图纸</el-radio>
           </el-radio-group>
         </el-form-item>
 
         <!-- 上传组件 -->
-        <el-form-item label="文件选择" prop="file">
+        <el-form-item :label="fileform.fileType === '工艺文件' ? '工艺文件' : '物料清单'" prop="file">
           <file-upload v-model="fileform.file"/>
         </el-form-item>
       </el-form>
@@ -274,10 +286,7 @@
         <el-form-item label="模具号" prop="moldNumber">
           <el-input v-model="form.moldNumber" placeholder="请输入模具号" />
         </el-form-item>
-<!--        <el-form-item label="种类" prop="moldType">-->
-<!--          <el-input v-model="form.moldType" placeholder="请输入模具种类" />-->
-<!--        </el-form-item>-->
-        <el-form-item label="种类" prop="moldType">
+        <el-form-item label="模具种类" prop="moldType">
           <el-select v-model="form.moldType" placeholder="请选择模具种类" clearable style="width: 50%;">
             <el-option
                 v-for="item in moldTypeList"
@@ -287,6 +296,9 @@
             </el-option>
           </el-select>
         </el-form-item>
+<!--        <el-form-item label="种类" prop="moldType">-->
+<!--          <el-input v-model="form.moldType" placeholder="请输入模具种类" />-->
+<!--        </el-form-item>-->
         <el-form-item label="投入时间" prop="investTime">
           <el-date-picker clearable
             v-model="form.investTime"
@@ -370,10 +382,11 @@ import {
   delWorkClothes,
   addWorkClothes,
   updateWorkClothes,
+  uploadFile,
   updateWorkClothesfile
 } from "@/api/ToolingModule/WorkClothes";
 import {ElMessage} from "element-plus";
-import {listMoldTypename} from "@/api/ToolingModule/MoldType";
+import {listMoldType} from "@/api/ToolingModule/MoldType";
 
 
 const { proxy } = getCurrentInstance();
@@ -386,13 +399,13 @@ const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
+const moldTypeList = ref([]); // 存储后端返回的数组
+
 // const total1 = ref(0);
 const title = ref("");
 const dialogVisible = ref(false); // 控制弹框的显示与隐藏
 // const loadingDetails = ref(false);  // 控制工装详细表格的加载状态
 // const subData = ref([]); // 存储子数据
-
-const moldTypeList = ref([]); // 存储后端返回的数组
 // 获取路由实例
 const router = useRouter()
 
@@ -403,27 +416,7 @@ const fileform = ref({
   moldname: null, //工装编号
 });
 
-// 获取工装类型数据
-const fetchMoldTypeList = async () => {
-  try {
-    const response = await listMoldTypename();
-    // moldTypeList.value = response.data || []; // 确保数据是数组
-    moldTypeList.value = response.data.map((item, index) => ({
-      id: index,  // 使用索引作为唯一标识
-      label: item // 使用数组的字符串作为显示的 label
-    }));
-    console.log('加载中....' , moldTypeList.value)
 
-  } catch (error) {
-    console.error("获取工装类型失败：", error);
-  }
-};
-
-// 组件加载时调用
-onMounted(() => {
-  fetchMoldTypeList();
-  // console.log('加载中....' , moldTypeList.value)
-});
 
 const data = reactive({
   form: {},
@@ -446,11 +439,36 @@ const data = reactive({
     assemblingProducts: null,
   },
   rules: {
+    moldNumber: [
+      { required: true, message: "模具号不能为空", trigger: "blur" }
+    ],
   }
 });
 
 const { queryParams, form, rules } = toRefs(data);
 
+const fetchMoldTypeList = async () => {
+  try {
+    const response = await listMoldType();
+
+    console.log('类别获取数据', response.rows);
+
+    moldTypeList.value = (response.rows || []).map(item => ({
+      id: item.id,
+      label: item.moldType  // 只取 moldType 作为显示字段
+    }));
+
+  } catch (error) {
+    console.error("获取工装类型失败：", error);
+  }
+};
+
+// 组件加载时调用
+onMounted(() => {
+  fetchMoldTypeList();
+  // proxy.$refs.form.validate();
+  // console.log('加载中....' , moldTypeList.value)
+});
 // const handleFileChange = (file) => {
 //   if (!file) return;
 //   console.log("处理后的文件名:", file);
@@ -497,6 +515,8 @@ const handleSubmit = () => {
   // console.log('提交的文件:', moldname);
   dialogVisible.value = false;
 };
+
+
 
 /** 查询工装台账列表 */
 function getList() {
@@ -573,7 +593,7 @@ function getFileName(name) {
   const fileName = name.slice(lastSlashIndex + 1);
   // 分割文件名
   const parts = fileName.split('_');
-  // console.log("parts===>",parts);
+  console.log("parts===>",parts);
   // 如果没有找到版本号部分，返回整个文件名
   return parts.length > 1 ? parts[0] : fileName;
 }
@@ -581,20 +601,16 @@ function getFileName(name) {
 // 提取文件名中的型号
 function extractModelName(filename) {
 
-
-  // // 正则表达式匹配类似 PJ-24-ZH-10901 格式的型号
-  // const regex = /([A-Za-z]+-\d+-[A-Za-z]+-\d+)/;
-  // const match = filename.match(regex);
-
-  // 正则表达式匹配中英文括号内的内容
-  const regex = /[\(（]([^）\)]+)[\)）]/;
-  const match = filename.match(regex);
-  // console.log('数据' ,match)
+  console.log('Huoqu' ,filename);
+  // 正则表达式匹配类似 PJ-24-ZH-10901 格式的型号
+// 基础版（支持任意括号类型）
+  const regexBasic = /[（(]([^）)]+)[）)]/;
+  const matchBasic = filename.match(regexBasic);
+  // const contentBasic = matchBasic ? matchBasic[1] : null;
+  // console.log('Xiugai' ,contentBasic);
   // 如果匹配成功，返回型号部分，否则返回空字符串
-  return match ? match[1] : '';
+  return matchBasic ? matchBasic[1] : '';
 }
-
-
 
 /** 搜索按钮操作 */
 function handleQuery() {
@@ -618,7 +634,6 @@ function handleSelectionChange(selection) {
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
-  // console.log('加载中....' , moldTypeList.value)
   open.value = true;
   title.value = "添加工装台账";
 }
@@ -673,6 +688,22 @@ function handleExport() {
     ...queryParams.value
   }, `WorkClothes_${new Date().getTime()}.xlsx`)
 }
+
+const handleUpload = async (file) => {
+  try {
+    const response = await uploadFile(file.file);
+    getList();
+
+    // console.log("Response:", response); // 查看响应数据
+    // console.log("Response:", response.code); // 查看响应数据
+    if (response.code === 200) {
+      proxy.$modal.msgSuccess(response.data.msg || "上传成功");
+    } else {
+      proxy.$modal.msgError(response.data.msg || "文件导入失败");
+    }
+  } catch (error) {
+  }
+};
 
 getList();
 </script>

@@ -51,3 +51,19 @@ export function delWorkClothes(id) {
     method: 'delete'
   })
 }
+
+// 上传文件的函数
+export function uploadFile(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  return request({
+    url: '/ToolingModule/WorkClothes/import',
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}
+
