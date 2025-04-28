@@ -53,6 +53,16 @@
 <!--            v-hasPermi="['ToolingModule:toolingDetail:edit']"-->
 <!--        >修改</el-button>-->
 <!--      </el-col>-->
+      <el-upload
+          class="upload-demo"
+          action=""
+          :http-request="handleUpload"
+          :show-file-list="true"
+          :limit="1"
+          accept=".xls,.xlsx"
+      >
+        <el-button type="primary" icon="Plus">上传</el-button>
+      </el-upload>
       <el-col :span="1.5">
         <el-button
             type="danger"

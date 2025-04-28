@@ -2,6 +2,7 @@ package com.ruoyi.workClothes.mapper;
 
 import java.util.List;
 import com.ruoyi.workClothes.domain.NonstructuraltoolingTable;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 非结构工装台账Mapper接口
@@ -74,4 +75,10 @@ public interface NonstructuraltoolingTableMapper
      * @return 结果
      */
     public int deleteNonstructuraltoolingTableByIds(Long[] ids);
+
+    List<String> getAllMoldNumbers();
+
+    void updateFilePath(@Param("moldNumber") String moldNumber,@Param("file") String file, @Param("moldownership")String moldownership,@Param("processDocuments") String processDocuments);
+
+    int upsertBatch(List<NonstructuraltoolingTable> batch);
 }

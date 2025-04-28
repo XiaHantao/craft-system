@@ -67,4 +67,14 @@ public interface ToolingLedgerTableMapper
     // 更新processDocuments字段
     void updateFilePath(@Param("moldNumber") String moldNumber, @Param("file") String file, @Param("field") String field);
 
+    int insertBatch(List<ToolingLedgerTable> toolingLedgerTables);
+
+    // Mapper接口
+    List<String> existByToolNumbers(@Param("list") List<String> toolNumbers);
+
+    // Mapper接口
+    int updateBatch(List<ToolingLedgerTable> list);
+
+    int upsertBatch(@Param("list") List<ToolingLedgerTable> list);
+
 }

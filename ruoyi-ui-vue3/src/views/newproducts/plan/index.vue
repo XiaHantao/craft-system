@@ -13,7 +13,7 @@
           <el-option label="待确认" value="待确认" />
         </el-select>     
       </el-form-item>
-      <el-form-item label="质量科确认结果" prop="qulitycheck">
+      <el-form-item label="质量科确认结果" prop="qualitycheck">
         <el-select
            v-model="queryParams.qualitycheck"
           placeholder="请选择"
@@ -141,7 +141,7 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right"  width="200">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:plan:edit']" 
-          v-if="scope.row.technicalcheck != '通过' || scope.row.qualitycheck != '通过' || scope.row.securitycheck !='通过'">修改</el-button>
+          v-if="scope.row.technicalcheck == '待确认' && scope.row.qualitycheck == '待确认' && scope.row.securitycheck =='待确认'">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:plan:remove']">删除</el-button>
           <el-button link type="primary" icon="Check" @click="handleChecka(scope.row)" v-hasPermi="['newproducts:plan:checka']">技术科确认</el-button>
            <el-button link type="primary" icon="Check" @click="handleCheckb(scope.row)" v-hasPermi="['newproducts:plan:checkb']">质量科确认</el-button>
@@ -448,6 +448,7 @@ function submitForm() {
           getList();
  
       // 修改后待确认通知
+      getPlan(form.value.id).then(response1 => {
       listDept().then(response => {
         deptList.value = response.data;
         // 获取用户列表
@@ -474,7 +475,7 @@ function submitForm() {
               createdTime: new Date(),
               executedBy: users.nickName,
               path: "/newproducts/plan",
-              pathId: form.value.id,
+              pathId: response1.data.id,
               status: 0
             });
           });
@@ -482,6 +483,7 @@ function submitForm() {
         });
       });
 
+      })
         });
       } else {
           form.value.technicalcheck ="待确认" ;
@@ -605,10 +607,11 @@ function submitCheckForm() {
         getList();
 
      // 判断是否满足通知条件
+     getPlan(form.value.id).then(response1 => { 
     if (
-      form.value.technicalcheck === "通过" &&
-      form.value.qualitycheck === "通过" &&
-      form.value.securitycheck === "通过"
+      response1.data.technicalcheck == "通过" &&
+      response1.data.qualitycheck == "通过" &&
+      response1.data.securitycheck == "通过"
     ) { 
       // 满足条件后执行逻辑
       listDept().then(response => {
@@ -637,7 +640,7 @@ function submitCheckForm() {
               createdTime: new Date(),
               executedBy: users.nickName,
               path: "/newproducts/plan",
-              pathId: form.value.id,
+              pathId: response1.data.id,
               status: 0
             });
           });
@@ -645,7 +648,7 @@ function submitCheckForm() {
         });
       });
     }
-
+    })
       });
     } 
     }

@@ -58,6 +58,61 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectToolingLedgerTableVo"/>
         where id = #{id}
     </select>
+
+<!--    <update id="updateBatch">-->
+<!--        <foreach collection="list" item="item" separator=";">-->
+<!--            UPDATE tooling_ledger_table-->
+<!--            SET-->
+<!--            mold_name = #{item.moldName},-->
+<!--            mold_position = #{item.moldPosition},-->
+<!--            mold_status = #{item.moldStatus},-->
+<!--            assembling_products = #{item.assemblingProducts},-->
+<!--            remark = #{item.remark}-->
+<!--            WHERE mold_number = #{item.moldNumber}-->
+<!--        </foreach>-->
+<!--    </update>-->
+    <insert id="upsertBatch">
+        INSERT INTO tooling_ledger_table
+        (mold_number, mold_name, mold_position, mold_status, assembling_products, remark)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.moldNumber}, #{item.moldName}, #{item.moldPosition}, #{item.moldStatus}, #{item.assemblingProducts}, #{item.remark})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        mold_name = VALUES(mold_name),
+        mold_position = VALUES(mold_position),
+        mold_status = VALUES(mold_status),
+        assembling_products = VALUES(assembling_products),
+        remark = VALUES(remark)
+    </insert>
+    <select id="existByToolNumbers" resultType="string">
+        SELECT mold_number FROM tooling_ledger_table
+        WHERE mold_number IN
+        <foreach collection="list" item="num" open="(" separator="," close=")">
+            #{num}
+        </foreach>
+    </select>
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO tooling_ledger_table (
+        mold_name,
+        mold_number,
+        mold_position,
+        mold_status,
+        assembling_products,
+        remark
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.moldName},
+            #{item.moldNumber},
+            #{item.moldPosition},
+            #{item.moldStatus},
+            #{item.assemblingProducts},
+            #{item.remark}
+            )
+        </foreach>
+    </insert>
         
     <insert id="insertToolingLedgerTable" parameterType="ToolingLedgerTable" useGeneratedKeys="true" keyProperty="id">
         insert into tooling_ledger_table
@@ -162,6 +217,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </when>
             <when test="field == 'mbom'">
                 UPDATE tooling_ledger_table SET mbom_file = #{file} WHERE mold_number = #{moldNumber}
+            </when>
+            <when test="field == 'toolingDrawings'">
+                UPDATE tooling_ledger_table SET tooling_drawings = #{file} WHERE mold_number = #{moldNumber}
             </when>
         </choose>
     </update>
