@@ -208,9 +208,11 @@ export default {
           break
       }
 
-      // 新增数据过滤逻辑
-      const filteredData = this.filterLastTwoYears(response.data)
-      
+      // 修改后的过滤逻辑
+      const filteredData = chartType === 'month' 
+        ? this.filterLastTwoYears(response.data) 
+        : response.data
+
       const xData = filteredData.map(item => item.month || item.name)
       const yData = filteredData.map(item => item.value)
 
@@ -243,30 +245,28 @@ export default {
       this.myChart.setOption(option)
     },
 
-    // 新增数据过滤方法
     filterLastTwoYears(data) {
       if (!data.length) return []
       
-      // 统一处理日期格式为YYYY-MM
+      // 检查是否为月份数据
+      const hasMonth = data.some(item => item.month)
+      if (!hasMonth) return data
+
       const parseDate = (item) => {
-        const dateStr = item.month || item.name
+        const dateStr = item.month
         const [year, month] = String(dateStr).split('-')
         return new Date(`${year}-${month.padStart(2, '0')}-01`)
       }
 
-      // 按日期排序
+      // 排序逻辑仅适用于月份数据
       const sortedData = [...data].sort((a, b) => 
         parseDate(b) - parseDate(a)
       )
 
-      // 获取最新日期
       const latestDate = parseDate(sortedData[0])
-      
-      // 计算两年前的同月（保持月份一致性）
       const twoYearsAgo = new Date(latestDate)
       twoYearsAgo.setFullYear(latestDate.getFullYear() - 2)
       
-      // 筛选数据并恢复时间顺序
       return sortedData
         .filter(item => parseDate(item) >= twoYearsAgo)
         .reverse()
