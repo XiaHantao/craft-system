@@ -433,6 +433,7 @@ function submitForm() {
           getList();   
           
       // 修改后待核对通知
+      getSubmit(form.value.id).then(response1 => {
       listDept().then(response => {
         deptList.value = response.data;
         // 获取用户列表
@@ -453,13 +454,13 @@ function submitForm() {
           // 对目标用户执行通知函数
           targetUsers.forEach(users => {
             addSysMessageNotification({
-              noticeTitle: "新产品提交审核通知",
-              noticeContent: "有一条新产品提交需要审核，请及时处理。",
+              noticeTitle: "新产品提交核对通知",
+              noticeContent: "有一条新产品提交信息需要核对，请及时处理。",
               createdBy: usernickName.value,
               createdTime: new Date(),
               executedBy: users.nickName,
               path: "/newproducts/submit",
-              pathId: form.value.id,
+              pathId: response1.data.id,
               status: 0
             });
           });
@@ -467,6 +468,7 @@ function submitForm() {
         });
       });         
 
+      });  
         });
       } else {   
           //reset(); 
@@ -477,7 +479,7 @@ function submitForm() {
           getList();
 
       // 新增后待审核通知
-        getLatestRecord02("newproducts_submit").then(response => {
+        getLatestRecord02("newproducts_submit").then(response1 => {
         listDept().then(response => {
           deptList.value = response.data;
         // 获取用户列表
@@ -498,13 +500,13 @@ function submitForm() {
           // 对目标用户执行通知函数
           targetUsers.forEach(users => {
             addSysMessageNotification({
-              noticeTitle: "新产品提交审核通知",
-              noticeContent: "有一条新产品提交需要审核，请及时处理。",
+              noticeTitle: "新产品提交核对通知",
+              noticeContent: "有一条新产品提交信息需要核对，请及时处理。",
               createdBy: usernickName.value,
               createdTime: new Date(),
               executedBy: users.nickName,
               path: "/newproducts/submit",
-              pathId: form.value.id,
+              pathId: response1.data.id,
               status: 0
             });
           });
@@ -552,7 +554,7 @@ function submitCheckForm() {
   proxy.$refs["checkRef"].validate(valid => {
   if(valid){  
     if (form.value.id != null) {
-      updateSubmit(form.value).then(response => {
+      updateSubmit(form.value).then(response => { 
         proxy.$modal.msgSuccess("核对完成");
         openCheckDialog.value = false;
         getList();
