@@ -95,8 +95,8 @@
     <!-- 添加或修改工装类别字典对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="MoldTypeRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="序号" prop="serialNumber">
-          <el-input v-model="form.serialNumber" placeholder="请输入序号" />
+        <el-form-item label="类别描述" prop="moldType">
+          <el-input v-model="form.moldType" placeholder="请输入类别名称" />
         </el-form-item>
         <el-form-item label="类别描述" prop="moldDescribe">
           <el-input v-model="form.moldDescribe" placeholder="请输入类别描述" />
