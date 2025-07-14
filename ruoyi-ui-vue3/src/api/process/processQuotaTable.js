@@ -12,8 +12,9 @@ export function listProcessQuotaTable(query) {
 // 查询当前车型关联的工艺定额列表
 export function listRelatedProcessQuotaTable(vehicleModel) {
   return request({
-    url: '/process/processQuotaTable/related/' + vehicleModel,
-    method: 'get'
+    url: '/process/processQuotaTable/related/',
+    method: 'get',
+    params: { vehicleModel }
   })
 }
 
@@ -46,7 +47,10 @@ export function updateProcessQuotaTable(data) {
 // 删除工艺定额
 export function delProcessQuotaTable(vehicleModels) {
   return request({
-    url: '/process/processQuotaTable/' + vehicleModels,
-    method: 'delete'
+    url: '/process/processQuotaTable/delete',
+    method: 'delete',
+    params: {
+      vehicleModels: vehicleModels.join(',')
+    }
   })
 }
