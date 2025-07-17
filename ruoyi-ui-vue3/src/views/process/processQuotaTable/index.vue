@@ -86,7 +86,7 @@
         <template #default="scope">
           <el-button link type="primary" icon="View" @click="handleAddQuota(scope.row)">上传定额</el-button>
           <el-button link type="primary" icon="View" @click="handleShowQuota(scope.row)">详情</el-button>
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['process:processQuotaTable:edit']">修改</el-button>
+<!--          <el-button link type="primary" icon="Edit" @click="edit1(scope.row)" v-hasPermi="['process:processQuotaTable:edit']">修改</el-button>-->
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['process:processQuotaTable:remove']">删除</el-button>
         </template>
       </el-table-column>
@@ -392,11 +392,7 @@ function handleAddQuota(row) {
   thisVehicleModel.value = row.vehicleModel;
 }
 
-/** 打开定额详情对话框 */
-function handleShowQuota(row) {
-  openShowQuota.value = true;
-  title.value = "定额详情";
-
+function getAllQuota(row) {
   // 获取当前车型关联的所有表单数据
   listRelatedProcessQuotaTable(row.vehicleModel).then(response => {
     const allForms = response.rows;
@@ -450,6 +446,15 @@ function handleShowQuota(row) {
   });
 }
 
+/** 打开定额详情对话框 */
+function handleShowQuota(row) {
+  openShowQuota.value = true;
+  title.value = "定额详情";
+
+  getAllQuota(row);
+
+}
+
 
 /** 提交按钮 */
 function submitForm() {
@@ -472,6 +477,22 @@ function submitForm() {
       }
     }
   });
+}
+
+function edit1(row) {
+  reset();
+  getAllQuota(row);
+  formList.value.forEach( (form,index) => {
+    formList.value[index] = form.QuotaTableForms[0];
+    console.log("formList.value[index]===>",formList.value[index]);
+  })
+  console.log("formList.value===>???",formList.value);
+  form.value = formList.value[0];
+  console.log("form.value===>",form.value);
+  steps.value = formList.value.length;
+  openQuota.value = true;
+  title.value = "修改工艺定额";
+  thisVehicleModel.value = row.vehicleModel;
 }
 
 //定额信息提交按钮
