@@ -238,7 +238,23 @@ const data = reactive({
     rectificationReportUploadTime: null
   },
   rules: {
+    inspectionReportName: [
+      { required: true, message: "检查报告名称不能为空", trigger: "blur" }
+    ],
+    inspectionReportPath: [
+      { required: true, message: "检查报告不能为空", trigger: "blur" }
+    ],
+    rectificationRequirements: [
+      { required: true, message: "整改要求不能为空", trigger: "blur" }
+    ],
+    rectificationReportName: [
+      { required: true, message: "整改报告名称不能为空", trigger: "blur" }
+    ],
+    rectificationReportPath: [
+      { required: true, message: "整改报告不能为空", trigger: "blur" }
+    ]
   }
+
 });
 
 const { queryParams, form, rules } = toRefs(data);

@@ -4,14 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -50,8 +43,8 @@ public class ProcessQuotaTableController extends BaseController
      * 查询当前车型相关联的列表
      */
     @PreAuthorize("@ss.hasPermi('process:processQuotaTable:list')")
-    @GetMapping(value = "/related/{vehicleModel}")
-    public TableDataInfo listRelated(@PathVariable("vehicleModel") String vehicleModel)
+    @GetMapping(value = "/related")
+    public TableDataInfo listRelated(@RequestParam String vehicleModel)
     {
         List<ProcessQuotaTable> list = processQuotaTableService.selectRelatedList(vehicleModel);
         return getDataTable(list);
@@ -107,8 +100,8 @@ public class ProcessQuotaTableController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('process:processQuotaTable:remove')")
     @Log(title = "工艺定额", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{vehicleModels}")
-    public AjaxResult remove(@PathVariable String[] vehicleModels)
+	@DeleteMapping("/delete")
+    public AjaxResult remove(@RequestParam String[] vehicleModels)
     {
         return toAjax(processQuotaTableService.deleteProcessQuotaTableByIds(vehicleModels));
     }

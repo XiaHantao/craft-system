@@ -151,6 +151,12 @@ const data = reactive({
     uploadPerson: null
   },
   rules: {
+    craftMapName: [
+      { required: true, message: "工艺地图名称不能为空", trigger: "blur" }
+    ],
+    craftMapPath: [
+      { required: true, message: "工艺地图不能为空", trigger: "blur" }
+    ],
   }
 });
 

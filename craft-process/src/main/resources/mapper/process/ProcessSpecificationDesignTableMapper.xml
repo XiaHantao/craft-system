@@ -22,26 +22,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectProcessSpecificationDesignTableList" parameterType="ProcessSpecificationDesignTable" resultMap="ProcessSpecificationDesignTableResult">
         <include refid="selectProcessSpecificationDesignTableVo"/>
         <where>  
-            <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model = #{vehicleModel}</if>
+            <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model like concat('%', #{vehicleModel}, '%')</if>
             <if test="processType != null  and processType != ''"> and process_type = #{processType}</if>
             <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
             <if test="keyProcessControlProcedures != null  and keyProcessControlProcedures != ''"> and key_process_control_procedures = #{keyProcessControlProcedures}</if>
             <if test="uploadTime != null "> and upload_time = #{uploadTime}</if>
             <if test="uploadPerson != null  and uploadPerson != ''"> and upload_person = #{uploadPerson}</if>
-             <if test="tabFlag == 1"> and tab_flag = #{tabFlag}</if>
+              and tab_flag = 1
         </where>
     </select>
 
     <select id="selectGeneralList" parameterType="ProcessSpecificationDesignTable" resultMap="ProcessSpecificationDesignTableResult">
         <include refid="selectProcessSpecificationDesignTableVo"/>
         <where>
-            <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model = #{vehicleModel}</if>
+            <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model like concat('%', #{vehicleModel}, '%')</if>
             <if test="processType != null  and processType != ''"> and process_type = #{processType}</if>
             <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
             <if test="keyProcessControlProcedures != null  and keyProcessControlProcedures != ''"> and key_process_control_procedures = #{keyProcessControlProcedures}</if>
             <if test="uploadTime != null "> and upload_time = #{uploadTime}</if>
             <if test="uploadPerson != null  and uploadPerson != ''"> and upload_person = #{uploadPerson}</if>
-            <if test="tabFlag == 2"> and tab_flag = #{tabFlag}</if>
+             and tab_flag = 2
         </where>
     </select>
     

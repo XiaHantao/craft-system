@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSpecializedProcessEquipmentTableList" parameterType="SpecializedProcessEquipmentTable" resultMap="SpecializedProcessEquipmentTableResult">
         <include refid="selectSpecializedProcessEquipmentTableVo"/>
         <where>  
-            <if test="toolNumber != null  and toolNumber != ''"> and tool_number = #{toolNumber}</if>
+            <if test="toolNumber != null  and toolNumber != ''"> and tool_number like concat('%', #{toolNumber}, '%')</if>
             <if test="toolName != null  and toolName != ''"> and tool_name like concat('%', #{toolName}, '%')</if>
             <if test="toolType != null  and toolType != ''"> and tool_type = #{toolType}</if>
             <if test="productId != null  and productId != ''"> and product_id = #{productId}</if>

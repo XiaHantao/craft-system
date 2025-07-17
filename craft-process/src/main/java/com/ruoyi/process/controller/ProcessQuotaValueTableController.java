@@ -4,14 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -92,13 +85,24 @@ public class ProcessQuotaValueTableController extends BaseController
         return toAjax(processQuotaValueTableService.updateProcessQuotaValueTable(processQuotaValueTable));
     }
 
+//    /**
+//     * 删除工艺定额值
+//     */
+//    @PreAuthorize("@ss.hasPermi('process:processQuotaValue:remove')")
+//    @Log(title = "工艺定额值", businessType = BusinessType.DELETE)
+//	@DeleteMapping("/{vehicleModels}")
+//    public AjaxResult remove(@PathVariable String[] vehicleModels)
+//    {
+//        return toAjax(processQuotaValueTableService.deleteProcessQuotaValueTableByIds(vehicleModels));
+//    }
+
     /**
      * 删除工艺定额值
      */
     @PreAuthorize("@ss.hasPermi('process:processQuotaValue:remove')")
     @Log(title = "工艺定额值", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{vehicleModels}")
-    public AjaxResult remove(@PathVariable String[] vehicleModels)
+    @DeleteMapping("/delete")
+    public AjaxResult remove(@RequestParam String[] vehicleModels)
     {
         return toAjax(processQuotaValueTableService.deleteProcessQuotaValueTableByIds(vehicleModels));
     }

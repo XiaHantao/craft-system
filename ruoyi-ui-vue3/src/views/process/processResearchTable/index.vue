@@ -193,6 +193,12 @@ const data = reactive({
     vehicleModel: [
       { required: true, message: "车型不能为空", trigger: "blur" }
     ],
+    reportTitle: [
+      { required: true, message: "报告标题不能为空", trigger: "blur" }
+    ],
+    filePath: [
+      { required: true, message: "文件不能为空", trigger: "blur" }
+    ]
   }
 });
 

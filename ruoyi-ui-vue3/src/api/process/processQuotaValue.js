@@ -35,10 +35,20 @@ export function updateProcessQuotaValue(data) {
   })
 }
 
-// 删除工艺定额值
+// // 删除工艺定额值
+// export function delProcessQuotaValue(vehicleModels) {
+//   return request({
+//     url: '/process/processQuotaValue/' + vehicleModels,
+//     method: 'delete'
+//   })
+// }
+
 export function delProcessQuotaValue(vehicleModels) {
   return request({
-    url: '/process/processQuotaValue/' + vehicleModels,
-    method: 'delete'
+    url: '/process/processQuotaValue/delete',
+    method: 'delete',
+    params: {
+      vehicleModels
+    }
   })
 }
