@@ -2,20 +2,10 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="网点 " prop="branch">
-        <el-input
-          v-model="queryParams.branch"
-          placeholder="请输入网点 "
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-input v-model="queryParams.branch" placeholder="请输入网点 " clearable @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item label="车型" prop="vehicleType">
-        <el-input
-          v-model="queryParams.vehicleType"
-          placeholder="请输入车型"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-input v-model="queryParams.vehicleType" placeholder="请输入车型" clearable @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -41,13 +31,20 @@
           v-hasPermi="['marketanalysis:saleanalysis:export']">导出</el-button>
       </el-col>
       <el-col :span="1.5">
-      <el-button type="info" plain icon="Upload" @click="handleImport">导入</el-button>
+        <el-button type="info" plain icon="Upload" @click="handleImport">导入</el-button>
       </el-col>
       <input ref="importRef" type="file" hidden accept=".xlsx, .xls" @change="handleFileChange" />
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="saleanalysisList" @selection-change="handleSelectionChange">
+   <el-table 
+    v-loading="loading" 
+    :data="saleanalysisList" 
+    @selection-change="handleSelectionChange"
+    height="600" 
+    border
+    class="custom-table-header"
+  >
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="id" align="center" prop="id" /> -->
       <el-table-column label="网点 " align="center" prop="branch" />
@@ -78,19 +75,16 @@
       <el-table-column label="兑现率" align="center" prop="redemptionRate" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:saleanalysis:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:saleanalysis:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['marketanalysis:saleanalysis:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['marketanalysis:saleanalysis:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
+
+    <pagination v-show="total>0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改销售分析对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
@@ -105,10 +99,7 @@
           <el-input v-model="form.orderNumber" placeholder="请输入订单号" />
         </el-form-item>
         <el-form-item label="接单日期" prop="orderAcceptanceDate">
-          <el-date-picker clearable
-            v-model="form.orderAcceptanceDate"
-            type="date"
-            value-format="YYYY-MM-DD"
+          <el-date-picker clearable v-model="form.orderAcceptanceDate" type="date" value-format="YYYY-MM-DD"
             placeholder="请选择接单日期">
           </el-date-picker>
         </el-form-item>
@@ -137,7 +128,7 @@
           <el-input v-model="form.tyre" placeholder="请输入轮胎" />
         </el-form-item>
         <el-form-item label="配置" prop="configuration">
-          <el-input v-model="form.configuration"  placeholder="请输入配置" />
+          <el-input v-model="form.configuration" placeholder="请输入配置" />
         </el-form-item>
         <el-form-item label="车号" prop="carNumber">
           <el-input v-model="form.carNumber" placeholder="请输入车号" />
@@ -158,34 +149,22 @@
           <el-input v-model="form.phoneNumber" placeholder="请输入电话" />
         </el-form-item>
         <el-form-item label="订单系统交货期" prop="deliveryTime">
-          <el-date-picker clearable
-            v-model="form.deliveryTime"
-            type="date"
-            value-format="YYYY-MM-DD"
+          <el-date-picker clearable v-model="form.deliveryTime" type="date" value-format="YYYY-MM-DD"
             placeholder="请选择订单系统交货期">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="计划发车日期" prop="planDepartureDate">
-          <el-date-picker clearable
-            v-model="form.planDepartureDate"
-            type="date"
-            value-format="YYYY-MM-DD"
+          <el-date-picker clearable v-model="form.planDepartureDate" type="date" value-format="YYYY-MM-DD"
             placeholder="请选择计划发车日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="实际发车日期" prop="actualDepartureDate">
-          <el-date-picker clearable
-            v-model="form.actualDepartureDate"
-            type="date"
-            value-format="YYYY-MM-DD"
+          <el-date-picker clearable v-model="form.actualDepartureDate" type="date" value-format="YYYY-MM-DD"
             placeholder="请选择实际发车日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="系统交货期" prop="systemDeliveryTime">
-          <el-date-picker clearable
-            v-model="form.systemDeliveryTime"
-            type="date"
-            value-format="YYYY-MM-DD"
+          <el-date-picker clearable v-model="form.systemDeliveryTime" type="date" value-format="YYYY-MM-DD"
             placeholder="请选择系统交货期">
           </el-date-picker>
         </el-form-item>
@@ -193,10 +172,7 @@
           <el-input v-model="form.deliveryOrderNumber" placeholder="请输入交货单号" />
         </el-form-item>
         <el-form-item label="技术准备完成时间" prop="completionTime">
-          <el-date-picker clearable
-            v-model="form.completionTime"
-            type="date"
-            value-format="YYYY-MM-DD"
+          <el-date-picker clearable v-model="form.completionTime" type="date" value-format="YYYY-MM-DD"
             placeholder="请选择技术准备完成时间">
           </el-date-picker>
         </el-form-item>
@@ -437,3 +413,17 @@ function handleExport() {
 
 getList();
 </script>
+
+<style scoped>
+/* 使用正确的 :deep() 语法 */
+:deep(.custom-table-header .el-table__header th) {
+  background-color: #e6f7ff !important; /* 浅蓝色背景 */
+  color: #000 !important;               /* 文字颜色 */
+  font-weight: bold !important;         /* 加粗文字 */
+}
+
+/* 确保表头单元格内部也应用样式 */
+:deep(.custom-table-header .el-table__header .cell) {
+  background-color: #e6f7ff !important;
+}
+</style>

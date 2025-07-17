@@ -1,5 +1,6 @@
 package com.ruoyi.marketanalysis.service;
 
+import java.io.File;
 import java.util.List;
 import com.ruoyi.marketanalysis.domain.CategoryfiveParameterTable;
 
@@ -58,4 +59,9 @@ public interface ICategoryfiveParameterTableService
      * @return 结果
      */
     public int deleteCategoryfiveParameterTableById(Long id);
+    // 添加导入方法
+    String importCategoryfiveParameterTable(File excelFile, boolean updateSupport);
+
+    // 添加数据存在检查方法
+    boolean checkDataExists();
 }

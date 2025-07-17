@@ -1,12 +1,15 @@
 package com.ruoyi.marketanalysis.service.impl;
 
+import java.io.File;
 import java.util.List;
+
+import lombok.extern.slf4j.XSlf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.marketanalysis.mapper.CategoryfiveStandardConfigurationTableMapper;
 import com.ruoyi.marketanalysis.domain.CategoryfiveStandardConfigurationTable;
 import com.ruoyi.marketanalysis.service.ICategoryfiveStandardConfigurationTableService;
-
+import com.ruoyi.marketanalysis.utils.ExcelUtils;
 /**
  * 五类/七类车标准配置Service业务层处理
  * 
@@ -89,5 +92,30 @@ public class CategoryfiveStandardConfigurationTableServiceImpl implements ICateg
     public int deleteCategoryfiveStandardConfigurationTableById(Long id)
     {
         return categoryfiveStandardConfigurationTableMapper.deleteCategoryfiveStandardConfigurationTableById(id);
+    }
+    @Override
+    public String importCategoryfiveStandardConfigurationTable(File excelFile, boolean updateSupport) {
+        try {
+            // 解析Excel文件
+            List<CategoryfiveStandardConfigurationTable> list = ExcelUtils.parseCategoryfiveStandardExcel(excelFile);
+
+            // 如果选择覆盖模式，先清空表
+            if (updateSupport) {
+                categoryfiveStandardConfigurationTableMapper.cleanTable();
+            }
+
+            // 批量插入数据
+            if (!list.isEmpty()) {
+                int rows =categoryfiveStandardConfigurationTableMapper.batchInsertCategoryfiveStandard(list);
+                return "成功导入 " + rows + " 条数据";
+            }
+            return "导入数据为空";
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败：" + e.getMessage());
+        }
+    }
+    @Override
+    public boolean checkDataExists() {
+        return categoryfiveStandardConfigurationTableMapper.checkDataExists() > 0;
     }
 }

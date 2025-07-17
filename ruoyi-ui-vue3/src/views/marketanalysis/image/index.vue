@@ -36,6 +36,7 @@
     <el-table v-loading="loading" :data="imageList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="配置名称" align="center" prop="fileName" />
+      <el-table-column label="文件名称" align="center" prop="image" />
       <el-table-column label="相关说明" align="center" prop="notes" />
       <el-table-column label="配置相关文件" align="center" prop="file">
         <template v-slot:default="scope">
@@ -63,6 +64,9 @@
       <el-form ref="imageRef" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="配置名称" prop="fileName">
           <el-input v-model="form.fileName" placeholder="请输入配置名称" />
+        </el-form-item>
+        <el-form-item label="文件名称" prop="image">
+          <el-input v-model="form.image" placeholder="请输入文件名" />
         </el-form-item>
         <el-form-item label="说明" prop="notes">
           <el-input v-model="form.notes" type="textarea" placeholder="请输入内容" />
@@ -189,9 +193,9 @@ const data = reactive({
     fileName: null,
   },
   rules: {
-    fileName: [
-      { required: true, message: "配置名称不能为空", trigger: "blur" }
-    ],
+    // fileName: [
+    //   { required: true, message: "配置名称不能为空", trigger: "blur" }
+    // ],
     file: [
       { required: true, message: "文件不能为空", trigger: "blur" }
     ],
@@ -310,7 +314,7 @@ function getList() {
 }
 
 function reset() {
-  form.value = { id: null, fileName: null, notes: null, file: null };
+  form.value = { id: null, fileName: null, notes: null, file: null,image: null };
   proxy.resetForm("imageRef");
 }
 
@@ -380,11 +384,11 @@ function handleExport() {
 //多文件下载代码
 const downloadFiles = (urls) => {
   const files = parseFileUrls(urls);
-  if (files.length <= 1) {
-    // 单个文件直接下载
-    handleDirectDownload(files);
-    return;
-  }
+  //   单个文件直接下载
+  // if (files.length <= 1) {
+  //   handleDirectDownload(files);
+  //   return;
+  // }
   // 多个文件显示选择框
   showDownloadSelection(files);
 };

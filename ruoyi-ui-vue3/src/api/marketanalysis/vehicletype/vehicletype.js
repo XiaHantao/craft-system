@@ -42,3 +42,22 @@ export function delVehicletype(id) {
     method: 'delete'
   })
 }
+// 导入车型分类
+export function importVehicleCategory(data) {
+  return request({
+    url: '/marketanalysis/vehicletype/importData',
+    method: 'post',
+    data: data,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
+// 检查数据是否存在
+export function checkDataExists() {
+  return request({
+    url: '/marketanalysis/vehicletype/checkDataExists',
+    method: 'get'
+  })
+}

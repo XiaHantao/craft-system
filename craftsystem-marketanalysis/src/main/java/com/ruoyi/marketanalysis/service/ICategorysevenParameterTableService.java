@@ -1,5 +1,6 @@
 package com.ruoyi.marketanalysis.service;
 
+import java.io.File;
 import java.util.List;
 import com.ruoyi.marketanalysis.domain.CategorysevenParameterTable;
 
@@ -58,4 +59,6 @@ public interface ICategorysevenParameterTableService
      * @return 结果
      */
     public int deleteCategorysevenParameterTableById(Long id);
+    String importCategorysevenParameterTable(File excelFile, boolean updateSupport);
+    boolean checkDataExists();
 }

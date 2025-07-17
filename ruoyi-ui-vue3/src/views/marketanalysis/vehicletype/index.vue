@@ -70,6 +70,10 @@
           v-hasPermi="['marketanalysis:vehicletype:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button type="info" plain icon="Upload" @click="handleImport">导入</el-button>
+      </el-col>
+      <input ref="importRef" type="file" hidden accept=".xlsx, .xls" @change="handleFileChange" />
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -115,9 +119,19 @@
     <!-- 添加或修改车型分类对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="vehicletypeRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="车类" prop="vehicleCategory">
+        <!-- <el-form-item label="车类" prop="vehicleCategory">
           <el-input v-model="form.vehicleCategory" placeholder="请输入车类" />
-        </el-form-item>
+        </el-form-item> -->
+        <el-form-item label="车类" prop="vehicleCategory">
+          <el-select v-model="form.vehicleCategory" placeholder="请选择车类" >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          </el-form-item>
         <el-form-item label="车型" prop="vehicleType">
           <el-input v-model="form.vehicleType" placeholder="请输入车型" />
         </el-form-item>
@@ -177,8 +191,65 @@
 </template>
 
 <script setup name="Vehicletype">
-import { listVehicletype, getVehicletype, delVehicletype, addVehicletype, updateVehicletype } from "@/api/marketanalysis/vehicletype/vehicletype";
+import { listVehicletype, getVehicletype, delVehicletype, addVehicletype, updateVehicletype, importVehicleCategory, checkDataExists  } from "@/api/marketanalysis/vehicletype/vehicletype";
+// 添加导入相关引用
+const importRef = ref(null);
+const updateSupport = ref(false);
 
+// 导入按钮操作
+function handleImport() {
+  importRef.value.click();
+}
+
+// 文件选择处理
+async function handleFileChange(e) {
+  const files = e.target.files;
+  if (!files.length) return;
+
+  try {
+    loading.value = true;
+    // 先检查数据是否存在
+    const res = await checkDataExists();
+    const dataExists = res.data;
+    if (dataExists) { 
+      // 存在数据时询问是否覆盖
+      proxy.$modal.confirm('检测到已有数据，是否覆盖？').then(() => {
+        updateSupport.value = true;
+        uploadFile(files[0]);
+      }).catch(() => {
+        updateSupport.value = false;
+        uploadFile(files[0]);
+      });
+    } else { 
+      updateSupport.value = false;
+      uploadFile(files[0]);
+    }
+  } catch (error) {
+    proxy.$modal.msgError("数据检查失败：" + error.message);
+  } finally {
+    loading.value = false;
+  }
+}
+
+// 执行上传
+async function uploadFile(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('updateSupport', updateSupport.value);
+
+  try {
+    loading.value = true;
+    await importVehicleCategory(formData);
+    proxy.$modal.msgSuccess("导入成功");
+    getList();
+  } catch (e) {
+    proxy.$modal.msgError("导入失败：" + (e.message || "请检查文件格式和数据有效性"));
+  } finally {
+    loading.value = false;
+    importRef.value.value = ''; // 清空文件选择
+    updateSupport.value = false; // 重置覆盖状态
+  }
+}
 const { proxy } = getCurrentInstance();
 
 const vehicletypeList = ref([]);
@@ -212,6 +283,14 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
+// 添加选项数据
+const options = ref([
+  { value: 'I类车', label: 'I类车' },
+  { value: 'II类车', label: 'II类车' },
+  { value: 'III类车', label: 'III类车' },
+  { value: 'V类车', label: 'V类车' },
+  { value: 'VII类车', label: 'VII类车' }
+]);
 /** 查询车型分类列表 */
 function getList() {
   loading.value = true;

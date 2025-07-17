@@ -42,3 +42,18 @@ export function delParameter_one(id) {
     method: 'delete'
   })
 }
+export function importParameter_one(data) {
+  return request({
+    url: '/marketanalysis/parameter_one/importData',
+    method: 'post',
+    data: data,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+
+export function checkDataExists() {
+  return request({
+    url: '/marketanalysis/parameter_one/checkDataExists',
+    method: 'get'
+  })
+}

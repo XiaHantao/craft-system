@@ -1,12 +1,14 @@
 package com.ruoyi.marketanalysis.service.impl;
 
+import java.io.File;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.marketanalysis.mapper.CategorytwoParameterTableMapper;
 import com.ruoyi.marketanalysis.domain.CategorytwoParameterTable;
 import com.ruoyi.marketanalysis.service.ICategorytwoParameterTableService;
-
+import org.springframework.transaction.annotation.Transactional;
+import com.ruoyi.marketanalysis.utils.ExcelUtils;
 /**
  * 二类车参数Service业务层处理
  * 
@@ -89,5 +91,30 @@ public class CategorytwoParameterTableServiceImpl implements ICategorytwoParamet
     public int deleteCategorytwoParameterTableById(Long id)
     {
         return categorytwoParameterTableMapper.deleteCategorytwoParameterTableById(id);
+    }
+    @Override
+    @Transactional
+    public String importCategorytwoParameterTable(File excelFile, boolean updateSupport) {
+        try {
+            List<CategorytwoParameterTable> list = ExcelUtils.parseCategorytwoParameterExcel(excelFile);
+
+            // 如果允许更新且存在数据，则清空表
+            if (updateSupport && checkDataExists()) {
+                categorytwoParameterTableMapper.cleanTable();
+            }
+
+            // 批量插入数据
+            if (!list.isEmpty()) {
+                categorytwoParameterTableMapper.batchInsertCategorytwoParameterTable(list);
+            }
+            return "成功导入 " + list.size() + " 条数据";
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败：" + e.getMessage());
+        }
+    }
+
+    @Override
+    public boolean checkDataExists() {
+        return categorytwoParameterTableMapper.checkDataExists() > 0;
     }
 }

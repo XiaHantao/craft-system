@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="gateFrameInclinationAngle"    column="gate_frame_inclination_angle"    />
         <result property="forkSize"    column="fork_size"    />
         <result property="maximumDrivingSpeed"    column="maximum_driving_speed"    />
-        <result property="maxClimbCapability"    column="max_climb_capability_"    />
+        <result property="maxClimbCapability"    column="max_climb_capability"    />
         <result property="maximumTractionForce"    column="maximum_traction_force"    />
         <result property="liftingSpeed"    column="lifting_speed"    />
         <result property="descentSpeed"    column="descent_speed"    />
@@ -49,7 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCategorysevenParameterTableVo">
-        select id, manufacturer, model, lifting_weight, load_center, driving_style, power_mode, lifting_height, door_frame_full_height, maximum_lifting_height_of_fork, free_elevation_height, full_height, minimum_ground_clearance, overall_length, wheelbase, front_suspension_distance, rear_suspension_distance, full_width, track_width, minimum_outer_turning_radius, gate_frame_inclination_angle, fork_size, maximum_driving_speed, max_climb_capability_, maximum_traction_force, lifting_speed, descent_speed, total_weight, weight_distribution_with_full_load, weight_distribution_empty_load, number_of_wheels, tire_type, tire_size, battery_voltage_capacity, engine_manufacturer, rated_power_speed, maximum_torque_speed, number_of_cylinders, fuel_tank_capacity, emission_standard, gears_in_the_gearbox from categoryseven_parameter_table
+        select id, manufacturer, model, lifting_weight, load_center, driving_style, power_mode, lifting_height, door_frame_full_height, maximum_lifting_height_of_fork, free_elevation_height, full_height, minimum_ground_clearance, overall_length, wheelbase, front_suspension_distance, rear_suspension_distance, full_width, track_width, minimum_outer_turning_radius, gate_frame_inclination_angle, fork_size, maximum_driving_speed, max_climb_capability, maximum_traction_force, lifting_speed, descent_speed, total_weight, weight_distribution_with_full_load, weight_distribution_empty_load, number_of_wheels, tire_type, tire_size, battery_voltage_capacity, engine_manufacturer, rated_power_speed, maximum_torque_speed, number_of_cylinders, fuel_tank_capacity, emission_standard, gears_in_the_gearbox from categoryseven_parameter_table
     </sql>
 
     <select id="selectCategorysevenParameterTableList" parameterType="CategorysevenParameterTable" resultMap="CategorysevenParameterTableResult">
@@ -90,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="gateFrameInclinationAngle != null">gate_frame_inclination_angle,</if>
             <if test="forkSize != null">fork_size,</if>
             <if test="maximumDrivingSpeed != null">maximum_driving_speed,</if>
-            <if test="maxClimbCapability != null">max_climb_capability_,</if>
+            <if test="maxClimbCapability != null">max_climb_capability,</if>
             <if test="maximumTractionForce != null">maximum_traction_force,</if>
             <if test="liftingSpeed != null">lifting_speed,</if>
             <if test="descentSpeed != null">descent_speed,</if>
@@ -178,7 +178,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="gateFrameInclinationAngle != null">gate_frame_inclination_angle = #{gateFrameInclinationAngle},</if>
             <if test="forkSize != null">fork_size = #{forkSize},</if>
             <if test="maximumDrivingSpeed != null">maximum_driving_speed = #{maximumDrivingSpeed},</if>
-            <if test="maxClimbCapability != null">max_climb_capability_ = #{maxClimbCapability},</if>
+            <if test="maxClimbCapability != null">max_climb_capability = #{maxClimbCapability},</if>
             <if test="maximumTractionForce != null">maximum_traction_force = #{maximumTractionForce},</if>
             <if test="liftingSpeed != null">lifting_speed = #{liftingSpeed},</if>
             <if test="descentSpeed != null">descent_speed = #{descentSpeed},</if>
@@ -209,5 +209,101 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
+    </delete>
+    <insert id="batchInsertCategorysevenParameterTable" parameterType="java.util.List">
+        INSERT INTO categoryseven_parameter_table (
+        manufacturer,
+        model,
+        lifting_weight,
+        load_center,
+        driving_style,
+        power_mode,
+        lifting_height,
+        door_frame_full_height,
+        maximum_lifting_height_of_fork,
+        free_elevation_height,
+        full_height,
+        minimum_ground_clearance,
+        overall_length,
+        wheelbase,
+        front_suspension_distance,
+        rear_suspension_distance,
+        full_width,
+        track_width,
+        minimum_outer_turning_radius,
+        gate_frame_inclination_angle,
+        fork_size,
+        maximum_driving_speed,
+        max_climb_capability,
+        maximum_traction_force,
+        lifting_speed,
+        descent_speed,
+        total_weight,
+        weight_distribution_with_full_load,
+        weight_distribution_empty_load,
+        number_of_wheels,
+        tire_type,
+        tire_size,
+        battery_voltage_capacity,
+        engine_manufacturer,
+        rated_power_speed,
+        maximum_torque_speed,
+        number_of_cylinders,
+        fuel_tank_capacity,
+        emission_standard,
+        gears_in_the_gearbox
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.manufacturer},
+            #{item.model},
+            #{item.liftingWeight},
+            #{item.loadCenter},
+            #{item.drivingStyle},
+            #{item.powerMode},
+            #{item.liftingHeight},
+            #{item.doorFrameFullHeight},
+            #{item.maximumLiftingHeightOfFork},
+            #{item.freeElevationHeight},
+            #{item.fullHeight},
+            #{item.minimumGroundClearance},
+            #{item.overallLength},
+            #{item.wheelbase},
+            #{item.frontSuspensionDistance},
+            #{item.rearSuspensionDistance},
+            #{item.fullWidth},
+            #{item.trackWidth},
+            #{item.minimumOuterTurningRadius},
+            #{item.gateFrameInclinationAngle},
+            #{item.forkSize},
+            #{item.maximumDrivingSpeed},
+            #{item.maxClimbCapability},
+            #{item.maximumTractionForce},
+            #{item.liftingSpeed},
+            #{item.descentSpeed},
+            #{item.totalWeight},
+            #{item.weightDistributionWithFullLoad},
+            #{item.weightDistributionEmptyLoad},
+            #{item.numberOfWheels},
+            #{item.tireType},
+            #{item.tireSize},
+            #{item.batteryVoltageCapacity},
+            #{item.engineManufacturer},
+            #{item.ratedPowerSpeed},
+            #{item.maximumTorqueSpeed},
+            #{item.numberOfCylinders},
+            #{item.fuelTankCapacity},
+            #{item.emissionStandard},
+            #{item.gearsInTheGearbox}
+            )
+        </foreach>
+    </insert>
+
+    <select id="checkDataExists" resultType="int">
+        SELECT COUNT(*) FROM categoryseven_parameter_table LIMIT 1
+    </select>
+
+    <delete id="cleanTable">
+        TRUNCATE TABLE categoryseven_parameter_table
     </delete>
 </mapper>

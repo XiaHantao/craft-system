@@ -73,4 +73,18 @@ public interface ISalesLedgerTableService
     boolean checkDataExists();
     List<String> getVehicleTypes();
     List<String> getBranches();
+//    // 获取所有车类
+//    List<String> getDistinctCategories();
+//
+//    // 按月统计销量（按车类）
+//    List<Map<String, Object>> countMonthlySalesComparison1(Integer year, String category, String branch);
+// 修改方法签名
+    List<Map<String, Object>> countSalesByMonth1(String vehicleCategory, String branch);
+    List<Map<String, Object>> countSalesByBranchForVehicle1(String vehicleCategory);
+    List<Map<String, Object>> countMonthlySalesComparison1(Integer year, String vehicleCategory, String branch);
+    List<Map<String, Object>> countSalesByVehicleForBranch1(String branch);
+    // 新增方法
+    List<String> getDistinctCategories();
+    List<Map<String, Object>> countSalesByCategory(String vehicleCategory);
+
 }

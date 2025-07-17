@@ -1,5 +1,6 @@
 package com.ruoyi.marketanalysis.service;
 
+import java.io.File;
 import java.util.List;
 import com.ruoyi.marketanalysis.domain.CategoryfiveStandardConfigurationTable;
 
@@ -58,4 +59,6 @@ public interface ICategoryfiveStandardConfigurationTableService
      * @return 结果
      */
     public int deleteCategoryfiveStandardConfigurationTableById(Long id);
+    String importCategoryfiveStandardConfigurationTable(File excelFile, boolean updateSupport);
+    boolean checkDataExists();
 }

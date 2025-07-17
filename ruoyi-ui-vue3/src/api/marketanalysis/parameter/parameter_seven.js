@@ -42,3 +42,21 @@ export function delParameter_seven(id) {
     method: 'delete'
   })
 }
+export function importParameter_seven(data) {
+  return request({
+    url: '/marketanalysis/parameter_seven/importData',
+    method: 'post',
+    data: data,
+    timeout: 60000,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
+export function checkDataExistsForSeven() {
+  return request({
+    url: '/marketanalysis/parameter_seven/checkDataExists',
+    method: 'get'
+  })
+}

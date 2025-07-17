@@ -1,6 +1,22 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+       <el-form-item label="系列" prop="series">
+        <el-input
+          v-model="queryParams.series"
+          placeholder="请输入系列"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="吨位" prop="tonnage">
+        <el-input
+          v-model="queryParams.tonnage"
+          placeholder="请输入吨位"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="文件名称" prop="fileName">
         <el-input
           v-model="queryParams.fileName"
@@ -45,22 +61,14 @@
           v-hasPermi="['marketanalysis:media:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <!-- <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['marketanalysis:media:export']"
-        >导出</el-button> -->
-      </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="mediaList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="系列" align="center" prop="series" />
+      <el-table-column label="吨位" align="center" prop="tonnage" />
       <el-table-column label="文件名称" align="center" prop="fileName" />
-      <!-- <el-table-column label="文件类型" align="center" prop="fileType" /> -->
       <el-table-column label="文件说明" align="center" prop="notes" />
       <el-table-column label="多媒体文件" align="center" prop="file" >
         <template v-slot:default="scope">
@@ -136,17 +144,21 @@
     <!-- 新增/修改对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="mediaRef" :model="form" :rules="rules" label-width="100px">
+         <el-form-item label="系列" prop="series">
+          <el-input v-model="form.series" placeholder="请输入系列" />
+        </el-form-item>
+        <el-form-item label="吨位" prop="tonnage">
+          <el-input v-model="form.tonnage" placeholder="请输入吨位" />
+        </el-form-item>
         <el-form-item label="文件名称" prop="fileName">
           <el-input v-model="form.fileName" placeholder="请输入文件名称" />
         </el-form-item>
-        <!-- <el-form-item label="文件类型" prop="fileType">
-          <el-input v-model="form.fileType" placeholder="请输入文件类型" />
-        </el-form-item> -->
         <el-form-item label="文件说明" prop="notes">
           <el-input v-model="form.notes" type="textarea" placeholder="请输入内容" />
         </el-form-item>
+        <!-- 修改文件上传组件，支持多文件 -->
         <el-form-item label="多媒体文件" prop="file">
-          <file-upload :limit="1"  v-model="form.file"/>
+          <file-upload v-model="form.file" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -154,6 +166,31 @@
           <el-button type="primary" @click="submitForm">确 定</el-button>
           <el-button @click="cancel">取 消</el-button>
         </div>
+      </template>
+    </el-dialog>
+
+    <!-- 新增文件选择下载对话框 -->
+    <el-dialog v-model="downloadSelectVisible" title="选择下载文件" width="500px">
+      <el-scrollbar height="300px">
+        <el-checkbox-group v-model="selectedDownloadFiles" class="file-select-group">
+          <el-checkbox 
+            v-for="(file, index) in downloadableFiles" 
+            :key="index" 
+            :label="file.fullUrl"
+            class="file-item"
+          >
+            <div class="file-info">
+              <el-icon class="file-type-icon">
+                <component :is="getFileIcon(file.fullUrl)"/>
+              </el-icon>
+              <span class="file-name">{{ file.displayName }}</span>
+            </div>
+          </el-checkbox>
+        </el-checkbox-group>
+      </el-scrollbar>
+      <template #footer>
+        <el-button @click="downloadSelectVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmDownload">下载选中文件</el-button>
       </template>
     </el-dialog>
   </div>
@@ -183,6 +220,10 @@ const selectedFileIndex = ref(0);
 const currentPreviewType = ref('');
 const filteredFiles = ref([]);
 const fileSelectTitle = ref('请选择预览文件');
+// 新增下载相关状态
+const downloadSelectVisible = ref(false);
+const downloadableFiles = ref([]);
+const selectedDownloadFiles = ref([]);
 
 const data = reactive({
   form: {},
@@ -190,12 +231,17 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     fileName: null,
+    series: null,
+    tonnage: null,
   },
-  rules: {
-    fileName: [
-      { required: true, message: "文件名称不能为空", trigger: "blur" }
-    ],
-    file: [
+   rules: {
+    // series: [
+    //   { required: true, message: "系列不能为空", trigger: "blur" }
+    // ],
+    // tonnage: [
+    //   { required: true, message: "吨位不能为空", trigger: "blur" }
+    // ],
+     file: [
       { required: true, message: "文件不能为空", trigger: "blur" }
     ],
   }
@@ -305,6 +351,51 @@ function handleImageError(event) {
   previewImageOpen.value = false;
 }
 
+// 文件下载方法 - 多文件支持
+const downloadFiles = (urls) => {
+  const files = parseFileUrls(urls);
+  // 多个文件显示选择框
+  showDownloadSelection(files);
+};
+
+// 显示下载选择对话框
+const showDownloadSelection = (files) => {
+  downloadableFiles.value = files.map(file => ({
+    fullUrl: file,
+    displayName: getFileNameForDisplay(file)
+  }));
+  selectedDownloadFiles.value = []; // 清空选中状态
+  downloadSelectVisible.value = true;
+};
+
+// 获取显示文件名（完整文件名）
+const getFileNameForDisplay = (url) => {
+  const decodedUrl = decodeURIComponent(url);
+  return decodedUrl.split('/').pop().split('_').join('_'); // 保留完整文件名
+};
+
+// 确认下载
+const confirmDownload = () => {
+  if (selectedDownloadFiles.value.length === 0) {
+    proxy.$modal.msgError('请至少选择一个文件');
+    return;
+  }
+  handleDirectDownload(selectedDownloadFiles.value);
+  downloadSelectVisible.value = false;
+};
+
+// 直接下载处理
+const handleDirectDownload = (urls) => {
+  urls.forEach(url => {
+    const link = document.createElement('a');
+    link.href = formatFileUrl(url);
+    link.download = getFileNameForDisplay(url);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+};
+
 // 其他原有方法保持不变
 /** 查询多媒体文件列表 */
 function getList() {
@@ -325,7 +416,8 @@ function reset() {
   form.value = {
     id: null,
     fileName: null,
-    fileType: null,
+    series: null,
+    tonnage: null,
     notes: null,
     file: null
   };
@@ -394,33 +486,6 @@ function handleDelete(row) {
   }).catch(() => {});
 }
 
-function handleExport() {
-  proxy.download('marketanalysis/media/export', {
-    ...queryParams.value
-  }, `media_${new Date().getTime()}.xlsx`)
-}
-
-function downloadFiles(urls) {
-  if (typeof urls === 'string') {
-    urls = decodeURIComponent(urls).split(',').map(url => url.trim());
-  }
-  
-  if (!Array.isArray(urls)) {
-    console.error('urls 必须是数组或逗号分隔的字符串');
-    return;
-  }
-
-  urls.forEach(url => {
-    const formattedUrl = formatFileUrl(url);
-    const link = document.createElement('a');
-    link.href = formattedUrl;
-    link.download = decodeURIComponent(url.split('/').pop());
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  });
-}
-
 getList();
 </script>
 
@@ -451,5 +516,20 @@ getList();
 .video-preview {
   background-color: #000;
   border-radius: 4px;
+}
+/* 文件下载需要添加如下代码 */
+.el-checkbox-group {
+  width: 100%;
+}
+.el-checkbox {
+  width: 100%;
+  margin-left: 0;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+}
+.el-checkbox:deep(.el-checkbox__label) {
+  width: 100%;
 }
 </style>

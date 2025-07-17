@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <!-- 参数选择区域 -->
+    <!-- 参数选择区域保持不变 -->
     <div class="param-selector">
       <div class="selector-title">对比参数选择：</div>
       <div class="selector-content">
@@ -23,85 +23,92 @@
       </div>
     </div>
 
-    <!-- 对比选择框 -->
+    <!-- 对比选择框 - 增加到5个 -->
     <div class="compare-selectors">
-      <div class="selector-item" v-for="n in 2" :key="n">
-        <div class="mode-switcher">
-          <el-button 
-            size="mini" 
-            @click="switchMode(n)"
-            :type="inputMode[n-1] ? 'success' : ''"
-          >
-            {{ inputMode[n-1] ? '切换选择' : '手动输入' }}
-          </el-button>
-        </div>
+      <div class="selector-item" v-for="n in 5" :key="n">
+        <div class="selector-container">
+          <div class="mode-switcher">
+            <el-button 
+              size="mini" 
+              @click="switchMode(n)"
+              :type="inputMode[n-1] ? 'success' : ''"
+            >
+              {{ inputMode[n-1] ? '切换选择' : '手动输入' }}
+            </el-button>
+          </div>
 
-        <!-- 下拉模式 -->
-        <div v-if="!inputMode[n-1]" class="select-wrapper">
-          <el-select
-            v-model="selectedProducts[n-1]"
-            filterable
-            remote
-            :placeholder="`请选择车型-制造商作为车型${n}`"
-            :remote-method="searchProducts"
-            @change="val => handleSelectChange(n, val)"
-            clearable
-          >
-            <el-option
-              v-for="item in productOptions"
-              :key="item.id"
-              :label="`${item.vehicleType} - ${item.manufacturer}`"
-              :value="item.id"
+          <!-- 下拉模式 -->
+          <div v-if="!inputMode[n-1]" class="input-wrapper">
+            <el-select
+              v-model="selectedProducts[n-1]"
+              filterable
+              remote
+              :placeholder="`请选择车型-制造商作为车型${n}`"
+              :remote-method="searchProducts"
+              @change="val => handleSelectChange(n, val)"
+              clearable
+            >
+              <el-option
+                v-for="item in productOptions"
+                :key="item.id"
+                :label="`${item.vehicleType} - ${item.manufacturer}`"
+                :value="item.id"
+              />
+            </el-select>
+          </div>
+
+          <!-- 输入模式 -->
+          <div v-else class="input-wrapper">
+            <el-input
+              v-model="manualInputs[n-1].vehicleType"
+              placeholder="输入车型"
+              style="margin-bottom: 5px"
+              clearable
             />
-          </el-select>
-        </div>
-
-        <!-- 输入模式 -->
-        <div v-else class="manual-input">
-          <el-input
-            v-model="manualInputs[n-1].vehicleType"
-            placeholder="输入车型"
-            style="margin-bottom: 5px"
-            clearable
-          />
-          <el-input
-            v-model="manualInputs[n-1].manufacturer"
-            placeholder="输入制造商"
-            style="margin-bottom: 5px"
-            clearable
-          />
-          <el-button
-            type="primary"
-            size="mini"
-            @click="handleManualConfirm(n)"
-          >确认</el-button>
-          <el-button
-            size="mini"
-            @click="inputMode[n-1] = false"
-          >取消</el-button>
+            <el-input
+              v-model="manualInputs[n-1].manufacturer"
+              placeholder="输入制造商"
+              style="margin-bottom: 5px"
+              clearable
+            />
+            <div class="btn-group">
+              <el-button
+                type="primary"
+                size="mini"
+                @click="handleManualConfirm(n)"
+              >确认</el-button>
+              <el-button
+                size="mini"
+                @click="inputMode[n-1] = false"
+              >取消</el-button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 对比表格 -->
-    <el-table
-      v-if="showComparison"
-      :data="comparisonData"
-      style="width: 100%; margin-top: 20px"
-      :key="tableKey" 
-    >
-      <el-table-column prop="field" label="参数\车型" width="180" />
-      <el-table-column :label="product1Label">
-        <template #default="{ row }">
-          <span :class="row.product1Class">{{ row.product1Value }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="product2Label">
-        <template #default="{ row }">
-          <span :class="row.product2Class">{{ row.product2Value }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
+    <!-- 对比表格 - 修改为支持5列 -->
+    <div class="comparison-table-container" v-if="showComparison">
+      <el-table
+        :data="comparisonData"
+        style="width: 100%; margin-top: 20px"
+        :key="tableKey" 
+        border
+      >
+        <el-table-column prop="field" label="参数\车型" width="180" fixed />
+        
+        <!-- 动态生成5个产品列 -->
+        <el-table-column 
+          v-for="(product, index) in products" 
+          :key="index"
+          :label="product ? `${product.vehicleType} - ${product.manufacturer}` : `车型${index+1}`"
+        >
+          <template #default="{ row }">
+            <span :class="row.highlightClasses[index]">{{ row.values[index] }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 
@@ -111,15 +118,13 @@ import { listCostprice, getCostprice } from '@/api/marketanalysis/costprice/cost
 export default {
   name: 'CostPriceCompare',
   data() {
+    const mandatoryFields = ['vehicleType', 'manufacturer'];
     return {
-      selectedProducts: [null, null],
-      inputMode: [false, false],
-      manualInputs: [
-        { vehicleType: '', manufacturer: '' },
-        { vehicleType: '', manufacturer: '' }
-      ],
-      product1: null,
-      product2: null,
+      // 修改为支持5个产品
+      selectedProducts: Array(5).fill(null),
+      inputMode: Array(5).fill(false),
+      manualInputs: Array(5).fill().map(() => ({ vehicleType: '', manufacturer: '' })),
+      products: Array(5).fill(null), // 存储5个产品数据
       productOptions: [],
       tableKey: 0,
       tempSelectedFields: ['manufacturer', 'cost', 'carBody','lifting','panjinPricing', 'stockPricing','outletSellingPrice','grossMargin','grossMarginRate','grossProfitIncludingTax'],
@@ -137,54 +142,51 @@ export default {
         grossProfitIncludingTax: '毛利（含税）'
       },
       comparisonData: [],
-      showComparison: false // 新增控制显示的状态
+      showComparison: false
     };
   },
-  computed: {
-    product1Label() {
-      return this.product1 ? `${this.product1.vehicleType} (${this.product1.manufacturer})` : '';
-    },
-    product2Label() {
-      return this.product2 ? `${this.product2.vehicleType} (${this.product2.manufacturer})` : '';
-    },
-  },
   methods: {
-    async searchProducts(query) {
-      const res = await listCostprice({
-        vehicleType: query,
-        manufacturer: query,
-      });
-      this.productOptions = res.rows;
-    },
-
-    handleSelectChange(n, id) {
-      if (n === 1) {
-        this.loadProduct1(id);
-      } else {
-        this.loadProduct2(id);
-      }
-    },
-
-    async loadProduct1(id) {
-      const res = await getCostprice(id);
-      this.product1 = res.data;
-    },
-
-    async loadProduct2(id) {
-      const res = await getCostprice(id);
-      this.product2 = res.data;
-    },
-
     applyParameters() {
-      if (!this.product1 || !this.product2) {
-        this.$message.warning('请先选择两个对比车型');
+      // 检查至少有两个产品被选择
+      const selectedCount = this.products.filter(p => p !== null).length;
+      if (selectedCount < 2) {
+        this.$message.warning('请至少选择两个对比车型');
         return;
       }
-      
+
       this.selectedFields = [...this.tempSelectedFields];
-      this.tableKey++;
       this.generateComparison();
-      this.showComparison = true; // 点击确定后显示表格
+      this.showComparison = true;
+    },
+
+    async searchProducts(query) {
+      try {
+        const res = await listCostprice({ query });
+        this.productOptions = res.rows;
+      } catch (error) {
+        console.error('搜索失败:', error);
+      }
+    },
+
+    async handleSelectChange(n, val) {
+      try {
+        if (!val) {
+          // 清空选择
+          this.products[n-1] = null;
+          return;
+        }
+        
+        const res = await getCostprice(val);
+        // 直接赋值
+        this.products = [
+          ...this.products.slice(0, n-1),
+          res.data,
+          ...this.products.slice(n)
+        ];
+      } catch (error) {
+        console.error('获取数据失败:', error);
+        this.$message.error('获取数据失败: ' + error.message);
+      }
     },
 
     generateComparison() {
@@ -198,29 +200,42 @@ export default {
         'stockPricing', 'outletSellingPrice', 'grossMargin', 'grossMarginRate', 'grossProfitIncludingTax'];
       const isNumeric = numericFields.includes(fieldKey);
       
-      let p1 = 0;
-      let p2 = 0;
-
+      // 获取所有产品的当前字段值
+      const values = this.products.map(product => {
+        return product ? (product[fieldKey] || '-') : '-';
+      });
+      
+      // 计算高亮类
+      const highlightClasses = Array(5).fill('');
+      
       if (isNumeric) {
-        const getValue = (value) => {
-          if (value === null || value === undefined || value === '-') return 0;
+        // 提取数值
+        const numericValues = values.map(value => {
+          if (value === '-') return -Infinity;
           if (fieldKey === 'grossMarginRate') {
             const numStr = String(value).replace('%', '');
-            return parseFloat(numStr) || 0;
+            const num = parseFloat(numStr);
+            return isNaN(num) ? -Infinity : num;
           }
-          return parseFloat(value) || 0;
-        };
-
-        p1 = getValue(this.product1[fieldKey]);
-        p2 = getValue(this.product2[fieldKey]);
+          const num = parseFloat(value);
+          return isNaN(num) ? -Infinity : num;
+        });
+        
+        // 找出最大值
+        const maxValue = Math.max(...numericValues);
+        
+        // 标记所有等于最大值的单元格
+        numericValues.forEach((val, index) => {
+          if (val === maxValue && val !== -Infinity) {
+            highlightClasses[index] = 'highlight-red';
+          }
+        });
       }
 
       return {
         field: fieldName,
-        product1Value: this.product1[fieldKey] ?? '-',
-        product2Value: this.product2[fieldKey] ?? '-',
-        product1Class: isNumeric && p1 > p2 ? 'highlight-red' : '',
-        product2Class: isNumeric && p2 > p1 ? 'highlight-red' : '',
+        values,
+        highlightClasses
       };
     },
 
@@ -228,9 +243,12 @@ export default {
       this.inputMode[n-1] = !this.inputMode[n-1];
       this.manualInputs[n-1] = { vehicleType: '', manufacturer: '' };
       this.selectedProducts[n-1] = null;
-      if(n === 1) this.product1 = null;
-      else this.product2 = null;
-      this.showComparison = false; // 切换模式时隐藏表格
+      this.products = [
+        ...this.products.slice(0, n-1),
+        null,
+        ...this.products.slice(n)
+      ];
+      this.showComparison = false;
     },
 
     async handleManualConfirm(n) {
@@ -254,19 +272,20 @@ export default {
         } else {
           const productId = res.rows[0].id;
           this.selectedProducts[n-1] = productId;
-          if(n === 1) {
-            await this.loadProduct1(productId);
-          } else {
-            await this.loadProduct2(productId);
-          }
+          const productRes = await getCostprice(productId);
+          // 直接赋值
+          this.products = [
+            ...this.products.slice(0, n-1),
+            productRes.data,
+            ...this.products.slice(n)
+          ];
           this.inputMode[n-1] = false;
-          this.showComparison = false; // 手动确认后隐藏表格
         }
       } catch (error) {
-        this.$message.error('查询失败');
+        this.$message.error('查询失败: ' + error.message);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -315,38 +334,61 @@ export default {
   white-space: nowrap;
 }
 
+/* 新增对比框样式 */
 .compare-selectors {
   display: flex;
-  gap: 30px;
-  margin-bottom: 30px;
+  gap: 20px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
 .selector-item {
   flex: 1;
-  min-width: 500px;
-  display: flex;
-  align-items: center;
+  min-width: 300px; /* 减小最小宽度以适应更多列 */
 }
 
-.el-select {
-  width: 300px !important;
-  flex: 1;
+.selector-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
 }
 
-.el-table {
-  margin-top: 30px !important;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+.input-wrapper {
+  flex: 1;
+  min-width: 0;
 }
 
-.el-table::before {
-  height: 0;
+.el-select {
+  width: 100% !important;
+}
+
+.btn-group {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
 }
 
 .highlight-red {
   color: #f56c6c;
   font-weight: 600;
+}
+
+.comparison-table-container {
+  width: 100%;
+  overflow-x: auto; /* 添加横向滚动 */
+}
+
+@media (max-width: 1200px) {
+  .selector-item {
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 992px) {
+  .selector-item {
+    min-width: 250px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -380,6 +422,15 @@ export default {
 
   .el-checkbox-group {
     gap: 15px;
+  }
+  
+  .selector-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .mode-switcher {
+    margin-bottom: 10px;
   }
 }
 </style>

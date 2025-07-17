@@ -115,4 +115,53 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+    <insert id="batchInsertVehicleCategoryTable" parameterType="java.util.List">
+        INSERT INTO vehicle_category_table (
+        vehicle_category,
+        vehicle_type,
+        series,
+        tonnage,
+        engine_type,
+        enginebattery_capacity,
+        power_rating,
+        torque_rotationalspeed,
+        fuel_injection_system,
+        effluent_standard,
+        valveplate_number,
+        battery_capacity,
+        tire_specification,
+        business_personnel,
+        development_class,
+        release_date
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.vehicleCategory},
+            #{item.vehicleType},
+            #{item.series},
+            #{item.tonnage},
+            #{item.engineType},
+            #{item.enginebatteryCapacity},
+            #{item.powerRating},
+            #{item.torqueRotationalspeed},
+            #{item.fuelInjectionSystem},
+            #{item.effluentStandard},
+            #{item.valveplateNumber},
+            #{item.batteryCapacity},
+            #{item.tireSpecification},
+            #{item.businessPersonnel},
+            #{item.developmentClass},
+            #{item.releaseDate}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="cleanTable">
+        TRUNCATE TABLE vehicle_category_table
+    </delete>
+
+    <select id="checkDataExists" resultType="int">
+        SELECT COUNT(*) FROM vehicle_category_table LIMIT 1
+    </select>
 </mapper>

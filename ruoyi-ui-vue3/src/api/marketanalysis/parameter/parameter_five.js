@@ -42,3 +42,23 @@ export function delParameter_five(id) {
     method: 'delete'
   })
 }
+// 添加导入方法
+export function importParameter_five(data) {
+  return request({
+    url: '/marketanalysis/parameter_five/importData',
+    method: 'post',
+    data: data,
+    timeout: 60000,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
+// 添加数据存在检查
+export function checkDataExistsForFive() {
+  return request({
+    url: '/marketanalysis/parameter_five/checkDataExists',
+    method: 'get'
+  })
+}

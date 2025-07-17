@@ -58,4 +58,8 @@ public interface PerformanceTableMapper
      * @return 结果
      */
     public int deletePerformanceTableByIds(Long[] ids);
+    int batchInsertPerformanceTable(List<PerformanceTable> list);
+    int checkDataExists();
+    int cleanTable();
+
 }

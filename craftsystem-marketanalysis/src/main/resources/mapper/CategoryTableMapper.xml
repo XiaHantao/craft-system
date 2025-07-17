@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.marketanalysis.mapper.CategoryTableMapper">
+    
+    <resultMap type="CategoryTable" id="CategoryTableResult">
+        <result property="id"    column="id"    />
+        <result property="vehicleType"    column="vehicle_type"    />
+        <result property="vehicleCategoryChn"    column="vehicle_category_chn"    />
+    </resultMap>
+
+    <sql id="selectCategoryTableVo">
+        select id, vehicle_type, vehicle_category_chn from category_table
+    </sql>
+
+    <select id="selectCategoryTableList" parameterType="CategoryTable" resultMap="CategoryTableResult">
+        <include refid="selectCategoryTableVo"/>
+        <where>  
+            <if test="vehicleType != null  and vehicleType != ''"> and vehicle_type like concat('%', #{vehicleType}, '%')</if>
+            <if test="vehicleCategoryChn != null  and vehicleCategoryChn != ''"> and vehicle_category_chn like concat('%', #{vehicleCategoryChn}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectCategoryTableById" parameterType="Long" resultMap="CategoryTableResult">
+        <include refid="selectCategoryTableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCategoryTable" parameterType="CategoryTable">
+        insert into category_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="vehicleType != null">vehicle_type,</if>
+            <if test="vehicleCategoryChn != null">vehicle_category_chn,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="vehicleType != null">#{vehicleType},</if>
+            <if test="vehicleCategoryChn != null">#{vehicleCategoryChn},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCategoryTable" parameterType="CategoryTable">
+        update category_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vehicleType != null">vehicle_type = #{vehicleType},</if>
+            <if test="vehicleCategoryChn != null">vehicle_category_chn = #{vehicleCategoryChn},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCategoryTableById" parameterType="Long">
+        delete from category_table where id = #{id}
+    </delete>
+
+    <delete id="deleteCategoryTableByIds" parameterType="String">
+        delete from category_table where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!-- 批量插入 -->
+    <insert id="batchInsertCategoryTable" parameterType="java.util.List">
+        INSERT INTO category_table (vehicle_type, vehicle_category_chn)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.vehicleType}, #{item.vehicleCategoryChn})
+        </foreach>
+    </insert>
+
+    <!-- 清空表 -->
+    <delete id="cleanTable">
+        DELETE FROM category_table
+    </delete>
+
+    <!-- 检查数据存在 -->
+    <select id="checkDataExists" resultType="int">
+        SELECT COUNT(1) FROM category_table
+    </select>
+</mapper>

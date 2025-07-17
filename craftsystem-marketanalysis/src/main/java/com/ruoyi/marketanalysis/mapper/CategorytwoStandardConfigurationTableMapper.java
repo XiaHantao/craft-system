@@ -58,4 +58,10 @@ public interface CategorytwoStandardConfigurationTableMapper
      * @return 结果
      */
     public int deleteCategorytwoStandardConfigurationTableByIds(Long[] ids);
+    // 添加批量插入方法
+    int batchInsertCategorytwoStandard(List<CategorytwoStandardConfigurationTable> list);
+    // 添加检查数据存在方法
+    int checkDataExists();
+    // 添加清空表方法
+    int cleanTable();
 }

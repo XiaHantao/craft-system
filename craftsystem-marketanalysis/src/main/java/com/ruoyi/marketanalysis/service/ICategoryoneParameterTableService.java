@@ -1,5 +1,6 @@
 package com.ruoyi.marketanalysis.service;
 
+import java.io.File;
 import java.util.List;
 import com.ruoyi.marketanalysis.domain.CategoryoneParameterTable;
 
@@ -58,4 +59,9 @@ public interface ICategoryoneParameterTableService
      * @return 结果
      */
     public int deleteCategoryoneParameterTableById(Long id);
+    // 导入一类车参数数据
+    String importCategoryoneParameterTable(File excelFile, boolean updateSupport) throws Exception;
+
+    // 检查表中是否有数据
+    boolean checkDataExists();
 }

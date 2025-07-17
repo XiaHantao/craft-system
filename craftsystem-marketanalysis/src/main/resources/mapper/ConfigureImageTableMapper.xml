@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.marketanalysis.mapper.ConfigureImageTableMapper">
-    
+
     <resultMap type="ConfigureImageTable" id="ConfigureImageTableResult">
         <result property="id"    column="id"    />
         <result property="fileName"    column="file_name"    />
@@ -18,16 +18,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectConfigureImageTableList" parameterType="ConfigureImageTable" resultMap="ConfigureImageTableResult">
         <include refid="selectConfigureImageTableVo"/>
-        <where>  
+        <where>
             <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
         </where>
     </select>
-    
+
     <select id="selectConfigureImageTableById" parameterType="Long" resultMap="ConfigureImageTableResult">
         <include refid="selectConfigureImageTableVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertConfigureImageTable" parameterType="ConfigureImageTable" useGeneratedKeys="true" keyProperty="id">
         insert into configure_image_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -35,13 +35,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="notes != null">notes,</if>
             <if test="file != null">file,</if>
             <if test="image != null">image,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="fileName != null and fileName != ''">#{fileName},</if>
             <if test="notes != null">#{notes},</if>
             <if test="file != null">#{file},</if>
             <if test="image != null">#{image},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateConfigureImageTable" parameterType="ConfigureImageTable">
@@ -60,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteConfigureImageTableByIds" parameterType="String">
-        delete from configure_image_table where id in 
+        delete from configure_image_table where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

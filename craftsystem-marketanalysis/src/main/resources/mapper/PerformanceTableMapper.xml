@@ -151,4 +151,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+    <!-- 批量插入 -->
+    <insert id="batchInsertPerformanceTable" parameterType="java.util.List">
+        INSERT INTO performance_table (
+        vehicle_category, vehicle_type, manufacturer,
+        maximum_driving_speed_full, maximum_driving_speed_empty,
+        max_climb_capability_full, max_climb_capability_empty,
+        maximum_traction_force_full, maximum_traction_force_empty,
+        lifting_speed_full, lifting_speed_empty,
+        descent_speed_full, descent_speed_empty,
+        running_speed_full, running_speed_empty,
+        increase_speed_full, increase_speed_empty,
+        lateral_movement_speed_full, lateral_movement_speed_empty,
+        travel_brake, parking_brake,
+        bridge_load_fully_loaded_front, bridge_load_fully_loaded_behind,
+        bridge_load_unloaded_front, bridge_load_unloaded_behind
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.vehicleCategory}, #{item.vehicleType}, #{item.manufacturer},
+            #{item.maximumDrivingSpeedFull}, #{item.maximumDrivingSpeedEmpty},
+            #{item.maxClimbCapabilityFull}, #{item.maxClimbCapabilityEmpty},
+            #{item.maximumTractionForceFull}, #{item.maximumTractionForceEmpty},
+            #{item.liftingSpeedFull}, #{item.liftingSpeedEmpty},
+            #{item.descentSpeedFull}, #{item.descentSpeedEmpty},
+            #{item.runningSpeedFull}, #{item.runningSpeedEmpty},
+            #{item.increaseSpeedFull}, #{item.increaseSpeedEmpty},
+            #{item.lateralMovementSpeedFull}, #{item.lateralMovementSpeedEmpty},
+            #{item.travelBrake}, #{item.parkingBrake},
+            #{item.bridgeLoadFullyLoadedFront}, #{item.bridgeLoadFullyLoadedBehind},
+            #{item.bridgeLoadUnloadedFront}, #{item.bridgeLoadUnloadedBehind}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 检查数据存在 -->
+    <select id="checkDataExists" resultType="int">
+        SELECT COUNT(*) FROM performance_table LIMIT 1
+    </select>
+
+    <!-- 清空表 -->
+    <delete id="cleanTable">
+        TRUNCATE TABLE performance_table
+    </delete>
 </mapper>

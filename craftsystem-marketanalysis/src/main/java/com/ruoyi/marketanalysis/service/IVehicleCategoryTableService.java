@@ -1,5 +1,6 @@
 package com.ruoyi.marketanalysis.service;
 
+import java.io.File;
 import java.util.List;
 import com.ruoyi.marketanalysis.domain.VehicleCategoryTable;
 
@@ -58,4 +59,8 @@ public interface IVehicleCategoryTableService
      * @return 结果
      */
     public int deleteVehicleCategoryTableById(Long id);
+    // 新增导入方法
+    String importVehicleCategoryTable(File excelFile, boolean updateSupport);
+    // 新增数据存在检查方法
+    boolean checkDataExists();
 }

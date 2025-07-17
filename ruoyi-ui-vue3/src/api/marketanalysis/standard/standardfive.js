@@ -42,3 +42,18 @@ export function delStandardfive(id) {
     method: 'delete'
   })
 }
+export function importstandard_five(data) {
+  return request({
+    url: '/marketanalysis/standardfive/importData',
+    method: 'post',
+    data: data,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+
+export function checkDataExists() {
+  return request({
+    url: '/marketanalysis/standardfive/checkDataExists',
+    method: 'get'
+  })
+}

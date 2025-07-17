@@ -58,4 +58,7 @@ public interface CategorysevenParameterTableMapper
      * @return 结果
      */
     public int deleteCategorysevenParameterTableByIds(Long[] ids);
+    int batchInsertCategorysevenParameterTable(List<CategorysevenParameterTable> list);
+    int checkDataExists();
+    int cleanTable();
 }

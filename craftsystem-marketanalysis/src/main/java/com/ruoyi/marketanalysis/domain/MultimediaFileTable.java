@@ -23,59 +23,84 @@ public class MultimediaFileTable extends BaseEntity
     private String fileName;
 
     /** 文件类型 */
-    @Excel(name = "文件类型")
     private String fileType;
 
-    /** 备注 */
-    @Excel(name = "备注")
+    /** 系列 */
+    @Excel(name = "系列")
+    private String series;
+
+    /** 吨位 */
+    @Excel(name = "吨位")
+    private String tonnage;
+
+    /** 文件说明 */
+    @Excel(name = "文件说明")
     private String notes;
 
     /** 文件地址 */
     @Excel(name = "文件地址")
     private String file;
 
-    public void setId(Long id) 
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setFileName(String fileName) 
+    public void setFileName(String fileName)
     {
         this.fileName = fileName;
     }
 
-    public String getFileName() 
+    public String getFileName()
     {
         return fileName;
     }
-    public void setFileType(String fileType) 
+    public void setFileType(String fileType)
     {
         this.fileType = fileType;
     }
 
-    public String getFileType() 
+    public String getFileType()
     {
         return fileType;
     }
-    public void setNotes(String notes) 
+    public void setSeries(String series)
+    {
+        this.series = series;
+    }
+
+    public String getSeries()
+    {
+        return series;
+    }
+    public void setTonnage(String tonnage)
+    {
+        this.tonnage = tonnage;
+    }
+
+    public String getTonnage()
+    {
+        return tonnage;
+    }
+    public void setNotes(String notes)
     {
         this.notes = notes;
     }
 
-    public String getNotes() 
+    public String getNotes()
     {
         return notes;
     }
-    public void setFile(String file) 
+    public void setFile(String file)
     {
         this.file = file;
     }
 
-    public String getFile() 
+    public String getFile()
     {
         return file;
     }
@@ -83,11 +108,13 @@ public class MultimediaFileTable extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("fileName", getFileName())
-            .append("fileType", getFileType())
-            .append("notes", getNotes())
-            .append("file", getFile())
-            .toString();
+                .append("id", getId())
+                .append("fileName", getFileName())
+                .append("fileType", getFileType())
+                .append("series", getSeries())
+                .append("tonnage", getTonnage())
+                .append("notes", getNotes())
+                .append("file", getFile())
+                .toString();
     }
 }

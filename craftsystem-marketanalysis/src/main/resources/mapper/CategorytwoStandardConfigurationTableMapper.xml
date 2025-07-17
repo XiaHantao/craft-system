@@ -177,4 +177,87 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+    <insert id="batchInsertCategorytwoStandard" parameterType="java.util.List">
+        INSERT INTO categorytwo_standard_configuration_table (
+        manufacturer,
+        polyurethane_tires,
+        five_meter_lifting_height,
+        lifting_height_gantry,
+        standard_series_fork,
+        non_standard_series_fork,
+        standard_body_color,
+        customized_body_color,
+        accessories_and_speed_limit,
+        turning_speed_limit,
+        fire_extinguisher,
+        reverse_buzzer,
+        reverse_voice_horn,
+        two_side_rearview_mirrors,
+        escape_bag,
+        rear_wheel_braking,
+        front_wheel_brake,
+        guide_wheel,
+        monitor,
+        magnetic_navigation,
+        station_driving_soft_pack_seat,
+        car_style_seats,
+        electric_fan,
+        windscreen,
+        rear_windshield,
+        full_car_led_lights,
+        reading_lamp,
+        led_flashing_warning_light,
+        metric,
+        national_standard_power_connector,
+        chinese_identification,
+        english_logo
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.manufacturer},
+            #{item.polyurethaneTires},
+            #{item.fiveMeterLiftingHeight},
+            #{item.liftingHeightGantry},
+            #{item.standardSeriesFork},
+            #{item.nonStandardSeriesFork},
+            #{item.standardBodyColor},
+            #{item.customizedBodyColor},
+            #{item.accessoriesAndSpeedLimit},
+            #{item.turningSpeedLimit},
+            #{item.fireExtinguisher},
+            #{item.reverseBuzzer},
+            #{item.reverseVoiceHorn},
+            #{item.twoSideRearviewMirrors},
+            #{item.escapeBag},
+            #{item.rearWheelBraking},
+            #{item.frontWheelBrake},
+            #{item.guideWheel},
+            #{item.monitor},
+            #{item.magneticNavigation},
+            #{item.stationDrivingSoftPackSeat},
+            #{item.carStyleSeats},
+            #{item.electricFan},
+            #{item.windscreen},
+            #{item.rearWindshield},
+            #{item.fullCarLedLights},
+            #{item.readingLamp},
+            #{item.ledFlashingWarningLight},
+            #{item.metric},
+            #{item.nationalStandardPowerConnector},
+            #{item.chineseIdentification},
+            #{item.englishLogo}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 检查数据存在 -->
+    <select id="checkDataExists" resultType="int">
+        SELECT COUNT(*) FROM categorytwo_standard_configuration_table LIMIT 1
+    </select>
+
+    <!-- 清空表 -->
+    <update id="cleanTable">
+        TRUNCATE TABLE categorytwo_standard_configuration_table
+    </update>
 </mapper>

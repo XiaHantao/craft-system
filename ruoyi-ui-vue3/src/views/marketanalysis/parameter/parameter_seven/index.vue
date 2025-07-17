@@ -30,6 +30,10 @@
         <el-button type="warning" plain icon="Download" @click="handleExport"
           v-hasPermi="['marketanalysis:parameter_seven:export']">导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+      <el-button type="info" plain icon="Upload" @click="handleImport">导入</el-button>
+    </el-col>
+    <input ref="importRef" type="file" hidden accept=".xlsx, .xls" @change="handleFileChange" />
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -112,7 +116,7 @@
     <pagination v-show="total>0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize"
       @pagination="getList" />
 
-    <!-- 添加或修改七类车参数对话框 -->
+    <!-- 添加或修改VII类车参数对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="parameter_sevenRef" :model="form" :rules="rules" label-width="145px">
         <el-form-item label="制造商" prop="manufacturer">
@@ -247,8 +251,60 @@
 </template>
 
 <script setup name="Parameter_seven">
-import { listParameter_seven, getParameter_seven, delParameter_seven, addParameter_seven, updateParameter_seven } from "@/api/marketanalysis/parameter/parameter_seven";
+import { listParameter_seven, getParameter_seven, delParameter_seven, addParameter_seven, updateParameter_seven,importParameter_seven, checkDataExistsForSeven } from "@/api/marketanalysis/parameter/parameter_seven";
+const importRef = ref(null);
+const updateSupport = ref(false);
 
+function handleImport() {
+  importRef.value.click();
+}
+
+async function handleFileChange(e) {
+  const files = e.target.files;
+  if (!files.length) return;
+
+  try {
+    loading.value = true;
+    const res = await checkDataExistsForSeven();
+    const dataExists = res.data;
+    
+    if (dataExists) { 
+      proxy.$modal.confirm('检测到已有数据，是否覆盖？').then(() => {
+        updateSupport.value = true;
+        uploadFile(files[0]);
+      }).catch(() => {
+        updateSupport.value = false;
+        uploadFile(files[0]);
+      });
+    } else { 
+      updateSupport.value = false;
+      uploadFile(files[0]);
+    }
+  } catch (error) {
+    proxy.$modal.msgError("数据检查失败：" + error.message);
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function uploadFile(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('updateSupport', updateSupport.value);
+
+  try {
+    loading.value = true;
+    await importParameter_seven(formData);
+    proxy.$modal.msgSuccess("导入成功");
+    getList();
+  } catch (e) {
+    proxy.$modal.msgError("导入失败：" + (e.message || "请检查文件格式和数据有效性"));
+  } finally {
+    loading.value = false;
+    importRef.value.value = '';
+    updateSupport.value = false;
+  }
+}
 const { proxy } = getCurrentInstance();
 
 const parameter_sevenList = ref([]);
@@ -281,7 +337,7 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-/** 查询七类车参数列表 */
+/** 查询VII类车参数列表 */
 function getList() {
   loading.value = true;
   listParameter_seven(queryParams.value).then(response => {
@@ -368,7 +424,7 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加七类车参数";
+  title.value = "添加VII类车参数";
 }
 
 /** 修改按钮操作 */
@@ -378,7 +434,7 @@ function handleUpdate(row) {
   getParameter_seven(_id).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改七类车参数";
+    title.value = "修改VII类车参数";
   });
 }
 
@@ -406,7 +462,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除七类车参数编号为"' + _ids + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除VII类车参数编号为"' + _ids + '"的数据项？').then(function() {
     return delParameter_seven(_ids);
   }).then(() => {
     getList();
@@ -418,7 +474,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/parameter_seven/export', {
     ...queryParams.value
-  }, `七类车参数表.xlsx`)
+  }, `VII类车参数表.xlsx`)
 }
 
 getList();

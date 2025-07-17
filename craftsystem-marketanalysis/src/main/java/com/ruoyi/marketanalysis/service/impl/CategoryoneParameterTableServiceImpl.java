@@ -1,12 +1,14 @@
 package com.ruoyi.marketanalysis.service.impl;
 
+import java.io.File;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.marketanalysis.mapper.CategoryoneParameterTableMapper;
 import com.ruoyi.marketanalysis.domain.CategoryoneParameterTable;
 import com.ruoyi.marketanalysis.service.ICategoryoneParameterTableService;
-
+import org.springframework.transaction.annotation.Transactional;
+import com.ruoyi.marketanalysis.utils.ExcelUtils;
 /**
  * 一类车参数Service业务层处理
  * 
@@ -89,5 +91,36 @@ public class CategoryoneParameterTableServiceImpl implements ICategoryoneParamet
     public int deleteCategoryoneParameterTableById(Long id)
     {
         return categoryoneParameterTableMapper.deleteCategoryoneParameterTableById(id);
+    }
+    // 导入一类车参数数据
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String importCategoryoneParameterTable(File excelFile, boolean updateSupport) throws Exception {
+        try {
+            List<CategoryoneParameterTable> list = ExcelUtils.parseCategoryoneParameterExcel(excelFile);
+
+            if (updateSupport && checkDataExists()) {
+                categoryoneParameterTableMapper.cleanTable();
+            }
+
+            if (list != null && !list.isEmpty()) {
+                int batchSize = 100;
+                for (int i = 0; i < list.size(); i += batchSize) {
+                    int endIndex = Math.min(i + batchSize, list.size());
+                    List<CategoryoneParameterTable> subList = list.subList(i, endIndex);
+                    categoryoneParameterTableMapper.batchInsertCategoryoneParameterTable(subList);
+                }
+                return "成功导入 " + list.size() + " 条数据";
+            }
+            return "导入成功，但未导入任何数据";
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败: " + e.getMessage());
+        }
+    }
+
+    // 检查一类车参数表中是否有数据
+    @Override
+    public boolean checkDataExists() {
+        return categoryoneParameterTableMapper.checkDataExists() > 0;
     }
 }

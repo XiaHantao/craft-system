@@ -1,12 +1,13 @@
 package com.ruoyi.marketanalysis.service.impl;
 
+import java.io.File;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.marketanalysis.mapper.CategorytwoStandardConfigurationTableMapper;
 import com.ruoyi.marketanalysis.domain.CategorytwoStandardConfigurationTable;
 import com.ruoyi.marketanalysis.service.ICategorytwoStandardConfigurationTableService;
-
+import com.ruoyi.marketanalysis.utils.ExcelUtils;
 /**
  * 二类车标准配置Service业务层处理
  * 
@@ -89,5 +90,30 @@ public class CategorytwoStandardConfigurationTableServiceImpl implements ICatego
     public int deleteCategorytwoStandardConfigurationTableById(Long id)
     {
         return categorytwoStandardConfigurationTableMapper.deleteCategorytwoStandardConfigurationTableById(id);
+    }
+    @Override
+    public String importCategorytwoStandard(File excelFile, boolean updateSupport) {
+        try {
+            List<CategorytwoStandardConfigurationTable> list = ExcelUtils.parseCategorytwoStandardExcel(excelFile);
+
+            // 如果允许更新且存在数据，则清空表
+            if (updateSupport && checkDataExists()) {
+                categorytwoStandardConfigurationTableMapper.cleanTable();
+            }
+
+            // 批量插入数据
+            if (!list.isEmpty()) {
+                categorytwoStandardConfigurationTableMapper.batchInsertCategorytwoStandard(list);
+            }
+
+            return "成功导入 " + list.size() + " 条数据";
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败：" + e.getMessage());
+        }
+    }
+
+    @Override
+    public boolean checkDataExists() {
+        return categorytwoStandardConfigurationTableMapper.checkDataExists() > 0;
     }
 }

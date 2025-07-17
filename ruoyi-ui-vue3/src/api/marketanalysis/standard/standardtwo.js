@@ -42,3 +42,18 @@ export function delStandardtwo(id) {
     method: 'delete'
   })
 }
+export function importstandard_two(data) {
+  return request({
+    url: '/marketanalysis/standardtwo/importData',
+    method: 'post',
+    data: data,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+
+export function checkDataExists() {
+  return request({
+    url: '/marketanalysis/standardtwo/checkDataExists',
+    method: 'get'
+  })
+}

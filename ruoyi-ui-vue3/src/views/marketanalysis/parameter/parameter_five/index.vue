@@ -62,6 +62,10 @@
           v-hasPermi="['marketanalysis:parameter_five:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+  <el-button type="info" plain icon="Upload" @click="handleImport">导入</el-button>
+</el-col>
+<input ref="importRef" type="file" hidden accept=".xlsx, .xls" @change="handleFileChange" />
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -150,7 +154,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改五类车参数对话框 -->
+    <!-- 添加或修改V类车参数对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="parameter_fiveRef" :model="form" :rules="rules" label-width="145px">
         <el-form-item label="制造商" prop="manufacturer">
@@ -285,8 +289,67 @@
 </template>
 
 <script setup name="Parameter_five">
-import { listParameter_five, getParameter_five, delParameter_five, addParameter_five, updateParameter_five } from "@/api/marketanalysis/parameter/parameter_five";
+import { listParameter_five, getParameter_five, delParameter_five, addParameter_five, updateParameter_five, importParameter_five, checkDataExistsForFive } from "@/api/marketanalysis/parameter/parameter_five";
+// 在setup中添加
+const importRef = ref(null);
+const updateSupport = ref(false);
 
+// 导入按钮操作
+function handleImport() {
+  importRef.value.click();
+}
+
+// 文件选择处理
+async function handleFileChange(e) {
+  const files = e.target.files;
+  if (!files.length) return;
+
+  try {
+    loading.value = true;
+    // 先检查数据是否存在
+    const res = await checkDataExistsForFive();
+    const dataExists = res.data;
+    
+    if (dataExists) { 
+      // 存在数据时询问是否覆盖
+      proxy.$modal.confirm('检测到已有数据，是否覆盖？').then(() => {
+        updateSupport.value = true;
+        uploadFile(files[0]);
+      }).catch(() => {
+        updateSupport.value = false;
+        uploadFile(files[0]);
+      });
+    } else { 
+      // 不存在数据时直接导入
+      updateSupport.value = false;
+      uploadFile(files[0]);
+    }
+  } catch (error) {
+    proxy.$modal.msgError("数据检查失败：" + error.message);
+  } finally {
+    loading.value = false;
+  }
+}
+
+// 执行上传
+async function uploadFile(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('updateSupport', updateSupport.value);
+
+  try {
+    loading.value = true;
+    await importParameter_five(formData);
+    proxy.$modal.msgSuccess("导入成功");
+    getList();
+  } catch (e) {
+    proxy.$modal.msgError("导入失败：" + (e.message || "请检查文件格式和数据有效性"));
+  } finally {
+    loading.value = false;
+    importRef.value.value = ''; // 清空文件选择
+    updateSupport.value = false; // 重置覆盖状态
+  }
+}
 const { proxy } = getCurrentInstance();
 
 const parameter_fiveList = ref([]);
@@ -319,7 +382,7 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-/** 查询五类车参数列表 */
+/** 查询V类车参数列表 */
 function getList() {
   loading.value = true;
   listParameter_five(queryParams.value).then(response => {
@@ -406,7 +469,7 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加五类车参数";
+  title.value = "添加V类车参数";
 }
 
 /** 修改按钮操作 */
@@ -416,7 +479,7 @@ function handleUpdate(row) {
   getParameter_five(_id).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改五类车参数";
+    title.value = "修改V类车参数";
   });
 }
 
@@ -444,7 +507,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除五类车参数编号为"' + _ids + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除V类车参数编号为"' + _ids + '"的数据项？').then(function() {
     return delParameter_five(_ids);
   }).then(() => {
     getList();
@@ -456,7 +519,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/parameter_five/export', {
     ...queryParams.value
-  }, `五类车参数表.xlsx`)
+  }, `V类车参数表.xlsx`)
 }
 
 getList();

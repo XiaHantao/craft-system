@@ -54,6 +54,10 @@
           v-hasPermi="['marketanalysis:standardone:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+  <el-button type="info" plain icon="Upload" @click="handleImport">导入</el-button>
+</el-col>
+<input ref="importRef" type="file" hidden accept=".xlsx, .xls" @change="handleFileChange" />
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -131,7 +135,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改一类车标准配置对话框 -->
+    <!-- 添加或修改I类车标准配置对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="standardoneRef" :model="form" :rules="rules" label-width="130px">
         <el-form-item label="制造商" prop="manufacturer">
@@ -689,8 +693,52 @@
 </template>
 
 <script setup name="Standardone">
-import { listStandardone, getStandardone, delStandardone, addStandardone, updateStandardone } from "@/api/marketanalysis/standard/standardone";
+import { listStandardone, getStandardone, delStandardone, addStandardone, updateStandardone,importstandard_one,checkDataExists } from "@/api/marketanalysis/standard/standardone";
+const importRef = ref(null);
+const updateSupport = ref(false);
 
+const handleImport = () => importRef.value.click();
+
+const handleFileChange = async (e) => {
+  const files = e.target.files;
+  if (!files.length) return;
+
+  try {
+    loading.value = true;
+    const res = await checkDataExists();
+    const dataExists = res.data;
+    if (dataExists) {
+      proxy.$modal.confirm('检测到已有数据，是否覆盖？').then(() => {
+        updateSupport.value = true;
+        uploadFile(files[0]);
+      }).catch(() => {
+        updateSupport.value = false;
+        uploadFile(files[0]);
+      });
+    } else {
+      updateSupport.value = false;
+      uploadFile(files[0]);
+    }
+  } finally {
+    loading.value = false;
+  }
+};
+
+const uploadFile = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('updateSupport', updateSupport.value);
+
+  try {
+    await importstandard_one(formData);
+    proxy.$modal.msgSuccess("导入成功");
+    getList();
+  } catch (e) {
+    proxy.$modal.msgError("导入失败");
+  } finally {
+    importRef.value.value = '';
+  }
+};
 const { proxy } = getCurrentInstance();
 
 // 添加选项数据
@@ -726,7 +774,7 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-/** 查询一类车标准配置列表 */
+/** 查询I类车标准配置列表 */
 function getList() {
   loading.value = true;
   listStandardone(queryParams.value).then(response => {
@@ -828,7 +876,7 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加一类车标准配置";
+  title.value = "添加I类车标准配置";
 }
 
 /** 修改按钮操作 */
@@ -838,7 +886,7 @@ function handleUpdate(row) {
   getStandardone(_id).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改一类车标准配置";
+    title.value = "修改I类车标准配置";
   });
 }
 
@@ -866,7 +914,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除一类车标准配置编号为"' + _ids + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除I类车标准配置编号为"' + _ids + '"的数据项？').then(function() {
     return delStandardone(_ids);
   }).then(() => {
     getList();
@@ -878,7 +926,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/standardone/export', {
     ...queryParams.value
-  }, `一类车标准配置表.xlsx`)
+  }, `I类车标准配置表.xlsx`)
 }
 
 getList();

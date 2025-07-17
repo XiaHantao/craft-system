@@ -1,13 +1,11 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="制造商" prop="manufacturer">
+        <el-input v-model="queryParams.manufacturer" placeholder="请输入制造商" clearable @keyup.enter="handleQuery" />
+      </el-form-item>
       <el-form-item label="型号" prop="model">
-        <el-input
-          v-model="queryParams.model"
-          placeholder="请输入型号"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-input v-model="queryParams.model" placeholder="请输入型号" clearable @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -17,156 +15,139 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['marketanalysis:parameter_two:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="Plus" @click="handleAdd"
+          v-hasPermi="['marketanalysis:parameter_two:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['marketanalysis:parameter_two:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['marketanalysis:parameter_two:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['marketanalysis:parameter_two:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['marketanalysis:parameter_two:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['marketanalysis:parameter_two:export']"
-        >导出</el-button>
+        <el-button type="warning" plain icon="Download" @click="handleExport"
+          v-hasPermi="['marketanalysis:parameter_two:export']">导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button type="info" plain icon="Upload" @click="handleImport">导入</el-button>
+      </el-col>
+      <input ref="importRef" type="file" hidden accept=".xlsx, .xls" @change="handleFileChange" />
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="parameter_twoList" @selection-change="handleSelectionChange">
-  <el-table-column type="selection" width="55" align="center" />
+      <el-table-column type="selection" width="55" align="center" />
 
-  <!-- 特性 -->
-  <el-table-column label="特性" align="center">
-    <!-- <el-table-column label="id" align="center" prop="id" /> -->
-    <el-table-column label="型号" align="center" prop="model" />
-    <el-table-column label="驾驶方式" align="center" prop="drivingStyle" />
-    <el-table-column label="额定起重量" align="center" prop="ratedLiftingCapacity" />
-    <el-table-column label="总提升高度" align="center" prop="raiseHeight" />
-    <el-table-column label="最高点载重" align="center" prop="highestPointLoadCapacity" />
-    <el-table-column label="载荷中心" align="center" prop="loadCenter" />
-    <el-table-column label="前悬距" align="center" prop="frontSuspensionDistance" />
-    <el-table-column label="轴距" align="center" prop="wheelbase" />
-    <el-table-column label="后悬距" align="center" prop="rearSuspensionDistance" />
-    <el-table-column label="自重（含电池）" align="center" prop="deadWeight" />
-    <el-table-column label="蓄电池重量" align="center" prop="weightOfBattery" />
-  </el-table-column>
+      <!-- 特性 -->
+      <el-table-column label="特性" align="center">
+        <!-- <el-table-column label="id" align="center" prop="id" /> -->
+        <el-table-column label="制造商" align="center" prop="manufacturer" />
+        <el-table-column label="型号" align="center" prop="model" />
+        <el-table-column label="驾驶方式" align="center" prop="drivingStyle" />
+        <el-table-column label="额定起重量" align="center" prop="ratedLiftingCapacity" />
+        <el-table-column label="总提升高度" align="center" prop="raiseHeight" />
+        <el-table-column label="最高点载重" align="center" prop="highestPointLoadCapacity" />
+        <el-table-column label="载荷中心" align="center" prop="loadCenter" />
+        <el-table-column label="前悬距" align="center" prop="frontSuspensionDistance" />
+        <el-table-column label="轴距" align="center" prop="wheelbase" />
+        <el-table-column label="后悬距" align="center" prop="rearSuspensionDistance" />
+        <el-table-column label="自重（含电池）" align="center" prop="deadWeight" />
+        <el-table-column label="蓄电池重量" align="center" prop="weightOfBattery" />
+      </el-table-column>
 
-  <!-- 轮胎 -->
-  <el-table-column label="轮胎" align="center">
-    <el-table-column label="轮胎类型" align="center" prop="tireType" />
-    <el-table-column label="轮胎尺寸—前轮" align="center" prop="tireSizeFrontWheel" />
-    <el-table-column label="轮胎尺寸—后轮" align="center" prop="tireSizeRearWheel" />
-    <el-table-column label="轮胎数量" align="center" prop="numberOfTires" />
-    <el-table-column label="前轮距" align="center" prop="frontWheelbase" />
-  </el-table-column>
+      <!-- 轮胎 -->
+      <el-table-column label="轮胎" align="center">
+        <el-table-column label="轮胎类型" align="center" prop="tireType" />
+        <el-table-column label="轮胎尺寸—前轮" align="center" prop="tireSizeFrontWheel" />
+        <el-table-column label="轮胎尺寸—后轮" align="center" prop="tireSizeRearWheel" />
+        <el-table-column label="轮胎数量" align="center" prop="numberOfTires" />
+        <el-table-column label="前轮距" align="center" prop="frontWheelbase" />
+      </el-table-column>
 
-  <!-- 尺寸 -->
-  <el-table-column label="尺寸" align="center">
-    <el-table-column label="门架回缩时高度" align="center" prop="doorFrameRetractsHeight" />
-    <el-table-column label="主起升高度" align="center" prop="liftingHeight" />
-    <el-table-column label="作业时最大高度" align="center" prop="maximumHeightDuringHomework" />
-    <el-table-column label="护顶架高度" align="center" prop="heightOfRoofProtectionFrame" />
-    <el-table-column label="站台高度" align="center" prop="platformHeight" />
-    <el-table-column label="辅助提升高度" align="center" prop="assistInRaisingHeight" />
-    <el-table-column label="提升后站台高度" align="center" prop="raisePlatformHeightAfterLifting" />
-    <el-table-column label="总长" align="center" prop="totalLength" />
-    <el-table-column label="车体长度（至货叉竖面）" align="center" prop="vehicleLength" />
-    <el-table-column label="总宽" align="center" prop="overallWidth" />
-    <el-table-column label="货叉尺寸" align="center" prop="forkSize" />
-    <el-table-column label="货叉架安装等级" align="center" prop="installationLevelOfForkFrame" />
-    <el-table-column label="货叉架宽度" align="center" prop="forkliftWidth" />
-    <el-table-column label="跨货叉宽度" align="center" prop="crossForkWidth" />
-    <el-table-column label="导轮间距" align="center" prop="distanceBetweenGuideWheels" />
-    <el-table-column label="侧移距离" align="center" prop="lateralDisplacementDistance" />
-    <el-table-column label="侧伸出至叉车中心线距离" align="center" prop="extendCenterlineOrkliftDistance" />
-    <el-table-column label="门架底部离地面间隙" align="center" prop="gapBottomGantryGround" />
-    <el-table-column label="轴距中心离地面间隙" align="center" prop="clearanceCenterWheelbaseGround" />
-    <el-table-column label="工作通道宽度" align="center" prop="widthOfWorkingChannel" />
-    <el-table-column label="转弯半径" align="center" prop="turningRadius" />
-    <el-table-column label="前轮轴至货叉旋转轴距离" align="center" prop="distanceForkRotationAxis" />
-    <el-table-column label="最大拣料高度" align="center" prop="maximumPickingHeight" />
-    <el-table-column label="托盘宽度" align="center" prop="palletWidth" />
-    <el-table-column label="托盘长度" align="center" prop="palletLength" />
-    <el-table-column label="驾驶仓入口净宽" align="center" prop="clearWidthOfCockpitEntrance" />
-    <el-table-column label="驾驶仓内部净高" align="center" prop="clearHeightInsideTheCockpit" />
-    <el-table-column label="驾驶仓外部总宽" align="center" prop="overallWidthOfTheCockpitExterior" />
-    <el-table-column label="旋转前伸叉架宽度" align="center" prop="rotatingForkFrameWidth" />
-    <el-table-column label="悬臂宽度" align="center" prop="cantileverWidth" />
-    <el-table-column label="下降速度（满载/空载）" align="center" prop="descentSpeedR" />
-  </el-table-column>
+      <!-- 尺寸 -->
+      <el-table-column label="尺寸" align="center">
+        <el-table-column label="门架回缩时高度" align="center" prop="doorFrameRetractsHeight" />
+        <el-table-column label="主起升高度" align="center" prop="liftingHeight" />
+        <el-table-column label="作业时最大高度" align="center" prop="maximumHeightDuringHomework" />
+        <el-table-column label="护顶架高度" align="center" prop="heightOfRoofProtectionFrame" />
+        <el-table-column label="站台高度" align="center" prop="platformHeight" />
+        <el-table-column label="辅助提升高度" align="center" prop="assistInRaisingHeight" />
+        <el-table-column label="提升后站台高度" align="center" prop="raisePlatformHeightAfterLifting" />
+        <el-table-column label="总长" align="center" prop="totalLength" />
+        <el-table-column label="车体长度（至货叉竖面）" align="center" prop="vehicleLength" />
+        <el-table-column label="总宽" align="center" prop="overallWidth" />
+        <el-table-column label="货叉尺寸" align="center" prop="forkSize" />
+        <el-table-column label="货叉架安装等级" align="center" prop="installationLevelOfForkFrame" />
+        <el-table-column label="货叉架宽度" align="center" prop="forkliftWidth" />
+        <el-table-column label="跨货叉宽度" align="center" prop="crossForkWidth" />
+        <el-table-column label="导轮间距" align="center" prop="distanceBetweenGuideWheels" />
+        <el-table-column label="侧移距离" align="center" prop="lateralDisplacementDistance" />
+        <el-table-column label="侧伸出至叉车中心线距离" align="center" prop="extendCenterlineOrkliftDistance" />
+        <el-table-column label="门架底部离地面间隙" align="center" prop="gapBottomGantryGround" />
+        <el-table-column label="轴距中心离地面间隙" align="center" prop="clearanceCenterWheelbaseGround" />
+        <el-table-column label="工作通道宽度" align="center" prop="widthOfWorkingChannel" />
+        <el-table-column label="转弯半径" align="center" prop="turningRadius" />
+        <el-table-column label="前轮轴至货叉旋转轴距离" align="center" prop="distanceForkRotationAxis" />
+        <el-table-column label="最大拣料高度" align="center" prop="maximumPickingHeight" />
+        <el-table-column label="托盘宽度" align="center" prop="palletWidth" />
+        <el-table-column label="托盘长度" align="center" prop="palletLength" />
+        <el-table-column label="驾驶仓入口净宽" align="center" prop="clearWidthOfCockpitEntrance" />
+        <el-table-column label="驾驶仓内部净高" align="center" prop="clearHeightInsideTheCockpit" />
+        <el-table-column label="驾驶仓外部总宽" align="center" prop="overallWidthOfTheCockpitExterior" />
+        <el-table-column label="旋转前伸叉架宽度" align="center" prop="rotatingForkFrameWidth" />
+        <el-table-column label="悬臂宽度" align="center" prop="cantileverWidth" />
+        <el-table-column label="下降速度（满载/空载）" align="center" prop="descentSpeedR" />
+      </el-table-column>
 
-  <!-- 性能 -->
-  <el-table-column label="性能" align="center">
-    <el-table-column label="运行速度，满/空载" align="center" prop="runningSpeed" />
-    <el-table-column label="提升速度，满/空载" align="center" prop="increaseSpeed" />
-    <el-table-column label="下降速度，满/空载" align="center" prop="descentSpeed" />
-    <el-table-column label="侧移速度，满/空载" align="center" prop="lateralMovementSpeed" />
-    <el-table-column label="行程制动" align="center" prop="travelBrake" />
-    <el-table-column label="停车制动" align="center" prop="parkingBrake" />
-    <el-table-column label="桥负荷，（满载）前/后" align="center" prop="bridgeLoadFullyLoaded" />
-    <el-table-column label="桥负荷，（空载）前/后" align="center" prop="bridgeLoadUnloaded" />
-  </el-table-column>
+      <!-- 性能 -->
+      <el-table-column label="性能" align="center">
+        <el-table-column label="运行速度，满/空载" align="center" prop="runningSpeed" />
+        <el-table-column label="提升速度，满/空载" align="center" prop="increaseSpeed" />
+        <el-table-column label="下降速度，满/空载" align="center" prop="descentSpeed" />
+        <el-table-column label="侧移速度，满/空载" align="center" prop="lateralMovementSpeed" />
+        <el-table-column label="行程制动" align="center" prop="travelBrake" />
+        <el-table-column label="停车制动" align="center" prop="parkingBrake" />
+        <el-table-column label="桥负荷，（满载）前/后" align="center" prop="bridgeLoadFullyLoaded" />
+        <el-table-column label="桥负荷，（空载）前/后" align="center" prop="bridgeLoadUnloaded" />
+      </el-table-column>
 
-  <!-- 电机和电池 -->
-  <el-table-column label="电机和电池" align="center">
-    <el-table-column label="驱动电机功率" align="center" prop="driveMotorPower" />
-    <el-table-column label="提升电机功率" align="center" prop="increaseMotorPower" />
-    <el-table-column label="电压/额定容量" align="center" prop="voltageRatedCapacity" />
-    <el-table-column label="蓄电池重量（含辅配重）" align="center" prop="weightOfBattery" />
-  </el-table-column>
+      <!-- 电机和电池 -->
+      <el-table-column label="电机和电池" align="center">
+        <el-table-column label="驱动电机功率" align="center" prop="driveMotorPower" />
+        <el-table-column label="提升电机功率" align="center" prop="increaseMotorPower" />
+        <el-table-column label="电压/额定容量" align="center" prop="voltageRatedCapacity" />
+        <el-table-column label="蓄电池重量（含辅配重）" align="center" prop="weightOfBattery" />
+      </el-table-column>
 
-  <!-- 其他 -->
-  <el-table-column label="其他" align="center">
-    <el-table-column label="驱动控制类型" align="center" prop="driveControlType" />
-    <el-table-column label="驾驶员耳边噪声" align="center" prop="driverEarNoise" />
-    <el-table-column label="转向" align="center" prop="turn" />
-  </el-table-column>
+      <!-- 其他 -->
+      <el-table-column label="其他" align="center">
+        <el-table-column label="驱动控制类型" align="center" prop="driveControlType" />
+        <el-table-column label="驾驶员耳边噪声" align="center" prop="driverEarNoise" />
+        <el-table-column label="转向" align="center" prop="turn" />
+      </el-table-column>
 
-  <!-- 操作 -->
-  <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-    <template #default="scope">
-      <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['marketanalysis:parameter_two:edit']">修改</el-button>
-      <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['marketanalysis:parameter_two:remove']">删除</el-button>
-    </template>
-  </el-table-column>
-</el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
+      <!-- 操作 -->
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template #default="scope">
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['marketanalysis:parameter_two:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['marketanalysis:parameter_two:remove']">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-    <!-- 添加或修改二类车参数对话框 -->
+    <pagination v-show="total>0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize"
+      @pagination="getList" />
+
+    <!-- 添加或修改II类车参数对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="parameter_twoRef" :model="form" :rules="rules" label-width="150px">
+        <el-form-item label="制造商" prop="manufacturer">
+          <el-input v-model="form.manufacturer" placeholder="请输入制造商" />
+        </el-form-item>
         <el-form-item label="型号" prop="model">
           <el-input v-model="form.model" placeholder="请输入型号" />
         </el-form-item>
@@ -362,8 +343,65 @@
 </template>
 
 <script setup name="Parameter_two">
-import { listParameter_two, getParameter_two, delParameter_two, addParameter_two, updateParameter_two } from "@/api/marketanalysis/parameter/parameter_two";
+import { listParameter_two, getParameter_two, delParameter_two, addParameter_two, updateParameter_two,importParameter_two, checkDataExists } from "@/api/marketanalysis/parameter/parameter_two";
+const importRef = ref(null);
+const updateSupport = ref(false);
 
+/** 导入按钮操作 */
+function handleImport() {
+  importRef.value.click();
+}
+
+/** 文件选择处理 */
+async function handleFileChange(e) {
+  const files = e.target.files;
+  if (!files.length) return;
+
+  try {
+    loading.value = true;
+    // 先检查数据是否存在
+    const res = await checkDataExists();
+    const dataExists = res.data;
+    if (dataExists) { 
+      // 存在数据时询问是否覆盖
+      proxy.$modal.confirm('检测到已有数据，是否覆盖？').then(() => {
+        updateSupport.value = true;
+        uploadFile(files[0]);
+      }).catch(() => {
+        updateSupport.value = false;
+        uploadFile(files[0]);
+      });
+    } else { 
+      // 不存在数据时直接导入
+      updateSupport.value = false;
+      uploadFile(files[0]);
+    }
+  } catch (error) {
+    proxy.$modal.msgError("数据检查失败：" + error.message);
+  } finally {
+    loading.value = false;
+  }
+}
+
+/** 执行上传 */
+async function uploadFile(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('updateSupport', updateSupport.value);
+
+  try {
+    loading.value = true;
+    await importParameter_two(formData);
+    proxy.$modal.msgSuccess("导入成功");
+    getList();
+  } catch (e) {
+    proxy.$modal.msgError("导入失败：" + (e.message || "请检查文件格式和数据有效性"));
+  } finally {
+    loading.value = false;
+    importRef.value.value = ''; // 清空文件选择
+    updateSupport.value = false; // 重置覆盖状态
+  }
+}
 const { proxy } = getCurrentInstance();
 
 const parameter_twoList = ref([]);
@@ -381,9 +419,13 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    manufacturer: null,
     model: null,
   },
   rules: {
+    manufacturer: [
+      { required: true, message: "制造商不能为空", trigger: "blur" }
+    ],
     model: [
       { required: true, message: "型号不能为空", trigger: "blur" }
     ],
@@ -392,7 +434,7 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-/** 查询二类车参数列表 */
+/** 查询II类车参数列表 */
 function getList() {
   loading.value = true;
   listParameter_two(queryParams.value).then(response => {
@@ -412,6 +454,7 @@ function cancel() {
 function reset() {
   form.value = {
     id: null,
+    manufacturer: null,
     model: null,
     drivingStyle: null,
     ratedLiftingCapacity: null,
@@ -500,7 +543,7 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加二类车参数";
+  title.value = "添加II类车参数";
 }
 
 /** 修改按钮操作 */
@@ -510,7 +553,7 @@ function handleUpdate(row) {
   getParameter_two(_id).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改二类车参数";
+    title.value = "修改II类车参数";
   });
 }
 
@@ -538,7 +581,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除二类车参数编号为"' + _ids + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除II类车参数编号为"' + _ids + '"的数据项？').then(function() {
     return delParameter_two(_ids);
   }).then(() => {
     getList();
@@ -550,7 +593,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/parameter_two/export', {
     ...queryParams.value
-  }, `二类车参数表.xlsx`)
+  }, `II类车参数表.xlsx`)
 }
 
 getList();

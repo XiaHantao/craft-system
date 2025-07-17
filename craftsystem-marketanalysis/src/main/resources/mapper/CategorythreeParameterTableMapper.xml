@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.marketanalysis.mapper.CategorythreeParameterTableMapper">
+
+    <resultMap type="CategorythreeParameterTable" id="CategorythreeParameterTableResult">
+        <result property="id"    column="id"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="model"    column="model"    />
+        <result property="drivingStyle"    column="driving_style"    />
+        <result property="ratedLiftingCapacity"    column="rated_lifting_capacity"    />
+        <result property="raiseHeight"    column="raise_height"    />
+        <result property="highestPointLoadCapacity"    column="highest_point_load_capacity"    />
+        <result property="loadCenter"    column="load_center"    />
+        <result property="frontSuspensionDistance"    column="front_suspension_distance"    />
+        <result property="wheelbase"    column="wheelbase"    />
+        <result property="rearSuspensionDistance"    column="rear_suspension_distance"    />
+        <result property="deadWeight"    column="dead_weight"    />
+        <result property="tireType"    column="tire_type"    />
+        <result property="tireSizeFrontWheel"    column="tire_size_front_wheel"    />
+        <result property="tireSizeRearWheel"    column="tire_size_rear_wheel"    />
+        <result property="numberOfTires"    column="number_of_tires"    />
+        <result property="frontWheelbase"    column="front_wheelbase"    />
+        <result property="doorFrameRetractsHeight"    column="door_frame_retracts_height"    />
+        <result property="liftingHeight"    column="lifting_height"    />
+        <result property="maximumHeightDuringHomework"    column="maximum_height_during_homework"    />
+        <result property="heightOfRoofProtectionFrame"    column="height_of_roof_protection_frame"    />
+        <result property="platformHeight"    column="platform_height"    />
+        <result property="assistInRaisingHeight"    column="assist_in_raising_height"    />
+        <result property="raisePlatformHeightAfterLifting"    column="raise_platform_height_after_lifting"    />
+        <result property="totalLength"    column="total_length"    />
+        <result property="vehicleLength"    column="vehicle_length"    />
+        <result property="overallWidth"    column="overall_width"    />
+        <result property="forkSize"    column="fork_size"    />
+        <result property="installationLevelOfForkFrame"    column="installation_level_of_fork_frame"    />
+        <result property="forkliftWidth"    column="forklift_width"    />
+        <result property="crossForkWidth"    column="cross_fork_width"    />
+        <result property="distanceBetweenGuideWheels"    column="distance_between_guide_wheels"    />
+        <result property="lateralDisplacementDistance"    column="lateral_displacement_distance"    />
+        <result property="extendCenterlineOrkliftDistance"    column="extend_centerline_orklift_distance"    />
+        <result property="gapBottomGantryGround"    column="gap_bottom_gantry_ground"    />
+        <result property="clearanceCenterWheelbaseGround"    column="clearance_center_wheelbase_ground"    />
+        <result property="widthOfWorkingChannel"    column="width_of_working_channel"    />
+        <result property="turningRadius"    column="turning_radius"    />
+        <result property="distanceForkRotationAxis"    column="distance_fork_rotation_axis"    />
+        <result property="maximumPickingHeight"    column="maximum_picking_height"    />
+        <result property="palletWidth"    column="pallet_width"    />
+        <result property="palletLength"    column="pallet_length"    />
+        <result property="clearWidthOfCockpitEntrance"    column="clear_width_of_cockpit_entrance"    />
+        <result property="clearHeightInsideTheCockpit"    column="clear_height_inside_the_cockpit"    />
+        <result property="overallWidthOfTheCockpitExterior"    column="overall_width_of_the_cockpit_exterior"    />
+        <result property="rotatingForkFrameWidth"    column="rotating_fork_frame_width"    />
+        <result property="cantileverWidth"    column="cantilever_width"    />
+        <result property="descentSpeedR"    column="descent_speed_r"    />
+        <result property="runningSpeed"    column="running_speed"    />
+        <result property="increaseSpeed"    column="increase_speed"    />
+        <result property="descentSpeed"    column="descent_speed"    />
+        <result property="lateralMovementSpeed"    column="lateral_movement_speed"    />
+        <result property="travelBrake"    column="travel_brake"    />
+        <result property="parkingBrake"    column="parking_brake"    />
+        <result property="bridgeLoadFullyLoaded"    column="bridge_load_fully_loaded"    />
+        <result property="bridgeLoadUnloaded"    column="bridge_load_unloaded"    />
+        <result property="driveMotorPower"    column="drive_motor_power"    />
+        <result property="increaseMotorPower"    column="increase_motor_power"    />
+        <result property="voltageRatedCapacity"    column="voltage_rated_capacity"    />
+        <result property="weightOfBattery"    column="weight_of_battery"    />
+        <result property="driveControlType"    column="drive_control_type"    />
+        <result property="driverEarNoise"    column="driver_ear_noise"    />
+        <result property="turn"    column="turn"    />
+    </resultMap>
+
+    <sql id="selectCategorythreeParameterTableVo">
+        select id, manufacturer, model, driving_style, rated_lifting_capacity, raise_height, highest_point_load_capacity, load_center, front_suspension_distance, wheelbase, rear_suspension_distance, dead_weight, tire_type, tire_size_front_wheel, tire_size_rear_wheel, number_of_tires, front_wheelbase, door_frame_retracts_height, lifting_height, maximum_height_during_homework, height_of_roof_protection_frame, platform_height, assist_in_raising_height, raise_platform_height_after_lifting, total_length, vehicle_length, overall_width, fork_size, installation_level_of_fork_frame, forklift_width, cross_fork_width, distance_between_guide_wheels, lateral_displacement_distance, extend_centerline_orklift_distance, gap_bottom_gantry_ground, clearance_center_wheelbase_ground, width_of_working_channel, turning_radius, distance_fork_rotation_axis, maximum_picking_height, pallet_width, pallet_length, clear_width_of_cockpit_entrance, clear_height_inside_the_cockpit, overall_width_of_the_cockpit_exterior, rotating_fork_frame_width, cantilever_width, descent_speed_r, running_speed, increase_speed, descent_speed, lateral_movement_speed, travel_brake, parking_brake, bridge_load_fully_loaded, bridge_load_unloaded, drive_motor_power, increase_motor_power, voltage_rated_capacity, weight_of_battery, drive_control_type, driver_ear_noise, turn from categorythree_parameter_table
+    </sql>
+
+    <select id="selectCategorythreeParameterTableList" parameterType="CategorythreeParameterTable" resultMap="CategorythreeParameterTableResult">
+        <include refid="selectCategorythreeParameterTableVo"/>
+        <where>
+            <if test="manufacturer != null  and manufacturer != ''"> and manufacturer = #{manufacturer}</if>
+            <if test="model != null  and model != ''"> and model like concat('%', #{model}, '%')</if>
+            <if test="drivingStyle != null  and drivingStyle != ''"> and driving_style like concat('%', #{drivingStyle}, '%')</if>
+            <if test="ratedLiftingCapacity != null  and ratedLiftingCapacity != ''"> and rated_lifting_capacity = #{ratedLiftingCapacity}</if>
+            <if test="raiseHeight != null  and raiseHeight != ''"> and raise_height = #{raiseHeight}</if>
+            <if test="highestPointLoadCapacity != null  and highestPointLoadCapacity != ''"> and highest_point_load_capacity = #{highestPointLoadCapacity}</if>
+            <if test="loadCenter != null  and loadCenter != ''"> and load_center = #{loadCenter}</if>
+            <if test="frontSuspensionDistance != null  and frontSuspensionDistance != ''"> and front_suspension_distance = #{frontSuspensionDistance}</if>
+            <if test="wheelbase != null  and wheelbase != ''"> and wheelbase = #{wheelbase}</if>
+            <if test="rearSuspensionDistance != null  and rearSuspensionDistance != ''"> and rear_suspension_distance = #{rearSuspensionDistance}</if>
+            <if test="deadWeight != null  and deadWeight != ''"> and dead_weight = #{deadWeight}</if>
+            <if test="tireType != null  and tireType != ''"> and tire_type = #{tireType}</if>
+            <if test="tireSizeFrontWheel != null  and tireSizeFrontWheel != ''"> and tire_size_front_wheel = #{tireSizeFrontWheel}</if>
+            <if test="tireSizeRearWheel != null  and tireSizeRearWheel != ''"> and tire_size_rear_wheel = #{tireSizeRearWheel}</if>
+            <if test="numberOfTires != null  and numberOfTires != ''"> and number_of_tires = #{numberOfTires}</if>
+            <if test="frontWheelbase != null  and frontWheelbase != ''"> and front_wheelbase = #{frontWheelbase}</if>
+            <if test="doorFrameRetractsHeight != null  and doorFrameRetractsHeight != ''"> and door_frame_retracts_height = #{doorFrameRetractsHeight}</if>
+            <if test="liftingHeight != null  and liftingHeight != ''"> and lifting_height = #{liftingHeight}</if>
+            <if test="maximumHeightDuringHomework != null  and maximumHeightDuringHomework != ''"> and maximum_height_during_homework = #{maximumHeightDuringHomework}</if>
+            <if test="heightOfRoofProtectionFrame != null  and heightOfRoofProtectionFrame != ''"> and height_of_roof_protection_frame = #{heightOfRoofProtectionFrame}</if>
+            <if test="platformHeight != null  and platformHeight != ''"> and platform_height = #{platformHeight}</if>
+            <if test="assistInRaisingHeight != null  and assistInRaisingHeight != ''"> and assist_in_raising_height = #{assistInRaisingHeight}</if>
+            <if test="raisePlatformHeightAfterLifting != null  and raisePlatformHeightAfterLifting != ''"> and raise_platform_height_after_lifting = #{raisePlatformHeightAfterLifting}</if>
+            <if test="totalLength != null  and totalLength != ''"> and total_length = #{totalLength}</if>
+            <if test="vehicleLength != null  and vehicleLength != ''"> and vehicle_length = #{vehicleLength}</if>
+            <if test="overallWidth != null  and overallWidth != ''"> and overall_width = #{overallWidth}</if>
+            <if test="forkSize != null  and forkSize != ''"> and fork_size = #{forkSize}</if>
+            <if test="installationLevelOfForkFrame != null  and installationLevelOfForkFrame != ''"> and installation_level_of_fork_frame = #{installationLevelOfForkFrame}</if>
+            <if test="forkliftWidth != null  and forkliftWidth != ''"> and forklift_width = #{forkliftWidth}</if>
+            <if test="crossForkWidth != null  and crossForkWidth != ''"> and cross_fork_width = #{crossForkWidth}</if>
+            <if test="distanceBetweenGuideWheels != null  and distanceBetweenGuideWheels != ''"> and distance_between_guide_wheels = #{distanceBetweenGuideWheels}</if>
+            <if test="lateralDisplacementDistance != null  and lateralDisplacementDistance != ''"> and lateral_displacement_distance = #{lateralDisplacementDistance}</if>
+            <if test="extendCenterlineOrkliftDistance != null  and extendCenterlineOrkliftDistance != ''"> and extend_centerline_orklift_distance = #{extendCenterlineOrkliftDistance}</if>
+            <if test="gapBottomGantryGround != null  and gapBottomGantryGround != ''"> and gap_bottom_gantry_ground = #{gapBottomGantryGround}</if>
+            <if test="clearanceCenterWheelbaseGround != null  and clearanceCenterWheelbaseGround != ''"> and clearance_center_wheelbase_ground = #{clearanceCenterWheelbaseGround}</if>
+            <if test="widthOfWorkingChannel != null  and widthOfWorkingChannel != ''"> and width_of_working_channel = #{widthOfWorkingChannel}</if>
+            <if test="turningRadius != null  and turningRadius != ''"> and turning_radius = #{turningRadius}</if>
+            <if test="distanceForkRotationAxis != null  and distanceForkRotationAxis != ''"> and distance_fork_rotation_axis = #{distanceForkRotationAxis}</if>
+            <if test="maximumPickingHeight != null  and maximumPickingHeight != ''"> and maximum_picking_height = #{maximumPickingHeight}</if>
+            <if test="palletWidth != null  and palletWidth != ''"> and pallet_width = #{palletWidth}</if>
+            <if test="palletLength != null  and palletLength != ''"> and pallet_length = #{palletLength}</if>
+            <if test="clearWidthOfCockpitEntrance != null  and clearWidthOfCockpitEntrance != ''"> and clear_width_of_cockpit_entrance = #{clearWidthOfCockpitEntrance}</if>
+            <if test="clearHeightInsideTheCockpit != null  and clearHeightInsideTheCockpit != ''"> and clear_height_inside_the_cockpit = #{clearHeightInsideTheCockpit}</if>
+            <if test="overallWidthOfTheCockpitExterior != null  and overallWidthOfTheCockpitExterior != ''"> and overall_width_of_the_cockpit_exterior = #{overallWidthOfTheCockpitExterior}</if>
+            <if test="rotatingForkFrameWidth != null  and rotatingForkFrameWidth != ''"> and rotating_fork_frame_width = #{rotatingForkFrameWidth}</if>
+            <if test="cantileverWidth != null  and cantileverWidth != ''"> and cantilever_width = #{cantileverWidth}</if>
+            <if test="descentSpeedR != null  and descentSpeedR != ''"> and descent_speed_r = #{descentSpeedR}</if>
+            <if test="runningSpeed != null  and runningSpeed != ''"> and running_speed = #{runningSpeed}</if>
+            <if test="increaseSpeed != null  and increaseSpeed != ''"> and increase_speed = #{increaseSpeed}</if>
+            <if test="descentSpeed != null  and descentSpeed != ''"> and descent_speed = #{descentSpeed}</if>
+            <if test="lateralMovementSpeed != null  and lateralMovementSpeed != ''"> and lateral_movement_speed = #{lateralMovementSpeed}</if>
+            <if test="travelBrake != null  and travelBrake != ''"> and travel_brake = #{travelBrake}</if>
+            <if test="parkingBrake != null  and parkingBrake != ''"> and parking_brake = #{parkingBrake}</if>
+            <if test="bridgeLoadFullyLoaded != null  and bridgeLoadFullyLoaded != ''"> and bridge_load_fully_loaded = #{bridgeLoadFullyLoaded}</if>
+            <if test="bridgeLoadUnloaded != null  and bridgeLoadUnloaded != ''"> and bridge_load_unloaded = #{bridgeLoadUnloaded}</if>
+            <if test="driveMotorPower != null  and driveMotorPower != ''"> and drive_motor_power = #{driveMotorPower}</if>
+            <if test="increaseMotorPower != null  and increaseMotorPower != ''"> and increase_motor_power = #{increaseMotorPower}</if>
+            <if test="voltageRatedCapacity != null  and voltageRatedCapacity != ''"> and voltage_rated_capacity = #{voltageRatedCapacity}</if>
+            <if test="weightOfBattery != null  and weightOfBattery != ''"> and weight_of_battery = #{weightOfBattery}</if>
+            <if test="driveControlType != null  and driveControlType != ''"> and drive_control_type = #{driveControlType}</if>
+            <if test="driverEarNoise != null  and driverEarNoise != ''"> and driver_ear_noise = #{driverEarNoise}</if>
+            <if test="turn != null  and turn != ''"> and turn = #{turn}</if>
+        </where>
+    </select>
+
+    <select id="selectCategorythreeParameterTableById" parameterType="Long" resultMap="CategorythreeParameterTableResult">
+        <include refid="selectCategorythreeParameterTableVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCategorythreeParameterTable" parameterType="CategorythreeParameterTable" useGeneratedKeys="true" keyProperty="id">
+        insert into categorythree_parameter_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="manufacturer != null">manufacturer,</if>
+            <if test="model != null and model != ''">model,</if>
+            <if test="drivingStyle != null and drivingStyle != ''">driving_style,</if>
+            <if test="ratedLiftingCapacity != null">rated_lifting_capacity,</if>
+            <if test="raiseHeight != null">raise_height,</if>
+            <if test="highestPointLoadCapacity != null">highest_point_load_capacity,</if>
+            <if test="loadCenter != null">load_center,</if>
+            <if test="frontSuspensionDistance != null">front_suspension_distance,</if>
+            <if test="wheelbase != null">wheelbase,</if>
+            <if test="rearSuspensionDistance != null">rear_suspension_distance,</if>
+            <if test="deadWeight != null">dead_weight,</if>
+            <if test="tireType != null">tire_type,</if>
+            <if test="tireSizeFrontWheel != null">tire_size_front_wheel,</if>
+            <if test="tireSizeRearWheel != null">tire_size_rear_wheel,</if>
+            <if test="numberOfTires != null">number_of_tires,</if>
+            <if test="frontWheelbase != null">front_wheelbase,</if>
+            <if test="doorFrameRetractsHeight != null">door_frame_retracts_height,</if>
+            <if test="liftingHeight != null">lifting_height,</if>
+            <if test="maximumHeightDuringHomework != null">maximum_height_during_homework,</if>
+            <if test="heightOfRoofProtectionFrame != null">height_of_roof_protection_frame,</if>
+            <if test="platformHeight != null">platform_height,</if>
+            <if test="assistInRaisingHeight != null">assist_in_raising_height,</if>
+            <if test="raisePlatformHeightAfterLifting != null">raise_platform_height_after_lifting,</if>
+            <if test="totalLength != null">total_length,</if>
+            <if test="vehicleLength != null">vehicle_length,</if>
+            <if test="overallWidth != null">overall_width,</if>
+            <if test="forkSize != null">fork_size,</if>
+            <if test="installationLevelOfForkFrame != null">installation_level_of_fork_frame,</if>
+            <if test="forkliftWidth != null">forklift_width,</if>
+            <if test="crossForkWidth != null">cross_fork_width,</if>
+            <if test="distanceBetweenGuideWheels != null">distance_between_guide_wheels,</if>
+            <if test="lateralDisplacementDistance != null">lateral_displacement_distance,</if>
+            <if test="extendCenterlineOrkliftDistance != null">extend_centerline_orklift_distance,</if>
+            <if test="gapBottomGantryGround != null">gap_bottom_gantry_ground,</if>
+            <if test="clearanceCenterWheelbaseGround != null">clearance_center_wheelbase_ground,</if>
+            <if test="widthOfWorkingChannel != null">width_of_working_channel,</if>
+            <if test="turningRadius != null">turning_radius,</if>
+            <if test="distanceForkRotationAxis != null">distance_fork_rotation_axis,</if>
+            <if test="maximumPickingHeight != null">maximum_picking_height,</if>
+            <if test="palletWidth != null">pallet_width,</if>
+            <if test="palletLength != null">pallet_length,</if>
+            <if test="clearWidthOfCockpitEntrance != null">clear_width_of_cockpit_entrance,</if>
+            <if test="clearHeightInsideTheCockpit != null">clear_height_inside_the_cockpit,</if>
+            <if test="overallWidthOfTheCockpitExterior != null">overall_width_of_the_cockpit_exterior,</if>
+            <if test="rotatingForkFrameWidth != null">rotating_fork_frame_width,</if>
+            <if test="cantileverWidth != null">cantilever_width,</if>
+            <if test="descentSpeedR != null">descent_speed_r,</if>
+            <if test="runningSpeed != null">running_speed,</if>
+            <if test="increaseSpeed != null">increase_speed,</if>
+            <if test="descentSpeed != null">descent_speed,</if>
+            <if test="lateralMovementSpeed != null">lateral_movement_speed,</if>
+            <if test="travelBrake != null">travel_brake,</if>
+            <if test="parkingBrake != null">parking_brake,</if>
+            <if test="bridgeLoadFullyLoaded != null">bridge_load_fully_loaded,</if>
+            <if test="bridgeLoadUnloaded != null">bridge_load_unloaded,</if>
+            <if test="driveMotorPower != null">drive_motor_power,</if>
+            <if test="increaseMotorPower != null">increase_motor_power,</if>
+            <if test="voltageRatedCapacity != null">voltage_rated_capacity,</if>
+            <if test="weightOfBattery != null">weight_of_battery,</if>
+            <if test="driveControlType != null">drive_control_type,</if>
+            <if test="driverEarNoise != null">driver_ear_noise,</if>
+            <if test="turn != null">turn,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="model != null and model != ''">#{model},</if>
+            <if test="drivingStyle != null and drivingStyle != ''">#{drivingStyle},</if>
+            <if test="ratedLiftingCapacity != null">#{ratedLiftingCapacity},</if>
+            <if test="raiseHeight != null">#{raiseHeight},</if>
+            <if test="highestPointLoadCapacity != null">#{highestPointLoadCapacity},</if>
+            <if test="loadCenter != null">#{loadCenter},</if>
+            <if test="frontSuspensionDistance != null">#{frontSuspensionDistance},</if>
+            <if test="wheelbase != null">#{wheelbase},</if>
+            <if test="rearSuspensionDistance != null">#{rearSuspensionDistance},</if>
+            <if test="deadWeight != null">#{deadWeight},</if>
+            <if test="tireType != null">#{tireType},</if>
+            <if test="tireSizeFrontWheel != null">#{tireSizeFrontWheel},</if>
+            <if test="tireSizeRearWheel != null">#{tireSizeRearWheel},</if>
+            <if test="numberOfTires != null">#{numberOfTires},</if>
+            <if test="frontWheelbase != null">#{frontWheelbase},</if>
+            <if test="doorFrameRetractsHeight != null">#{doorFrameRetractsHeight},</if>
+            <if test="liftingHeight != null">#{liftingHeight},</if>
+            <if test="maximumHeightDuringHomework != null">#{maximumHeightDuringHomework},</if>
+            <if test="heightOfRoofProtectionFrame != null">#{heightOfRoofProtectionFrame},</if>
+            <if test="platformHeight != null">#{platformHeight},</if>
+            <if test="assistInRaisingHeight != null">#{assistInRaisingHeight},</if>
+            <if test="raisePlatformHeightAfterLifting != null">#{raisePlatformHeightAfterLifting},</if>
+            <if test="totalLength != null">#{totalLength},</if>
+            <if test="vehicleLength != null">#{vehicleLength},</if>
+            <if test="overallWidth != null">#{overallWidth},</if>
+            <if test="forkSize != null">#{forkSize},</if>
+            <if test="installationLevelOfForkFrame != null">#{installationLevelOfForkFrame},</if>
+            <if test="forkliftWidth != null">#{forkliftWidth},</if>
+            <if test="crossForkWidth != null">#{crossForkWidth},</if>
+            <if test="distanceBetweenGuideWheels != null">#{distanceBetweenGuideWheels},</if>
+            <if test="lateralDisplacementDistance != null">#{lateralDisplacementDistance},</if>
+            <if test="extendCenterlineOrkliftDistance != null">#{extendCenterlineOrkliftDistance},</if>
+            <if test="gapBottomGantryGround != null">#{gapBottomGantryGround},</if>
+            <if test="clearanceCenterWheelbaseGround != null">#{clearanceCenterWheelbaseGround},</if>
+            <if test="widthOfWorkingChannel != null">#{widthOfWorkingChannel},</if>
+            <if test="turningRadius != null">#{turningRadius},</if>
+            <if test="distanceForkRotationAxis != null">#{distanceForkRotationAxis},</if>
+            <if test="maximumPickingHeight != null">#{maximumPickingHeight},</if>
+            <if test="palletWidth != null">#{palletWidth},</if>
+            <if test="palletLength != null">#{palletLength},</if>
+            <if test="clearWidthOfCockpitEntrance != null">#{clearWidthOfCockpitEntrance},</if>
+            <if test="clearHeightInsideTheCockpit != null">#{clearHeightInsideTheCockpit},</if>
+            <if test="overallWidthOfTheCockpitExterior != null">#{overallWidthOfTheCockpitExterior},</if>
+            <if test="rotatingForkFrameWidth != null">#{rotatingForkFrameWidth},</if>
+            <if test="cantileverWidth != null">#{cantileverWidth},</if>
+            <if test="descentSpeedR != null">#{descentSpeedR},</if>
+            <if test="runningSpeed != null">#{runningSpeed},</if>
+            <if test="increaseSpeed != null">#{increaseSpeed},</if>
+            <if test="descentSpeed != null">#{descentSpeed},</if>
+            <if test="lateralMovementSpeed != null">#{lateralMovementSpeed},</if>
+            <if test="travelBrake != null">#{travelBrake},</if>
+            <if test="parkingBrake != null">#{parkingBrake},</if>
+            <if test="bridgeLoadFullyLoaded != null">#{bridgeLoadFullyLoaded},</if>
+            <if test="bridgeLoadUnloaded != null">#{bridgeLoadUnloaded},</if>
+            <if test="driveMotorPower != null">#{driveMotorPower},</if>
+            <if test="increaseMotorPower != null">#{increaseMotorPower},</if>
+            <if test="voltageRatedCapacity != null">#{voltageRatedCapacity},</if>
+            <if test="weightOfBattery != null">#{weightOfBattery},</if>
+            <if test="driveControlType != null">#{driveControlType},</if>
+            <if test="driverEarNoise != null">#{driverEarNoise},</if>
+            <if test="turn != null">#{turn},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCategorythreeParameterTable" parameterType="CategorythreeParameterTable">
+        update categorythree_parameter_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="manufacturer != null">manufacturer = #{manufacturer},</if>
+            <if test="model != null and model != ''">model = #{model},</if>
+            <if test="drivingStyle != null and drivingStyle != ''">driving_style = #{drivingStyle},</if>
+            <if test="ratedLiftingCapacity != null">rated_lifting_capacity = #{ratedLiftingCapacity},</if>
+            <if test="raiseHeight != null">raise_height = #{raiseHeight},</if>
+            <if test="highestPointLoadCapacity != null">highest_point_load_capacity = #{highestPointLoadCapacity},</if>
+            <if test="loadCenter != null">load_center = #{loadCenter},</if>
+            <if test="frontSuspensionDistance != null">front_suspension_distance = #{frontSuspensionDistance},</if>
+            <if test="wheelbase != null">wheelbase = #{wheelbase},</if>
+            <if test="rearSuspensionDistance != null">rear_suspension_distance = #{rearSuspensionDistance},</if>
+            <if test="deadWeight != null">dead_weight = #{deadWeight},</if>
+            <if test="tireType != null">tire_type = #{tireType},</if>
+            <if test="tireSizeFrontWheel != null">tire_size_front_wheel = #{tireSizeFrontWheel},</if>
+            <if test="tireSizeRearWheel != null">tire_size_rear_wheel = #{tireSizeRearWheel},</if>
+            <if test="numberOfTires != null">number_of_tires = #{numberOfTires},</if>
+            <if test="frontWheelbase != null">front_wheelbase = #{frontWheelbase},</if>
+            <if test="doorFrameRetractsHeight != null">door_frame_retracts_height = #{doorFrameRetractsHeight},</if>
+            <if test="liftingHeight != null">lifting_height = #{liftingHeight},</if>
+            <if test="maximumHeightDuringHomework != null">maximum_height_during_homework = #{maximumHeightDuringHomework},</if>
+            <if test="heightOfRoofProtectionFrame != null">height_of_roof_protection_frame = #{heightOfRoofProtectionFrame},</if>
+            <if test="platformHeight != null">platform_height = #{platformHeight},</if>
+            <if test="assistInRaisingHeight != null">assist_in_raising_height = #{assistInRaisingHeight},</if>
+            <if test="raisePlatformHeightAfterLifting != null">raise_platform_height_after_lifting = #{raisePlatformHeightAfterLifting},</if>
+            <if test="totalLength != null">total_length = #{totalLength},</if>
+            <if test="vehicleLength != null">vehicle_length = #{vehicleLength},</if>
+            <if test="overallWidth != null">overall_width = #{overallWidth},</if>
+            <if test="forkSize != null">fork_size = #{forkSize},</if>
+            <if test="installationLevelOfForkFrame != null">installation_level_of_fork_frame = #{installationLevelOfForkFrame},</if>
+            <if test="forkliftWidth != null">forklift_width = #{forkliftWidth},</if>
+            <if test="crossForkWidth != null">cross_fork_width = #{crossForkWidth},</if>
+            <if test="distanceBetweenGuideWheels != null">distance_between_guide_wheels = #{distanceBetweenGuideWheels},</if>
+            <if test="lateralDisplacementDistance != null">lateral_displacement_distance = #{lateralDisplacementDistance},</if>
+            <if test="extendCenterlineOrkliftDistance != null">extend_centerline_orklift_distance = #{extendCenterlineOrkliftDistance},</if>
+            <if test="gapBottomGantryGround != null">gap_bottom_gantry_ground = #{gapBottomGantryGround},</if>
+            <if test="clearanceCenterWheelbaseGround != null">clearance_center_wheelbase_ground = #{clearanceCenterWheelbaseGround},</if>
+            <if test="widthOfWorkingChannel != null">width_of_working_channel = #{widthOfWorkingChannel},</if>
+            <if test="turningRadius != null">turning_radius = #{turningRadius},</if>
+            <if test="distanceForkRotationAxis != null">distance_fork_rotation_axis = #{distanceForkRotationAxis},</if>
+            <if test="maximumPickingHeight != null">maximum_picking_height = #{maximumPickingHeight},</if>
+            <if test="palletWidth != null">pallet_width = #{palletWidth},</if>
+            <if test="palletLength != null">pallet_length = #{palletLength},</if>
+            <if test="clearWidthOfCockpitEntrance != null">clear_width_of_cockpit_entrance = #{clearWidthOfCockpitEntrance},</if>
+            <if test="clearHeightInsideTheCockpit != null">clear_height_inside_the_cockpit = #{clearHeightInsideTheCockpit},</if>
+            <if test="overallWidthOfTheCockpitExterior != null">overall_width_of_the_cockpit_exterior = #{overallWidthOfTheCockpitExterior},</if>
+            <if test="rotatingForkFrameWidth != null">rotating_fork_frame_width = #{rotatingForkFrameWidth},</if>
+            <if test="cantileverWidth != null">cantilever_width = #{cantileverWidth},</if>
+            <if test="descentSpeedR != null">descent_speed_r = #{descentSpeedR},</if>
+            <if test="runningSpeed != null">running_speed = #{runningSpeed},</if>
+            <if test="increaseSpeed != null">increase_speed = #{increaseSpeed},</if>
+            <if test="descentSpeed != null">descent_speed = #{descentSpeed},</if>
+            <if test="lateralMovementSpeed != null">lateral_movement_speed = #{lateralMovementSpeed},</if>
+            <if test="travelBrake != null">travel_brake = #{travelBrake},</if>
+            <if test="parkingBrake != null">parking_brake = #{parkingBrake},</if>
+            <if test="bridgeLoadFullyLoaded != null">bridge_load_fully_loaded = #{bridgeLoadFullyLoaded},</if>
+            <if test="bridgeLoadUnloaded != null">bridge_load_unloaded = #{bridgeLoadUnloaded},</if>
+            <if test="driveMotorPower != null">drive_motor_power = #{driveMotorPower},</if>
+            <if test="increaseMotorPower != null">increase_motor_power = #{increaseMotorPower},</if>
+            <if test="voltageRatedCapacity != null">voltage_rated_capacity = #{voltageRatedCapacity},</if>
+            <if test="weightOfBattery != null">weight_of_battery = #{weightOfBattery},</if>
+            <if test="driveControlType != null">drive_control_type = #{driveControlType},</if>
+            <if test="driverEarNoise != null">driver_ear_noise = #{driverEarNoise},</if>
+            <if test="turn != null">turn = #{turn},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCategorythreeParameterTableById" parameterType="Long">
+        delete from categorythree_parameter_table where id = #{id}
+    </delete>
+
+    <delete id="deleteCategorythreeParameterTableByIds" parameterType="String">
+        delete from categorythree_parameter_table where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!-- 批量插入 -->
+    <insert id="batchInsertCategorythreeParameterTable" parameterType="java.util.List">
+        INSERT INTO categorythree_parameter_table (
+        manufacturer, model, driving_style, rated_lifting_capacity, raise_height,
+        highest_point_load_capacity, load_center, front_suspension_distance, wheelbase,
+        rear_suspension_distance, dead_weight, tire_type, tire_size_front_wheel,
+        tire_size_rear_wheel, number_of_tires, front_wheelbase, door_frame_retracts_height,
+        lifting_height, maximum_height_during_homework, height_of_roof_protection_frame,
+        platform_height, assist_in_raising_height, raise_platform_height_after_lifting,
+        total_length, vehicle_length, overall_width, fork_size, installation_level_of_fork_frame,
+        forklift_width, cross_fork_width, distance_between_guide_wheels, lateral_displacement_distance,
+        extend_centerline_orklift_distance, gap_bottom_gantry_ground, clearance_center_wheelbase_ground,
+        width_of_working_channel, turning_radius, distance_fork_rotation_axis, maximum_picking_height,
+        pallet_width, pallet_length, clear_width_of_cockpit_entrance, clear_height_inside_the_cockpit,
+        overall_width_of_the_cockpit_exterior, rotating_fork_frame_width, cantilever_width,
+        descent_speed_r, running_speed, increase_speed, descent_speed, lateral_movement_speed,
+        travel_brake, parking_brake, bridge_load_fully_loaded, bridge_load_unloaded,
+        drive_motor_power, increase_motor_power, voltage_rated_capacity, weight_of_battery,
+        drive_control_type, driver_ear_noise, turn
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.manufacturer}, #{item.model}, #{item.drivingStyle}, #{item.ratedLiftingCapacity},
+            #{item.raiseHeight}, #{item.highestPointLoadCapacity}, #{item.loadCenter},
+            #{item.frontSuspensionDistance}, #{item.wheelbase}, #{item.rearSuspensionDistance},
+            #{item.deadWeight}, #{item.tireType}, #{item.tireSizeFrontWheel}, #{item.tireSizeRearWheel},
+            #{item.numberOfTires}, #{item.frontWheelbase}, #{item.doorFrameRetractsHeight},
+            #{item.liftingHeight}, #{item.maximumHeightDuringHomework}, #{item.heightOfRoofProtectionFrame},
+            #{item.platformHeight}, #{item.assistInRaisingHeight}, #{item.raisePlatformHeightAfterLifting},
+            #{item.totalLength}, #{item.vehicleLength}, #{item.overallWidth}, #{item.forkSize},
+            #{item.installationLevelOfForkFrame}, #{item.forkliftWidth}, #{item.crossForkWidth},
+            #{item.distanceBetweenGuideWheels}, #{item.lateralDisplacementDistance},
+            #{item.extendCenterlineOrkliftDistance}, #{item.gapBottomGantryGround},
+            #{item.clearanceCenterWheelbaseGround}, #{item.widthOfWorkingChannel}, #{item.turningRadius},
+            #{item.distanceForkRotationAxis}, #{item.maximumPickingHeight}, #{item.palletWidth},
+            #{item.palletLength}, #{item.clearWidthOfCockpitEntrance}, #{item.clearHeightInsideTheCockpit},
+            #{item.overallWidthOfTheCockpitExterior}, #{item.rotatingForkFrameWidth}, #{item.cantileverWidth},
+            #{item.descentSpeedR}, #{item.runningSpeed}, #{item.increaseSpeed}, #{item.descentSpeed},
+            #{item.lateralMovementSpeed}, #{item.travelBrake}, #{item.parkingBrake},
+            #{item.bridgeLoadFullyLoaded}, #{item.bridgeLoadUnloaded}, #{item.driveMotorPower},
+            #{item.increaseMotorPower}, #{item.voltageRatedCapacity}, #{item.weightOfBattery},
+            #{item.driveControlType}, #{item.driverEarNoise}, #{item.turn}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 检查数据是否存在 -->
+    <select id="checkDataExists" resultType="int">
+        SELECT COUNT(*) FROM categorythree_parameter_table LIMIT 1
+    </select>
+
+    <!-- 清空表 -->
+    <delete id="cleanTable">
+        TRUNCATE TABLE categorythree_parameter_table
+    </delete>
+</mapper>

@@ -33,6 +33,10 @@
         <el-button type="warning" plain icon="Download" @click="handleExport"
           v-hasPermi="['marketanalysis:performance:export']">导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button type="info" plain icon="Upload" @click="handleImport">导入</el-button>
+      </el-col>
+      <input ref="importRef" type="file" hidden accept=".xlsx, .xls" @change="handleFileChange" />
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -167,8 +171,65 @@
 </template>
 
 <script setup name="Performance">
-import { listPerformance, getPerformance, delPerformance, addPerformance, updatePerformance } from "@/api/marketanalysis/performance/performance";
+import { listPerformance, getPerformance, delPerformance, addPerformance, updatePerformance,importP, checkDataExists } from "@/api/marketanalysis/performance/performance";
+const importRef = ref(null);
+const updateSupport = ref(false);
 
+/** 导入按钮操作 */
+function handleImport() {
+  importRef.value.click();
+}
+
+/** 文件选择处理 */
+async function handleFileChange(e) {
+  const files = e.target.files;
+  if (!files.length) return;
+
+  try {
+    loading.value = true;
+    // 先检查数据是否存在
+    const res = await checkDataExists();
+    const dataExists = res.data;
+    if (dataExists) { 
+      // 存在数据时询问是否覆盖
+      proxy.$modal.confirm('检测到已有数据，是否覆盖？').then(() => {
+        updateSupport.value = true;
+        uploadFile(files[0]);
+      }).catch(() => {
+        updateSupport.value = false;
+        uploadFile(files[0]);
+      });
+    } else { 
+      // 不存在数据时直接导入
+      updateSupport.value = false;
+      uploadFile(files[0]);
+    }
+  } catch (error) {
+    proxy.$modal.msgError("数据检查失败：" + error.message);
+  } finally {
+    loading.value = false;
+  }
+}
+
+/** 执行上传 */
+async function uploadFile(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('updateSupport', updateSupport.value);
+
+  try {
+    loading.value = true;
+    await importP(formData);
+    proxy.$modal.msgSuccess("导入成功");
+    getList();
+  } catch (e) {
+    proxy.$modal.msgError("导入失败：" + (e.message || "请检查文件格式和数据有效性"));
+  } finally {
+    loading.value = false;
+    importRef.value.value = ''; // 清空文件选择
+    updateSupport.value = false; // 重置覆盖状态
+  }
+}
 const { proxy } = getCurrentInstance();
 
 const performanceList = ref([]);

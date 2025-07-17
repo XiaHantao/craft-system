@@ -58,4 +58,12 @@ public interface CategoryoneParameterTableMapper
      * @return 结果
      */
     public int deleteCategoryoneParameterTableByIds(Long[] ids);
+    // 批量插入一类车参数
+    int batchInsertCategoryoneParameterTable(List<CategoryoneParameterTable> list);
+
+    // 检查表中是否有数据
+    int checkDataExists();
+
+    // 清空表
+    int cleanTable();
 }

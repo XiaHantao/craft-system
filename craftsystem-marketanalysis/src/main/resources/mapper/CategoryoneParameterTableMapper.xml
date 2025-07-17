@@ -198,4 +198,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+    <!-- 批量插入一类车参数 -->
+    <insert id="batchInsertCategoryoneParameterTable" parameterType="java.util.List">
+        INSERT INTO categoryone_parameter_table (
+        manufacturer, configuration_number, lifting_weight, load_center, power_mode,
+        driving_style, lifting_height, doorframe_height, maximum_lifting_height_of_fork,
+        free_elevation_height, full_height, minimum_ground_clearance, overall_length,
+        wheelbase, front_suspension_distance, rear_suspension_distance, full_width,
+        track_width, minimum_outer_turning_radius, gate_frame_inclination_angle, fork_size,
+        maximum_driving_speed, max_climb_capability, maximum_traction_force, lifting_speed,
+        descent_speed, total_weight, weight_distribution_with_full_load,
+        weight_distribution_empty_load, number_of_wheels, tire_type, tire_size,
+        battery_voltage_capacity, drive_motor_power, power_of_lifting_motor,
+        drive_motor_control_mode, control_mode_of_lifting_motor
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.manufacturer}, #{item.configurationNumber}, #{item.liftingWeight},
+            #{item.loadCenter}, #{item.powerMode}, #{item.drivingStyle}, #{item.liftingHeight},
+            #{item.doorframeHeight}, #{item.maximumLiftingHeightOfFork}, #{item.freeElevationHeight},
+            #{item.fullHeight}, #{item.minimumGroundClearance}, #{item.overallLength},
+            #{item.wheelbase}, #{item.frontSuspensionDistance}, #{item.rearSuspensionDistance},
+            #{item.fullWidth}, #{item.trackWidth}, #{item.minimumOuterTurningRadius},
+            #{item.gateFrameInclinationAngle}, #{item.forkSize}, #{item.maximumDrivingSpeed},
+            #{item.maxClimbCapability}, #{item.maximumTractionForce}, #{item.liftingSpeed},
+            #{item.descentSpeed}, #{item.totalWeight}, #{item.weightDistributionWithFullLoad},
+            #{item.weightDistributionEmptyLoad}, #{item.numberOfWheels}, #{item.tireType},
+            #{item.tireSize}, #{item.batteryVoltageCapacity}, #{item.driveMotorPower},
+            #{item.powerOfLiftingMotor}, #{item.driveMotorControlMode},
+            #{item.controlModeOfLiftingMotor}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 检查表中是否有数据 -->
+    <select id="checkDataExists" resultType="int">
+        SELECT COUNT(*) FROM categoryone_parameter_table LIMIT 1
+    </select>
+
+    <!-- 清空表 -->
+    <delete id="cleanTable">
+        TRUNCATE TABLE categoryone_parameter_table
+    </delete>
 </mapper>

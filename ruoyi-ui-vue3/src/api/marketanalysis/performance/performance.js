@@ -42,3 +42,18 @@ export function delPerformance(id) {
     method: 'delete'
   })
 }
+export function importP(data) {
+  return request({
+    url: '/marketanalysis/performance/importData',
+    method: 'post',
+    data: data,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+
+export function checkDataExists() {
+  return request({
+    url: '/marketanalysis/performance/checkDataExists',
+    method: 'get'
+  })
+}

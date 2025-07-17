@@ -42,3 +42,18 @@ export function delStandardone(id) {
     method: 'delete'
   })
 }
+export function importstandard_one(data) {
+  return request({
+    url: '/marketanalysis/standardone/importData',
+    method: 'post',
+    data: data,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+
+export function checkDataExists() {
+  return request({
+    url: '/marketanalysis/standardone/checkDataExists',
+    method: 'get'
+  })
+}

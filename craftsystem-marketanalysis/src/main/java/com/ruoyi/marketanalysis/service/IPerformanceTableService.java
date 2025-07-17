@@ -1,5 +1,6 @@
 package com.ruoyi.marketanalysis.service;
 
+import java.io.File;
 import java.util.List;
 import com.ruoyi.marketanalysis.domain.PerformanceTable;
 
@@ -58,4 +59,6 @@ public interface IPerformanceTableService
      * @return 结果
      */
     public int deletePerformanceTableById(Long id);
+    String importPerformanceTable(File excelFile, boolean updateSupport);
+    boolean checkDataExists();
 }

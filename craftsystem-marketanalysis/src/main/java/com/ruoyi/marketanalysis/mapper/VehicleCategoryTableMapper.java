@@ -58,4 +58,10 @@ public interface VehicleCategoryTableMapper
      * @return 结果
      */
     public int deleteVehicleCategoryTableByIds(Long[] ids);
+    // 新增批量插入方法
+    int batchInsertVehicleCategoryTable(List<VehicleCategoryTable> list);
+    // 新增清空表方法
+    int cleanTable();
+    // 新增数据存在检查方法
+    int checkDataExists();
 }

@@ -1,47 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.marketanalysis.mapper.MultimediaFileTableMapper">
-    
+
     <resultMap type="MultimediaFileTable" id="MultimediaFileTableResult">
         <result property="id"    column="id"    />
         <result property="fileName"    column="file_name"    />
         <result property="fileType"    column="file_type"    />
+        <result property="series"    column="series"    />
+        <result property="tonnage"    column="tonnage"    />
         <result property="notes"    column="notes"    />
         <result property="file"    column="file"    />
     </resultMap>
 
     <sql id="selectMultimediaFileTableVo">
-        select id, file_name, file_type, notes, file from multimedia_file_table
+        select id, file_name, file_type, series, tonnage, notes, file from multimedia_file_table
     </sql>
 
     <select id="selectMultimediaFileTableList" parameterType="MultimediaFileTable" resultMap="MultimediaFileTableResult">
         <include refid="selectMultimediaFileTableVo"/>
-        <where>  
+        <where>
             <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="series != null  and series != ''"> and series like concat('%', #{series}, '%')</if>
+            <if test="tonnage != null  and tonnage != ''"> and tonnage like concat('%', #{tonnage}, '%')</if>
         </where>
     </select>
-    
+
     <select id="selectMultimediaFileTableById" parameterType="Long" resultMap="MultimediaFileTableResult">
         <include refid="selectMultimediaFileTableVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertMultimediaFileTable" parameterType="MultimediaFileTable" useGeneratedKeys="true" keyProperty="id">
         insert into multimedia_file_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="fileName != null and fileName != ''">file_name,</if>
             <if test="fileType != null">file_type,</if>
+            <if test="series != null">series,</if>
+            <if test="tonnage != null">tonnage,</if>
             <if test="notes != null">notes,</if>
             <if test="file != null">file,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="fileName != null and fileName != ''">#{fileName},</if>
             <if test="fileType != null">#{fileType},</if>
+            <if test="series != null">#{series},</if>
+            <if test="tonnage != null">#{tonnage},</if>
             <if test="notes != null">#{notes},</if>
             <if test="file != null">#{file},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateMultimediaFileTable" parameterType="MultimediaFileTable">
@@ -49,6 +57,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="fileName != null and fileName != ''">file_name = #{fileName},</if>
             <if test="fileType != null">file_type = #{fileType},</if>
+            <if test="series != null">series = #{series},</if>
+            <if test="tonnage != null">tonnage = #{tonnage},</if>
             <if test="notes != null">notes = #{notes},</if>
             <if test="file != null">file = #{file},</if>
         </trim>
@@ -60,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteMultimediaFileTableByIds" parameterType="String">
-        delete from multimedia_file_table where id in 
+        delete from multimedia_file_table where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

@@ -42,3 +42,23 @@ export function delParameter_two(id) {
     method: 'delete'
   })
 }
+// 导入二类车参数
+export function importParameter_two(data) {
+  return request({
+    url: '/marketanalysis/parameter_two/importData',
+    method: 'post',
+    data: data,
+    timeout: 60000, // 超时时间设置为60秒
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
+// 检查数据是否存在
+export function checkDataExists() {
+  return request({
+    url: '/marketanalysis/parameter_two/checkDataExists',
+    method: 'get'
+  })
+}

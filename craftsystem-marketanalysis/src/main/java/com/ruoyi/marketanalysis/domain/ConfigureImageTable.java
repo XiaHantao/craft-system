@@ -22,6 +22,10 @@ public class ConfigureImageTable extends BaseEntity
     @Excel(name = "配置名称")
     private String fileName;
 
+    /** 图片地址 */
+    @Excel(name = "文件名")
+    private String image;
+
     /** 说明 */
     @Excel(name = "说明")
     private String notes;
@@ -30,8 +34,7 @@ public class ConfigureImageTable extends BaseEntity
     @Excel(name = "文件地址")
     private String file;
 
-    /** 图片地址 */
-    private String image;
+
 
     public void setId(Long id) 
     {

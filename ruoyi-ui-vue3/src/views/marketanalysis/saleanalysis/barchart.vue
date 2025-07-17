@@ -306,13 +306,31 @@ export default {
               name: '本年销量',
               type: 'bar',
               data: currentYearData,
-              itemStyle: { color: '#5470C6' }
+              itemStyle: { color: '#5470C6' },
+              // 添加数据标签
+              label: {
+                show: true,
+                position: 'top',
+                formatter: '{c}',
+                fontSize: 12,
+                fontWeight: 'bold',
+                color: '#333'
+              }
             },
             {
               name: '去年同期销量',
               type: 'bar',
               data: lastYearData,
-              itemStyle: { color: '#91CC75' }
+              itemStyle: { color: '#91CC75' },
+              // 添加数据标签
+              label: {
+                show: true,
+                position: 'top',
+                formatter: '{c}',
+                fontSize: 12,
+                fontWeight: 'bold',
+                color: '#333'
+              }
             },
             {
               name: '同比增长率',
@@ -322,7 +340,16 @@ export default {
               symbol: 'circle',
               symbolSize: 8,
               itemStyle: { color: '#EE6666' },
-              lineStyle: { width: 3 }
+              lineStyle: { width: 3 },
+              // 添加数据标签
+              label: {
+                show: true,
+                position: 'top',
+                formatter: '{c}%',
+                fontSize: 11,
+                fontWeight: 'bold',
+                color: '#EE6666'
+              }
             },
             {
               name: '环比增长率',
@@ -332,7 +359,16 @@ export default {
               symbol: 'circle',
               symbolSize: 8,
               itemStyle: { color: '#FAC858' },
-              lineStyle: { width: 3, type: 'dashed' }
+              lineStyle: { width: 3, type: 'dashed' },
+              // 添加数据标签
+              label: {
+                show: true,
+                position: 'bottom',
+                formatter: '{c}%',
+                fontSize: 11,
+                fontWeight: 'bold',
+                color: '#FAC858'
+              }
             }
           ]
         });

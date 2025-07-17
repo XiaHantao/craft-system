@@ -1,12 +1,13 @@
 package com.ruoyi.marketanalysis.service.impl;
 
+import java.io.File;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.marketanalysis.mapper.CategorysevenParameterTableMapper;
 import com.ruoyi.marketanalysis.domain.CategorysevenParameterTable;
 import com.ruoyi.marketanalysis.service.ICategorysevenParameterTableService;
-
+import com.ruoyi.marketanalysis.utils.ExcelUtils;
 /**
  * 七类车参数Service业务层处理
  * 
@@ -89,5 +90,25 @@ public class CategorysevenParameterTableServiceImpl implements ICategorysevenPar
     public int deleteCategorysevenParameterTableById(Long id)
     {
         return categorysevenParameterTableMapper.deleteCategorysevenParameterTableById(id);
+    }
+    @Override
+    public String importCategorysevenParameterTable(File excelFile, boolean updateSupport) {
+        try {
+            List<CategorysevenParameterTable> list = ExcelUtils.parseCategorysevenParameterExcel(excelFile);
+
+            if (updateSupport && checkDataExists()) {
+                categorysevenParameterTableMapper.cleanTable();
+            }
+
+            categorysevenParameterTableMapper.batchInsertCategorysevenParameterTable(list);
+            return "成功导入 " + list.size() + " 条七类车参数数据";
+        } catch (Exception e) {
+            throw new RuntimeException("七类车参数导入失败：" + e.getMessage());
+        }
+    }
+
+    @Override
+    public boolean checkDataExists() {
+        return categorysevenParameterTableMapper.checkDataExists() > 0;
     }
 }

@@ -1,17 +1,11 @@
 package com.ruoyi.marketanalysis.controller;
 
+import java.io.File;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -20,6 +14,7 @@ import com.ruoyi.marketanalysis.domain.CategoryfiveParameterTable;
 import com.ruoyi.marketanalysis.service.ICategoryfiveParameterTableService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 五类车参数Controller
@@ -100,5 +95,24 @@ public class CategoryfiveParameterTableController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(categoryfiveParameterTableService.deleteCategoryfiveParameterTableByIds(ids));
+    }
+    // 在类中添加导入方法
+    @PostMapping("/importData")
+    @ResponseBody
+    public AjaxResult importData(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "updateSupport", defaultValue = "false") boolean updateSupport
+    ) throws Exception {
+        File excelFile = File.createTempFile("temp", ".xlsx");
+        file.transferTo(excelFile);
+        String message = categoryfiveParameterTableService.importCategoryfiveParameterTable(excelFile, updateSupport);
+        return AjaxResult.success(message);
+    }
+
+    // 添加数据存在检查接口
+    @GetMapping("/checkDataExists")
+    public AjaxResult checkDataExists() {
+        boolean exists = categoryfiveParameterTableService.checkDataExists();
+        return success(exists);
     }
 }

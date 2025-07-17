@@ -230,7 +230,19 @@ export default {
           type: 'line',
           smooth: false,
           lineStyle: { color: '#409eff', width: 3 },
-          itemStyle: { color: '#409eff' }
+          itemStyle: { color: '#409eff' },
+          // 添加数据点标签
+          label: {
+            show: true,  // 显示标签
+            position: 'top',  // 标签位置在点上方
+            formatter: '{c}', // 只显示数值
+            fontSize: 12,
+            fontWeight: 'bold',
+            color: '#333'
+          },
+          // 显示数据点标记
+          symbol: 'circle',
+          symbolSize: 8
         }],
         tooltip: {
           trigger: 'axis',

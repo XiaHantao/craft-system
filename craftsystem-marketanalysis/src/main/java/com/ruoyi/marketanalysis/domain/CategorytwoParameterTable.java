@@ -18,6 +18,10 @@ public class CategorytwoParameterTable extends BaseEntity
     /** id */
     private Long id;
 
+    /** 制造商 */
+    @Excel(name = "制造商")
+    private String manufacturer;
+
     /** 型号 */
     @Excel(name = "型号")
     private String model;
@@ -55,7 +59,7 @@ public class CategorytwoParameterTable extends BaseEntity
     private String rearSuspensionDistance;
 
     /** 自重（含电池） */
-    @Excel(name = "自重", readConverterExp = "含=电池")
+    @Excel(name = "自重（含电池）")
     private String deadWeight;
 
     /** 轮胎类型 */
@@ -275,7 +279,14 @@ public class CategorytwoParameterTable extends BaseEntity
     {
         this.model = model;
     }
-
+    public void setManufacturer(String manufacturer)
+    {
+        this.manufacturer = manufacturer;
+    }
+    public String getManufacturer()
+    {
+        return manufacturer;
+    }
     public String getModel() 
     {
         return model;
@@ -824,68 +835,69 @@ public class CategorytwoParameterTable extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("model", getModel())
-            .append("drivingStyle", getDrivingStyle())
-            .append("ratedLiftingCapacity", getRatedLiftingCapacity())
-            .append("raiseHeight", getRaiseHeight())
-            .append("highestPointLoadCapacity", getHighestPointLoadCapacity())
-            .append("loadCenter", getLoadCenter())
-            .append("frontSuspensionDistance", getFrontSuspensionDistance())
-            .append("wheelbase", getWheelbase())
-            .append("rearSuspensionDistance", getRearSuspensionDistance())
-            .append("deadWeight", getDeadWeight())
-            .append("tireType", getTireType())
-            .append("tireSizeFrontWheel", getTireSizeFrontWheel())
-            .append("tireSizeRearWheel", getTireSizeRearWheel())
-            .append("numberOfTires", getNumberOfTires())
-            .append("frontWheelbase", getFrontWheelbase())
-            .append("doorFrameRetractsHeight", getDoorFrameRetractsHeight())
-            .append("liftingHeight", getLiftingHeight())
-            .append("maximumHeightDuringHomework", getMaximumHeightDuringHomework())
-            .append("heightOfRoofProtectionFrame", getHeightOfRoofProtectionFrame())
-            .append("platformHeight", getPlatformHeight())
-            .append("assistInRaisingHeight", getAssistInRaisingHeight())
-            .append("raisePlatformHeightAfterLifting", getRaisePlatformHeightAfterLifting())
-            .append("totalLength", getTotalLength())
-            .append("vehicleLength", getVehicleLength())
-            .append("overallWidth", getOverallWidth())
-            .append("forkSize", getForkSize())
-            .append("installationLevelOfForkFrame", getInstallationLevelOfForkFrame())
-            .append("forkliftWidth", getForkliftWidth())
-            .append("crossForkWidth", getCrossForkWidth())
-            .append("distanceBetweenGuideWheels", getDistanceBetweenGuideWheels())
-            .append("lateralDisplacementDistance", getLateralDisplacementDistance())
-            .append("extendCenterlineOrkliftDistance", getExtendCenterlineOrkliftDistance())
-            .append("gapBottomGantryGround", getGapBottomGantryGround())
-            .append("clearanceCenterWheelbaseGround", getClearanceCenterWheelbaseGround())
-            .append("widthOfWorkingChannel", getWidthOfWorkingChannel())
-            .append("turningRadius", getTurningRadius())
-            .append("distanceForkRotationAxis", getDistanceForkRotationAxis())
-            .append("maximumPickingHeight", getMaximumPickingHeight())
-            .append("palletWidth", getPalletWidth())
-            .append("palletLength", getPalletLength())
-            .append("clearWidthOfCockpitEntrance", getClearWidthOfCockpitEntrance())
-            .append("clearHeightInsideTheCockpit", getClearHeightInsideTheCockpit())
-            .append("overallWidthOfTheCockpitExterior", getOverallWidthOfTheCockpitExterior())
-            .append("rotatingForkFrameWidth", getRotatingForkFrameWidth())
-            .append("cantileverWidth", getCantileverWidth())
-            .append("descentSpeedR", getDescentSpeedR())
-            .append("runningSpeed", getRunningSpeed())
-            .append("increaseSpeed", getIncreaseSpeed())
-            .append("descentSpeed", getDescentSpeed())
-            .append("lateralMovementSpeed", getLateralMovementSpeed())
-            .append("travelBrake", getTravelBrake())
-            .append("parkingBrake", getParkingBrake())
-            .append("bridgeLoadFullyLoaded", getBridgeLoadFullyLoaded())
-            .append("bridgeLoadUnloaded", getBridgeLoadUnloaded())
-            .append("driveMotorPower", getDriveMotorPower())
-            .append("increaseMotorPower", getIncreaseMotorPower())
-            .append("voltageRatedCapacity", getVoltageRatedCapacity())
-            .append("weightOfBattery", getWeightOfBattery())
-            .append("driveControlType", getDriveControlType())
-            .append("driverEarNoise", getDriverEarNoise())
-            .append("turn", getTurn())
-            .toString();
+                .append("id", getId())
+                .append("manufacturer", getManufacturer())
+                .append("model", getModel())
+                .append("drivingStyle", getDrivingStyle())
+                .append("ratedLiftingCapacity", getRatedLiftingCapacity())
+                .append("raiseHeight", getRaiseHeight())
+                .append("highestPointLoadCapacity", getHighestPointLoadCapacity())
+                .append("loadCenter", getLoadCenter())
+                .append("frontSuspensionDistance", getFrontSuspensionDistance())
+                .append("wheelbase", getWheelbase())
+                .append("rearSuspensionDistance", getRearSuspensionDistance())
+                .append("deadWeight", getDeadWeight())
+                .append("tireType", getTireType())
+                .append("tireSizeFrontWheel", getTireSizeFrontWheel())
+                .append("tireSizeRearWheel", getTireSizeRearWheel())
+                .append("numberOfTires", getNumberOfTires())
+                .append("frontWheelbase", getFrontWheelbase())
+                .append("doorFrameRetractsHeight", getDoorFrameRetractsHeight())
+                .append("liftingHeight", getLiftingHeight())
+                .append("maximumHeightDuringHomework", getMaximumHeightDuringHomework())
+                .append("heightOfRoofProtectionFrame", getHeightOfRoofProtectionFrame())
+                .append("platformHeight", getPlatformHeight())
+                .append("assistInRaisingHeight", getAssistInRaisingHeight())
+                .append("raisePlatformHeightAfterLifting", getRaisePlatformHeightAfterLifting())
+                .append("totalLength", getTotalLength())
+                .append("vehicleLength", getVehicleLength())
+                .append("overallWidth", getOverallWidth())
+                .append("forkSize", getForkSize())
+                .append("installationLevelOfForkFrame", getInstallationLevelOfForkFrame())
+                .append("forkliftWidth", getForkliftWidth())
+                .append("crossForkWidth", getCrossForkWidth())
+                .append("distanceBetweenGuideWheels", getDistanceBetweenGuideWheels())
+                .append("lateralDisplacementDistance", getLateralDisplacementDistance())
+                .append("extendCenterlineOrkliftDistance", getExtendCenterlineOrkliftDistance())
+                .append("gapBottomGantryGround", getGapBottomGantryGround())
+                .append("clearanceCenterWheelbaseGround", getClearanceCenterWheelbaseGround())
+                .append("widthOfWorkingChannel", getWidthOfWorkingChannel())
+                .append("turningRadius", getTurningRadius())
+                .append("distanceForkRotationAxis", getDistanceForkRotationAxis())
+                .append("maximumPickingHeight", getMaximumPickingHeight())
+                .append("palletWidth", getPalletWidth())
+                .append("palletLength", getPalletLength())
+                .append("clearWidthOfCockpitEntrance", getClearWidthOfCockpitEntrance())
+                .append("clearHeightInsideTheCockpit", getClearHeightInsideTheCockpit())
+                .append("overallWidthOfTheCockpitExterior", getOverallWidthOfTheCockpitExterior())
+                .append("rotatingForkFrameWidth", getRotatingForkFrameWidth())
+                .append("cantileverWidth", getCantileverWidth())
+                .append("descentSpeedR", getDescentSpeedR())
+                .append("runningSpeed", getRunningSpeed())
+                .append("increaseSpeed", getIncreaseSpeed())
+                .append("descentSpeed", getDescentSpeed())
+                .append("lateralMovementSpeed", getLateralMovementSpeed())
+                .append("travelBrake", getTravelBrake())
+                .append("parkingBrake", getParkingBrake())
+                .append("bridgeLoadFullyLoaded", getBridgeLoadFullyLoaded())
+                .append("bridgeLoadUnloaded", getBridgeLoadUnloaded())
+                .append("driveMotorPower", getDriveMotorPower())
+                .append("increaseMotorPower", getIncreaseMotorPower())
+                .append("voltageRatedCapacity", getVoltageRatedCapacity())
+                .append("weightOfBattery", getWeightOfBattery())
+                .append("driveControlType", getDriveControlType())
+                .append("driverEarNoise", getDriverEarNoise())
+                .append("turn", getTurn())
+                .toString();
     }
 }

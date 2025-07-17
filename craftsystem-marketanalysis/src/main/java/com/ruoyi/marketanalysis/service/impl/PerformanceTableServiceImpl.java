@@ -1,12 +1,13 @@
 package com.ruoyi.marketanalysis.service.impl;
 
+import java.io.File;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.marketanalysis.mapper.PerformanceTableMapper;
 import com.ruoyi.marketanalysis.domain.PerformanceTable;
 import com.ruoyi.marketanalysis.service.IPerformanceTableService;
-
+import com.ruoyi.marketanalysis.utils.ExcelUtils;
 /**
  * 性能表Service业务层处理
  * 
@@ -89,5 +90,27 @@ public class PerformanceTableServiceImpl implements IPerformanceTableService
     public int deletePerformanceTableById(Long id)
     {
         return performanceTableMapper.deletePerformanceTableById(id);
+    }
+    @Override
+    public String importPerformanceTable(File excelFile, boolean updateSupport) {
+        try {
+            List<PerformanceTable> list = ExcelUtils.parsePerformanceExcel(excelFile);
+
+            // 如果允许更新且存在数据，则清空表
+            if (updateSupport && checkDataExists()) {
+                performanceTableMapper.cleanTable();
+            }
+
+            // 批量插入数据
+            performanceTableMapper.batchInsertPerformanceTable(list);
+            return "成功导入 " + list.size() + " 条数据";
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败：" + e.getMessage());
+        }
+    }
+
+    @Override
+    public boolean checkDataExists() {
+        return performanceTableMapper.checkDataExists() > 0;
     }
 }

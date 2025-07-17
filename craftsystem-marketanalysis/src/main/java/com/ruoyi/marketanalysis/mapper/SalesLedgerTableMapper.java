@@ -86,5 +86,32 @@ public interface SalesLedgerTableMapper
     int cleanTable();
     List<String> getDistinctVehicleTypes();
     List<String> getDistinctBranches();
+//    // 获取所有车类
+//    List<String> getDistinctCategories();
+//
+//    // 按月统计销量（按车类）
+//    List<Map<String, Object>> countMonthlySalesComparison1(
+//            @Param("year") Integer year,
+//            @Param("category") String category,
+//            @Param("branch") String branch);
+// 修改方法参数和返回类型
+List<Map<String, Object>> countSalesByMonth1(
+        @Param("vehicleCategory") String vehicleCategory,
+        @Param("branch") String branch
+);
 
+    List<Map<String, Object>> countSalesByBranchForVehicle1(
+            @Param("vehicleCategory") String vehicleCategory
+    );
+
+    List<Map<String, Object>> countMonthlySalesComparison1(
+            @Param("year") Integer year,
+            @Param("vehicleCategory") String vehicleCategory,
+            @Param("branch") String branch
+    );
+
+    // 新增方法
+    List<String> getDistinctCategories();
+    List<Map<String, Object>> countSalesByCategory(@Param("vehicleCategory") String vehicleCategory);
+    List<Map<String, Object>> countSalesByVehicleForBranch1(@Param("branch") String branch);
 }

@@ -296,4 +296,95 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getDistinctBranches" resultType="java.lang.String">
         SELECT DISTINCT branch FROM sales_ledger_table WHERE branch IS NOT NULL
     </select>
+    <!-- 获取所有车类 -->
+<!--    <select id="getDistinctCategories" resultType="java.lang.String">-->
+<!--        SELECT DISTINCT vehicle_category_chn-->
+<!--        FROM category_table-->
+<!--    </select>-->
+
+    <!-- 按月统计销量（按车类） -->
+<!--    <select id="countMonthlySalesComparison1" resultType="java.util.Map">-->
+<!--        SELECT-->
+<!--            EXTRACT(MONTH FROM s.order_acceptance_date) AS month,-->
+<!--        SUM(CASE WHEN EXTRACT(YEAR FROM s.order_acceptance_date) = #{year} THEN 1 ELSE 0 END) AS currentYear,-->
+<!--            SUM(CASE WHEN EXTRACT(YEAR FROM s.order_acceptance_date) = #{year} - 1 THEN 1 ELSE 0 END) AS lastYear-->
+<!--        FROM sales_ledger_table s-->
+<!--            JOIN category_table c ON s.vehicle_type = c.vehicle_type-->
+<!--        WHERE-->
+<!--            (#{category} IS NULL OR c.vehicle_category_chn = #{category})-->
+<!--          AND (#{branch} IS NULL OR s.branch = #{branch})-->
+<!--          AND EXTRACT(YEAR FROM s.order_acceptance_date) IN (#{year}, #{year} - 1)-->
+<!--        GROUP BY EXTRACT(MONTH FROM s.order_acceptance_date)-->
+<!--        ORDER BY month-->
+<!--    </select>-->
+    <!-- 按月统计销量（按车类+网点） -->
+    <select id="countSalesByMonth1" resultType="java.util.Map">
+        SELECT
+            DATE_FORMAT(s.order_acceptance_date, '%Y-%m') AS month,
+        COUNT(*) AS value
+        FROM sales_ledger_table s
+            JOIN category_table c ON s.vehicle_type = c.vehicle_type
+        WHERE c.vehicle_category_chn = #{vehicleCategory} AND s.branch = #{branch}
+        GROUP BY month
+        ORDER BY month
+    </select>
+
+    <!-- 按网点统计（特定车类） -->
+    <select id="countSalesByBranchForVehicle1" resultType="java.util.Map">
+        SELECT
+            s.branch AS name,
+            COUNT(*) AS value
+        FROM sales_ledger_table s
+            JOIN category_table c ON s.vehicle_type = c.vehicle_type
+        WHERE c.vehicle_category_chn = #{vehicleCategory}
+        GROUP BY s.branch
+    </select>
+
+    <select id="countSalesByVehicleForBranch1" resultType="map">
+        SELECT c.vehicle_category_chn AS name,  <!-- 确保别名为name -->
+        COUNT(*) AS value
+        FROM sales_ledger_table s
+        JOIN category_table c ON s.vehicle_type = c.vehicle_type
+        WHERE s.branch = #{branch}
+        GROUP BY c.vehicle_category_chn
+    </select>
+
+    <select id="countMonthlySalesComparison1" resultType="map">
+        WITH RECURSIVE months(month) AS (
+            SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6
+            UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12
+        )
+        SELECT
+            m.month AS month,
+        COALESCE(COUNT(CASE WHEN YEAR(s.order_acceptance_date) = #{year}
+                AND (#{vehicleCategory} IS NULL OR c.vehicle_category_chn = #{vehicleCategory})
+                AND (#{branch} IS NULL OR s.branch = #{branch}) THEN 1 END), 0) AS currentYear,
+            COALESCE(COUNT(CASE WHEN YEAR(s.order_acceptance_date) = #{year} - 1
+                AND (#{vehicleCategory} IS NULL OR c.vehicle_category_chn = #{vehicleCategory})
+                AND (#{branch} IS NULL OR s.branch = #{branch}) THEN 1 END), 0) AS lastYear
+        FROM months m
+            LEFT JOIN sales_ledger_table s ON m.month = MONTH(s.order_acceptance_date)
+            LEFT JOIN category_table c ON s.vehicle_type = c.vehicle_type
+        GROUP BY m.month
+        ORDER BY m.month;
+    </select>
+    <!-- 获取所有车类 -->
+    <select id="getDistinctCategories" resultType="java.lang.String">
+        SELECT DISTINCT vehicle_category_chn
+        FROM category_table
+    </select>
+    <select id="countSalesByCategory" resultType="map">
+        SELECT
+        c.vehicle_category_chn AS name,
+        COUNT(s.id) AS value
+        FROM category_table c
+        LEFT JOIN sales_ledger_table s ON s.vehicle_type = c.vehicle_type
+        <where>
+            <if test="vehicleCategory != null and vehicleCategory != ''">
+                AND c.vehicle_category_chn LIKE CONCAT('%', #{vehicleCategory}, '%')
+            </if>
+        </where>
+        GROUP BY c.vehicle_category_chn
+        ORDER BY value DESC
+    </select>
 </mapper>

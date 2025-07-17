@@ -54,6 +54,10 @@
           v-hasPermi="['marketanalysis:standardtwo:export']"
         >导出</el-button>
       </el-col>
+       <el-col :span="1.5">
+        <el-button type="info" plain icon="Upload" @click="handleImport">导入</el-button>
+      </el-col>
+      <input ref="importRef" type="file" hidden accept=".xlsx, .xls" @change="handleFileChange" />
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -108,7 +112,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改二类车标准配置对话框 -->
+    <!-- 添加或修改II类车/III类车标准配置对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="standardtwoRef" :model="form" :rules="rules" label-width="140px">
         <el-form-item label="制造商" prop="manufacturer">
@@ -436,8 +440,52 @@
 </template>
 
 <script setup name="Standardtwo">
-import { listStandardtwo, getStandardtwo, delStandardtwo, addStandardtwo, updateStandardtwo } from "@/api/marketanalysis/standard/standardtwo";
+import { listStandardtwo, getStandardtwo, delStandardtwo, addStandardtwo, updateStandardtwo,importstandard_two,checkDataExists } from "@/api/marketanalysis/standard/standardtwo";
+const importRef = ref(null);
+const updateSupport = ref(false);
 
+const handleImport = () => importRef.value.click();
+
+const handleFileChange = async (e) => {
+  const files = e.target.files;
+  if (!files.length) return;
+
+  try {
+    loading.value = true;
+    const res = await checkDataExists();
+    const dataExists = res.data;
+    if (dataExists) {
+      proxy.$modal.confirm('检测到已有数据，是否覆盖？').then(() => {
+        updateSupport.value = true;
+        uploadFile(files[0]);
+      }).catch(() => {
+        updateSupport.value = false;
+        uploadFile(files[0]);
+      });
+    } else {
+      updateSupport.value = false;
+      uploadFile(files[0]);
+    }
+  } finally {
+    loading.value = false;
+  }
+};
+
+const uploadFile = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('updateSupport', updateSupport.value);
+
+  try {
+    await importstandard_two(formData);
+    proxy.$modal.msgSuccess("导入成功");
+    getList();
+  } catch (e) {
+    proxy.$modal.msgError("导入失败");
+  } finally {
+    importRef.value.value = '';
+  }
+};
 const { proxy } = getCurrentInstance();
 // 添加选项数据
 const options = ref([
@@ -472,7 +520,7 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-/** 查询二类车标准配置列表 */
+/** 查询II类车/III类车标准配置列表 */
 function getList() {
   loading.value = true;
   listStandardtwo(queryParams.value).then(response => {
@@ -551,7 +599,7 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加二类车标准配置";
+  title.value = "添加II类车/III类车标准配置";
 }
 
 /** 修改按钮操作 */
@@ -561,7 +609,7 @@ function handleUpdate(row) {
   getStandardtwo(_id).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改二类车标准配置";
+    title.value = "修改II类车/III类车标准配置";
   });
 }
 
@@ -577,7 +625,7 @@ function submitForm() {
         });
       } else {
         addStandardtwo(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功");
+          proxy.$modal.msgSuccess("新增成功"); 
           open.value = false;
           getList();
         });
@@ -589,7 +637,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除二类车标准配置编号为"' + _ids + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除II类车/III类车标准配置编号为"' + _ids + '"的数据项？').then(function() {
     return delStandardtwo(_ids);
   }).then(() => {
     getList();
@@ -601,7 +649,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download('marketanalysis/standardtwo/export', {
     ...queryParams.value
-  }, `二类车标准配置表.xlsx`)
+  }, `II类车/III类车标准配置表.xlsx`)
 }
 
 getList();

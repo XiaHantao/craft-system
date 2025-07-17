@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.marketanalysis.mapper.CategorytwoParameterTableMapper">
-    
+
     <resultMap type="CategorytwoParameterTable" id="CategorytwoParameterTableResult">
         <result property="id"    column="id"    />
+        <result property="manufacturer"    column="manufacturer"    />
         <result property="model"    column="model"    />
         <result property="drivingStyle"    column="driving_style"    />
         <result property="ratedLiftingCapacity"    column="rated_lifting_capacity"    />
@@ -70,24 +71,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCategorytwoParameterTableVo">
-        select id, model, driving_style, rated_lifting_capacity, raise_height, highest_point_load_capacity, load_center, front_suspension_distance, wheelbase, rear_suspension_distance, dead_weight, tire_type, tire_size_front_wheel, tire_size_rear_wheel, number_of_tires, front_wheelbase, door_frame_retracts_height, lifting_height, maximum_height_during_homework, height_of_roof_protection_frame, platform_height, assist_in_raising_height, raise_platform_height_after_lifting, total_length, vehicle_length, overall_width, fork_size, installation_level_of_fork_frame, forklift_width, cross_fork_width, distance_between_guide_wheels, lateral_displacement_distance, extend_centerline_orklift_distance, gap_bottom_gantry_ground, clearance_center_wheelbase_ground, width_of_working_channel, turning_radius, distance_fork_rotation_axis, maximum_picking_height, pallet_width, pallet_length, clear_width_of_cockpit_entrance, clear_height_inside_the_cockpit, overall_width_of_the_cockpit_exterior, rotating_fork_frame_width, cantilever_width, descent_speed_r, running_speed, increase_speed, descent_speed, lateral_movement_speed, travel_brake, parking_brake, bridge_load_fully_loaded, bridge_load_unloaded, drive_motor_power, increase_motor_power, voltage_rated_capacity, weight_of_battery, drive_control_type, driver_ear_noise, turn from categorytwo_parameter_table
+        select id, manufacturer, model, driving_style, rated_lifting_capacity, raise_height, highest_point_load_capacity, load_center, front_suspension_distance, wheelbase, rear_suspension_distance, dead_weight, tire_type, tire_size_front_wheel, tire_size_rear_wheel, number_of_tires, front_wheelbase, door_frame_retracts_height, lifting_height, maximum_height_during_homework, height_of_roof_protection_frame, platform_height, assist_in_raising_height, raise_platform_height_after_lifting, total_length, vehicle_length, overall_width, fork_size, installation_level_of_fork_frame, forklift_width, cross_fork_width, distance_between_guide_wheels, lateral_displacement_distance, extend_centerline_orklift_distance, gap_bottom_gantry_ground, clearance_center_wheelbase_ground, width_of_working_channel, turning_radius, distance_fork_rotation_axis, maximum_picking_height, pallet_width, pallet_length, clear_width_of_cockpit_entrance, clear_height_inside_the_cockpit, overall_width_of_the_cockpit_exterior, rotating_fork_frame_width, cantilever_width, descent_speed_r, running_speed, increase_speed, descent_speed, lateral_movement_speed, travel_brake, parking_brake, bridge_load_fully_loaded, bridge_load_unloaded, drive_motor_power, increase_motor_power, voltage_rated_capacity, weight_of_battery, drive_control_type, driver_ear_noise, turn from categorytwo_parameter_table
     </sql>
 
     <select id="selectCategorytwoParameterTableList" parameterType="CategorytwoParameterTable" resultMap="CategorytwoParameterTableResult">
         <include refid="selectCategorytwoParameterTableVo"/>
-        <where>  
+        <where>
+            <if test="manufacturer != null  and manufacturer != ''"> and manufacturer like concat('%', #{manufacturer}, '%')</if>
             <if test="model != null  and model != ''"> and model like concat('%', #{model}, '%')</if>
         </where>
     </select>
-    
+
     <select id="selectCategorytwoParameterTableById" parameterType="Long" resultMap="CategorytwoParameterTableResult">
         <include refid="selectCategorytwoParameterTableVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertCategorytwoParameterTable" parameterType="CategorytwoParameterTable" useGeneratedKeys="true" keyProperty="id">
         insert into categorytwo_parameter_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="manufacturer != null and manufacturer != ''">manufacturer,</if>
             <if test="model != null and model != ''">model,</if>
             <if test="drivingStyle != null">driving_style,</if>
             <if test="ratedLiftingCapacity != null">rated_lifting_capacity,</if>
@@ -149,8 +152,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="driveControlType != null">drive_control_type,</if>
             <if test="driverEarNoise != null">driver_ear_noise,</if>
             <if test="turn != null">turn,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="manufacturer != null and manufacturer != ''">#{manufacturer},</if>
             <if test="model != null and model != ''">#{model},</if>
             <if test="drivingStyle != null">#{drivingStyle},</if>
             <if test="ratedLiftingCapacity != null">#{ratedLiftingCapacity},</if>
@@ -212,12 +216,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="driveControlType != null">#{driveControlType},</if>
             <if test="driverEarNoise != null">#{driverEarNoise},</if>
             <if test="turn != null">#{turn},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateCategorytwoParameterTable" parameterType="CategorytwoParameterTable">
         update categorytwo_parameter_table
         <trim prefix="SET" suffixOverrides=",">
+            <if test="manufacturer != null and manufacturer != ''">manufacturer = #{manufacturer},</if>
             <if test="model != null and model != ''">model = #{model},</if>
             <if test="drivingStyle != null">driving_style = #{drivingStyle},</if>
             <if test="ratedLiftingCapacity != null">rated_lifting_capacity = #{ratedLiftingCapacity},</if>
@@ -288,9 +293,65 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteCategorytwoParameterTableByIds" parameterType="String">
-        delete from categorytwo_parameter_table where id in 
+        delete from categorytwo_parameter_table where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
+    </delete>
+    <!-- 批量插入 -->
+    <insert id="batchInsertCategorytwoParameterTable" parameterType="java.util.List">
+        INSERT INTO categorytwo_parameter_table (
+        manufacturer, model, driving_style, rated_lifting_capacity, raise_height,
+        highest_point_load_capacity, load_center, front_suspension_distance, wheelbase,
+        rear_suspension_distance, dead_weight, tire_type, tire_size_front_wheel,
+        tire_size_rear_wheel, number_of_tires, front_wheelbase, door_frame_retracts_height,
+        lifting_height, maximum_height_during_homework, height_of_roof_protection_frame,
+        platform_height, assist_in_raising_height, raise_platform_height_after_lifting,
+        total_length, vehicle_length, overall_width, fork_size, installation_level_of_fork_frame,
+        forklift_width, cross_fork_width, distance_between_guide_wheels, lateral_displacement_distance,
+        extend_centerline_orklift_distance, gap_bottom_gantry_ground, clearance_center_wheelbase_ground,
+        width_of_working_channel, turning_radius, distance_fork_rotation_axis, maximum_picking_height,
+        pallet_width, pallet_length, clear_width_of_cockpit_entrance, clear_height_inside_the_cockpit,
+        overall_width_of_the_cockpit_exterior, rotating_fork_frame_width, cantilever_width,
+        descent_speed_r, running_speed, increase_speed, descent_speed, lateral_movement_speed,
+        travel_brake, parking_brake, bridge_load_fully_loaded, bridge_load_unloaded,
+        drive_motor_power, increase_motor_power, voltage_rated_capacity, weight_of_battery,
+        drive_control_type, driver_ear_noise, turn
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.manufacturer}, #{item.model}, #{item.drivingStyle}, #{item.ratedLiftingCapacity},
+            #{item.raiseHeight}, #{item.highestPointLoadCapacity}, #{item.loadCenter},
+            #{item.frontSuspensionDistance}, #{item.wheelbase}, #{item.rearSuspensionDistance},
+            #{item.deadWeight}, #{item.tireType}, #{item.tireSizeFrontWheel}, #{item.tireSizeRearWheel},
+            #{item.numberOfTires}, #{item.frontWheelbase}, #{item.doorFrameRetractsHeight},
+            #{item.liftingHeight}, #{item.maximumHeightDuringHomework}, #{item.heightOfRoofProtectionFrame},
+            #{item.platformHeight}, #{item.assistInRaisingHeight}, #{item.raisePlatformHeightAfterLifting},
+            #{item.totalLength}, #{item.vehicleLength}, #{item.overallWidth}, #{item.forkSize},
+            #{item.installationLevelOfForkFrame}, #{item.forkliftWidth}, #{item.crossForkWidth},
+            #{item.distanceBetweenGuideWheels}, #{item.lateralDisplacementDistance},
+            #{item.extendCenterlineOrkliftDistance}, #{item.gapBottomGantryGround},
+            #{item.clearanceCenterWheelbaseGround}, #{item.widthOfWorkingChannel}, #{item.turningRadius},
+            #{item.distanceForkRotationAxis}, #{item.maximumPickingHeight}, #{item.palletWidth},
+            #{item.palletLength}, #{item.clearWidthOfCockpitEntrance}, #{item.clearHeightInsideTheCockpit},
+            #{item.overallWidthOfTheCockpitExterior}, #{item.rotatingForkFrameWidth}, #{item.cantileverWidth},
+            #{item.descentSpeedR}, #{item.runningSpeed}, #{item.increaseSpeed}, #{item.descentSpeed},
+            #{item.lateralMovementSpeed}, #{item.travelBrake}, #{item.parkingBrake},
+            #{item.bridgeLoadFullyLoaded}, #{item.bridgeLoadUnloaded}, #{item.driveMotorPower},
+            #{item.increaseMotorPower}, #{item.voltageRatedCapacity}, #{item.weightOfBattery},
+            #{item.driveControlType}, #{item.driverEarNoise}, #{item.turn}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 检查数据是否存在 -->
+    <select id="checkDataExists" resultType="int">
+        SELECT COUNT(*) FROM categorytwo_parameter_table LIMIT 1
+    </select>
+
+    <!-- 清空表 -->
+    <delete id="cleanTable">
+        TRUNCATE TABLE categorytwo_parameter_table
     </delete>
 </mapper>

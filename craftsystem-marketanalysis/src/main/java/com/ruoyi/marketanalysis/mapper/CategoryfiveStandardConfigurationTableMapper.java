@@ -58,4 +58,12 @@ public interface CategoryfiveStandardConfigurationTableMapper
      * @return 结果
      */
     public int deleteCategoryfiveStandardConfigurationTableByIds(Long[] ids);
+    // 新增批量插入方法
+    int batchInsertCategoryfiveStandard(List<CategoryfiveStandardConfigurationTable> list);
+
+    // 新增清空表方法
+    int cleanTable();
+
+    // 新增数据存在检查方法
+    int checkDataExists();
 }

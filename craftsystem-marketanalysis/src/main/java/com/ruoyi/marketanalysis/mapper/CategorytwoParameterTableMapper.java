@@ -58,4 +58,7 @@ public interface CategorytwoParameterTableMapper
      * @return 结果
      */
     public int deleteCategorytwoParameterTableByIds(Long[] ids);
+    int batchInsertCategorytwoParameterTable(List<CategorytwoParameterTable> list);
+    int checkDataExists();
+    int cleanTable();
 }

@@ -58,4 +58,10 @@ public interface CategoryoneStandardConfigurationTableMapper
      * @return 结果
      */
     public int deleteCategoryoneStandardConfigurationTableByIds(Long[] ids);
+    // 批量插入
+    int batchInsertCategoryoneStandardConfigurationTable(List<CategoryoneStandardConfigurationTable> list);
+    // 清空表
+    int cleanTable();
+    // 检查数据存在
+    int checkDataExists();
 }

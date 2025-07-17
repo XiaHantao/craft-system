@@ -58,4 +58,7 @@ public interface CategoryfiveParameterTableMapper
      * @return 结果
      */
     public int deleteCategoryfiveParameterTableByIds(Long[] ids);
+    int batchInsertCategoryfiveParameterTable(List<CategoryfiveParameterTable> list);
+    int checkDataExists();
+    int cleanTable();
 }

@@ -155,4 +155,41 @@ public class SalesLedgerTableServiceImpl implements ISalesLedgerTableService
     public List<String> getBranches() {
         return salesLedgerTableMapper.getDistinctBranches();
     }
+//    @Override
+//    public List<String> getDistinctCategories() {
+//        return salesLedgerTableMapper.getDistinctCategories();
+//    }
+//
+//    @Override
+//    public List<Map<String, Object>> countMonthlySalesComparison1(Integer year, String category, String branch) {
+//        return salesLedgerTableMapper.countMonthlySalesComparison(year, category, branch);
+//    }
+@Override
+public List<Map<String, Object>> countSalesByMonth1(String vehicleCategory, String branch) {
+    return salesLedgerTableMapper.countSalesByMonth1(vehicleCategory, branch);
+}
+
+    @Override
+    public List<Map<String, Object>> countSalesByBranchForVehicle1(String vehicleCategory) {
+        return salesLedgerTableMapper.countSalesByBranchForVehicle1(vehicleCategory);
+    }
+
+    @Override
+    public List<Map<String, Object>> countMonthlySalesComparison1(Integer year, String vehicleCategory, String branch) {
+        if (year == null) year = Year.now().getValue();
+        return salesLedgerTableMapper.countMonthlySalesComparison1(year, vehicleCategory, branch);
+    }
+
+    @Override
+    public List<String> getDistinctCategories() {
+        return salesLedgerTableMapper.getDistinctCategories();
+    }
+    @Override
+    public List<Map<String, Object>> countSalesByCategory(String vehicleCategory) {
+        return salesLedgerTableMapper.countSalesByCategory(vehicleCategory);
+    }
+    @Override
+    public List<Map<String, Object>> countSalesByVehicleForBranch1(String branch) {
+        return salesLedgerTableMapper.countSalesByVehicleForBranch1(branch);
+    }
 }

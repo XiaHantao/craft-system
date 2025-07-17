@@ -1,64 +1,122 @@
 <template>
   <div class="app-container">
-    <div class="compare-selectors">
-      <div class="selector-item" v-for="n in 2" :key="n">
-        <el-select
-          v-model="selectedVehicleType[n-1]"
-          placeholder="请选择车类（相同车类）"
-          @change="handleVehicleTypeChange(n)"
-          style="margin-bottom: 10px"
-          clearable
-        >
-          <el-option
-            v-for="item in vehicleTypes"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+    <div class="compare-container">
+      <!-- 第一行：三个对比框 -->
+      <div class="compare-row">
+        <div class="selector-item" v-for="n in 3" :key="n">
+          <!-- 车型选择器 -->
+          <el-select
+            v-model="selectedVehicleTypeIds[n-1]"
+            placeholder="请选择车型（相同车类）"
+            @change="handleVehicleTypeChange(n)"
+            style="margin-bottom: 10px"
+            clearable
+            filterable
+          >
+            <el-option
+              v-for="item in vehicleTypeOptions"
+              :key="item.id"
+              :label="item.vehicleType"
+              :value="item.id"
+            />
+          </el-select>
 
-        <el-select
-          v-model="selectedManufacturers[n-1]"
-          filterable
-          remote
-          :remote-method="query => searchManufacturers(n, query)"
-          :loading="loadingManufacturer"
-          :disabled="!selectedVehicleType[n-1]"
-          :placeholder="selectedVehicleType[n-1] ? '请选择制造商' : '请先选择车类'"
-          style="width: 100%"
-          clearable
-          @change="handleManufacturerChange"
-        >
-          <el-option
-            v-for="item in manufacturerOptions[n-1]"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+          <!-- 制造商选择器 -->
+          <el-select
+            v-model="selectedManufacturers[n-1]"
+            filterable
+            remote
+            :remote-method="query => searchManufacturers(n, query)"
+            :loading="loadingManufacturer"
+            :disabled="!selectedVehicleTypeIds[n-1]"
+            :placeholder="selectedVehicleTypeIds[n-1] ? '请选择制造商' : '请先选择车型'"
+            style="width: 100%"
+            clearable
+          >
+            <el-option
+              v-for="item in manufacturerOptions[n-1]"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+      </div>
+      
+      <!-- 第二行：两个对比框 + 按钮 -->
+      <div class="compare-row">
+        <!-- 第四和第五个选择器 -->
+        <div class="selector-item selector-item-shrink" v-for="n in 2" :key="n+3">
+          <el-select
+            v-model="selectedVehicleTypeIds[n+2]"
+            placeholder="请选择车型（相同车类）"
+            @change="handleVehicleTypeChange(n+3)"
+            style="margin-bottom: 10px"
+            clearable
+            filterable
+          >
+            <el-option
+              v-for="item in vehicleTypeOptions"
+              :key="item.id"
+              :label="item.vehicleType"
+              :value="item.id"
+            />
+          </el-select>
+
+          <el-select
+            v-model="selectedManufacturers[n+2]"
+            filterable
+            remote
+            :remote-method="query => searchManufacturers(n+3, query)"
+            :loading="loadingManufacturer"
+            :disabled="!selectedVehicleTypeIds[n+2]"
+            :placeholder="selectedVehicleTypeIds[n+2] ? '请选择制造商' : '请先选择车型'"
+            style="width: 100%"
+            clearable
+          >
+            <el-option
+              v-for="item in manufacturerOptions[n+2]"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+        
+        <!-- 对比按钮 -->
+        <div class="compare-button-container">
+          <el-button 
+            type="primary" 
+            @click="handleCompare"
+            :disabled="!canCompare"
+            size="large"
+            class="compact-button"
+          >
+            确定对比
+          </el-button>
+        </div>
       </div>
     </div>
 
-     <!-- 对比表格 -->
-     <el-table
+    <!-- 对比表格 -->
+    <el-table
       v-loading="tableLoading"
       :data="comparisonData"
-      border
       style="width: 100%; margin-top: 20px"
       v-if="showTable"
+      border
     >
-      <el-table-column prop="paramName" label="参数名称" width="200" fixed />
-      <el-table-column label="制造商A">
+      <el-table-column prop="paramName" label="参数名称" width="200" fixed="left" />
+      
+      <!-- 动态生成五列 -->
+      <el-table-column 
+        v-for="(_, index) in 5" 
+        :key="index"
+        :label="'制造商' + String.fromCharCode(65 + index)"
+      >
         <template #default="{ row }">
-          <span :class="{ 'diff-cell': row.manufacturerA !== row.manufacturerB }">
-            {{ row.manufacturerA || '-' }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="制造商B">
-        <template #default="{ row }">
-          <span :class="{ 'diff-cell': row.manufacturerA !== row.manufacturerB }">
-            {{ row.manufacturerB || '-' }}
+          <span :class="{ 'diff-cell': !row.allSame }">
+            {{ row.values[index] || '-' }}
           </span>
         </template>
       </el-table-column>
@@ -70,8 +128,9 @@
 import { listStandardone } from '@/api/marketanalysis/standard/standardone'
 import { listStandardtwo } from '@/api/marketanalysis/standard/standardtwo'
 import { listStandardfive } from '@/api/marketanalysis/standard/standardfive'
+import { listVehicletype } from '@/api/marketanalysis/vehicletype/vehicletype' 
 
-// 各车类参数配置
+// 各车类参数配置保持不变
 const vehicleParams = {
   1: [ // 一类车参数
     'manufacturer',
@@ -127,7 +186,7 @@ const vehicleParams = {
     'domesticBattery',
     'ficsHeliConnectedCarBasicEdition'
   ],
-  2: [ // 二类车参数
+  2: [ // 二类/三类车参数
     'manufacturer',
     'polyurethaneTires',
     'fiveMeterLiftingHeight',
@@ -226,50 +285,91 @@ export default {
   name: 'Contrast',
   data() {
     return {
-      selectedVehicleType: [null, null],
-      selectedManufacturers: [null, null],
-      manufacturerOptions: [[], []],
-      cachedManufacturers: [[], []],
+      // 修改为5个元素
+      selectedVehicleTypeIds: Array(5).fill(null),
+      selectedVehicleCategories: Array(5).fill(null),
+      selectedManufacturers: Array(5).fill(null),
+      manufacturerOptions: Array(5).fill([]),
+      cachedManufacturers: Array(5).fill([]),
       loadingManufacturer: false,
       tableLoading: false,
       comparisonData: [],
-      vehicleTypes: [
-        { value: 1, label: '一类车' },
-        { value: 2, label: '二类车' },
-        { value: 3, label: '五类/七类车' }
-      ]
+      vehicleTypeOptions: []
     }
   },
   computed: {
     showTable() {
-      return this.selectedManufacturers.every(m => m) && this.comparisonData.length > 0
+      return this.comparisonData.length > 0
+    },
+    // 检查是否可以执行对比
+    canCompare() {
+      // 统计已选择的制造商数量
+      const selectedCount = this.selectedManufacturers.filter(Boolean).length;
+      // 至少需要选择2个制造商才能对比
+      return selectedCount >= 2;
     }
   },
-  watch: {
-    selectedManufacturers: {
-      deep: true,
-      handler(newVal) {
-        if (newVal[0] && newVal[1]) {
-          this.loadComparisonData()
-        }
-      }
-    }
+  created() {
+    this.loadVehicleTypes()
   },
   methods: {
+    // 加载车型列表
+    async loadVehicleTypes() {
+      try {
+        const res = await listVehicletype({ pageNum: 1, pageSize: 1000 })
+        this.vehicleTypeOptions = res.rows
+      } catch (error) {
+        console.error('获取车型列表失败:', error)
+      }
+    },
+    
+    // 处理车型选择变化
     handleVehicleTypeChange(index) {
-      const vehicleType = this.selectedVehicleType[index - 1]
-      if (!vehicleType) {
-        this.manufacturerOptions.splice(index - 1, 1, [])
+      const idx = index - 1
+      const vehicleTypeId = this.selectedVehicleTypeIds[idx]
+      
+      if (!vehicleTypeId) {
+        this.selectedVehicleCategories.splice(idx, 1, null)
+        this.manufacturerOptions.splice(idx, 1, [])
+        this.selectedManufacturers.splice(idx, 1, null) // 清空制造商选择
         return
       }
-      this.loadManufacturers(index, vehicleType)
+      
+      // 查找选中的车型
+      const selectedVehicle = this.vehicleTypeOptions.find(v => v.id === vehicleTypeId)
+      if (!selectedVehicle) return
+      
+      // 映射车类字符串到数字ID
+      let categoryId = null
+      switch(selectedVehicle.vehicleCategory) {
+        case 'I类车':
+          categoryId = 1
+          break
+        case 'II类车':
+        case 'III类车':
+          categoryId = 2
+          break
+        case 'V类车':
+        case 'VII类车':
+          categoryId = 3
+          break
+      }
+      
+      // 保存车类ID
+      this.selectedVehicleCategories.splice(idx, 1, categoryId)
+      
+      // 加载制造商
+      if (categoryId) {
+        this.loadManufacturers(index, categoryId)
+      }
     },
 
-    async loadManufacturers(index, vehicleType) {
+    // 加载制造商
+    async loadManufacturers(index, categoryId) {
       this.loadingManufacturer = true
       try {
         let apiMethod
-        switch (vehicleType) {
+        switch (categoryId) {
           case 1: apiMethod = listStandardone; break
           case 2: apiMethod = listStandardtwo; break
           case 3: apiMethod = listStandardfive; break
@@ -290,6 +390,7 @@ export default {
       }
     },
 
+    // 搜索制造商
     searchManufacturers(index, query) {
       const cached = this.cachedManufacturers[index - 1]
       if (!query) {
@@ -302,35 +403,54 @@ export default {
       this.manufacturerOptions.splice(index - 1, 1, filtered)
     },
 
-    async loadComparisonData() {
-      // 检查车类是否相同
-      if (this.selectedVehicleType[0] !== this.selectedVehicleType[1]) {
-        this.$message.warning('请选择相同车类进行对比')
-        this.comparisonData = []
+    // 处理对比按钮点击
+    handleCompare() {
+      if (!this.canCompare) {
+        this.$message.warning('请至少选择两个制造商进行对比')
         return
       }
+      
+      this.loadComparisonData()
+    },
 
-      this.tableLoading = true
+    // 加载对比数据
+    async loadComparisonData() {
+      // 获取所有已选车类ID
+      const selectedCategories = this.selectedVehicleCategories.filter(Boolean);
+      
+      // 检查所有已选车类是否相同
+      if (selectedCategories.length > 0 && !selectedCategories.every(c => c === selectedCategories[0])) {
+        this.$message.warning('请选择相同车类下的车型进行对比');
+        this.comparisonData = [];
+        return;
+      }
+
+      this.tableLoading = true;
       try {
-        const [dataA, dataB] = await Promise.all([
-          this.fetchManufacturerData(0),
-          this.fetchManufacturerData(1)
-        ])
+        // 获取所有已选制造商的数据
+        const manufacturerData = await Promise.all(
+          this.selectedManufacturers.map((manufacturer, index) => 
+            manufacturer ? this.fetchManufacturerData(index) : Promise.resolve({})
+          )
+        );
         
-        this.generateComparisonTable(dataA, dataB)
+        this.generateComparisonTable(manufacturerData);
       } catch (error) {
-        console.error('数据对比失败:', error)
+        console.error('数据对比失败:', error);
       } finally {
-        this.tableLoading = false
+        this.tableLoading = false;
       }
     },
 
+    // 获取制造商数据
     async fetchManufacturerData(index) {
-      const vehicleType = this.selectedVehicleType[index]
+      const categoryId = this.selectedVehicleCategories[index]
       const manufacturer = this.selectedManufacturers[index]
 
+      if (!categoryId || !manufacturer) return {}
+
       let apiMethod
-      switch (vehicleType) {
+      switch (categoryId) {
         case 1: apiMethod = listStandardone; break
         case 2: apiMethod = listStandardtwo; break
         case 3: apiMethod = listStandardfive; break
@@ -341,17 +461,35 @@ export default {
       return res.rows[0] || {}
     },
 
-    generateComparisonTable(dataA, dataB) {
-      const vehicleType = this.selectedVehicleType[0]
-      const params = vehicleParams[vehicleType] || []
+    // 生成对比表格
+    generateComparisonTable(manufacturerData) {
+      const categoryId = this.selectedVehicleCategories.find(Boolean);
+      if (!categoryId) {
+        this.comparisonData = [];
+        return;
+      }
       
-      this.comparisonData = params.map(param => ({
-        paramName: this.formatParamName(param),
-        manufacturerA: dataA[param] || '-',
-        manufacturerB: dataB[param] || '-'
-      }))
+      const params = vehicleParams[categoryId] || [];
+      
+      this.comparisonData = params.map(param => {
+        const values = manufacturerData.map(data => data[param] || '-');
+        
+        // 检查该行所有值是否相同
+        const allSame = values.every((val, _, arr) => 
+          val === arr[0] || 
+          val === '-' || 
+          arr[0] === '-'
+        );
+        
+        return {
+          paramName: this.formatParamName(param),
+          values: values,
+          allSame: allSame
+        };
+      });
     },
 
+    // 格式化参数名称
     formatParamName(key) {
       const nameMap = {
         // 公共字段
@@ -412,6 +550,7 @@ export default {
         centralWideangleRearviewMirror: '中央广角后视镜', 
         twoSideRearviewMirrors: '两侧后视镜',           
         parkingSensor: '倒车雷达',                     
+        
         // 二类车特有
         polyurethaneTires: '聚氨酯轮胎',
         fiveMeterLiftingHeight: '5米起升高度',
@@ -429,50 +568,97 @@ export default {
         readingLamp: '阅读灯',
         chineseIdentification: '中文标识',
         englishLogo: '英文标识',
-        accessoriesAndSpeedLimit: '属具未到位限速',     
-        escapeBag: '逃生包',                          
-        guideWheel: '导向轮',                         
-        magneticNavigation: '磁导航',                 
-
+        
         // 五类/七类车特有
         twinTires: '双胎',
         walkingOpsFunction: '行走OPS',
-        parkingSensor: '倒车雷达',
         medianExhaust: '中位排气',
         highExhaust: '高排气',
         twoWheelDrive: '两驱',
         fourWheelDrive: '四驱',
         dentalEmbeddedDifferentialLock: '牙嵌差速锁',
         limitedSlipDifferential: '限滑差速器',
-        manualDifferentialLock: '手动差速锁',
-        walkingOpsFunction: '行走OPS功能',           
-        medianExhaust: '中位排气',                   
-        highExhaust: '高排气',                       
-      }
-      return nameMap[key] || key
-    },
-
-    handleManufacturerChange() {
-      this.comparisonData = []
+        manualDifferentialLock: '手动差速锁'
+      };
+      
+      return nameMap[key] || key;
     }
   }
 }
 </script>
 
 <style scoped>
-.compare-selectors {
+.app-container {
+  padding: 20px;
+}
+
+.compare-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.compare-row {
   display: flex;
   gap: 20px;
-  margin-bottom: 20px;
+  justify-content: space-between;
 }
+
+/* 第一行选择器样式 */
 .selector-item {
   flex: 1;
+  min-width: 240px;
 }
+
+/* 第二行选择器缩小20% */
+.selector-item-shrink {
+  flex: 0.8; /* 缩小20% */
+  min-width: 200px;
+}
+
+.compare-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  padding: 0 10px; /* 添加两侧内边距 */
+}
+
+/* 紧凑型按钮样式 */
+.compact-button {
+  width: 100px; /* 原始150px的三分之二 */
+  height: 60px; /* 原始80px的四分之三 */
+  font-size: 16px; /* 适当调整字体大小 */
+  padding: 10px; /* 内部填充 */
+}
+
 .diff-cell {
   color: #F56C6C;
   font-weight: bold;
 }
+
 .el-select {
-  width: 400px !important; /* 覆盖原有100%宽度 */
+  width: 100% !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+  .compare-row {
+    flex-wrap: wrap;
+  }
+  
+  .selector-item, .selector-item-shrink {
+    min-width: calc(50% - 10px);
+  }
+  
+  .compare-button-container {
+    min-width: 100%;
+    margin-top: 10px;
+  }
+  
+  .compact-button {
+    width: 100%;
+    height: 50px;
+  }
 }
 </style>
