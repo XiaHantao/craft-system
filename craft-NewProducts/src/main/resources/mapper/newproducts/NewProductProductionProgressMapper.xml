@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.myCode.mapper.NewProductProductionProgressMapper">
+    
+    <resultMap type="NewProductProductionProgress" id="NewProductProductionProgressResult">
+        <result property="id"    column="id"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="materialPreparation"    column="material_preparation"    />
+        <result property="metalworking"    column="metalworking"    />
+        <result property="mastStructure"    column="mast_structure"    />
+        <result property="frameStructure"    column="frame_structure"    />
+        <result property="painting"    column="painting"    />
+        <result property="mastAssembly"    column="mast_assembly"    />
+        <result property="bodyAssembly"    column="body_assembly"    />
+        <result property="testDrive"    column="test_drive"    />
+        <result property="extField1"    column="ext_field1"    />
+        <result property="extField2"    column="ext_field2"    />
+        <result property="extField3"    column="ext_field3"    />
+    </resultMap>
+
+    <sql id="selectNewProductProductionProgressVo">
+        select id, project_code, project_name, material_preparation, metalworking, mast_structure, frame_structure, painting, mast_assembly, body_assembly, test_drive, ext_field1, ext_field2, ext_field3 from new_product_production_progress
+    </sql>
+
+    <select id="selectNewProductProductionProgressList" parameterType="NewProductProductionProgress" resultMap="NewProductProductionProgressResult">
+        <include refid="selectNewProductProductionProgressVo"/>
+        <where>  
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="extField1 != null  and extField1 != ''"> and ext_field1 = #{extField1}</if>
+            <if test="extField2 != null  and extField2 != ''"> and ext_field2 = #{extField2}</if>
+            <if test="extField3 != null  and extField3 != ''"> and ext_field3 = #{extField3}</if>
+        </where>
+    </select>
+    
+    <select id="selectNewProductProductionProgressById" parameterType="Long" resultMap="NewProductProductionProgressResult">
+        <include refid="selectNewProductProductionProgressVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNewProductProductionProgress" parameterType="NewProductProductionProgress" useGeneratedKeys="true" keyProperty="id">
+        insert into new_product_production_progress
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="materialPreparation != null">material_preparation,</if>
+            <if test="metalworking != null">metalworking,</if>
+            <if test="mastStructure != null">mast_structure,</if>
+            <if test="frameStructure != null">frame_structure,</if>
+            <if test="painting != null">painting,</if>
+            <if test="mastAssembly != null">mast_assembly,</if>
+            <if test="bodyAssembly != null">body_assembly,</if>
+            <if test="testDrive != null">test_drive,</if>
+            <if test="extField1 != null">ext_field1,</if>
+            <if test="extField2 != null">ext_field2,</if>
+            <if test="extField3 != null">ext_field3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">#{projectCode},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="materialPreparation != null">#{materialPreparation},</if>
+            <if test="metalworking != null">#{metalworking},</if>
+            <if test="mastStructure != null">#{mastStructure},</if>
+            <if test="frameStructure != null">#{frameStructure},</if>
+            <if test="painting != null">#{painting},</if>
+            <if test="mastAssembly != null">#{mastAssembly},</if>
+            <if test="bodyAssembly != null">#{bodyAssembly},</if>
+            <if test="testDrive != null">#{testDrive},</if>
+            <if test="extField1 != null">#{extField1},</if>
+            <if test="extField2 != null">#{extField2},</if>
+            <if test="extField3 != null">#{extField3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewProductProductionProgress" parameterType="NewProductProductionProgress">
+        update new_product_production_progress
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code = #{projectCode},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="materialPreparation != null">material_preparation = #{materialPreparation},</if>
+            <if test="metalworking != null">metalworking = #{metalworking},</if>
+            <if test="mastStructure != null">mast_structure = #{mastStructure},</if>
+            <if test="frameStructure != null">frame_structure = #{frameStructure},</if>
+            <if test="painting != null">painting = #{painting},</if>
+            <if test="mastAssembly != null">mast_assembly = #{mastAssembly},</if>
+            <if test="bodyAssembly != null">body_assembly = #{bodyAssembly},</if>
+            <if test="testDrive != null">test_drive = #{testDrive},</if>
+            <if test="extField1 != null">ext_field1 = #{extField1},</if>
+            <if test="extField2 != null">ext_field2 = #{extField2},</if>
+            <if test="extField3 != null">ext_field3 = #{extField3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewProductProductionProgressById" parameterType="Long">
+        delete from new_product_production_progress where id = #{id}
+    </delete>
+
+    <delete id="deleteNewProductProductionProgressByIds" parameterType="String">
+        delete from new_product_production_progress where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

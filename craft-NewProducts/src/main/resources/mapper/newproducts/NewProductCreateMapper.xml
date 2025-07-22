@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.myCode.mapper.NewProductCreateMapper">
+    
+    <resultMap type="NewProductCreate" id="NewProductCreateResult">
+        <result property="id"    column="id"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="projectLeader"    column="project_leader"    />
+        <result property="productSeries"    column="product_series"    />
+        <result property="tonnage"    column="tonnage"    />
+        <result property="vehicleModel"    column="vehicle_model"    />
+        <result property="mainConfiguration"    column="main_configuration"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="extField1"    column="ext_field1"    />
+        <result property="extField2"    column="ext_field2"    />
+        <result property="extField3"    column="ext_field3"    />
+    </resultMap>
+
+    <sql id="selectNewProductCreateVo">
+        select id, project_code, project_name, project_leader, product_series, tonnage, vehicle_model, main_configuration, create_date, remarks, ext_field1, ext_field2, ext_field3 from new_product_create
+    </sql>
+
+    <select id="selectNewProductCreateList" parameterType="NewProductCreate" resultMap="NewProductCreateResult">
+        <include refid="selectNewProductCreateVo"/>
+        <where>  
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="extField1 != null  and extField1 != ''"> and ext_field1 = #{extField1}</if>
+            <if test="extField2 != null  and extField2 != ''"> and ext_field2 = #{extField2}</if>
+            <if test="extField3 != null  and extField3 != ''"> and ext_field3 = #{extField3}</if>
+        </where>
+    </select>
+    
+    <select id="selectNewProductCreateById" parameterType="Long" resultMap="NewProductCreateResult">
+        <include refid="selectNewProductCreateVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNewProductCreate" parameterType="NewProductCreate" useGeneratedKeys="true" keyProperty="id">
+        insert into new_product_create
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code,</if>
+            <if test="projectName != null and projectName != ''">project_name,</if>
+            <if test="projectLeader != null">project_leader,</if>
+            <if test="productSeries != null">product_series,</if>
+            <if test="tonnage != null">tonnage,</if>
+            <if test="vehicleModel != null">vehicle_model,</if>
+            <if test="mainConfiguration != null">main_configuration,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="extField1 != null">ext_field1,</if>
+            <if test="extField2 != null">ext_field2,</if>
+            <if test="extField3 != null">ext_field3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">#{projectCode},</if>
+            <if test="projectName != null and projectName != ''">#{projectName},</if>
+            <if test="projectLeader != null">#{projectLeader},</if>
+            <if test="productSeries != null">#{productSeries},</if>
+            <if test="tonnage != null">#{tonnage},</if>
+            <if test="vehicleModel != null">#{vehicleModel},</if>
+            <if test="mainConfiguration != null">#{mainConfiguration},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="extField1 != null">#{extField1},</if>
+            <if test="extField2 != null">#{extField2},</if>
+            <if test="extField3 != null">#{extField3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewProductCreate" parameterType="NewProductCreate">
+        update new_product_create
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code = #{projectCode},</if>
+            <if test="projectName != null and projectName != ''">project_name = #{projectName},</if>
+            <if test="projectLeader != null">project_leader = #{projectLeader},</if>
+            <if test="productSeries != null">product_series = #{productSeries},</if>
+            <if test="tonnage != null">tonnage = #{tonnage},</if>
+            <if test="vehicleModel != null">vehicle_model = #{vehicleModel},</if>
+            <if test="mainConfiguration != null">main_configuration = #{mainConfiguration},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="extField1 != null">ext_field1 = #{extField1},</if>
+            <if test="extField2 != null">ext_field2 = #{extField2},</if>
+            <if test="extField3 != null">ext_field3 = #{extField3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewProductCreateById" parameterType="Long">
+        delete from new_product_create where id = #{id}
+    </delete>
+
+    <delete id="deleteNewProductCreateByIds" parameterType="String">
+        delete from new_product_create where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

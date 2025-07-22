@@ -42,11 +42,3 @@ export function delPlan(id) {
     method: 'delete'
   })
 }
-
-//获得任意表单最新数据
-export function getLatestRecord02(tableName) {
-  return request({
-    url: '/process/processValidationAndSummary/latest02/'+ tableName,
-    method: 'get'
-  })
-}

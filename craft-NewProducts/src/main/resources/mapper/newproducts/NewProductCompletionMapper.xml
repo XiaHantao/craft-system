@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.myCode.mapper.NewProductCompletionMapper">
+    
+    <resultMap type="NewProductCompletion" id="NewProductCompletionResult">
+        <result property="id"    column="id"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="enhancementTestPlan"    column="enhancement_test_plan"    />
+        <result property="enhancementTestResult"    column="enhancement_test_result"    />
+        <result property="tr4Tr5Summary"    column="tr4_tr5_summary"    />
+        <result property="internalLaunchReport"    column="internal_launch_report"    />
+        <result property="extField1"    column="ext_field1"    />
+        <result property="extField2"    column="ext_field2"    />
+        <result property="extField3"    column="ext_field3"    />
+    </resultMap>
+
+    <sql id="selectNewProductCompletionVo">
+        select id, project_code, project_name, enhancement_test_plan, enhancement_test_result, tr4_tr5_summary, internal_launch_report, ext_field1, ext_field2, ext_field3 from new_product_completion
+    </sql>
+
+    <select id="selectNewProductCompletionList" parameterType="NewProductCompletion" resultMap="NewProductCompletionResult">
+        <include refid="selectNewProductCompletionVo"/>
+        <where>  
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="extField1 != null  and extField1 != ''"> and ext_field1 = #{extField1}</if>
+            <if test="extField2 != null  and extField2 != ''"> and ext_field2 = #{extField2}</if>
+            <if test="extField3 != null  and extField3 != ''"> and ext_field3 = #{extField3}</if>
+        </where>
+    </select>
+    
+    <select id="selectNewProductCompletionById" parameterType="Long" resultMap="NewProductCompletionResult">
+        <include refid="selectNewProductCompletionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNewProductCompletion" parameterType="NewProductCompletion" useGeneratedKeys="true" keyProperty="id">
+        insert into new_product_completion
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="enhancementTestPlan != null">enhancement_test_plan,</if>
+            <if test="enhancementTestResult != null">enhancement_test_result,</if>
+            <if test="tr4Tr5Summary != null">tr4_tr5_summary,</if>
+            <if test="internalLaunchReport != null">internal_launch_report,</if>
+            <if test="extField1 != null">ext_field1,</if>
+            <if test="extField2 != null">ext_field2,</if>
+            <if test="extField3 != null">ext_field3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">#{projectCode},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="enhancementTestPlan != null">#{enhancementTestPlan},</if>
+            <if test="enhancementTestResult != null">#{enhancementTestResult},</if>
+            <if test="tr4Tr5Summary != null">#{tr4Tr5Summary},</if>
+            <if test="internalLaunchReport != null">#{internalLaunchReport},</if>
+            <if test="extField1 != null">#{extField1},</if>
+            <if test="extField2 != null">#{extField2},</if>
+            <if test="extField3 != null">#{extField3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewProductCompletion" parameterType="NewProductCompletion">
+        update new_product_completion
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code = #{projectCode},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="enhancementTestPlan != null">enhancement_test_plan = #{enhancementTestPlan},</if>
+            <if test="enhancementTestResult != null">enhancement_test_result = #{enhancementTestResult},</if>
+            <if test="tr4Tr5Summary != null">tr4_tr5_summary = #{tr4Tr5Summary},</if>
+            <if test="internalLaunchReport != null">internal_launch_report = #{internalLaunchReport},</if>
+            <if test="extField1 != null">ext_field1 = #{extField1},</if>
+            <if test="extField2 != null">ext_field2 = #{extField2},</if>
+            <if test="extField3 != null">ext_field3 = #{extField3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewProductCompletionById" parameterType="Long">
+        delete from new_product_completion where id = #{id}
+    </delete>
+
+    <delete id="deleteNewProductCompletionByIds" parameterType="String">
+        delete from new_product_completion where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

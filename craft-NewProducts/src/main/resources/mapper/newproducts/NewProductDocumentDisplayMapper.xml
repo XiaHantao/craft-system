@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.myCode.mapper.NewProductDocumentDisplayMapper">
+    
+    <resultMap type="NewProductDocumentDisplay" id="NewProductDocumentDisplayResult">
+        <result property="id"    column="id"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="taskOrderDisplay"    column="task_order_display"    />
+        <result property="techDisclosureDisplay"    column="tech_disclosure_display"    />
+        <result property="bomDisplay"    column="bom_display"    />
+        <result property="otherSubmissionDisplay"    column="other_submission_display"    />
+        <result property="verificationDisplay"    column="verification_display"    />
+        <result property="bomInspectionDisplay"    column="bom_inspection_display"    />
+        <result property="productionIssueDisplay"    column="production_issue_display"    />
+        <result property="productionSummaryDisplay"    column="production_summary_display"    />
+        <result property="enhancementPlanDisplay"    column="enhancement_plan_display"    />
+        <result property="enhancementResultDisplay"    column="enhancement_result_display"    />
+        <result property="trSummaryDisplay"    column="tr_summary_display"    />
+        <result property="launchReportDisplay"    column="launch_report_display"    />
+        <result property="extField1"    column="ext_field1"    />
+        <result property="extField2"    column="ext_field2"    />
+        <result property="extField3"    column="ext_field3"    />
+    </resultMap>
+
+    <sql id="selectNewProductDocumentDisplayVo">
+        select id, project_code, project_name, task_order_display, tech_disclosure_display, bom_display, other_submission_display, verification_display, bom_inspection_display, production_issue_display, production_summary_display, enhancement_plan_display, enhancement_result_display, tr_summary_display, launch_report_display, ext_field1, ext_field2, ext_field3 from new_product_document_display
+    </sql>
+
+    <select id="selectNewProductDocumentDisplayList" parameterType="NewProductDocumentDisplay" resultMap="NewProductDocumentDisplayResult">
+        <include refid="selectNewProductDocumentDisplayVo"/>
+        <where>  
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="extField1 != null  and extField1 != ''"> and ext_field1 = #{extField1}</if>
+            <if test="extField2 != null  and extField2 != ''"> and ext_field2 = #{extField2}</if>
+            <if test="extField3 != null  and extField3 != ''"> and ext_field3 = #{extField3}</if>
+        </where>
+    </select>
+    
+    <select id="selectNewProductDocumentDisplayById" parameterType="Long" resultMap="NewProductDocumentDisplayResult">
+        <include refid="selectNewProductDocumentDisplayVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNewProductDocumentDisplay" parameterType="NewProductDocumentDisplay" useGeneratedKeys="true" keyProperty="id">
+        insert into new_product_document_display
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="taskOrderDisplay != null">task_order_display,</if>
+            <if test="techDisclosureDisplay != null">tech_disclosure_display,</if>
+            <if test="bomDisplay != null">bom_display,</if>
+            <if test="otherSubmissionDisplay != null">other_submission_display,</if>
+            <if test="verificationDisplay != null">verification_display,</if>
+            <if test="bomInspectionDisplay != null">bom_inspection_display,</if>
+            <if test="productionIssueDisplay != null">production_issue_display,</if>
+            <if test="productionSummaryDisplay != null">production_summary_display,</if>
+            <if test="enhancementPlanDisplay != null">enhancement_plan_display,</if>
+            <if test="enhancementResultDisplay != null">enhancement_result_display,</if>
+            <if test="trSummaryDisplay != null">tr_summary_display,</if>
+            <if test="launchReportDisplay != null">launch_report_display,</if>
+            <if test="extField1 != null">ext_field1,</if>
+            <if test="extField2 != null">ext_field2,</if>
+            <if test="extField3 != null">ext_field3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">#{projectCode},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="taskOrderDisplay != null">#{taskOrderDisplay},</if>
+            <if test="techDisclosureDisplay != null">#{techDisclosureDisplay},</if>
+            <if test="bomDisplay != null">#{bomDisplay},</if>
+            <if test="otherSubmissionDisplay != null">#{otherSubmissionDisplay},</if>
+            <if test="verificationDisplay != null">#{verificationDisplay},</if>
+            <if test="bomInspectionDisplay != null">#{bomInspectionDisplay},</if>
+            <if test="productionIssueDisplay != null">#{productionIssueDisplay},</if>
+            <if test="productionSummaryDisplay != null">#{productionSummaryDisplay},</if>
+            <if test="enhancementPlanDisplay != null">#{enhancementPlanDisplay},</if>
+            <if test="enhancementResultDisplay != null">#{enhancementResultDisplay},</if>
+            <if test="trSummaryDisplay != null">#{trSummaryDisplay},</if>
+            <if test="launchReportDisplay != null">#{launchReportDisplay},</if>
+            <if test="extField1 != null">#{extField1},</if>
+            <if test="extField2 != null">#{extField2},</if>
+            <if test="extField3 != null">#{extField3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewProductDocumentDisplay" parameterType="NewProductDocumentDisplay">
+        update new_product_document_display
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code = #{projectCode},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="taskOrderDisplay != null">task_order_display = #{taskOrderDisplay},</if>
+            <if test="techDisclosureDisplay != null">tech_disclosure_display = #{techDisclosureDisplay},</if>
+            <if test="bomDisplay != null">bom_display = #{bomDisplay},</if>
+            <if test="otherSubmissionDisplay != null">other_submission_display = #{otherSubmissionDisplay},</if>
+            <if test="verificationDisplay != null">verification_display = #{verificationDisplay},</if>
+            <if test="bomInspectionDisplay != null">bom_inspection_display = #{bomInspectionDisplay},</if>
+            <if test="productionIssueDisplay != null">production_issue_display = #{productionIssueDisplay},</if>
+            <if test="productionSummaryDisplay != null">production_summary_display = #{productionSummaryDisplay},</if>
+            <if test="enhancementPlanDisplay != null">enhancement_plan_display = #{enhancementPlanDisplay},</if>
+            <if test="enhancementResultDisplay != null">enhancement_result_display = #{enhancementResultDisplay},</if>
+            <if test="trSummaryDisplay != null">tr_summary_display = #{trSummaryDisplay},</if>
+            <if test="launchReportDisplay != null">launch_report_display = #{launchReportDisplay},</if>
+            <if test="extField1 != null">ext_field1 = #{extField1},</if>
+            <if test="extField2 != null">ext_field2 = #{extField2},</if>
+            <if test="extField3 != null">ext_field3 = #{extField3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewProductDocumentDisplayById" parameterType="Long">
+        delete from new_product_document_display where id = #{id}
+    </delete>
+
+    <delete id="deleteNewProductDocumentDisplayByIds" parameterType="String">
+        delete from new_product_document_display where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

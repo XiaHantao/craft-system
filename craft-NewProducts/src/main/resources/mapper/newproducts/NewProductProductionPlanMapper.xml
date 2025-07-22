@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.myCode.mapper.NewProductProductionPlanMapper">
+    
+    <resultMap type="NewProductProductionPlan" id="NewProductProductionPlanResult">
+        <result property="id"    column="id"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="planDate"    column="plan_date"    />
+        <result property="workers"    column="workers"    />
+        <result property="workLocation"    column="work_location"    />
+        <result property="equipment"    column="equipment"    />
+        <result property="workContent"    column="work_content"    />
+        <result property="arranger"    column="arranger"    />
+        <result property="resultStatus"    column="result_status"    />
+        <result property="extField1"    column="ext_field1"    />
+        <result property="extField2"    column="ext_field2"    />
+        <result property="extField3"    column="ext_field3"    />
+    </resultMap>
+
+    <sql id="selectNewProductProductionPlanVo">
+        select id, project_code, project_name, plan_date, workers, work_location, equipment, work_content, arranger, result_status, ext_field1, ext_field2, ext_field3 from new_product_production_plan
+    </sql>
+
+    <select id="selectNewProductProductionPlanList" parameterType="NewProductProductionPlan" resultMap="NewProductProductionPlanResult">
+        <include refid="selectNewProductProductionPlanVo"/>
+        <where>  
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="resultStatus != null  and resultStatus != ''"> and result_status = #{resultStatus}</if>
+            <if test="extField1 != null  and extField1 != ''"> and ext_field1 = #{extField1}</if>
+            <if test="extField2 != null  and extField2 != ''"> and ext_field2 = #{extField2}</if>
+            <if test="extField3 != null  and extField3 != ''"> and ext_field3 = #{extField3}</if>
+        </where>
+    </select>
+    
+    <select id="selectNewProductProductionPlanById" parameterType="Long" resultMap="NewProductProductionPlanResult">
+        <include refid="selectNewProductProductionPlanVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNewProductProductionPlan" parameterType="NewProductProductionPlan" useGeneratedKeys="true" keyProperty="id">
+        insert into new_product_production_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="planDate != null">plan_date,</if>
+            <if test="workers != null">workers,</if>
+            <if test="workLocation != null">work_location,</if>
+            <if test="equipment != null">equipment,</if>
+            <if test="workContent != null">work_content,</if>
+            <if test="arranger != null">arranger,</if>
+            <if test="resultStatus != null">result_status,</if>
+            <if test="extField1 != null">ext_field1,</if>
+            <if test="extField2 != null">ext_field2,</if>
+            <if test="extField3 != null">ext_field3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">#{projectCode},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="planDate != null">#{planDate},</if>
+            <if test="workers != null">#{workers},</if>
+            <if test="workLocation != null">#{workLocation},</if>
+            <if test="equipment != null">#{equipment},</if>
+            <if test="workContent != null">#{workContent},</if>
+            <if test="arranger != null">#{arranger},</if>
+            <if test="resultStatus != null">#{resultStatus},</if>
+            <if test="extField1 != null">#{extField1},</if>
+            <if test="extField2 != null">#{extField2},</if>
+            <if test="extField3 != null">#{extField3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewProductProductionPlan" parameterType="NewProductProductionPlan">
+        update new_product_production_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code = #{projectCode},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="planDate != null">plan_date = #{planDate},</if>
+            <if test="workers != null">workers = #{workers},</if>
+            <if test="workLocation != null">work_location = #{workLocation},</if>
+            <if test="equipment != null">equipment = #{equipment},</if>
+            <if test="workContent != null">work_content = #{workContent},</if>
+            <if test="arranger != null">arranger = #{arranger},</if>
+            <if test="resultStatus != null">result_status = #{resultStatus},</if>
+            <if test="extField1 != null">ext_field1 = #{extField1},</if>
+            <if test="extField2 != null">ext_field2 = #{extField2},</if>
+            <if test="extField3 != null">ext_field3 = #{extField3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewProductProductionPlanById" parameterType="Long">
+        delete from new_product_production_plan where id = #{id}
+    </delete>
+
+    <delete id="deleteNewProductProductionPlanByIds" parameterType="String">
+        delete from new_product_production_plan where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.myCode.mapper.NewProductFilesMapper">
+    
+    <resultMap type="NewProductFiles" id="NewProductFilesResult">
+        <result property="id"    column="id"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="taskOrderFile"    column="task_order_file"    />
+        <result property="techDisclosureFile"    column="tech_disclosure_file"    />
+        <result property="bomFile"    column="bom_file"    />
+        <result property="otherFiles"    column="other_files"    />
+        <result property="submitRemarks"    column="submit_remarks"    />
+        <result property="submitTime"    column="submit_time"    />
+        <result property="checkFile"    column="check_file"    />
+        <result property="checkStatus"    column="check_status"    />
+        <result property="checkRemarks"    column="check_remarks"    />
+        <result property="checkTime"    column="check_time"    />
+        <result property="extField1"    column="ext_field1"    />
+        <result property="extField2"    column="ext_field2"    />
+        <result property="extField3"    column="ext_field3"    />
+    </resultMap>
+
+    <sql id="selectNewProductFilesVo">
+        select id, project_code, project_name, task_order_file, tech_disclosure_file, bom_file, other_files, submit_remarks, submit_time, check_file, check_status, check_remarks, check_time, ext_field1, ext_field2, ext_field3 from new_product_files
+    </sql>
+
+    <select id="selectNewProductFilesList" parameterType="NewProductFiles" resultMap="NewProductFilesResult">
+        <include refid="selectNewProductFilesVo"/>
+        <where>  
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="submitTime != null "> and submit_time = #{submitTime}</if>
+            <if test="checkStatus != null  and checkStatus != ''"> and check_status = #{checkStatus}</if>
+            <if test="extField1 != null  and extField1 != ''"> and ext_field1 = #{extField1}</if>
+            <if test="extField2 != null  and extField2 != ''"> and ext_field2 = #{extField2}</if>
+            <if test="extField3 != null  and extField3 != ''"> and ext_field3 = #{extField3}</if>
+        </where>
+    </select>
+    
+    <select id="selectNewProductFilesById" parameterType="Long" resultMap="NewProductFilesResult">
+        <include refid="selectNewProductFilesVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNewProductFiles" parameterType="NewProductFiles" useGeneratedKeys="true" keyProperty="id">
+        insert into new_product_files
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="taskOrderFile != null">task_order_file,</if>
+            <if test="techDisclosureFile != null">tech_disclosure_file,</if>
+            <if test="bomFile != null">bom_file,</if>
+            <if test="otherFiles != null">other_files,</if>
+            <if test="submitRemarks != null">submit_remarks,</if>
+            <if test="submitTime != null">submit_time,</if>
+            <if test="checkFile != null">check_file,</if>
+            <if test="checkStatus != null">check_status,</if>
+            <if test="checkRemarks != null">check_remarks,</if>
+            <if test="checkTime != null">check_time,</if>
+            <if test="extField1 != null">ext_field1,</if>
+            <if test="extField2 != null">ext_field2,</if>
+            <if test="extField3 != null">ext_field3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">#{projectCode},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="taskOrderFile != null">#{taskOrderFile},</if>
+            <if test="techDisclosureFile != null">#{techDisclosureFile},</if>
+            <if test="bomFile != null">#{bomFile},</if>
+            <if test="otherFiles != null">#{otherFiles},</if>
+            <if test="submitRemarks != null">#{submitRemarks},</if>
+            <if test="submitTime != null">#{submitTime},</if>
+            <if test="checkFile != null">#{checkFile},</if>
+            <if test="checkStatus != null">#{checkStatus},</if>
+            <if test="checkRemarks != null">#{checkRemarks},</if>
+            <if test="checkTime != null">#{checkTime},</if>
+            <if test="extField1 != null">#{extField1},</if>
+            <if test="extField2 != null">#{extField2},</if>
+            <if test="extField3 != null">#{extField3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewProductFiles" parameterType="NewProductFiles">
+        update new_product_files
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code = #{projectCode},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="taskOrderFile != null">task_order_file = #{taskOrderFile},</if>
+            <if test="techDisclosureFile != null">tech_disclosure_file = #{techDisclosureFile},</if>
+            <if test="bomFile != null">bom_file = #{bomFile},</if>
+            <if test="otherFiles != null">other_files = #{otherFiles},</if>
+            <if test="submitRemarks != null">submit_remarks = #{submitRemarks},</if>
+            <if test="submitTime != null">submit_time = #{submitTime},</if>
+            <if test="checkFile != null">check_file = #{checkFile},</if>
+            <if test="checkStatus != null">check_status = #{checkStatus},</if>
+            <if test="checkRemarks != null">check_remarks = #{checkRemarks},</if>
+            <if test="checkTime != null">check_time = #{checkTime},</if>
+            <if test="extField1 != null">ext_field1 = #{extField1},</if>
+            <if test="extField2 != null">ext_field2 = #{extField2},</if>
+            <if test="extField3 != null">ext_field3 = #{extField3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewProductFilesById" parameterType="Long">
+        delete from new_product_files where id = #{id}
+    </delete>
+
+    <delete id="deleteNewProductFilesByIds" parameterType="String">
+        delete from new_product_files where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

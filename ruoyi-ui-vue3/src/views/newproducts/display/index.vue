@@ -56,7 +56,7 @@
           plain
           icon="Plus"
           @click="handleAdd"
-          v-hasPermi="['newproducts:plan:add']"
+          v-hasPermi="['newproducts:display:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -66,7 +66,7 @@
           icon="Edit"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['newproducts:plan:edit']"
+          v-hasPermi="['newproducts:display:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -76,7 +76,7 @@
           icon="Delete"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['newproducts:plan:remove']"
+          v-hasPermi="['newproducts:display:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -85,28 +85,29 @@
           plain
           icon="Download"
           @click="handleExport"
-          v-hasPermi="['newproducts:plan:export']"
+          v-hasPermi="['newproducts:display:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="planList" @selection-change="handleSelectionChange" height="500px">
+    <el-table v-loading="loading" :data="displayList" @selection-change="handleSelectionChange" height="500px">
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="主键" align="center" prop="id" /> -->
       <el-table-column label="项目编号" align="center" prop="projectCode" />
       <!-- <el-table-column label="项目名称" align="center" prop="projectName" /> -->
-      <el-table-column label="计划开始日期" align="center" prop="planDate" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.planDate, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="工作人员" align="center" prop="workers" />
-      <el-table-column label="工作场地" align="center" prop="workLocation" />
-      <el-table-column label="使用设备" align="center" prop="equipment" />
-      <el-table-column label="作业内容" align="center" prop="workContent" />
-      <el-table-column label="安排人" align="center" prop="arranger" />
-      <el-table-column label="完成结果" align="center" prop="resultStatus" />
+      <el-table-column label="任务单展示文件" align="center" prop="taskOrderDisplay" />
+      <el-table-column label="技术交底展示文件" align="center" prop="techDisclosureDisplay" />
+      <el-table-column label="BOM展示文件" align="center" prop="bomDisplay" />
+      <el-table-column label="其他提交展示文件" align="center" prop="otherSubmissionDisplay" />
+      <el-table-column label="核对展示文件" align="center" prop="verificationDisplay" />
+      <el-table-column label="BOM质检结果展示文件" align="center" prop="bomInspectionDisplay" />
+      <el-table-column label="生产问题记录展示文件" align="center" prop="productionIssueDisplay" />
+      <el-table-column label="生产总结展示文件" align="center" prop="productionSummaryDisplay" />
+      <el-table-column label="强化试验方案展示文件" align="center" prop="enhancementPlanDisplay" />
+      <el-table-column label="强化试验结果展示文件" align="center" prop="enhancementResultDisplay" />
+      <el-table-column label="TR4/TR5总结展示文件" align="center" prop="trSummaryDisplay" />
+      <el-table-column label="内部上市报告展示文件" align="center" prop="launchReportDisplay" />
 
 <!--       <el-table-column label="扩展字段1" align="center" prop="extField1" />
       <el-table-column label="扩展字段2" align="center" prop="extField2" />
@@ -114,8 +115,8 @@
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:plan:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:plan:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:display:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:display:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -128,9 +129,9 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改新产品生产计划对话框 -->
+    <!-- 添加或修改新产品项目文件展示对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="planRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="displayRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="项目编号" prop="projectCode">
            <el-select
               v-model="form.projectCode"
@@ -152,28 +153,41 @@
           <el-input v-model="form.projectName" placeholder="请输入项目名称" />
         </el-form-item> -->
 
-        <el-form-item label="计划开始日期" prop="planDate">
-          <el-date-picker clearable
-            v-model="form.planDate"
-            type="date"
-            value-format="YYYY-MM-DD"
-            placeholder="请选择计划开始日期">
-          </el-date-picker>
+        <el-form-item label="任务单展示文件" prop="taskOrderDisplay">
+          <file-upload v-model="form.taskOrderDisplay"/>
         </el-form-item>
-        <el-form-item label="工作人员" prop="workers">
-          <el-input v-model="form.workers" placeholder="请输入工作人员" />
+        <el-form-item label="技术交底展示文件" prop="techDisclosureDisplay">
+          <file-upload v-model="form.techDisclosureDisplay"/>
         </el-form-item>
-        <el-form-item label="工作场地" prop="workLocation">
-          <el-input v-model="form.workLocation" placeholder="请输入工作场地" />
+        <el-form-item label="BOM展示文件" prop="bomDisplay">
+          <file-upload v-model="form.bomDisplay"/>
         </el-form-item>
-        <el-form-item label="使用设备" prop="equipment">
-          <el-input v-model="form.equipment" placeholder="请输入使用设备" />
+        <el-form-item label="其他提交展示文件" prop="otherSubmissionDisplay">
+          <file-upload v-model="form.otherSubmissionDisplay"/>
         </el-form-item>
-        <el-form-item label="作业内容" prop="workContent">
-          <el-input v-model="form.workContent" placeholder="请输入作业内容" />
+        <el-form-item label="核对展示文件" prop="verificationDisplay">
+          <file-upload v-model="form.verificationDisplay"/>
         </el-form-item>
-        <el-form-item label="安排人" prop="arranger">
-          <el-input v-model="form.arranger" placeholder="请输入安排人" />
+        <el-form-item label="BOM质检结果展示文件" prop="bomInspectionDisplay">
+          <file-upload v-model="form.bomInspectionDisplay"/>
+        </el-form-item>
+        <el-form-item label="生产问题记录展示文件" prop="productionIssueDisplay">
+          <file-upload v-model="form.productionIssueDisplay"/>
+        </el-form-item>
+        <el-form-item label="生产总结展示文件" prop="productionSummaryDisplay">
+          <file-upload v-model="form.productionSummaryDisplay"/>
+        </el-form-item>
+        <el-form-item label="强化试验方案展示文件" prop="enhancementPlanDisplay">
+          <file-upload v-model="form.enhancementPlanDisplay"/>
+        </el-form-item>
+        <el-form-item label="强化试验结果展示文件" prop="enhancementResultDisplay">
+          <file-upload v-model="form.enhancementResultDisplay"/>
+        </el-form-item>
+        <el-form-item label="TR4/TR5总结展示文件" prop="trSummaryDisplay">
+          <file-upload v-model="form.trSummaryDisplay"/>
+        </el-form-item>
+        <el-form-item label="内部上市报告展示文件" prop="launchReportDisplay">
+          <file-upload v-model="form.launchReportDisplay"/>
         </el-form-item>
 
 <!--         <el-form-item label="扩展字段1" prop="extField1">
@@ -197,14 +211,14 @@
   </div>
 </template>
 
-<script setup name="Plan">
-import { listPlan, getPlan, delPlan, addPlan, updatePlan } from "@/api/newproducts/plan";
+<script setup name="Display">
+import { listDisplay, getDisplay, delDisplay, addDisplay, updateDisplay } from "@/api/newproducts/display";
 import { listCreate } from "@/api/newproducts/create";
 
 const { proxy } = getCurrentInstance();
 
 const projectCodeList =ref([]);//项目编号列表
-const planList = ref([]);
+const displayList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
@@ -221,7 +235,6 @@ const data = reactive({
     pageSize: 10,
     projectCode: null,
     projectName: null,
-    resultStatus: null,
     extField1: null,
     extField2: null,
     extField3: null
@@ -230,19 +243,16 @@ const data = reactive({
     projectCode: [
       { required: true, message: "项目编号不能为空", trigger: "blur" }
     ],
-    planDate: [
-      { required: true, message: "计划开始日期不能为空", trigger: "blur" }
-    ],
   }
 });
 
 const { queryParams, form, rules } = toRefs(data);
 
-/** 查询新产品生产计划列表 */
+/** 查询新产品项目文件展示列表 */
 function getList() {
   loading.value = true;
-  listPlan(queryParams.value).then(response => {
-    planList.value = response.rows;
+  listDisplay(queryParams.value).then(response => {
+    displayList.value = response.rows;
     total.value = Number(response.total);
     loading.value = false;
   });
@@ -267,18 +277,23 @@ function reset() {
     id: null,
     projectCode: null,
     projectName: null,
-    planDate: null,
-    workers: null,
-    workLocation: null,
-    equipment: null,
-    workContent: null,
-    arranger: null,
-    resultStatus: null,
+    taskOrderDisplay: null,
+    techDisclosureDisplay: null,
+    bomDisplay: null,
+    otherSubmissionDisplay: null,
+    verificationDisplay: null,
+    bomInspectionDisplay: null,
+    productionIssueDisplay: null,
+    productionSummaryDisplay: null,
+    enhancementPlanDisplay: null,
+    enhancementResultDisplay: null,
+    trSummaryDisplay: null,
+    launchReportDisplay: null,
     extField1: null,
     extField2: null,
     extField3: null
   };
-  proxy.resetForm("planRef");
+  proxy.resetForm("displayRef");
 }
 
 /** 搜索按钮操作 */
@@ -304,32 +319,32 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加新产品生产计划";
+  title.value = "添加新产品项目文件展示";
 }
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
   const _id = row.id || ids.value
-  getPlan(_id).then(response => {
+  getDisplay(_id).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改新产品生产计划";
+    title.value = "修改新产品项目文件展示";
   });
 }
 
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs["planRef"].validate(valid => {
+  proxy.$refs["displayRef"].validate(valid => {
     if (valid) {
       if (form.value.id != null) {
-        updatePlan(form.value).then(response => {
+        updateDisplay(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
           getList();
         });
       } else {
-        addPlan(form.value).then(response => {
+        addDisplay(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
           getList();
@@ -342,8 +357,8 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除新产品生产计划编号为"' + _ids + '"的数据项？').then(function() {
-    return delPlan(_ids);
+  proxy.$modal.confirm('是否确认删除新产品项目文件展示编号为"' + _ids + '"的数据项？').then(function() {
+    return delDisplay(_ids);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
@@ -352,9 +367,9 @@ function handleDelete(row) {
 
 /** 导出按钮操作 */
 function handleExport() {
-  proxy.download('newproducts/plan/export', {
+  proxy.download('newproducts/display/export', {
     ...queryParams.value
-  }, `plan_${new Date().getTime()}.xlsx`)
+  }, `display_${new Date().getTime()}.xlsx`)
 }
 
 getprojectCodeList();

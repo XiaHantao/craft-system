@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.myCode.mapper.NewProductIssueRecordsMapper">
+    
+    <resultMap type="NewProductIssueRecords" id="NewProductIssueRecordsResult">
+        <result property="id"    column="id"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="issueRecordFile"    column="issue_record_file"    />
+        <result property="summaryFile"    column="summary_file"    />
+        <result property="attachmentFiles"    column="attachment_files"    />
+        <result property="extField1"    column="ext_field1"    />
+        <result property="extField2"    column="ext_field2"    />
+        <result property="extField3"    column="ext_field3"    />
+    </resultMap>
+
+    <sql id="selectNewProductIssueRecordsVo">
+        select id, project_code, project_name, issue_record_file, summary_file, attachment_files, ext_field1, ext_field2, ext_field3 from new_product_issue_records
+    </sql>
+
+    <select id="selectNewProductIssueRecordsList" parameterType="NewProductIssueRecords" resultMap="NewProductIssueRecordsResult">
+        <include refid="selectNewProductIssueRecordsVo"/>
+        <where>  
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="extField1 != null  and extField1 != ''"> and ext_field1 = #{extField1}</if>
+            <if test="extField2 != null  and extField2 != ''"> and ext_field2 = #{extField2}</if>
+            <if test="extField3 != null  and extField3 != ''"> and ext_field3 = #{extField3}</if>
+        </where>
+    </select>
+    
+    <select id="selectNewProductIssueRecordsById" parameterType="Long" resultMap="NewProductIssueRecordsResult">
+        <include refid="selectNewProductIssueRecordsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNewProductIssueRecords" parameterType="NewProductIssueRecords" useGeneratedKeys="true" keyProperty="id">
+        insert into new_product_issue_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="issueRecordFile != null">issue_record_file,</if>
+            <if test="summaryFile != null">summary_file,</if>
+            <if test="attachmentFiles != null">attachment_files,</if>
+            <if test="extField1 != null">ext_field1,</if>
+            <if test="extField2 != null">ext_field2,</if>
+            <if test="extField3 != null">ext_field3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">#{projectCode},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="issueRecordFile != null">#{issueRecordFile},</if>
+            <if test="summaryFile != null">#{summaryFile},</if>
+            <if test="attachmentFiles != null">#{attachmentFiles},</if>
+            <if test="extField1 != null">#{extField1},</if>
+            <if test="extField2 != null">#{extField2},</if>
+            <if test="extField3 != null">#{extField3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewProductIssueRecords" parameterType="NewProductIssueRecords">
+        update new_product_issue_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code = #{projectCode},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="issueRecordFile != null">issue_record_file = #{issueRecordFile},</if>
+            <if test="summaryFile != null">summary_file = #{summaryFile},</if>
+            <if test="attachmentFiles != null">attachment_files = #{attachmentFiles},</if>
+            <if test="extField1 != null">ext_field1 = #{extField1},</if>
+            <if test="extField2 != null">ext_field2 = #{extField2},</if>
+            <if test="extField3 != null">ext_field3 = #{extField3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewProductIssueRecordsById" parameterType="Long">
+        delete from new_product_issue_records where id = #{id}
+    </delete>
+
+    <delete id="deleteNewProductIssueRecordsByIds" parameterType="String">
+        delete from new_product_issue_records where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
