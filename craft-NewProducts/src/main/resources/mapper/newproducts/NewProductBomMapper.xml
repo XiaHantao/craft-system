@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.myCode.mapper.NewProductBomMapper">
+
+    <resultMap type="NewProductBom" id="NewProductBomResult">
+        <result property="id"    column="id"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="layer"    column="layer"    />
+        <result property="materialCode"    column="material_code"    />
+        <result property="materialDescription"    column="material_description"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="purchaseType"    column="purchase_type"    />
+        <result property="arrivalStatus"    column="arrival_status"    />
+        <result property="inspectionStatus"    column="inspection_status"    />
+        <result property="inspectionResult"    column="inspection_result"    />
+        <result property="inspectionFile"    column="inspection_file"    />
+        <result property="inspectionSolve"    column="inspection_solve"    />
+        <result property="inspectionRemarks"    column="inspection_remarks"    />
+        <result property="receivingDate"    column="receiving_date"    />
+        <result property="issueRecord"    column="issue_record"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="extField2"    column="ext_field2"    />
+        <result property="extField3"    column="ext_field3"    />
+    </resultMap>
+
+    <sql id="selectNewProductBomVo">
+        select id, project_code, project_name, layer, material_code, material_description, quantity, purchase_type, arrival_status, inspection_status, inspection_result, inspection_file, inspection_solve, inspection_remarks, receiving_date, issue_record, parent_id, ext_field2, ext_field3 from new_product_bom
+    </sql>
+
+    <select id="selectNewProductBomList" parameterType="NewProductBom" resultMap="NewProductBomResult">
+        <include refid="selectNewProductBomVo"/>
+        <where>
+            <if test="projectCode != null  and projectCode != ''"> and project_code like concat('%', #{projectCode}, '%')</if>
+            <if test="materialCode != null  and materialCode != ''"> and material_code like concat('%', #{materialCode}, '%')</if>
+            <!-- 新增问题记录筛选条件 -->
+            <if test="issueRecordFilter != null and issueRecordFilter">
+                and issue_record is not null and issue_record != ''
+            </if>
+        </where>
+    </select>
+
+    <select id="selectNewProductBomById" parameterType="Long" resultMap="NewProductBomResult">
+        <include refid="selectNewProductBomVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertNewProductBom" parameterType="NewProductBom" useGeneratedKeys="true" keyProperty="id">
+        insert into new_product_bom
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="layer != null">layer,</if>
+            <if test="materialCode != null">material_code,</if>
+            <if test="materialDescription != null">material_description,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="purchaseType != null">purchase_type,</if>
+            <if test="arrivalStatus != null">arrival_status,</if>
+            <if test="inspectionStatus != null">inspection_status,</if>
+            <if test="inspectionResult != null">inspection_result,</if>
+            <if test="inspectionFile != null">inspection_file,</if>
+            <if test="inspectionSolve != null">inspection_solve,</if>
+            <if test="inspectionRemarks != null">inspection_remarks,</if>
+            <if test="receivingDate != null">receiving_date,</if>
+            <if test="issueRecord != null">issue_record,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="extField2 != null">ext_field2,</if>
+            <if test="extField3 != null">ext_field3,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">#{projectCode},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="layer != null">#{layer},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="materialDescription != null">#{materialDescription},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="purchaseType != null">#{purchaseType},</if>
+            <if test="arrivalStatus != null">#{arrivalStatus},</if>
+            <if test="inspectionStatus != null">#{inspectionStatus},</if>
+            <if test="inspectionResult != null">#{inspectionResult},</if>
+            <if test="inspectionFile != null">#{inspectionFile},</if>
+            <if test="inspectionSolve != null">#{inspectionSolve},</if>
+            <if test="inspectionRemarks != null">#{inspectionRemarks},</if>
+            <if test="receivingDate != null">#{receivingDate},</if>
+            <if test="issueRecord != null">#{issueRecord},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="extField2 != null">#{extField2},</if>
+            <if test="extField3 != null">#{extField3},</if>
+        </trim>
+    </insert>
+
+    <update id="updateNewProductBom" parameterType="NewProductBom">
+        update new_product_bom
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code = #{projectCode},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="layer != null">layer = #{layer},</if>
+            <if test="materialCode != null">material_code = #{materialCode},</if>
+            <if test="materialDescription != null">material_description = #{materialDescription},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="purchaseType != null">purchase_type = #{purchaseType},</if>
+            <if test="arrivalStatus != null">arrival_status = #{arrivalStatus},</if>
+            <if test="inspectionStatus != null">inspection_status = #{inspectionStatus},</if>
+            <if test="inspectionResult != null">inspection_result = #{inspectionResult},</if>
+            <if test="inspectionFile != null">inspection_file = #{inspectionFile},</if>
+            <if test="inspectionSolve != null">inspection_solve = #{inspectionSolve},</if>
+            <if test="inspectionRemarks != null">inspection_remarks = #{inspectionRemarks},</if>
+            <if test="receivingDate != null">receiving_date = #{receivingDate},</if>
+            <if test="issueRecord != null">issue_record = #{issueRecord},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="extField2 != null">ext_field2 = #{extField2},</if>
+            <if test="extField3 != null">ext_field3 = #{extField3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewProductBomById" parameterType="Long">
+        delete from new_product_bom where id = #{id}
+    </delete>
+
+    <delete id="deleteNewProductBomByIds" parameterType="String">
+        delete from new_product_bom where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!-- 批量插入新产品BOM -->
+    <insert id="batchInsertNewProductBom" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO new_product_bom (
+        project_code,
+        project_name,
+        layer,
+        material_code,
+        material_description,
+        quantity,
+        purchase_type,
+        arrival_status,
+        inspection_status,
+        inspection_result,
+        inspection_file,
+        inspection_remarks,
+        receiving_date,
+        issue_record,
+        parent_id,
+        ext_field1,
+        ext_field2,
+        ext_field3
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.projectCode},
+            #{item.projectName},
+            #{item.layer},
+            #{item.materialCode},
+            #{item.materialDescription},
+            #{item.quantity},
+            #{item.purchaseType},
+            #{item.arrivalStatus},
+            #{item.inspectionStatus},
+            #{item.inspectionResult},
+            #{item.inspectionFile},
+            #{item.inspectionRemarks},
+            #{item.receivingDate},
+            #{item.issueRecord},
+            #{item.parentId},
+            #{item.extField1},
+            #{item.extField2},
+            #{item.extField3}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 检查项目数据是否存在 -->
+    <select id="checkDataExists" parameterType="String" resultType="int">
+        SELECT COUNT(1)
+        FROM new_product_bom
+        WHERE project_code = #{projectCode}
+    </select>
+
+    <!-- 清空项目下的所有数据 -->
+    <delete id="cleanProjectData" parameterType="String">
+        DELETE
+        FROM new_product_bom
+        WHERE project_code = #{projectCode}
+    </delete>
+
+    <!-- 批量更新父节点ID -->
+    <update id="batchUpdateParentId" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            UPDATE new_product_bom
+            SET parent_id = #{item.parentId}
+            WHERE id = #{item.id}
+        </foreach>
+    </update>
+</mapper>

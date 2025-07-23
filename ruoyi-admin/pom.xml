@@ -68,6 +68,8 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
+
+        <!-- 市场模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>craftsystem-marketanalysis</artifactId>
