@@ -68,7 +68,15 @@ public class NewProductBomServiceImpl implements INewProductBomService
     @Override
     public int updateNewProductBom(NewProductBom newProductBom)
     {
-        return newProductBomMapper.updateNewProductBom(newProductBom);
+        int Bomresult = newProductBomMapper.updateNewProductBom(newProductBom);
+        //如果修改成功，继续修改 NewproductDocumentDisplay
+        if(Bomresult > 0) {
+            int Displayresult = newProductBomMapper.updateNewproductDocumentDisplay(newProductBom);
+            if(Displayresult > 0){
+                return Displayresult;
+            }
+        }
+        return 0;
     }
 
     /**

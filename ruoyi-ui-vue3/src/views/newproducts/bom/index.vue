@@ -41,12 +41,12 @@
     </el-row>
 
     <el-table v-if="refreshTable" v-loading="loading" :data="bomList" row-key="id" :default-expand-all="isExpandAll"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="600px">
 
       <el-table-column label="项目编号" prop="projectCode" />
 
       <!-- <el-table-column label="项目名称" align="center" prop="projectName" /> -->
-      <!-- <el-table-column label="层" align="center" prop="layer" /> -->
+      <el-table-column label="层级" align="center" prop="layer" />
       <el-table-column label="物料编号" align="center" prop="materialCode" />
       <el-table-column label="物料描述" align="center" prop="materialDescription" />
       <el-table-column label="数量" align="center" prop="quantity" />
@@ -102,6 +102,13 @@
         </template>
       </el-table-column>
       <el-table-column label="质检处理备注" align="center" prop="inspectionRemarks" />
+      <el-table-column label="领用记录" align="center" prop="extField2" >
+        <template #default="scope">
+          <el-tag v-if="scope.row.extField2" :type="scope.row.inspectionSolve === '未处理' ? 'danger' : 'success'">
+            {{ scope.row.extField2 }}
+          </el-tag>
+        </template>        
+      </el-table-column>
       <el-table-column label="领用日期" align="center" prop="receivingDate" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.receivingDate, '{y}-{m}-{d}') }}</span>
@@ -109,7 +116,7 @@
       </el-table-column>
       <el-table-column label="问题记录" align="center" prop="issueRecord" />
       <!-- <el-table-column label="父级ID" align="center" prop="parentId" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right"  width="200">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
             v-hasPermi="['newproducts:bom:edit']">修改</el-button>
@@ -139,9 +146,9 @@
             :props="{ value: 'id', label: 'materialCode', children: 'children' }" value-key="id" placeholder="请选择父级ID"
             check-strictly />
         </el-form-item>
-        <!-- <el-form-item label="层" prop="layer">
+        <el-form-item label="层" prop="layer">
           <el-input v-model="form.layer" placeholder="请输入层" />
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item label="物料编号" prop="materialCode">
           <el-input v-model="form.materialCode" placeholder="请输入物料编号" />
         </el-form-item>
@@ -189,6 +196,9 @@
         </el-form-item>
         <el-form-item label="质检处理备注" prop="inspectionRemarks">
           <el-input v-model="form.inspectionRemarks" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="领用记录" prop="extField2">
+          <el-input v-model="form.extField2" placeholder="请输入是否领用" />
         </el-form-item>
         <el-form-item label="领用日期" prop="receivingDate">
           <el-date-picker clearable v-model="form.receivingDate" type="date" value-format="YYYY-MM-DD"
@@ -377,10 +387,12 @@ const showSearch = ref(true);
 const title = ref("");
 const isExpandAll = ref(true);
 const refreshTable = ref(true);
+
 // 新增下载相关状态
 const downloadSelectVisible = ref(false);
 const downloadableFiles = ref([]);
 const selectedDownloadFiles = ref([]);
+
 const data = reactive({
   form: {},
   queryParams: {
@@ -415,7 +427,7 @@ function getList() {
 function getTreeselect() {
   listBom().then(response => {
     bomOptions.value = [];
-    const data = { id: 0, materialCode: '顶级节点', children: [] };
+    const data = { id: 0, materialCode: '根节点', children: [] };
     data.children = proxy.handleTree(response.data, "id", "parentId");
     bomOptions.value.push(data);
   });

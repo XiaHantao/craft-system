@@ -43,6 +43,7 @@ public interface INewProductCompletionService
      */
     public int updateNewProductCompletion(NewProductCompletion newProductCompletion);
 
+
     /**
      * 批量删除新产品生产完成
      * 

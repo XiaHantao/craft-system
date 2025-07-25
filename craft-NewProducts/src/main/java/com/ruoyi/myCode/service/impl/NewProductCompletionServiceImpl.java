@@ -64,7 +64,15 @@ public class NewProductCompletionServiceImpl implements INewProductCompletionSer
     @Override
     public int updateNewProductCompletion(NewProductCompletion newProductCompletion)
     {
-        return newProductCompletionMapper.updateNewProductCompletion(newProductCompletion);
+        int Completionresult = newProductCompletionMapper.updateNewProductCompletion(newProductCompletion);
+        //如果修改成功，继续修改 NewproductDocumentDisplay
+        if(Completionresult > 0) {
+            int Displayresult = newProductCompletionMapper.updateNewproductDocumentDisplay(newProductCompletion);
+            if(Displayresult > 0){
+                return Displayresult;
+            }
+        }
+        return 0;
     }
 
     /**

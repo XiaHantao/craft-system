@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="108px">
       <el-form-item label="项目编号" prop="projectCode">
         <el-input
           v-model="queryParams.projectCode"
@@ -9,7 +9,50 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-
+<el-form-item label="计划开始日期" prop="planDate">
+        <el-date-picker clearable
+          v-model="queryParams.planDate"
+          type="date"
+          value-format="YYYY-MM-DD"
+          placeholder="请选择计划开始日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="工作人员" prop="workers">
+        <el-input
+          v-model="queryParams.workers"
+          placeholder="请输入工作人员"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="工作场地" prop="workLocation">
+        <el-input
+          v-model="queryParams.workLocation"
+          placeholder="请输入工作场地"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="安排人" prop="arranger">
+        <el-input
+          v-model="queryParams.arranger"
+          placeholder="请输入安排人"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="完成结果" prop="resultStatus">
+        <el-select
+           v-model="queryParams.resultStatus"
+          placeholder="请选择完成结果"
+          clearable
+          @change="handleQuery"
+          style="width: 200px"
+        >
+          <el-option label="完成" value="完成" />
+          <el-option label="未完成" value="未完成" />
+        </el-select>     
+      </el-form-item> 
 <!--       <el-form-item label="项目名称" prop="projectName">
         <el-input
           v-model="queryParams.projectName"
@@ -106,7 +149,13 @@
       <el-table-column label="使用设备" align="center" prop="equipment" />
       <el-table-column label="作业内容" align="center" prop="workContent" />
       <el-table-column label="安排人" align="center" prop="arranger" />
-      <el-table-column label="完成结果" align="center" prop="resultStatus" />
+      <el-table-column label="完成结果" align="center" prop="resultStatus" >
+        <template #default="scope">
+          <el-tag :type="scope.row.resultStatus === '完成' ? 'success' : 'danger'" >
+            {{ scope.row.resultStatus }}
+          </el-tag>
+        </template>        
+      </el-table-column>
 
 <!--       <el-table-column label="扩展字段1" align="center" prop="extField1" />
       <el-table-column label="扩展字段2" align="center" prop="extField2" />
@@ -116,6 +165,7 @@
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:plan:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:plan:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="ResultStatus(scope.row)" v-hasPermi="['newproducts:plan:edit']">完成结果</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -170,7 +220,7 @@
           <el-input v-model="form.equipment" placeholder="请输入使用设备" />
         </el-form-item>
         <el-form-item label="作业内容" prop="workContent">
-          <el-input v-model="form.workContent" placeholder="请输入作业内容" />
+          <el-input v-model="form.workContent" type="textarea" placeholder="请输入作业内容" />
         </el-form-item>
         <el-form-item label="安排人" prop="arranger">
           <el-input v-model="form.arranger" placeholder="请输入安排人" />
@@ -194,6 +244,25 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 计划完成结果对话框 -->
+    <el-dialog :title="title" v-model="openResultStatus" width="500px" append-to-body>
+      <el-form ref="planRef" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="核对状态" prop="resultStatus">
+            <el-radio-group v-model="form.resultStatus">
+            <el-radio label="完成" /> 
+            <el-radio label="未完成" /> 
+            </el-radio-group>
+        </el-form-item>       
+     </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>  
+
   </div>
 </template>
 
@@ -206,6 +275,7 @@ const { proxy } = getCurrentInstance();
 const projectCodeList =ref([]);//项目编号列表
 const planList = ref([]);
 const open = ref(false);
+const openResultStatus = ref(false);//计划完成结果对话框
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
@@ -258,6 +328,7 @@ function getprojectCodeList () {
 // 取消按钮
 function cancel() {
   open.value = false;
+  openResultStatus.value = false;
   reset();
 }
 
@@ -307,6 +378,14 @@ function handleAdd() {
   title.value = "添加新产品生产计划";
 }
 
+//计划完成结果按钮
+function ResultStatus(row) {
+  reset();
+  openResultStatus.value = true;
+  title.value = "计划完成结果";
+  form.value.id = row.id;  console.log(form.value.id);
+}
+
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
@@ -326,12 +405,15 @@ function submitForm() {
         updatePlan(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
+          openResultStatus.value = false;
           getList();
         });
       } else {
+        form.value.resultStatus = "未完成";        
         addPlan(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
+          openResultStatus.value = false;
           getList();
         });
       }
@@ -342,7 +424,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除新产品生产计划编号为"' + _ids + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除？').then(function() {
     return delPlan(_ids);
   }).then(() => {
     getList();

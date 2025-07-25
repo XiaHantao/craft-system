@@ -96,9 +96,24 @@
       <!-- <el-table-column label="主键" align="center" prop="id" /> -->
       <el-table-column label="项目编号" align="center" prop="projectCode" />
       <!-- <el-table-column label="项目名称" align="center" prop="projectName" /> -->
-      <el-table-column label="问题记录文件" align="center" prop="issueRecordFile" />
-      <el-table-column label="总结文件" align="center" prop="summaryFile" />
-      <el-table-column label="其他附件文件" align="center" prop="attachmentFiles" />
+      <el-table-column label="问题记录文件" align="center" prop="issueRecordFile" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.issueRecordFile" icon="Download" @click="downloadFiles(scope.row.issueRecordFile)">
+          </el-button>
+        </template>        
+      </el-table-column>
+      <el-table-column label="总结文件" align="center" prop="summaryFile" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.summaryFile" icon="Download" @click="downloadFiles(scope.row.summaryFile)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="其他附件文件" align="center" prop="attachmentFiles" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.attachmentFiles" icon="Download" @click="downloadFiles(scope.row.attachmentFiles)">
+          </el-button>
+        </template>
+      </el-table-column> -->
 
 <!--       <el-table-column label="扩展字段1" align="center" prop="extField1" />
       <el-table-column label="扩展字段2" align="center" prop="extField2" />
@@ -106,7 +121,7 @@
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:records:edit']">修改</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:records:edit']">上传文件</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:records:remove']">删除</el-button>
         </template>
       </el-table-column>
@@ -123,7 +138,7 @@
     <!-- 添加或修改新产品生产问题记录对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="recordsRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="项目编号" prop="projectCode">
+        <!-- <el-form-item label="项目编号" prop="projectCode">
            <el-select
               v-model="form.projectCode"
               aria-placeholder="请选择项目编号！"
@@ -138,7 +153,7 @@
                 :value="model.projectCode"
             ></el-option>
            </el-select>
-        </el-form-item>
+        </el-form-item> -->
 
 <!--         <el-form-item label="项目名称" prop="projectName">
           <el-input v-model="form.projectName" placeholder="请输入项目名称" />
@@ -150,9 +165,9 @@
         <el-form-item label="总结文件" prop="summaryFile">
           <file-upload v-model="form.summaryFile"/>
         </el-form-item>
-        <el-form-item label="其他附件文件" prop="attachmentFiles">
+        <!-- <el-form-item label="其他附件文件" prop="attachmentFiles">
           <file-upload v-model="form.attachmentFiles"/>
-        </el-form-item>
+        </el-form-item> -->
 
 <!--         <el-form-item label="扩展字段1" prop="extField1">
           <el-input v-model="form.extField1" placeholder="请输入扩展字段1" />
@@ -172,6 +187,35 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 新增对话框 -->
+    <el-dialog :title="title" v-model="openAdd" width="500px" append-to-body>
+      <el-form ref="recordsRef" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="项目编号" prop="projectCode">
+           <el-select
+              v-model="form.projectCode"
+              aria-placeholder="请选择项目编号！"
+              clearable
+              filterable
+              @keyup.enter="handleQuery"
+           >
+            <el-option
+                v-for="model in projectCodeList"
+                :key="model.projectCode"
+                :label="model.projectCode"
+                :value="model.projectCode"
+            ></el-option>
+           </el-select>
+        </el-form-item>       
+     </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog> 
+
   </div>
 </template>
 
@@ -184,6 +228,7 @@ const { proxy } = getCurrentInstance();
 const projectCodeList =ref([]);//项目编号列表
 const recordsList = ref([]);
 const open = ref(false);
+const openAdd = ref(false);//新增对话框
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
@@ -230,9 +275,41 @@ function getprojectCodeList () {
 }
 
 
+/** 多文件下载 */
+const formatFileUrl = (url) => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_API;
+  if (url.startsWith('http')) return url;
+  return `${baseUrl}/${url}`;
+};
+//文件下载
+function downloadFiles(urls) {
+  // 统一处理输入为数组
+  if (typeof urls === 'string') {
+    urls = decodeURIComponent(urls).split(',').map(url => url.trim());
+  }
+  
+  // 确保是数组格式
+  if (!Array.isArray(urls)) {
+    console.error('urls 必须是数组或逗号分隔的字符串');
+    return;
+  }
+
+  // 遍历下载每个文件
+  urls.forEach(url => {
+    const formattedUrl = formatFileUrl(url);
+    const link = document.createElement('a');
+    link.href = formattedUrl;
+    link.download = decodeURIComponent(url.split('/').pop());
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+}
+
 // 取消按钮
 function cancel() {
   open.value = false;
+  openAdd.value = false;
   reset();
 }
 
@@ -274,7 +351,7 @@ function handleSelectionChange(selection) {
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
-  open.value = true;
+  openAdd.value = true;
   title.value = "添加新产品生产问题记录";
 }
 
@@ -297,12 +374,14 @@ function submitForm() {
         updateRecords(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
+          openAdd.value = false;
           getList();
         });
       } else {
         addRecords(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
+          openAdd.value = falsel;
           getList();
         });
       }
@@ -313,7 +392,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除新产品生产问题记录编号为"' + _ids + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除？').then(function() {
     return delRecords(_ids);
   }).then(() => {
     getList();

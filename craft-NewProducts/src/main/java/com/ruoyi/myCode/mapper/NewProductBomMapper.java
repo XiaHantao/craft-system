@@ -42,6 +42,7 @@ public interface NewProductBomMapper
      * @return 结果
      */
     public int updateNewProductBom(NewProductBom newProductBom);
+    public int updateNewproductDocumentDisplay(NewProductBom newProductBom);
 
     /**
      * 删除新产品BOM

@@ -96,10 +96,30 @@
       <!-- <el-table-column label="主键" align="center" prop="id" /> -->
       <el-table-column label="项目编号" align="center" prop="projectCode" />
       <!-- <el-table-column label="项目名称" align="center" prop="projectName" /> -->
-      <el-table-column label="强化试验方案文件" align="center" prop="enhancementTestPlan" />
-      <el-table-column label="强化试验结果文件" align="center" prop="enhancementTestResult" />
-      <el-table-column label="TR4/TR5总结文件" align="center" prop="tr4Tr5Summary" />
-      <el-table-column label="内部上市报告文件" align="center" prop="internalLaunchReport" />
+      <el-table-column label="强化试验方案文件" align="center" prop="enhancementTestPlan" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.enhancementTestPlan" icon="Download" @click="downloadFiles(scope.row.enhancementTestPlan)">
+          </el-button>
+        </template>        
+      </el-table-column>
+      <el-table-column label="强化试验结果文件" align="center" prop="enhancementTestResult" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.enhancementTestResult" icon="Download" @click="downloadFiles(scope.row.enhancementTestResult)">
+          </el-button>
+        </template>        
+      </el-table-column>
+      <el-table-column label="TR4/TR5总结文件" align="center" prop="tr4Tr5Summary" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.tr4Tr5Summary" icon="Download" @click="downloadFiles(scope.row.tr4Tr5Summary)">
+          </el-button>
+        </template>      
+      </el-table-column>
+      <el-table-column label="内部上市报告文件" align="center" prop="internalLaunchReport" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.internalLaunchReport" icon="Download" @click="downloadFiles(scope.row.internalLaunchReport)">
+          </el-button>
+        </template>        
+      </el-table-column>
 
 <!--       <el-table-column label="扩展字段1" align="center" prop="extField1" />
       <el-table-column label="扩展字段2" align="center" prop="extField2" />
@@ -109,6 +129,8 @@
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:completion:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:completion:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="TechnicalDocuments(scope.row)" v-hasPermi="['newproducts:completion:technical']">技术文件</el-button>
+          <el-button link type="primary" icon="Edit" @click="ProductionDocuments(scope.row)" v-hasPermi="['newproducts:completion:production']">生产文件</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -145,7 +167,7 @@
           <el-input v-model="form.projectName" placeholder="请输入项目名称" />
         </el-form-item> -->
 
-        <el-form-item label="强化试验方案文件" prop="enhancementTestPlan">
+<!--         <el-form-item label="强化试验方案文件" prop="enhancementTestPlan">
           <file-upload v-model="form.enhancementTestPlan"/>
         </el-form-item>
         <el-form-item label="强化试验结果文件" prop="enhancementTestResult">
@@ -156,7 +178,7 @@
         </el-form-item>
         <el-form-item label="内部上市报告文件" prop="internalLaunchReport">
           <file-upload v-model="form.internalLaunchReport"/>
-        </el-form-item>
+        </el-form-item> -->
 
 <!--         <el-form-item label="扩展字段1" prop="extField1">
           <el-input v-model="form.extField1" placeholder="请输入扩展字段1" />
@@ -176,18 +198,60 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 技术科上传文件对话框 -->
+    <el-dialog :title="title" v-model="opentechnicalDocuments" width="500px" append-to-body>
+      <el-form ref="completionRef" :model="form" :rules="rules" label-width="80px">
+
+        <el-form-item label="强化试验方案文件" prop="enhancementTestPlan">
+          <file-upload v-model="form.enhancementTestPlan"/>
+        </el-form-item>
+        <el-form-item label="TR4/TR5总结文件" prop="tr4Tr5Summary">
+          <file-upload v-model="form.tr4Tr5Summary"/>
+        </el-form-item>
+        <el-form-item label="内部上市报告文件" prop="internalLaunchReport">
+          <file-upload v-model="form.internalLaunchReport"/>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <!-- 生产科上传文件对话框 -->
+    <el-dialog :title="title" v-model="openproductionDocuments" width="500px" append-to-body>
+      <el-form ref="completionRef" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="强化试验结果文件" prop="enhancementTestResult">
+          <file-upload v-model="form.enhancementTestResult"/>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+
   </div>
 </template>
 
 <script setup name="Completion">
 import { listCompletion, getCompletion, delCompletion, addCompletion, updateCompletion } from "@/api/newproducts/completion";
 import { listCreate } from "@/api/newproducts/create";
+import { ref } from "vue";
 
 const { proxy } = getCurrentInstance();
 
 const projectCodeList =ref([]);//项目编号列表
 const completionList = ref([]);
 const open = ref(false);
+const opentechnicalDocuments = ref(false);//技术文件上传对话框
+const openproductionDocuments = ref(false);//生产文件上传对话框
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
@@ -233,9 +297,44 @@ function getprojectCodeList () {
   });
 }
 
+/** 多文件下载 */
+const formatFileUrl = (url) => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_API;
+  if (url.startsWith('http')) return url;
+  return `${baseUrl}/${url}`;
+};
+//文件下载
+function downloadFiles(urls) {
+  // 统一处理输入为数组
+  if (typeof urls === 'string') {
+    urls = decodeURIComponent(urls).split(',').map(url => url.trim());
+  }
+  
+  // 确保是数组格式
+  if (!Array.isArray(urls)) {
+    console.error('urls 必须是数组或逗号分隔的字符串');
+    return;
+  }
+
+  // 遍历下载每个文件
+  urls.forEach(url => {
+    const formattedUrl = formatFileUrl(url);
+    const link = document.createElement('a');
+    link.href = formattedUrl;
+    link.download = decodeURIComponent(url.split('/').pop());
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+}
+
+
+
 // 取消按钮
 function cancel() {
   open.value = false;
+  opentechnicalDocuments.value = false;
+  openproductionDocuments.value = false;
   reset();
 }
 
@@ -282,6 +381,22 @@ function handleAdd() {
   title.value = "添加新产品生产完成";
 }
 
+/** 技术文件按钮操作 */
+function TechnicalDocuments(row) {
+  reset();
+  opentechnicalDocuments.value = true;
+  title.value = "技术科上传文件";
+  form.value = row;
+}
+
+/** 生产文件按钮操作 */
+function ProductionDocuments(row) {
+  reset();
+  openproductionDocuments.value = true;
+  title.value = "生产科上传文件";
+  form.value = row;
+}
+
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
@@ -301,12 +416,16 @@ function submitForm() {
         updateCompletion(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
+          opentechnicalDocuments.value = false;
+          openproductionDocuments.value = false;
           getList();
         });
       } else {
         addCompletion(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
+          opentechnicalDocuments.value = false;
+          openproductionDocuments.value = false;
           getList();
         });
       }

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="88px">
       <el-form-item label="项目编号" prop="projectCode">
         <el-input
           v-model="queryParams.projectCode"
@@ -9,7 +9,46 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-
+      <el-form-item label="项目负责人" prop="projectLeader">
+        <el-input
+          v-model="queryParams.projectLeader"
+          placeholder="请输入项目负责人"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="产品系列" prop="productSeries">
+        <el-input
+          v-model="queryParams.productSeries"
+          placeholder="请输入产品系列"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="吨位" prop="tonnage">
+        <el-input
+          v-model="queryParams.tonnage"
+          placeholder="请输入吨位"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="车型" prop="vehicleModel">
+        <el-input
+          v-model="queryParams.vehicleModel"
+          placeholder="请输入车型"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="创建日期" prop="createDate">
+        <el-date-picker clearable
+          v-model="queryParams.createDate"
+          type="date"
+          value-format="YYYY-MM-DD"
+          placeholder="请选择创建日期">
+        </el-date-picker>
+      </el-form-item>
 <!--       <el-form-item label="项目名称" prop="projectName">
         <el-input
           v-model="queryParams.projectName"
@@ -325,7 +364,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除新产品信息编号为"' + _ids + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除？').then(function() {
     return delCreate(_ids);
   }).then(() => {
     getList();

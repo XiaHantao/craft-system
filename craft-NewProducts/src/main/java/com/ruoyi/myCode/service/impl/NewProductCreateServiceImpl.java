@@ -7,6 +7,8 @@ import com.ruoyi.myCode.mapper.NewProductCreateMapper;
 import com.ruoyi.myCode.domain.NewProductCreate;
 import com.ruoyi.myCode.service.INewProductCreateService;
 
+import javax.annotation.Resource;
+
 /**
  * 新产品信息Service业务层处理
  * 
@@ -16,7 +18,7 @@ import com.ruoyi.myCode.service.INewProductCreateService;
 @Service
 public class NewProductCreateServiceImpl implements INewProductCreateService 
 {
-    @Autowired
+    @Resource
     private NewProductCreateMapper newProductCreateMapper;
 
     /**
@@ -52,7 +54,14 @@ public class NewProductCreateServiceImpl implements INewProductCreateService
     @Override
     public int insertNewProductCreate(NewProductCreate newProductCreate)
     {
-        return newProductCreateMapper.insertNewProductCreate(newProductCreate);
+        int result = newProductCreateMapper.insertNewProductCreate(newProductCreate);
+
+        // 如果插入成功，继续插入 NewproductDocumentDisplay
+        if (result > 0) {
+            result = newProductCreateMapper.insertNewproductDocumentDisplay(newProductCreate);
+        }
+
+        return result;
     }
 
     /**
@@ -64,7 +73,15 @@ public class NewProductCreateServiceImpl implements INewProductCreateService
     @Override
     public int updateNewProductCreate(NewProductCreate newProductCreate)
     {
-        return newProductCreateMapper.updateNewProductCreate(newProductCreate);
+        int Createresult = newProductCreateMapper.updateNewProductCreate(newProductCreate);
+        //如果修改成功，继续修改 NewproductDocumentDisplay
+        if(Createresult > 0) {
+            int Displayresult = newProductCreateMapper.updateNewproductDocumentDisplay(newProductCreate);
+            if(Displayresult > 0){
+                return Displayresult;
+            }
+        }
+        return 0;
     }
 
     /**
@@ -76,7 +93,13 @@ public class NewProductCreateServiceImpl implements INewProductCreateService
     @Override
     public int deleteNewProductCreateByIds(Long[] ids)
     {
-        return newProductCreateMapper.deleteNewProductCreateByIds(ids);
+        int result = newProductCreateMapper.deleteNewProductCreateByIds(ids);
+        if (result > 0) {
+            for (Long id : ids) {
+                newProductCreateMapper.deleteNewproductNewproductDocumentDisplayById(id);//同时删除NewproductDocumentDisplay表数据
+            }
+        }
+        return result;
     }
 
     /**

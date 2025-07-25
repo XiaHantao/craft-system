@@ -49,7 +49,7 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
+    <!-- <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
           type="primary"
@@ -89,36 +89,96 @@
         >导出</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
+    </el-row> -->
 
     <el-table v-loading="loading" :data="displayList" @selection-change="handleSelectionChange" height="500px">
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="主键" align="center" prop="id" /> -->
       <el-table-column label="项目编号" align="center" prop="projectCode" />
       <!-- <el-table-column label="项目名称" align="center" prop="projectName" /> -->
-      <el-table-column label="任务单展示文件" align="center" prop="taskOrderDisplay" />
-      <el-table-column label="技术交底展示文件" align="center" prop="techDisclosureDisplay" />
-      <el-table-column label="BOM展示文件" align="center" prop="bomDisplay" />
-      <el-table-column label="其他提交展示文件" align="center" prop="otherSubmissionDisplay" />
-      <el-table-column label="核对展示文件" align="center" prop="verificationDisplay" />
-      <el-table-column label="BOM质检结果展示文件" align="center" prop="bomInspectionDisplay" />
-      <el-table-column label="生产问题记录展示文件" align="center" prop="productionIssueDisplay" />
-      <el-table-column label="生产总结展示文件" align="center" prop="productionSummaryDisplay" />
-      <el-table-column label="强化试验方案展示文件" align="center" prop="enhancementPlanDisplay" />
-      <el-table-column label="强化试验结果展示文件" align="center" prop="enhancementResultDisplay" />
-      <el-table-column label="TR4/TR5总结展示文件" align="center" prop="trSummaryDisplay" />
-      <el-table-column label="内部上市报告展示文件" align="center" prop="launchReportDisplay" />
+      <el-table-column label="任务单展示文件" align="center" prop="taskOrderDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.taskOrderDisplay" icon="Download" @click="downloadFiles(scope.row.taskOrderDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="技术交底展示文件" align="center" prop="techDisclosureDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.techDisclosureDisplay" icon="Download" @click="downloadFiles(scope.row.techDisclosureDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="BOM展示文件" align="center" prop="bomDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.bomDisplay" icon="Download" @click="downloadFiles(scope.row.bomDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="其他提交展示文件" align="center" prop="otherSubmissionDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.otherSubmissionDisplay" icon="Download" @click="downloadFiles(scope.row.otherSubmissionDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="核对展示文件" align="center" prop="verificationDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.verificationDisplay" icon="Download" @click="downloadFiles(scope.row.verificationDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="BOM质检结果展示文件" align="center" prop="bomInspectionDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.bomInspectionDisplay" icon="Download" @click="downloadFiles(scope.row.bomInspectionDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="生产问题记录展示文件" align="center" prop="productionIssueDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.productionIssueDisplay" icon="Download" @click="downloadFiles(scope.row.productionIssueDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="生产总结展示文件" align="center" prop="productionSummaryDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.productionSummaryDisplay" icon="Download" @click="downloadFiles(scope.row.productionSummaryDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="强化试验方案展示文件" align="center" prop="enhancementPlanDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.enhancementPlanDisplay" icon="Download" @click="downloadFiles(scope.row.enhancementPlanDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="强化试验结果展示文件" align="center" prop="enhancementResultDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.enhancementResultDisplay" icon="Download" @click="downloadFiles(scope.row.enhancementResultDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="TR4/TR5总结展示文件" align="center" prop="trSummaryDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.trSummaryDisplay" icon="Download" @click="downloadFiles(scope.row.trSummaryDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="内部上市报告展示文件" align="center" prop="launchReportDisplay" >
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.launchReportDisplay" icon="Download" @click="downloadFiles(scope.row.launchReportDisplay)">
+          </el-button>
+        </template>
+      </el-table-column>
 
 <!--       <el-table-column label="扩展字段1" align="center" prop="extField1" />
       <el-table-column label="扩展字段2" align="center" prop="extField2" />
       <el-table-column label="扩展字段3" align="center" prop="extField3" /> -->
 
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+<!--       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:display:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:display:remove']">删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     
     <pagination
@@ -208,6 +268,27 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 新增文件选择下载对话框 -->
+    <el-dialog v-model="downloadSelectVisible" title="选择下载文件" width="500px">
+      <el-scrollbar height="300px">
+        <el-checkbox-group v-model="selectedDownloadFiles" class="file-select-group">
+          <el-checkbox v-for="(file, index) in downloadableFiles" :key="index" :label="file.fullUrl" class="file-item">
+            <div class="file-info">
+              <el-icon class="file-type-icon">
+                <component :is="getFileIcon(file.fullUrl)" />
+              </el-icon>
+              <span class="file-name">{{ file.displayName }}</span>
+            </div>
+          </el-checkbox>
+        </el-checkbox-group>
+      </el-scrollbar>
+      <template #footer>
+        <el-button @click="downloadSelectVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmDownload">下载选中文件</el-button>
+      </template>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -227,6 +308,11 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
+
+// 新增下载相关状态
+const downloadSelectVisible = ref(false);
+const downloadableFiles = ref([]);
+const selectedDownloadFiles = ref([]);
 
 const data = reactive({
   form: {},
@@ -371,6 +457,84 @@ function handleExport() {
     ...queryParams.value
   }, `display_${new Date().getTime()}.xlsx`)
 }
+
+// 文件下载方法 - 多文件支持
+const downloadFiles = (urls) => {
+  const files = parseFileUrls(urls);
+  // 多个文件显示选择框
+  showDownloadSelection(files);
+};
+
+// 显示下载选择对话框
+const showDownloadSelection = (files) => {
+  downloadableFiles.value = files.map(file => ({
+    fullUrl: file,
+    displayName: getFileNameForDisplay(file)
+  }));
+  selectedDownloadFiles.value = []; // 清空选中状态
+  downloadSelectVisible.value = true;
+};
+
+// 获取显示文件名（完整文件名）
+const getFileNameForDisplay = (url) => {
+  const decodedUrl = decodeURIComponent(url);
+  return decodedUrl.split('/').pop(); // 只显示文件名部分
+};
+
+// 确认下载
+const confirmDownload = () => {
+  if (selectedDownloadFiles.value.length === 0) {
+    proxy.$modal.msgError('请至少选择一个文件');
+    return;
+  }
+  handleDirectDownload(selectedDownloadFiles.value);
+  downloadSelectVisible.value = false;
+};
+
+// 直接下载处理
+const handleDirectDownload = (urls) => {
+  urls.forEach(url => {
+    const fullUrl = formatFileUrl(url);
+    const link = document.createElement('a');
+    link.href = fullUrl;
+    link.download = getFileNameForDisplay(url);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+};
+
+// 格式化文件URL（添加基础路径）
+const formatFileUrl = (url) => {
+  if (url.startsWith('http')) return url;
+  const baseUrl = import.meta.env.VITE_APP_BASE_API;
+  return `${baseUrl}/${url}`;
+};
+
+// 解析文件URL（处理逗号分隔的多文件情况）
+const parseFileUrls = (urls) => {
+  if (!urls) return [];
+  if (Array.isArray(urls)) return urls;
+  return urls.split(',').map(url => url.trim());
+};
+
+// 获取文件扩展名
+const getFileExtension = (url) => {
+  const filename = url.split(/[\\/]/).pop();
+  return filename.split('.').pop() || '';
+};
+
+// 获取文件图标
+const getFileIcon = (url) => {
+  const ext = getFileExtension(url).toLowerCase();
+  const iconMap = {
+    mp4: 'VideoPlay', webm: 'VideoPlay', mov: 'VideoPlay',
+    jpg: 'Picture', jpeg: 'Picture', png: 'Picture', gif: 'Picture', webp: 'Picture',
+    pdf: 'Document', doc: 'Document', docx: 'Document', xls: 'Document', xlsx: 'Document', 
+    txt: 'Document', zip: 'Document', rar: 'Document'
+  };
+  return iconMap[ext] || 'Document';
+};
 
 getprojectCodeList();
 getList();

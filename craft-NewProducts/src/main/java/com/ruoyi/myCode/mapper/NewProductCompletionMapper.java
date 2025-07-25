@@ -42,6 +42,7 @@ public interface NewProductCompletionMapper
      * @return 结果
      */
     public int updateNewProductCompletion(NewProductCompletion newProductCompletion);
+    public int updateNewproductDocumentDisplay(NewProductCompletion newProductCompletion);
 
     /**
      * 删除新产品生产完成

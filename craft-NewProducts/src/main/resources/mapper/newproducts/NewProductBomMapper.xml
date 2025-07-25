@@ -116,6 +116,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
+    <!--    同步修改 new_product_document_display 表-->
+    <update id="updateNewproductDocumentDisplay" parameterType="NewProductBom">
+        update new_product_document_display
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="inspectionFile != null">bom_inspection_display = #{inspectionFile},</if>
+        </trim>
+        where project_code = #{projectCode}
+    </update>
+
     <delete id="deleteNewProductBomById" parameterType="Long">
         delete from new_product_bom where id = #{id}
     </delete>

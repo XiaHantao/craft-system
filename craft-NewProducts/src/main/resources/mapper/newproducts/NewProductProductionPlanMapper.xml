@@ -29,6 +29,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
             <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="planDate != null "> and plan_date = #{planDate}</if>
+            <if test="workers != null  and workers != ''"> and workers = #{workers}</if>
+            <if test="workLocation != null  and workLocation != ''"> and work_location = #{workLocation}</if>
+            <if test="arranger != null  and arranger != ''"> and arranger = #{arranger}</if>
             <if test="resultStatus != null  and resultStatus != ''"> and result_status = #{resultStatus}</if>
             <if test="extField1 != null  and extField1 != ''"> and ext_field1 = #{extField1}</if>
             <if test="extField2 != null  and extField2 != ''"> and ext_field2 = #{extField2}</if>

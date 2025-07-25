@@ -79,6 +79,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
+    <!--    同步修改 new_product_document_display 表-->
+    <update id="updateNewproductDocumentDisplay" parameterType="NewProductCompletion">
+        update new_product_document_display
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="enhancementTestPlan != null">enhancement_plan_display = #{enhancementTestPlan},</if>
+            <if test="enhancementTestResult != null">enhancement_result_display = #{enhancementTestResult},</if>
+            <if test="tr4Tr5Summary != null">tr_summary_display = #{tr4Tr5Summary},</if>
+            <if test="internalLaunchReport != null">launch_report_display = #{internalLaunchReport},</if>
+        </trim>
+        where project_code = #{projectCode}
+    </update>
+
     <delete id="deleteNewProductCompletionById" parameterType="Long">
         delete from new_product_completion where id = #{id}
     </delete>

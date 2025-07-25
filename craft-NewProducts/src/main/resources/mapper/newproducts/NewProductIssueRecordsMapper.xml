@@ -75,6 +75,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
+    <!--    同步修改 new_product_document_display 表-->
+    <update id="updateNewproductDocumentDisplay" parameterType="NewProductIssueRecords">
+        update new_product_document_display
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="issueRecordFile != null">production_issue_display = #{issueRecordFile},</if>
+            <if test="summaryFile != null">production_summary_display = #{summaryFile},</if>
+        </trim>
+        where project_code = #{projectCode}
+    </update>
+
     <delete id="deleteNewProductIssueRecordsById" parameterType="Long">
         delete from new_product_issue_records where id = #{id}
     </delete>
