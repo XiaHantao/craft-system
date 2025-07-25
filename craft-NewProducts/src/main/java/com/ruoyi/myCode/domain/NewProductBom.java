@@ -30,7 +30,7 @@ public class NewProductBom extends TreeEntity
     private String projectName;
 
     /** 层 */
-//    @Excel(name = "层")
+    @Excel(name = "层")
     private Long layer;
 
     /** 物料编号 */
@@ -61,7 +61,7 @@ public class NewProductBom extends TreeEntity
     @Excel(name = "质检结果")
     private String inspectionResult;
 
-    /** 质检结果文件 */
+    /** 结果文件 */
     @Excel(name = "质检结果文件")
     private String inspectionFile;
 
