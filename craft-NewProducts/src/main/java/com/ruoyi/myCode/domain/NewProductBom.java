@@ -26,7 +26,7 @@ public class NewProductBom extends TreeEntity
     private String projectCode;
 
     /** 项目名称 */
-    @Excel(name = "项目名称")
+//    @Excel(name = "项目名称")
     private String projectName;
 
     /** 层 */
