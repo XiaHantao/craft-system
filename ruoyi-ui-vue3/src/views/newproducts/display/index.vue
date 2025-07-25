@@ -126,12 +126,12 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="BOM质检结果展示文件" align="center" prop="bomInspectionDisplay" >
+<!--       <el-table-column label="BOM质检结果展示文件" align="center" prop="bomInspectionDisplay" >
         <template v-slot:default="scope">
           <el-button  v-if="scope.row.bomInspectionDisplay" icon="Download" @click="downloadFiles(scope.row.bomInspectionDisplay)">
           </el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="生产问题记录展示文件" align="center" prop="productionIssueDisplay" >
         <template v-slot:default="scope">
           <el-button  v-if="scope.row.productionIssueDisplay" icon="Download" @click="downloadFiles(scope.row.productionIssueDisplay)">

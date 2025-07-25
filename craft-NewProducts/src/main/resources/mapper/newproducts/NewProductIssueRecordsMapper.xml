@@ -81,6 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="issueRecordFile != null">production_issue_display = #{issueRecordFile},</if>
             <if test="summaryFile != null">production_summary_display = #{summaryFile},</if>
+            <if test="issueRecordFile == null and summaryFile == null ">project_code = project_code <!-- 无实际修改，仅防止语法错误 --></if>
         </trim>
         where project_code = #{projectCode}
     </update>

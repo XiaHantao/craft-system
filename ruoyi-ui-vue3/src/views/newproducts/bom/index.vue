@@ -41,19 +41,19 @@
     </el-row>
 
     <el-table v-if="refreshTable" v-loading="loading" :data="bomList" row-key="id" :default-expand-all="isExpandAll"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="600px">
 
       <el-table-column label="项目编号" prop="projectCode" />
 
       <!-- <el-table-column label="项目名称" align="center" prop="projectName" /> -->
-      <!-- <el-table-column label="层" align="center" prop="layer" /> -->
+      <el-table-column label="层" align="center" prop="layer" />
       <el-table-column label="物料编号" align="center" prop="materialCode" />
       <el-table-column label="物料描述" align="center" prop="materialDescription" />
       <el-table-column label="数量" align="center" prop="quantity" />
       <!-- <el-table-column label="采购类型" align="center" prop="purchaseType" /> -->
       <el-table-column label="采购类型" align="center" prop="purchaseType">
         <template #default="scope">
-          <el-tag v-if="scope.row.purchaseType" :type="scope.row.purchaseType === '自制' ? 'default' : 'default'">
+          <el-tag v-if="scope.row.purchaseType" :type="scope.row.purchaseType === 'E' ? 'default' : 'default'">
             {{ scope.row.purchaseType }}
           </el-tag>
         </template>
@@ -61,13 +61,13 @@
      
       <el-table-column label="到货情况" align="center" prop="arrivalStatus">
         <template #default="scope">
-          <el-tag v-if="scope.row.arrivalStatus" :type="scope.row.arrivalStatus === '未完成'
+          <el-tag v-if="scope.row.arrivalStatus" :type="scope.row.arrivalStatus === '完成'
             ? 'danger'
-            : scope.row.arrivalStatus === '未到货'
-              ? 'warning'
-              : scope.row.arrivalStatus === '已完成'
+            : scope.row.arrivalStatus === '已完成'
+              ? 'success'
+              : scope.row.arrivalStatus === '已到货'
                 ? 'success'
-                : 'info'">
+                : 'danger'">
             {{ scope.row.arrivalStatus }}
           </el-tag>
         </template>
@@ -75,14 +75,14 @@
       <el-table-column label="质检情况" align="center" prop="inspectionStatus">
         <template #default="scope">
           <el-tag v-if="scope.row.inspectionStatus"
-            :type="scope.row.inspectionStatus === '需要质检' ? 'danger' : 'success'">
+            :type="scope.row.inspectionStatus === '无需质检' ? 'success' : 'danger'">
             {{ scope.row.inspectionStatus }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="质检结果" align="center" prop="inspectionResult">
         <template #default="scope">
-          <el-tag v-if="scope.row.inspectionResult" :type="scope.row.inspectionResult === '不合格' ? 'danger' : 'success'">
+          <el-tag v-if="scope.row.inspectionResult" :type="scope.row.inspectionResult === '合格' ? 'success' : 'danger'">
             {{ scope.row.inspectionResult }}
           </el-tag>
         </template>
@@ -96,13 +96,19 @@
 
       <el-table-column label="质检结果处理" align="center" prop="inspectionSolve">
         <template #default="scope">
-          <el-tag v-if="scope.row.inspectionSolve" :type="scope.row.inspectionSolve === '未处理' ? 'danger' : 'success'">
+          <el-tag v-if="scope.row.inspectionSolve" :type="scope.row.inspectionSolve === '已处理' ? 'success' : 'danger'">
             {{ scope.row.inspectionSolve }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="质检处理备注" align="center" prop="inspectionRemarks" />
-      <el-table-column label="领用记录" align="center" prop="extField2" />
+      <el-table-column label="领用记录" align="center" prop="extField2" >
+        <template #default="scope">
+          <el-tag v-if="scope.row.extField2" :type="scope.row.extField2 === '已领用' ? 'success' : 'danger'">
+            {{ scope.row.extField2 }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="领用日期" align="center" prop="receivingDate" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.receivingDate, '{y}-{m}-{d}') }}</span>
@@ -110,7 +116,7 @@
       </el-table-column>
       <el-table-column label="问题记录" align="center" prop="issueRecord" />
       <!-- <el-table-column label="父级ID" align="center" prop="parentId" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right"  width="200">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
             v-hasPermi="['newproducts:bom:edit']">修改</el-button>
@@ -118,13 +124,19 @@
             v-hasPermi="['newproducts:bom:add']">新增</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
             v-hasPermi="['newproducts:bom:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleInspection(scope.row)"
+            v-hasPermi="['newproducts:bom:edit']">质检</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleCollection(scope.row)"
+            v-hasPermi="['newproducts:bom:edit']">领用</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleIssue(scope.row)"
+            v-hasPermi="['newproducts:bom:edit']">问题记录</el-button>      
         </template>
       </el-table-column>
     </el-table>
 
     <!-- 添加或修改新产品BOM对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="bomRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="bomRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="项目编号" prop="projectCode">
           <el-select v-model="form.projectCode" aria-placeholder="请选择项目编号！" clearable filterable
             @keyup.enter="handleQuery">
@@ -140,9 +152,9 @@
             :props="{ value: 'id', label: 'materialCode', children: 'children' }" value-key="id" placeholder="请选择父级ID"
             check-strictly />
         </el-form-item>
-        <!-- <el-form-item label="层" prop="layer">
+        <el-form-item label="层" prop="layer">
           <el-input v-model="form.layer" placeholder="请输入层" />
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item label="物料编号" prop="materialCode">
           <el-input v-model="form.materialCode" placeholder="请输入物料编号" />
         </el-form-item>
@@ -152,47 +164,50 @@
         <el-form-item label="数量" prop="quantity">
           <el-input v-model="form.quantity" placeholder="请输入数量" />
         </el-form-item>
-        <el-form-item label="采购类型" prop="purchaseType">
-          <el-select v-model="form.purchaseType" placeholder="请选择采购类型" clearable filterable>
-            <el-option label="E" value="E"></el-option>
-            <el-option label="F" value="F"></el-option>
-          </el-select>
+        <el-form-item label="物料类型" prop="purchaseType">
+          <el-radio-group v-model="form.purchaseType" placeholder="请选择采购类型" clearable filterable>
+            <el-radio label="自制" value="E"></el-radio>
+            <el-radio label="采购" value="F"></el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="到货情况" prop="arrivalStatus">
           <el-select v-model="form.arrivalStatus" placeholder="请选择到货情况" clearable filterable>
-            <el-option label="已到货" value="已到货"></el-option>
-            <el-option label="未到货" value="未到货"></el-option>
-            <el-option label="已完成" value="已完成"></el-option>
-            <el-option label="未完成" value="未完成"></el-option>
+            <el-option label="采购已到货" value="已到货"></el-option>
+            <el-option label="采购未到货" value="未到货"></el-option>
+            <el-option label="自制已完成" value="已完成"></el-option>
+            <el-option label="自制未完成" value="未完成"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="质检情况" prop="inspectionStatus">
-          <el-select v-model="form.inspectionStatus" placeholder="请选择质检情况" clearable filterable>
-            <el-option label="需要质检" value="需要质检"></el-option>
-            <el-option label="无需质检" value="无需质检"></el-option>
-          </el-select>
+            <el-radio-group v-model="form.inspectionStatus">
+            <el-radio label="需要质检" />
+            <el-radio label="无需质检" />
+            </el-radio-group>
         </el-form-item>
-        <el-form-item label="质检结果" prop="inspectionResult">
-          <el-select v-model="form.inspectionResult" placeholder="请选择质检结果" clearable filterable>
-            <el-option label="合格" value="合格"></el-option>
-            <el-option label="不合格" value="不合格"></el-option>
-          </el-select>
+<!--         <el-form-item label="质检结果" prop="inspectionResult">
+          <el-radio-group v-model="form.inspectionResult" placeholder="请选择质检结果" clearable filterable>
+            <el-radio label="合格" value="合格"></el-radio>
+            <el-radio label="不合格" value="不合格"></el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="质检结果文件" prop="inspectionFile">
           <file-upload v-model="form.inspectionFile" />
         </el-form-item>
 
-        <el-form-item label="质检结果处理" prop="inspectionSolve">
-          <el-select v-model="form.inspectionSolve" placeholder="请选择质检处理结果" clearable filterable>
-            <el-option label="已处理" value="已处理"></el-option>
-            <el-option label="未处理" value="未处理"></el-option>
-          </el-select>
+        <el-form-item label="质检处理结果" prop="inspectionSolve">
+          <el-radio-group v-model="form.inspectionSolve" placeholder="请选择质检处理结果" clearable filterable>
+            <el-radio label="已处理" value="已处理"></el-radio>
+            <el-radio label="未处理" value="未处理"></el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="质检处理备注" prop="inspectionRemarks">
           <el-input v-model="form.inspectionRemarks" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="领用记录" prop="extField2">
-          <el-input v-model="form.extField2" placeholder="请输入领用记录" />
+          <el-radio-group v-model="form.extField2" placeholder="请选择质检处理结果" clearable filterable>
+            <el-radio label="已领用" value="已领用"></el-radio>
+            <el-radio label="未领用" value="未领用"></el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="领用日期" prop="receivingDate">
           <el-date-picker clearable v-model="form.receivingDate" type="date" value-format="YYYY-MM-DD"
@@ -201,7 +216,7 @@
         </el-form-item>
         <el-form-item label="问题记录" prop="issueRecord">
           <el-input v-model="form.issueRecord" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -210,6 +225,7 @@
         </div>
       </template>
     </el-dialog>
+
     <!-- 导入对话框 -->
     <el-dialog title="导入新产品BOM" v-model="importDialogVisible" width="500px" append-to-body>
       <el-form ref="importFormRef" :model="importForm" :rules="importRules" label-width="100px">
@@ -243,8 +259,83 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 质检对话框 -->
+    <el-dialog :title="title" v-model="openInspection" width="800px" append-to-body>
+      <el-form ref="bomRef" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="质检情况" prop="inspectionStatus">
+            <el-radio-group v-model="form.inspectionStatus">
+            <el-radio label="需要质检" />
+            <el-radio label="无需质检" />
+            </el-radio-group>
+        </el-form-item>
+        <el-form-item label="质检结果" prop="inspectionResult">
+          <el-radio-group v-model="form.inspectionResult" placeholder="请选择质检结果" clearable filterable>
+            <el-radio label="合格" value="合格"></el-radio>
+            <el-radio label="不合格" value="不合格"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="质检结果文件" prop="inspectionFile">
+          <file-upload v-model="form.inspectionFile" />
+        </el-form-item>
+        <el-form-item label="质检处理结果" prop="inspectionSolve">
+          <el-radio-group v-model="form.inspectionSolve" placeholder="请选择质检处理结果" clearable filterable>
+            <el-radio label="已处理" value="已处理"></el-radio>
+            <el-radio label="未处理" value="未处理"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="质检处理备注" prop="inspectionRemarks">
+          <el-input v-model="form.inspectionRemarks" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+<!-- 领用对话框 -->
+    <el-dialog :title="title" v-model="openCollection" width="800px" append-to-body>
+      <el-form ref="bomRef" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="领用记录" prop="extField2">
+          <el-radio-group v-model="form.extField2" placeholder="请选择质检处理结果" clearable filterable>
+            <el-radio label="已领用" value="已领用"></el-radio>
+            <el-radio label="未领用" value="未领用"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="领用日期" prop="receivingDate">
+          <el-date-picker clearable v-model="form.receivingDate" type="date" value-format="YYYY-MM-DD"
+            placeholder="选择领用日期">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+<!-- 问题记录对话框 -->
+    <el-dialog :title="title" v-model="openIssue" width="800px" append-to-body>
+      <el-form ref="bomRef" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="问题记录" prop="issueRecord">
+          <el-input v-model="form.issueRecord" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
     <!-- 新增文件选择下载对话框 -->
-    <el-dialog v-model="downloadSelectVisible" title="选择下载文件" width="500px">
+<!--     <el-dialog v-model="downloadSelectVisible" title="选择下载文件" width="500px">
       <el-scrollbar height="300px">
         <el-checkbox-group v-model="selectedDownloadFiles" class="file-select-group">
           <el-checkbox v-for="(file, index) in downloadableFiles" :key="index" :label="file.fullUrl" class="file-item">
@@ -261,7 +352,7 @@
         <el-button @click="downloadSelectVisible = false">取消</el-button>
         <el-button type="primary" @click="confirmDownload">下载选中文件</el-button>
       </template>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -376,15 +467,18 @@ const projectCodeList =ref([]);//项目编号列表
 const bomList = ref([]);
 const bomOptions = ref([]);
 const open = ref(false);
+const openInspection =ref(false);//质检对话框
+const openCollection = ref(false);//领用对话框
+const openIssue = ref(false);//问题记录对话框
 const loading = ref(true);
 const showSearch = ref(true);
 const title = ref("");
 const isExpandAll = ref(true);
 const refreshTable = ref(true);
 // 新增下载相关状态
-const downloadSelectVisible = ref(false);
-const downloadableFiles = ref([]);
-const selectedDownloadFiles = ref([]);
+// const downloadSelectVisible = ref(false);
+// const downloadableFiles = ref([]);
+// const selectedDownloadFiles = ref([]);
 const data = reactive({
   form: {},
   queryParams: {
@@ -428,6 +522,9 @@ function getTreeselect() {
 // 取消按钮
 function cancel() {
   open.value = false;
+  openInspection.value = false;
+  openCollection.value = false;
+  openIssue.value = false;
   reset();
 }
 
@@ -455,6 +552,37 @@ function reset() {
     extField3: null
   };
   proxy.resetForm("bomRef");
+}
+
+/** 多文件下载 */
+const formatFileUrl = (url) => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_API;
+  if (url.startsWith('http')) return url;
+  return `${baseUrl}/${url}`;
+};
+//文件下载
+function downloadFiles(urls) {
+  // 统一处理输入为数组
+  if (typeof urls === 'string') {
+    urls = decodeURIComponent(urls).split(',').map(url => url.trim());
+  }
+  
+  // 确保是数组格式
+  if (!Array.isArray(urls)) {
+    console.error('urls 必须是数组或逗号分隔的字符串');
+    return;
+  }
+
+  // 遍历下载每个文件
+  urls.forEach(url => {
+    const formattedUrl = formatFileUrl(url);
+    const link = document.createElement('a');
+    link.href = formattedUrl;
+    link.download = decodeURIComponent(url.split('/').pop());
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
 }
 
 /** 搜索按钮操作 */
@@ -504,20 +632,74 @@ async function handleUpdate(row) {
   });
 }
 
+//质检按钮操作
+function handleInspection(row){
+  reset();
+  getBom(row.id).then(response => {
+    form.value = response.data;
+    openInspection.value = true;
+    title.value = "质检";
+  });
+}
+
+//领用按钮操作
+function handleCollection(row){
+  reset();
+  getBom(row.id).then(response => {
+    form.value = response.data;
+    openCollection.value = true;
+    title.value = "领用";
+  });
+}
+
+//问题记录按钮操作
+function handleIssue(row){
+  reset();
+  getBom(row.id).then(response => {
+    form.value = response.data;
+    openIssue.value = true;
+    title.value = "问题记录";
+  });
+}
+
 /** 提交按钮 */
 function submitForm() {
   proxy.$refs["bomRef"].validate(valid => {
     if (valid) {
+      // 新增采购类型和到货情况的匹配验证
+      const purchaseType = form.value.purchaseType;
+      const arrivalStatus = form.value.arrivalStatus;
+      
+      // 验证逻辑：E类型对应完成状态，F类型对应到货状态
+      if (purchaseType === 'E' && 
+          (arrivalStatus === '已到货' || arrivalStatus === '未到货')) {
+        proxy.$modal.msgError("物料类型为自制时，到货情况应为'已完成'或'未完成'");
+        return;
+      }
+      
+      if (purchaseType === 'F' && 
+          (arrivalStatus === '已完成' || arrivalStatus === '未完成')) {
+        proxy.$modal.msgError("物料类型为采购时，到货情况应为'已到货'或'未到货'");
+        return;
+      }
+
+      // 原有提交逻辑保持不变
       if (form.value.id != null) {
         updateBom(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
+          openInspection.value = false;
+          openCollection.value = false;
+          openIssue.value = false;
           getList();
         });
       } else {
         addBom(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
+          openInspection.value = false;
+          openCollection.value = false;
+          openIssue.value = false;
           getList();
         });
       }
@@ -543,7 +725,7 @@ function handleExport() {
   }, `问题记录${new Date().getTime()}.xlsx`)
 }
 
-// 文件下载方法 - 多文件支持
+/* // 文件下载方法 - 多文件支持
 const downloadFiles = (urls) => {
   const files = parseFileUrls(urls);
   // 多个文件显示选择框
@@ -619,7 +801,8 @@ const getFileIcon = (url) => {
     txt: 'Document', zip: 'Document', rar: 'Document'
   };
   return iconMap[ext] || 'Document';
-};
+}; */
+
 getprojectCodeList();
 getList();
 </script>

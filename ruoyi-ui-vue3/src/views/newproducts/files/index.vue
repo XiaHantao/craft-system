@@ -327,7 +327,7 @@
         </div>
       </template>
     </el-dialog>    
-<!-- 审核文件对话框 -->
+<!-- 核对文件对话框 -->
     <el-dialog :title="title" v-model="openCheckFiles" width="500px" append-to-body>
       <el-form ref="filesRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="核对状态" prop="checkStatus">
@@ -558,18 +558,25 @@ function handleAdd() {
 // 审核任务单按钮操作
 function CheckTask(row) {
   reset();
-  openCheckTask.value = true;
-  title.value = "审核任务单";
-  form.value.id = row.id;
+  const _id = row.id || ids.value
+  getFiles(_id).then(response => {
+    form.value = response.data;
+    openCheckTask.value = true;
+    title.value = "审核任务单";
+  });
 }
 
-// 审核文件按钮操作
-function CheckFiles(row) {
+// 核对文件按钮操作
+function CheckFiles(row){
   reset();
-  openCheckFiles.value = true;
-  title.value = "审核文件";
-  form.value.id = row.id;
+  const _id = row.id || ids.value
+  getFiles(_id).then(response => {
+    form.value = response.data;
+    openCheckFiles.value =true;
+    title.value = "核对文件";
+  })
 }
+
 
 /** 修改按钮操作 */
 function handleUpdate(row) {

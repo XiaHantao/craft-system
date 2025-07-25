@@ -384,17 +384,23 @@ function handleAdd() {
 /** 技术文件按钮操作 */
 function TechnicalDocuments(row) {
   reset();
-  opentechnicalDocuments.value = true;
-  title.value = "技术科上传文件";
-  form.value = row;
+  const _id = row.id || ids.value
+  getCompletion(_id).then(response => {
+    form.value = response.data;
+    opentechnicalDocuments.value = true;
+    title.value = "技术科上传文件";
+  });
 }
 
 /** 生产文件按钮操作 */
 function ProductionDocuments(row) {
   reset();
-  openproductionDocuments.value = true;
-  title.value = "生产科上传文件";
-  form.value = row;
+  const _id = row.id || ids.value
+  getCompletion(_id).then(response => {
+    form.value = response.data;
+    openproductionDocuments.value = true;
+    title.value = "生产科上传文件";
+  });
 }
 
 /** 修改按钮操作 */
@@ -412,7 +418,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["completionRef"].validate(valid => {
     if (valid) {
-      if (form.value.id != null) {
+      if (form.value.id != null) { console.log(form.value);
         updateCompletion(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
@@ -436,7 +442,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除新产品生产完成编号为"' + _ids + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除？').then(function() {
     return delCompletion(_ids);
   }).then(() => {
     getList();

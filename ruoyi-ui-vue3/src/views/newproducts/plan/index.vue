@@ -381,10 +381,13 @@ function handleAdd() {
 //计划完成结果按钮
 function ResultStatus(row) {
   reset();
-  openResultStatus.value = true;
-  title.value = "计划完成结果";
-  form.value.id = row.id;  console.log(form.value.id);
-}
+  const _id = row.id || ids.value
+  getPlan(_id).then(response => {
+    form.value = response.data;
+    openResultStatus.value = true;
+    title.value = "计划完成结果";
+  });
+}  
 
 /** 修改按钮操作 */
 function handleUpdate(row) {

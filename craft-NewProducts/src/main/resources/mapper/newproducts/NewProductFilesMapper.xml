@@ -115,6 +115,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bomFile != null">bom_display = #{bomFile},</if>
             <if test="otherFiles != null">other_submission_display = #{otherFiles},</if>
             <if test="checkFile != null">verification_display = #{checkFile},</if>
+            <if test="taskOrderFile == null and techDisclosureFile == null and bomFile == null and otherFiles == null and checkFile == null">
+                project_code = project_code <!-- 无实际修改，仅防止语法错误 -->
+            </if>
         </trim>
         where project_code = #{projectCode}
     </update>
