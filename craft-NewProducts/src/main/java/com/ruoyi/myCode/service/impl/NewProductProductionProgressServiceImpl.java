@@ -90,4 +90,8 @@ public class NewProductProductionProgressServiceImpl implements INewProductProdu
     {
         return newProductProductionProgressMapper.deleteNewProductProductionProgressById(id);
     }
+    @Override
+    public NewProductProductionProgress selectProgressByProjectCode(String projectCode) {
+        return newProductProductionProgressMapper.selectProgressByProjectCode(projectCode);
+    }
 }

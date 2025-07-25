@@ -42,3 +42,10 @@ export function delProgress(id) {
     method: 'delete'
   })
 }
+export function getProgressByProjectCode(projectCode) {
+  return request({
+    url: '/newproducts/progress/getByProjectCode',
+    method: 'get',
+    params: { projectCode }
+  })
+}

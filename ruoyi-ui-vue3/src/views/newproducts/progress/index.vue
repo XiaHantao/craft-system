@@ -2,15 +2,10 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="项目编号" prop="projectCode">
-        <el-input
-          v-model="queryParams.projectCode"
-          placeholder="请输入项目编号"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-input v-model="queryParams.projectCode" placeholder="请输入项目编号" clearable @keyup.enter="handleQuery" />
       </el-form-item>
 
-<!--       <el-form-item label="项目名称" prop="projectName">
+      <!--       <el-form-item label="项目名称" prop="projectName">
         <el-input
           v-model="queryParams.projectName"
           placeholder="请输入项目名称"
@@ -51,42 +46,20 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['newproducts:progress:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="Plus" @click="handleAdd"
+          v-hasPermi="['newproducts:progress:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['newproducts:progress:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['newproducts:progress:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['newproducts:progress:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['newproducts:progress:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['newproducts:progress:export']"
-        >导出</el-button>
+        <el-button type="warning" plain icon="Download" @click="handleExport"
+          v-hasPermi="['newproducts:progress:export']">导出</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -105,47 +78,37 @@
       <el-table-column label="车体装配" align="center" prop="bodyAssembly" />
       <el-table-column label="试车" align="center" prop="testDrive" />
 
-<!--       <el-table-column label="扩展字段1" align="center" prop="extField1" />
+      <!--       <el-table-column label="扩展字段1" align="center" prop="extField1" />
       <el-table-column label="扩展字段2" align="center" prop="extField2" />
       <el-table-column label="扩展字段3" align="center" prop="extField3" /> -->
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:progress:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:progress:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['newproducts:progress:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['newproducts:progress:remove']">删除</el-button>
+          <el-button link type="primary" icon="DataAnalysis" @click="handleDetail(scope.row)"
+            v-hasPermi="['newproducts:progress:view']">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
+
+    <pagination v-show="total>0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改新产品生产进度跟踪对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="progressRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="项目编号" prop="projectCode">
-           <el-select
-              v-model="form.projectCode"
-              aria-placeholder="请选择项目编号！"
-              clearable
-              filterable
-              @keyup.enter="handleQuery"
-           >
-            <el-option
-                v-for="model in projectCodeList"
-                :key="model.projectCode"
-                :label="model.projectCode"
-                :value="model.projectCode"
-            ></el-option>
-           </el-select>
+          <el-select v-model="form.projectCode" aria-placeholder="请选择项目编号！" clearable filterable
+            @keyup.enter="handleQuery">
+            <el-option v-for="model in projectCodeList" :key="model.projectCode" :label="model.projectCode"
+              :value="model.projectCode"></el-option>
+          </el-select>
         </el-form-item>
 
-<!--         <el-form-item label="项目名称" prop="projectName">
+        <!--         <el-form-item label="项目名称" prop="projectName">
           <el-input v-model="form.projectName" placeholder="请输入项目名称" />
         </el-form-item> -->
 
@@ -174,7 +137,7 @@
           <el-input v-model="form.testDrive" placeholder="请输入试车" />
         </el-form-item>
 
-<!--         <el-form-item label="扩展字段1" prop="extField1">
+        <!--         <el-form-item label="扩展字段1" prop="extField1">
           <el-input v-model="form.extField1" placeholder="请输入扩展字段1" />
         </el-form-item>
         <el-form-item label="扩展字段2" prop="extField2">
@@ -352,7 +315,14 @@ function handleExport() {
     ...queryParams.value
   }, `progress_${new Date().getTime()}.xlsx`)
 }
-
+function handleDetail(row) {
+  const projectCode = row.projectCode;
+  // 跳转到图表页面并传递项目编号
+  proxy.$router.push({
+    path: '/newproducts/progress/charts',
+    query: { projectCode }
+  });
+}
 getprojectCodeList();
 getList();
 </script>

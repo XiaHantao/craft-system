@@ -4,14 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -100,5 +93,10 @@ public class NewProductProductionProgressController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(newProductProductionProgressService.deleteNewProductProductionProgressByIds(ids));
+    }
+    @GetMapping("/getByProjectCode")
+    public AjaxResult getProgressByProjectCode(@RequestParam String projectCode) {
+        NewProductProductionProgress progress = newProductProductionProgressService.selectProgressByProjectCode(projectCode);
+        return AjaxResult.success(progress);
     }
 }

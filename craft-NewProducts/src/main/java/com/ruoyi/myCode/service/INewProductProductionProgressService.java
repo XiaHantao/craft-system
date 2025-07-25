@@ -58,4 +58,5 @@ public interface INewProductProductionProgressService
      * @return 结果
      */
     public int deleteNewProductProductionProgressById(Long id);
+    NewProductProductionProgress selectProgressByProjectCode(String projectCode);
 }

@@ -1,5 +1,6 @@
 package com.ruoyi.myCode.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -58,6 +59,7 @@ public class NewProductProductionProgress extends BaseEntity
     @Excel(name = "试车")
     private String testDrive;
 
+
     /** 扩展字段1 */
     @Excel(name = "扩展字段1")
     private String extField1;
@@ -70,6 +72,45 @@ public class NewProductProductionProgress extends BaseEntity
     @Excel(name = "扩展字段3")
     private String extField3;
 
+//    /** 备料 */
+//    @JsonProperty("materialPreparation")
+//    @Excel(name = "备料")
+//    private String materialPreparation;
+//
+//    /** 涂装 */
+//    @Excel(name = "涂装")
+//    private String painting;
+//
+//    /** 金工 */
+//    @Excel(name = "金工")
+//    private String metalworking;
+//
+//    /** 门架结构 */
+//    @JsonProperty("mastStructure") // 添加此注解
+//    @Excel(name = "门架结构")
+//    private String mastStructure;
+//
+//    /** 车架结构 */
+//    @JsonProperty("frameStructure") // 添加此注解
+//    @Excel(name = "车架结构")
+//    private String frameStructure;
+//
+//
+//
+//    /** 门架装配 */
+//    @JsonProperty("mastAssembly") // 添加此注解
+//    @Excel(name = "门架装配")
+//    private String mastAssembly;
+//
+//    /** 车体装配 */
+//    @JsonProperty("bodyAssembly") // 添加此注解
+//    @Excel(name = "车体装配")
+//    private String bodyAssembly;
+//
+//    /** 试车 */
+//    @JsonProperty("testDrive") // 添加此注解
+//    @Excel(name = "试车")
+//    private String testDrive;
     public void setId(Long id) 
     {
         this.id = id;
