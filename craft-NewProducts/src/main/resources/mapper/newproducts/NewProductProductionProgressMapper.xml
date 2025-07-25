@@ -105,4 +105,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+    <select id="selectProgressByProjectCode" parameterType="String" resultMap="NewProductProductionProgressResult">
+        SELECT
+<!--        id,-->
+<!--        project_code AS projectCode,-->
+<!--        project_name AS projectName,-->
+<!--        material_preparation AS materialPreparation,-->
+<!--        metalworking,-->
+<!--        mast_structure AS mastStructure,  &lt;!&ndash; 添加别名 &ndash;&gt;-->
+<!--        frame_structure AS frameStructure, &lt;!&ndash; 添加别名 &ndash;&gt;-->
+<!--        painting,-->
+<!--        mast_assembly AS mastAssembly,    &lt;!&ndash; 添加别名 &ndash;&gt;-->
+<!--        body_assembly AS bodyAssembly,    &lt;!&ndash; 添加别名 &ndash;&gt;-->
+<!--        test_drive AS testDrive,          &lt;!&ndash; 添加别名 &ndash;&gt;-->
+<!--        ext_field1 AS extField1,-->
+<!--        ext_field2 AS extField2,-->
+<!--        ext_field3 AS extField3-->
+        test_drive,material_preparation,metalworking,painting,
+        mast_structure,frame_structure,mast_assembly,body_assembly
+        FROM new_product_production_progress
+        WHERE project_code = #{projectCode}
+    </select>
 </mapper>

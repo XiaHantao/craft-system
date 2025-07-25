@@ -58,4 +58,6 @@ public interface NewProductProductionProgressMapper
      * @return 结果
      */
     public int deleteNewProductProductionProgressByIds(Long[] ids);
+    // ProgressMapper.java
+    NewProductProductionProgress selectProgressByProjectCode(String projectCode);
 }
