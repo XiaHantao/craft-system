@@ -63,11 +63,11 @@
         <template #default="scope">
           <el-tag v-if="scope.row.arrivalStatus" :type="scope.row.arrivalStatus === '未完成'
             ? 'danger'
-            : scope.row.arrivalStatus === '未到货'
-              ? 'warning'
-              : scope.row.arrivalStatus === '已完成'
+            : scope.row.arrivalStatus === '已完成'
+              ? 'success'
+              : scope.row.arrivalStatus === '已到货'
                 ? 'success'
-                : 'info'">
+                : 'danger'">
             {{ scope.row.arrivalStatus }}
           </el-tag>
         </template>
@@ -75,14 +75,14 @@
       <el-table-column label="质检情况" align="center" prop="inspectionStatus">
         <template #default="scope">
           <el-tag v-if="scope.row.inspectionStatus"
-            :type="scope.row.inspectionStatus === '需要质检' ? 'danger' : 'success'">
+            :type="scope.row.inspectionStatus === '无需质检' ? 'success' : 'danger'">
             {{ scope.row.inspectionStatus }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="质检结果" align="center" prop="inspectionResult">
         <template #default="scope">
-          <el-tag v-if="scope.row.inspectionResult" :type="scope.row.inspectionResult === '不合格' ? 'danger' : 'success'">
+          <el-tag v-if="scope.row.inspectionResult" :type="scope.row.inspectionResult === '合格' ? 'success' : 'danger'">
             {{ scope.row.inspectionResult }}
           </el-tag>
         </template>
@@ -96,12 +96,13 @@
 
       <el-table-column label="质检结果处理" align="center" prop="inspectionSolve">
         <template #default="scope">
-          <el-tag v-if="scope.row.inspectionSolve" :type="scope.row.inspectionSolve === '未处理' ? 'danger' : 'success'">
+          <el-tag v-if="scope.row.inspectionSolve" :type="scope.row.inspectionSolve === '已处理' ? 'success' : 'danger'">
             {{ scope.row.inspectionSolve }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="质检处理备注" align="center" prop="inspectionRemarks" />
+      <el-table-column label="领用记录" align="center" prop="extField2" />
       <el-table-column label="领用日期" align="center" prop="receivingDate" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.receivingDate, '{y}-{m}-{d}') }}</span>
@@ -189,6 +190,9 @@
         </el-form-item>
         <el-form-item label="质检处理备注" prop="inspectionRemarks">
           <el-input v-model="form.inspectionRemarks" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="领用记录" prop="extField2">
+          <el-input v-model="form.extField2" placeholder="请输入领用记录" />
         </el-form-item>
         <el-form-item label="领用日期" prop="receivingDate">
           <el-date-picker clearable v-model="form.receivingDate" type="date" value-format="YYYY-MM-DD"
@@ -504,6 +508,24 @@ async function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["bomRef"].validate(valid => {
     if (valid) {
+      // 新增采购类型和到货情况的匹配验证
+      const purchaseType = form.value.purchaseType;
+      const arrivalStatus = form.value.arrivalStatus;
+      
+      // 验证逻辑：E类型对应完成状态，F类型对应到货状态
+      if (purchaseType === 'E' && 
+          (arrivalStatus === '已到货' || arrivalStatus === '未到货')) {
+        proxy.$modal.msgError("采购类型为E时，到货情况应为'已完成'或'未完成'");
+        return;
+      }
+      
+      if (purchaseType === 'F' && 
+          (arrivalStatus === '已完成' || arrivalStatus === '未完成')) {
+        proxy.$modal.msgError("采购类型为F时，到货情况应为'已到货'或'未到货'");
+        return;
+      }
+
+      // 原有提交逻辑保持不变
       if (form.value.id != null) {
         updateBom(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
