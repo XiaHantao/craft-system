@@ -644,7 +644,7 @@ function handleExport() {
 
 // 任务单预览
   function openExcelPreviewDialog(filePath) {
-      this.previewSrc = "http://172.19.3.63:8080"+filePath;
+      this.previewSrc = filePath;
       this.isExcelPreview = true;
       this.excelPreviewDialogVisible = true;
     }
