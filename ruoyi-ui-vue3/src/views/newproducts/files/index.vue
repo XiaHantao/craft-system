@@ -361,7 +361,7 @@
 
     <!-- Excel 预览对话框 -->
     <el-dialog v-model="excelPreviewDialogVisible"
-      title="Excel 预览"
+      title="预览"
       width="80%"
       :center="true"
       append-to-body
@@ -383,8 +383,6 @@ import '@vue-office/docx/lib/index.css';
 import '@vue-office/excel/lib/index.css';
 // 引入 VueOffice 组件
 import VueOfficeDocx from '@vue-office/docx';
-import VueOfficeExcel from '@vue-office/excel';
-import VueOfficePdf from '@vue-office/pdf';
 import { reactive, ref } from "vue";
 
 const { proxy } = getCurrentInstance();
@@ -643,16 +641,17 @@ function handleExport() {
 }
 
 // 任务单预览
-  function openExcelPreviewDialog(filePath) {
-      this.previewSrc = filePath;
-      this.isExcelPreview = true;
-      this.excelPreviewDialogVisible = true;
-    }
-  function closeExcelPreviewDialog(done) {
-      this.isExcelPreview = false;
-      this.previewSrc = '';
-      done();
-    }
+function openExcelPreviewDialog(filePath) {
+  console.log("filePath===>",filePath);
+  previewSrc.value = filePath;
+  isExcelPreview.value = true;
+  excelPreviewDialogVisible.value = true;
+}
+function closeExcelPreviewDialog(done) {
+  isExcelPreview.value = false;
+  this.previewSrc = '';
+  done();
+}
 
 getprojectCodeList();
 getList();
