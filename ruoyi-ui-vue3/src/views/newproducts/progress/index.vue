@@ -113,28 +113,28 @@
         </el-form-item> -->
 
         <el-form-item label="备料" prop="materialPreparation">
-          <el-input v-model="form.materialPreparation" placeholder="请输入备料" />
+          <el-input v-model="form.materialPreparation" placeholder="请输入备料进度（小数形式）" />
         </el-form-item>
         <el-form-item label="金工" prop="metalworking">
-          <el-input v-model="form.metalworking" placeholder="请输入金工" />
+          <el-input v-model="form.metalworking" placeholder="请输入金工进度（小数形式）" />
         </el-form-item>
         <el-form-item label="门架结构" prop="mastStructure">
-          <el-input v-model="form.mastStructure" placeholder="请输入门架结构" />
+          <el-input v-model="form.mastStructure" placeholder="请输入门架结构进度（小数形式）" />
         </el-form-item>
         <el-form-item label="车架结构" prop="frameStructure">
-          <el-input v-model="form.frameStructure" placeholder="请输入车架结构" />
+          <el-input v-model="form.frameStructure" placeholder="请输入车架结构进度（小数形式）" />
         </el-form-item>
         <el-form-item label="涂装" prop="painting">
-          <el-input v-model="form.painting" placeholder="请输入涂装" />
+          <el-input v-model="form.painting" placeholder="请输入涂装进度（小数形式）" />
         </el-form-item>
         <el-form-item label="门架装配" prop="mastAssembly">
-          <el-input v-model="form.mastAssembly" placeholder="请输入门架装配" />
+          <el-input v-model="form.mastAssembly" placeholder="请输入门架装配进度（小数形式）" />
         </el-form-item>
         <el-form-item label="车体装配" prop="bodyAssembly">
-          <el-input v-model="form.bodyAssembly" placeholder="请输入车体装配" />
+          <el-input v-model="form.bodyAssembly" placeholder="请输入车体装配进度（小数形式）" />
         </el-form-item>
         <el-form-item label="试车" prop="testDrive">
-          <el-input v-model="form.testDrive" placeholder="请输入试车" />
+          <el-input v-model="form.testDrive" placeholder="请输入试车进度（小数形式）" />
         </el-form-item>
 
         <!--         <el-form-item label="扩展字段1" prop="extField1">

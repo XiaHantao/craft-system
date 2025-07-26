@@ -114,6 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update new_product_document_display
         <trim prefix="SET" suffixOverrides=",">
             <if test="projectCode != null and projectCode != ''">project_code = #{projectCode},</if>
+            <if test="projectCode == null ">project_code = project_code <!-- 无实际修改，仅防止语法错误 --></if>
         </trim>
         where id = #{id}
     </update>

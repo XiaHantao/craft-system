@@ -129,8 +129,8 @@
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:completion:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:completion:remove']">删除</el-button>
-          <el-button link type="primary" icon="Edit" @click="TechnicalDocuments(scope.row)" v-hasPermi="['newproducts:completion:technical']">技术文件</el-button>
-          <el-button link type="primary" icon="Edit" @click="ProductionDocuments(scope.row)" v-hasPermi="['newproducts:completion:production']">生产文件</el-button>
+          <el-button link type="primary" icon="Edit" @click="TechnicalDocuments(scope.row)" v-hasPermi="['newproducts:completion:technical']">技术科上传文件</el-button>
+          <el-button link type="primary" icon="Edit" @click="ProductionDocuments(scope.row)" v-hasPermi="['newproducts:completion:production']">生产科上传文件</el-button>
         </template>
       </el-table-column>
     </el-table>

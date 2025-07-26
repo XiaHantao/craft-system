@@ -12,9 +12,44 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item> -->
+      <el-form-item label="层" prop="layer">
+        <el-input
+          v-model="queryParams.layer"
+          placeholder="请输入层级"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>      
       <el-form-item label="物料编号" prop="materialCode">
         <el-input v-model="queryParams.materialCode" placeholder="请输入物料编号" clearable @keyup.enter="handleQuery" />
       </el-form-item>
+      <el-form-item label="采购类型" prop="purchaseType">
+        <el-select v-model="queryParams.purchaseType" placeholder="请选择采购类型" style="width: 200px" clearable>
+          <el-option label="自制" value="E"></el-option>
+          <el-option label="采购" value="F"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="到货情况" prop="arrivalStatus">
+        <el-select v-model="queryParams.arrivalStatus" placeholder="请选择到货情况" style="width: 200px" clearable>
+          <el-option label="采购已到货" value="已到货"></el-option>
+          <el-option label="采购未到货" value="未到货"></el-option>
+          <el-option label="自制已完成" value="已完成"></el-option>
+          <el-option label="自制未完成" value="未完成"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="质检情况" prop="inspectionStatus">
+        <el-select v-model="queryParams.inspectionStatus" placeholder="请选择质检情况" style="width: 200px" clearable>
+          <el-option label="需要质检" value="需要质检"></el-option>
+          <el-option label="无需质检" value="无需质检"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="质检结果" prop="inspectionResult">
+        <el-select v-model="queryParams.inspectionResult" placeholder="请选择质检结果" style="width: 200px" clearable>
+          <el-option label="合格" value="合格"></el-option>
+          <el-option label="不合格" value="不合格"></el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -94,7 +129,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="质检结果处理" align="center" prop="inspectionSolve">
+      <el-table-column label="质检处理结果" align="center" prop="inspectionSolve">
         <template #default="scope">
           <el-tag v-if="scope.row.inspectionSolve" :type="scope.row.inspectionSolve === '已处理' ? 'success' : 'danger'">
             {{ scope.row.inspectionSolve }}
@@ -124,6 +159,8 @@
             v-hasPermi="['newproducts:bom:add']">新增</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
             v-hasPermi="['newproducts:bom:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleInspectionStatus(scope.row)"
+            v-hasPermi="['newproducts:bom:edit']">质检情况</el-button>
           <el-button link type="primary" icon="Edit" @click="handleInspection(scope.row)"
             v-hasPermi="['newproducts:bom:edit']">质检</el-button>
           <el-button link type="primary" icon="Edit" @click="handleCollection(scope.row)"
@@ -147,9 +184,9 @@
         <!-- <el-form-item label="项目名称" prop="projectName">
           <el-input v-model="form.projectName" placeholder="请输入项目名称" />
         </el-form-item> -->
-        <el-form-item label="父级ID" prop="parentId">
+        <el-form-item label="上级物料编号" prop="parentId">
           <el-tree-select v-model="form.parentId" :data="bomOptions"
-            :props="{ value: 'id', label: 'materialCode', children: 'children' }" value-key="id" placeholder="请选择父级ID"
+            :props="{ value: 'materialCode', label: 'materialCode', children: 'children' }" value-key="id" placeholder="请选择上级物料编号"
             check-strictly />
         </el-form-item>
         <el-form-item label="层" prop="layer">
@@ -260,8 +297,8 @@
       </template>
     </el-dialog>
 
-    <!-- 质检对话框 -->
-    <el-dialog :title="title" v-model="openInspection" width="800px" append-to-body>
+<!-- 质检情况对话框 -->
+    <el-dialog :title="title" v-model="openInspectionStatus" width="800px" append-to-body>
       <el-form ref="bomRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="质检情况" prop="inspectionStatus">
             <el-radio-group v-model="form.inspectionStatus">
@@ -269,6 +306,24 @@
             <el-radio label="无需质检" />
             </el-radio-group>
         </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <!-- 质检对话框 -->
+    <el-dialog :title="title" v-model="openInspection" width="800px" append-to-body>
+      <el-form ref="bomRef" :model="form" :rules="rules" label-width="100px">
+        <!-- <el-form-item label="质检情况" prop="inspectionStatus">
+            <el-radio-group v-model="form.inspectionStatus">
+            <el-radio label="需要质检" />
+            <el-radio label="无需质检" />
+            </el-radio-group>
+        </el-form-item> -->
         <el-form-item label="质检结果" prop="inspectionResult">
           <el-radio-group v-model="form.inspectionResult" placeholder="请选择质检结果" clearable filterable>
             <el-radio label="合格" value="合格"></el-radio>
@@ -467,6 +522,7 @@ const projectCodeList =ref([]);//项目编号列表
 const bomList = ref([]);
 const bomOptions = ref([]);
 const open = ref(false);
+const openInspectionStatus = ref(false);//质检情况对话框
 const openInspection =ref(false);//质检对话框
 const openCollection = ref(false);//领用对话框
 const openIssue = ref(false);//问题记录对话框
@@ -489,6 +545,9 @@ const data = reactive({
   rules: {
     projectCode: [
       { required: true, message: "项目编号不能为空", trigger: "blur" }
+    ],
+    materialCode: [
+      { required: true, message: "物料编号不能为空", trigger: "blur" }
     ],
   }
 });
@@ -522,6 +581,7 @@ function getTreeselect() {
 // 取消按钮
 function cancel() {
   open.value = false;
+  openInspectionStatus.value = false;
   openInspection.value = false;
   openCollection.value = false;
   openIssue.value = false;
@@ -632,6 +692,16 @@ async function handleUpdate(row) {
   });
 }
 
+//质检情况按钮操作
+function handleInspectionStatus(row){
+  reset();
+  getBom(row.id).then(response => {
+    form.value =response.data;
+    openInspectionStatus.value = true;
+    title.value = "是否需要质检";
+  });
+}
+
 //质检按钮操作
 function handleInspection(row){
   reset();
@@ -688,6 +758,7 @@ function submitForm() {
         updateBom(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
+          openInspectionStatus.value = false;
           openInspection.value = false;
           openCollection.value = false;
           openIssue.value = false;
@@ -697,6 +768,7 @@ function submitForm() {
         addBom(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
+          openInspectionStatus.value = false;
           openInspection.value = false;
           openCollection.value = false;
           openIssue.value = false;
@@ -709,7 +781,7 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  proxy.$modal.confirm('是否确认删除新产品BOM编号为"' + row.id + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除？').then(function() {
     return delBom(row.id);
   }).then(() => {
     getList();

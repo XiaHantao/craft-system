@@ -337,7 +337,7 @@
             </el-radio-group>
         </el-form-item>
      </el-form>
-     <el-form-item label="核对文件" prop="checkFile">
+     <el-form-item label="核对文件上传" prop="checkFile">
           <file-upload v-model="form.checkFile"/>
         </el-form-item>
         <el-form-item label="核对备注" prop="checkRemarks">

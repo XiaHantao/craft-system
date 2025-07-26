@@ -35,6 +35,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="projectCode != null  and projectCode != ''"> and project_code like concat('%', #{projectCode}, '%')</if>
             <if test="materialCode != null  and materialCode != ''"> and material_code like concat('%', #{materialCode}, '%')</if>
+            <if test="layer != null "> and layer = #{layer}</if>
+            <if test="purchaseType != null  and purchaseType != ''"> and purchase_type = #{purchaseType}</if>
+            <if test="arrivalStatus != null  and arrivalStatus != ''"> and arrival_status = #{arrivalStatus}</if>
+            <if test="inspectionStatus != null  and inspectionStatus != ''"> and inspection_status = #{inspectionStatus}</if>
+            <if test="inspectionResult != null  and inspectionResult != ''"> and inspection_result = #{inspectionResult}</if>
+            <if test="extField2 != null  and extField2 != ''"> and ext_field2 = #{extField2}</if>
             <!-- 新增问题记录筛选条件 -->
             <if test="issueRecordFilter != null and issueRecordFilter">
                 and issue_record is not null and issue_record != ''
