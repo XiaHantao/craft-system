@@ -82,9 +82,9 @@ public class CommonController
             System.out.println("filePath====>"+filePath);
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file);
-//            String url = serverConfig.getUrl() + fileName;
+            String url = serverConfig.getUrl() + fileName;
 //            String url = "http://172.19.14.49:8080" + fileName;
-            String url = "http://8.153.37.12:8080" + fileName;
+//            String url = "http://8.153.37.12:8080" + fileName;
             System.out.println("上传文件的 url=============>" + url);
             AjaxResult ajax = AjaxResult.success();
             ajax.put("url", url);
