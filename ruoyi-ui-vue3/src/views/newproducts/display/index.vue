@@ -132,7 +132,7 @@
           </el-button>
         </template>
       </el-table-column> -->
-      <el-table-column label="生产问题记录展示文件" align="center" prop="productionIssueDisplay" >
+      <!-- <el-table-column label="生产问题记录展示文件" align="center" prop="productionIssueDisplay" >
         <template v-slot:default="scope">
           <el-button  v-if="scope.row.productionIssueDisplay" icon="Download" @click="downloadFiles(scope.row.productionIssueDisplay)">
           </el-button>
@@ -143,7 +143,7 @@
           <el-button  v-if="scope.row.productionSummaryDisplay" icon="Download" @click="downloadFiles(scope.row.productionSummaryDisplay)">
           </el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="强化试验方案展示文件" align="center" prop="enhancementPlanDisplay" >
         <template v-slot:default="scope">
           <el-button  v-if="scope.row.enhancementPlanDisplay" icon="Download" @click="downloadFiles(scope.row.enhancementPlanDisplay)">

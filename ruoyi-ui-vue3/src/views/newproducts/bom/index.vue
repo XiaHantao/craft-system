@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="88px">
       <el-form-item label="项目编号" prop="projectCode">
         <el-input v-model="queryParams.projectCode" placeholder="请输入项目编号" clearable @keyup.enter="handleQuery" />
       </el-form-item>
@@ -23,7 +23,7 @@
       <el-form-item label="物料编号" prop="materialCode">
         <el-input v-model="queryParams.materialCode" placeholder="请输入物料编号" clearable @keyup.enter="handleQuery" />
       </el-form-item>
-      <el-form-item label="采购类型" prop="purchaseType">
+      <el-form-item label="物料类型" prop="purchaseType">
         <el-select v-model="queryParams.purchaseType" placeholder="请选择采购类型" style="width: 200px" clearable>
           <el-option label="自制" value="E"></el-option>
           <el-option label="采购" value="F"></el-option>
@@ -186,7 +186,7 @@
         </el-form-item> -->
         <el-form-item label="上级物料编号" prop="parentId">
           <el-tree-select v-model="form.parentId" :data="bomOptions"
-            :props="{ value: 'materialCode', label: 'materialCode', children: 'children' }" value-key="id" placeholder="请选择上级物料编号"
+            :props="{ value: 'id', label: 'materialCode', children: 'children' }" value-key="materialCode" placeholder="请选择上级物料编号"
             check-strictly />
         </el-form-item>
         <el-form-item label="层" prop="layer">
@@ -203,8 +203,8 @@
         </el-form-item>
         <el-form-item label="物料类型" prop="purchaseType">
           <el-radio-group v-model="form.purchaseType" placeholder="请选择采购类型" clearable filterable>
-            <el-radio label="自制" value="E"></el-radio>
-            <el-radio label="采购" value="F"></el-radio>
+            <el-radio label="E" >自制</el-radio>
+            <el-radio label="F" >采购</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="到货情况" prop="arrivalStatus">
@@ -738,6 +738,7 @@ function submitForm() {
     if (valid) {
       // 新增采购类型和到货情况的匹配验证
       const purchaseType = form.value.purchaseType;
+      console.log("form.value===>",form.value)
       const arrivalStatus = form.value.arrivalStatus;
       
       // 验证逻辑：E类型对应完成状态，F类型对应到货状态
