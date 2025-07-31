@@ -86,7 +86,7 @@
         <template #default="scope">
           <el-button link type="primary" icon="View" @click="handleAddQuota(scope.row)">上传定额</el-button>
           <el-button link type="primary" icon="View" @click="handleShowQuota(scope.row)">详情</el-button>
-<!--          <el-button link type="primary" icon="Edit" @click="edit1(scope.row)" v-hasPermi="['process:processQuotaTable:edit']">修改</el-button>-->
+          <el-button link type="primary" icon="Edit" @click="edit1(scope.row)" v-hasPermi="['process:processQuotaTable:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['process:processQuotaTable:remove']">删除</el-button>
         </template>
       </el-table-column>
@@ -221,7 +221,7 @@ import {
   delProcessQuotaTable,
   addProcessQuotaTable,
   updateProcessQuotaTable,
-  listRelatedProcessQuotaTable
+  listRelatedProcessQuotaTable, delProcessQuotaTable02
 } from "@/api/process/processQuotaTable";
 import {getCurrentInstance} from "vue";
 import {listModelTable} from "@/api/process/modelTable";
@@ -392,59 +392,64 @@ function handleAddQuota(row) {
   thisVehicleModel.value = row.vehicleModel;
 }
 
-function getAllQuota(row) {
-  // 获取当前车型关联的所有表单数据
-  listRelatedProcessQuotaTable(row.vehicleModel).then(response => {
-    const allForms = response.rows;
+async function getAllQuota(row) {
+  try {
+    // 获取当前车型关联的所有表单数据
+    const response1 = await listRelatedProcessQuotaTable(row.vehicleModel);
+    const allForms = response1.rows;
 
     // 获取定额值数据
-    listProcessQuotaValue({ vehicleModel: row.vehicleModel }).then(response => {
-      const quotaValueList = response.rows;
+    const response2 = await listProcessQuotaValue({ vehicleModel: row.vehicleModel });
+    const quotaValueList = response2.rows;
 
-      // 按照步骤分组
-      const groupedForms = {};
-      allForms.forEach(form => {
-        if (!groupedForms[form.step]) {
-          groupedForms[form.step] = [];
-        }
-        groupedForms[form.step].push(form);
-      });
-
-      const groupedQuotaValues = {};
-      quotaValueList.forEach(quotaValue => {
-        if (!groupedQuotaValues[quotaValue.step]) {
-          groupedQuotaValues[quotaValue.step] = [];
-        }
-        groupedQuotaValues[quotaValue.step].push(quotaValue);
-      });
-
-      // 将分组后的数据存储到 formList 中
-      formList.value = Object.keys(groupedForms).map(step => ({
-        step: step,
-        QuotaTableForms: groupedForms[step],
-        QuotaValueForms: groupedQuotaValues[step] || []
-      }));
-
-      // 计算每个定额项的总和
-      const totals = {};
-      formList.value.forEach(group => {
-        group.QuotaValueForms.forEach(quotaForm => {
-          const quotaName = quotaForm.quotaName;
-          if (!totals[quotaName]) {
-            totals[quotaName] = 0;
-          }
-          totals[quotaName] += parseFloat(quotaForm.quotaValue || 0);
-        });
-      });
-
-      // 将 totals 存储在 quotaTotals 响应式变量中
-      quotaTotals.value = totals;
-
-      console.log("formList.value===>", formList.value);
-      console.log("quotaTotals===>", quotaTotals.value);
+    // 按照步骤分组
+    const groupedForms = {};
+    allForms.forEach(form => {
+      if (!groupedForms[form.step]) {
+        groupedForms[form.step] = [];
+      }
+      groupedForms[form.step].push(form);
     });
-  });
+
+    const groupedQuotaValues = {};
+    quotaValueList.forEach(quotaValue => {
+      if (!groupedQuotaValues[quotaValue.step]) {
+        groupedQuotaValues[quotaValue.step] = [];
+      }
+      groupedQuotaValues[quotaValue.step].push(quotaValue);
+    });
+
+    // 将分组后的数据存储到 formList 中
+    formList.value = Object.keys(groupedForms).map(step => ({
+      step: step,
+      QuotaTableForms: groupedForms[step],
+      QuotaValueForms: groupedQuotaValues[step] || []
+    }));
+
+    // 计算每个定额项的总和
+    const totals = {};
+    formList.value.forEach(group => {
+      group.QuotaValueForms.forEach(quotaForm => {
+        const quotaName = quotaForm.quotaName;
+        if (!totals[quotaName]) {
+          totals[quotaName] = 0;
+        }
+        totals[quotaName] += parseFloat(quotaForm.quotaValue || 0);
+      });
+    });
+
+    // 将 totals 存储在 quotaTotals 响应式变量中
+    quotaTotals.value = totals;
+
+    console.log("formList.value===>", formList.value);
+    console.log("quotaTotals===>", quotaTotals.value);
+
+    // 这里才是真正完成所有异步操作的地方
+  } catch (error) {
+    console.error("获取定额数据失败:", error);
+  }
 }
+
 
 /** 打开定额详情对话框 */
 function handleShowQuota(row) {
@@ -479,66 +484,87 @@ function submitForm() {
   });
 }
 
-function edit1(row) {
+async function edit1(row) {
   reset();
-  getAllQuota(row);
+  await getAllQuota(row);
   formList.value.forEach( (form,index) => {
     formList.value[index] = form.QuotaTableForms[0];
     console.log("formList.value[index]===>",formList.value[index]);
+    quotaValueList.value[index] = form.QuotaValueForms;
+    console.log("quotaValueList.value[index]===>",quotaValueList.value[index]);
+    steps.value[index] = { title: '步骤 ' + (index + 1) };
   })
+  quotaValueForms.value = quotaValueList.value[0];
   console.log("formList.value===>???",formList.value);
+  console.log("quotaValueList.value===>",quotaValueList.value);
   form.value = formList.value[0];
   console.log("form.value===>",form.value);
-  steps.value = formList.value.length;
+  console.log("steps.value===>",steps.value);
   openQuota.value = true;
   title.value = "修改工艺定额";
   thisVehicleModel.value = row.vehicleModel;
+
 }
 
 //定额信息提交按钮
-function quotaSubmitForm() {
-
-  // 更新step字段为当前步骤索引
+async function quotaSubmitForm() {
+  // 更新表单数据
   form.value.step = activeStep.value + 1;
-  quotaValueForms.value.forEach((quotaForm, index) => {
+  quotaValueForms.value.forEach(quotaForm => {
     quotaForm.step = activeStep.value + 1;
   });
-  // 保存当前步骤的表单数据到 formList 和 quotaValueList
+
   formList.value[activeStep.value] = { ...form.value };
   quotaValueList.value[activeStep.value] = [...quotaValueForms.value];
 
-  // 将当前车型添加到 formList 和 quotaValueList 中
-  formList.value.forEach(form => {
-    form.vehicleModel = thisVehicleModel.value;
-  });
+  // 添加车型信息
+  formList.value.forEach(form => form.vehicleModel = thisVehicleModel.value);
   quotaValueList.value.forEach(stepForms => {
     stepForms.forEach(quotaForm => {
       quotaForm.vehicleModel = thisVehicleModel.value;
     });
   });
 
-  proxy.$refs["processQuotaTableRef"].validate(valid => {
-    if(valid) {
-      formList.value.forEach(form => {
-        console.log("form.value===>",form.value);
-        addProcessQuotaTable(form).then(response => {
-        });
-      });
+  try {
+    const valid = await new Promise(resolve => {
+      proxy.$refs["processQuotaTableRef"].validate(resolve);
+    });
 
-      // 提交每个步骤的定额组数据
-      quotaValueList.value.forEach((stepForms) => {
-        stepForms.forEach((quotaForm) => {
-          addProcessQuotaValue(quotaForm).then(response => {
-          });
-        });
-      });
-      proxy.$modal.msgSuccess("上传成功");
-      openQuota.value = false;
-      quotaCancel();
-      getList();
+    if (!valid) return;
+
+    console.log("删除前form.value===>", form.value);
+    // 如果有ID，先执行并等待删除操作
+    if (formList.value.length > 0 && formList.value[0].id != null) {
+      console.log("开始删除操作...");
+      await handleDelete02(thisVehicleModel.value);
+      console.log("删除操作完成");
     }
-  });
 
+    // 添加过程定额表
+    console.log("开始添加定额表...");
+    for (const formData of formList.value) {
+      await addProcessQuotaTable(formData);
+    }
+
+    // 添加过程定额值
+    console.log("开始添加定额值...");
+    for (const stepForms of quotaValueList.value) {
+      // 并行添加当前步骤的所有定额值
+      await Promise.all(stepForms.map(quotaForm =>
+          addProcessQuotaValue(quotaForm)
+      ));
+    }
+
+    // 成功处理
+    proxy.$modal.msgSuccess("上传成功");
+    openQuota.value = false;
+    quotaCancel();
+    getList();
+
+  } catch (error) {
+    console.error("提交过程中出错:", error);
+    proxy.$modal.msgError(`操作失败: ${error.message || error}`);
+  }
 }
 
 // /** 删除按钮操作 */
@@ -570,6 +596,33 @@ function handleDelete(row) {
   }).catch(() => {
     proxy.$modal.msgError("删除失败");
   });
+}
+
+/** 没有确认操作的删除按钮操作 */
+async function handleDelete02(vm) {
+  try {
+    const vehicleModels = vm ? [vm] : selectedVehicleModel.value;
+
+    // 1. 检查并删除所有相关的过程定额值
+    for (const vehicleModel of vehicleModels) {
+      const response = await listProcessQuotaValue({ vehicleModel });
+
+      if (response.rows.length > 0) {
+        await delProcessQuotaValue(vehicleModel);
+      }
+    }
+
+    // 2. 删除过程定额表
+    await delProcessQuotaTable02(vehicleModels);
+
+    // 3. 刷新列表（可选）
+    // getList();
+
+  } catch (error) {
+    console.error("删除操作失败:", error);
+    proxy.$modal.msgError("删除失败");
+    throw error; // 重新抛出错误以便上层捕获
+  }
 }
 
 
@@ -609,10 +662,13 @@ function nextStep() {
   if (activeStep.value < steps.value.length - 1) {
     // 保存当前步骤的表单数据到 formList 和 quotaValueList
     formList.value[activeStep.value] = { ...form.value };
+    console.log("下一步formList.value===>",formList.value);
     quotaValueList.value[activeStep.value] = [...quotaValueForms.value];
     activeStep.value++;
     // 恢复下一步的表单数据
+    console.log("activeStep.value===>",activeStep.value);
     form.value = { ...formList.value[activeStep.value] };
+    console.log("form.value===>",form.value);
     quotaValueForms.value = [...quotaValueList.value[activeStep.value]];
   } else {
     // 增加新的步骤
