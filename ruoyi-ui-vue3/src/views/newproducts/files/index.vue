@@ -1,14 +1,13 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="项目编号" prop="projectCode">
-        <el-input
-          v-model="queryParams.projectCode"
-          placeholder="请输入项目编号"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
+        <el-form-item label="项目编号" prop="projectCode">
+          <el-select v-model="queryParams.projectCode" aria-placeholder="请选择项目编号！" clearable filterable
+            @keyup.enter="handleQuery">
+            <el-option v-for="model in projectCodeList" :key="model.projectCode" :label="model.projectCode"
+              :value="model.projectCode"></el-option>
+          </el-select>
+        </el-form-item>
 
 <!--       <el-form-item label="项目名称" prop="projectName">
         <el-input
@@ -642,7 +641,6 @@ function handleExport() {
 
 // 任务单预览
 function openExcelPreviewDialog(filePath) {
-  console.log("filePath===>",filePath);
   previewSrc.value = filePath;
   isExcelPreview.value = true;
   excelPreviewDialogVisible.value = true;

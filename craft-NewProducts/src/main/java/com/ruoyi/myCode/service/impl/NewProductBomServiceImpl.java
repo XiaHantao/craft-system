@@ -47,6 +47,11 @@ public class NewProductBomServiceImpl implements INewProductBomService
         return newProductBomMapper.selectNewProductBomList(newProductBom);
     }
 
+    @Override
+    public List<NewProductBom> selectNewProductBom(NewProductBom newProductBom)
+    {
+        return newProductBomMapper.selectNewProductBom(newProductBom);
+    }
     /**
      * 新增新产品BOM
      * 
@@ -145,7 +150,7 @@ public class NewProductBomServiceImpl implements INewProductBomService
             // 设置项目信息
             item.setProjectCode(projectCode);
             item.setProjectName(projectName);
-
+            item.setInspectionFile(null);
             // 插入数据库（使用返回主键的insert语句）
             newProductBomMapper.insertNewProductBom(item);
 

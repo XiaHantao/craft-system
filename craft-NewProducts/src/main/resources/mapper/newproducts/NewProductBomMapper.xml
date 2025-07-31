@@ -48,6 +48,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="selectNewProductBom" parameterType="NewProductBom" resultMap="NewProductBomResult">
+        <include refid="selectNewProductBomVo"/>
+        /*SELECT
+        id, layer, material_code, material_description , quantity ,purchase_type,arrival_status ,inspection_status ,
+        inspection_result , inspection_file , inspection_solve , inspection_remarks , receiving_date , issue_record , ext_field2
+        FROM new_product_bom*/
+        <where>
+            <if test="projectCode != null  and projectCode != ''"> and project_code like concat('%', #{projectCode}, '%')</if>
+            <if test="materialCode != null  and materialCode != ''"> and material_code like concat('%', #{materialCode}, '%')</if>
+            <if test="layer != null "> and layer = #{layer}</if>
+            <if test="purchaseType != null  and purchaseType != ''"> and purchase_type = #{purchaseType}</if>
+            <if test="arrivalStatus != null  and arrivalStatus != ''"> and arrival_status = #{arrivalStatus}</if>
+            <if test="inspectionStatus != null  and inspectionStatus != ''"> and inspection_status = #{inspectionStatus}</if>
+            <if test="inspectionResult != null  and inspectionResult != ''"> and inspection_result = #{inspectionResult}</if>
+            <if test="extField2 != null  and extField2 != ''"> and ext_field2 = #{extField2}</if>
+        </where>
+    </select>
+
     <select id="selectNewProductBomById" parameterType="Long" resultMap="NewProductBomResult">
         <include refid="selectNewProductBomVo"/>
         where id = #{id}
@@ -132,7 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where project_code = #{projectCode}
     </update>
 
-    <delete id="deleteNewProductBomById" parameterType="Long">
+<!--    <delete id="deleteNewProductBomById" parameterType="Long">
         delete from new_product_bom where id = #{id}
     </delete>
 
@@ -141,7 +159,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
+    </delete>-->
+<!--删除节点及子孙节点-->
+    <delete id="deleteNewProductBomByIds" parameterType="String">
+        WITH RECURSIVE child_nodes AS (
+        SELECT id FROM new_product_bom WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        UNION ALL
+        SELECT b.id FROM new_product_bom b
+        JOIN child_nodes c ON b.parent_id = c.id
+        )
+        DELETE FROM new_product_bom WHERE id IN (SELECT id FROM child_nodes)
     </delete>
+
     <!-- 批量插入新产品BOM -->
     <insert id="batchInsertNewProductBom" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO new_product_bom (

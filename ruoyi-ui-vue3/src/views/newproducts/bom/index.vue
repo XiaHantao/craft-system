@@ -1,9 +1,13 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="88px">
-      <el-form-item label="项目编号" prop="projectCode">
-        <el-input v-model="queryParams.projectCode" placeholder="请输入项目编号" clearable @keyup.enter="handleQuery" />
-      </el-form-item>
+        <el-form-item label="项目编号" prop="projectCode">
+          <el-select v-model="queryParams.projectCode" aria-placeholder="请选择项目编号！" clearable filterable
+            @keyup.enter="handleQuery">
+            <el-option v-for="model in projectCodeList" :key="model.projectCode" :label="model.projectCode"
+              :value="model.projectCode"></el-option>
+          </el-select>
+        </el-form-item>
       <!-- <el-form-item label="项目名称" prop="projectName">
         <el-input
           v-model="queryParams.projectName"
@@ -25,16 +29,16 @@
       </el-form-item>
       <el-form-item label="物料类型" prop="purchaseType">
         <el-select v-model="queryParams.purchaseType" placeholder="请选择采购类型" style="width: 200px" clearable>
-          <el-option label="自制" value="E"></el-option>
-          <el-option label="采购" value="F"></el-option>
+          <el-option label="E" value="E"></el-option>
+          <el-option label="F" value="F"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="到货情况" prop="arrivalStatus">
         <el-select v-model="queryParams.arrivalStatus" placeholder="请选择到货情况" style="width: 200px" clearable>
-          <el-option label="采购已到货" value="已到货"></el-option>
-          <el-option label="采购未到货" value="未到货"></el-option>
-          <el-option label="自制已完成" value="已完成"></el-option>
-          <el-option label="自制未完成" value="未完成"></el-option>
+          <el-option label="已到货" value="已到货"></el-option>
+          <el-option label="未到货" value="未到货"></el-option>
+          <el-option label="已完成" value="已完成"></el-option>
+          <el-option label="未完成" value="未完成"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="质检情况" prop="inspectionStatus">
@@ -47,6 +51,18 @@
         <el-select v-model="queryParams.inspectionResult" placeholder="请选择质检结果" style="width: 200px" clearable>
           <el-option label="合格" value="合格"></el-option>
           <el-option label="不合格" value="不合格"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="质检处理结果" prop="inspectionSolve">
+        <el-select v-model="queryParams.inspectionSolve" placeholder="请选择质检处理结果" style="width: 250px" clearable>
+          <el-option label="已处理" value="已处理"></el-option>
+          <el-option label="未处理" value="未处理"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="领用记录" prop="extField2">
+        <el-select v-model="queryParams.extField2" placeholder="请选择领用记录" style="width: 250px" clearable>
+          <el-option label="已领用" value="已领用"></el-option>
+          <el-option label="未领用" value="未领用"></el-option>
         </el-select>
       </el-form-item>
 
@@ -69,7 +85,7 @@
           v-hasPermi="['newproducts:bom:import']">导入</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="Download" @click="handleExport"
+        <el-button type="warning" plain icon="Download" @click="Export"
           v-hasPermi="['newproducts:bom:export']">导出</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
@@ -209,10 +225,10 @@
         </el-form-item>
         <el-form-item label="到货情况" prop="arrivalStatus">
           <el-select v-model="form.arrivalStatus" placeholder="请选择到货情况" clearable filterable>
-            <el-option label="采购已到货" value="已到货"></el-option>
-            <el-option label="采购未到货" value="未到货"></el-option>
-            <el-option label="自制已完成" value="已完成"></el-option>
-            <el-option label="自制未完成" value="未完成"></el-option>
+            <el-option label="已到货" value="已到货"></el-option>
+            <el-option label="未到货" value="未到货"></el-option>
+            <el-option label="已完成" value="已完成"></el-option>
+            <el-option label="未完成" value="未完成"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="质检情况" prop="inspectionStatus">
@@ -293,6 +309,24 @@
         <div class="dialog-footer">
           <el-button @click="importDialogVisible = false">取消</el-button>
           <el-button type="primary" :loading="importLoading" @click="submitImport">开始导入</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+<!-- 导出对话框 -->
+    <el-dialog :title="title" v-model="openExport" width="800px" append-to-body>
+      <el-form ref="bomRef" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="项目编号" prop="projectCode">
+          <el-select v-model="importForm.projectCode" placeholder="请选择项目编号" clearable @change="handleProjectSelect">
+            <el-option v-for="item in projectCodeList" :key="item.projectCode" :label="item.projectCode"
+              :value="item.projectCode" />
+          </el-select>
+        </el-form-item>      
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="exportAll">导出</el-button>
+          <el-button @click="cancel">取 消</el-button>
         </div>
       </template>
     </el-dialog>
@@ -415,6 +449,11 @@
 import { getCurrentInstance, ref, reactive, toRefs } from 'vue';
 import { listBom, getBom, delBom, addBom, updateBom,importBom, checkProjectDataExists } from "@/api/newproducts/bom";
 import { listCreate } from "@/api/newproducts/create";
+//导出
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+// import {Loading} from "element-ui";
+// import { mapActions } from 'vuex';
 
 // 导入对话框相关变量
 const importDialogVisible = ref(false);
@@ -522,6 +561,7 @@ const projectCodeList =ref([]);//项目编号列表
 const bomList = ref([]);
 const bomOptions = ref([]);
 const open = ref(false);
+const openExport =ref(false);//导出对话框
 const openInspectionStatus = ref(false);//质检情况对话框
 const openInspection =ref(false);//质检对话框
 const openCollection = ref(false);//领用对话框
@@ -529,7 +569,7 @@ const openIssue = ref(false);//问题记录对话框
 const loading = ref(true);
 const showSearch = ref(true);
 const title = ref("");
-const isExpandAll = ref(true);
+const isExpandAll = ref(false);
 const refreshTable = ref(true);
 // 新增下载相关状态
 // const downloadSelectVisible = ref(false);
@@ -548,6 +588,9 @@ const data = reactive({
     ],
     materialCode: [
       { required: true, message: "物料编号不能为空", trigger: "blur" }
+    ],
+    layer: [
+      { required: true, message: "层不能为空", trigger: "blur" }
     ],
   }
 });
@@ -585,6 +628,7 @@ function cancel() {
   openInspection.value = false;
   openCollection.value = false;
   openIssue.value = false;
+  openExport.value = false;
   reset();
 }
 
@@ -744,13 +788,13 @@ function submitForm() {
       // 验证逻辑：E类型对应完成状态，F类型对应到货状态
       if (purchaseType === 'E' && 
           (arrivalStatus === '已到货' || arrivalStatus === '未到货')) {
-        proxy.$modal.msgError("物料类型为自制时，到货情况应为'已完成'或'未完成'");
+        proxy.$modal.msgError("物料类型为E时，到货情况应为'已完成'或'未完成'");
         return;
       }
       
       if (purchaseType === 'F' && 
           (arrivalStatus === '已完成' || arrivalStatus === '未完成')) {
-        proxy.$modal.msgError("物料类型为采购时，到货情况应为'已到货'或'未到货'");
+        proxy.$modal.msgError("物料类型为F时，到货情况应为'已到货'或'未到货'");
         return;
       }
 
@@ -789,92 +833,87 @@ function handleDelete(row) {
     proxy.$modal.msgSuccess("删除成功");
   }).catch(() => {});
 }
-/** 导出按钮操作 */
-function handleExport() {
+/** 导出按钮操作（问题记录） */
+/* function handleExport() {
   // 添加 issueRecord 参数，设置为 true 表示只导出有问题记录的数据
   proxy.download('newproducts/bom/export', {
     ...queryParams.value,
     issueRecord: true // 新增参数
   }, `问题记录${new Date().getTime()}.xlsx`)
+} */
+
+//导出按钮操作
+/* function Export(){
+  proxy.download('newproducts/bom/exportbom',{
+    ...queryParams.value
+  }, `新产品bom信息表${new Date().getTime()}.xlsx`)
+
+// 打开对话框
+//确定按钮跳转到exportAllAdd
+
+} */
+//导出对话框操作
+function Export(row) {
+    reset();
+    openExport.value = true;
+    title.value = "导出";
 }
 
-/* // 文件下载方法 - 多文件支持
-const downloadFiles = (urls) => {
-  const files = parseFileUrls(urls);
-  // 多个文件显示选择框
-  showDownloadSelection(files);
-};
+function exportAll(){
+    const traverseTree = (nodes) => {
+        let results = [];
+        nodes.forEach(node => {
+            if(node.projectCode === importForm.projectCode){
+            results.push({
+                层: node.layer,
+                物料编号: node.materialCode,
+                物料描述: node.materialDescription,
+                数量: node.quantity,
+                采购类型: node.purchaseType,
+                到货情况: node.arrivalStatus,
+                质检情况: node.inspectionStatus,
+                质检结果: node.inspectionResult,
+                // 质检结果文件: node.inspectionFile,
+                质检结果处理: node.inspectionSolve,
+                // 质检处理备注: node.inspectionRemarks,
+                领用记录: node.extField2,
+                领用日期: node.receivingDate,
+                问题记录: node.issueRecord,
+            });
+            }
+            // 递归处理子节点（若依框架默认子节点字段是 `children`）
+            if (node.children && node.children.length > 0) {
+                results = results.concat(traverseTree(node.children));
+            }
+        });
+        return results;
+    };
+            // 获取所有节点数据
+    const allData = traverseTree(bomList.value);
+    try {
+        // 直接使用数据生成Excel，不需要Promise.all
+        const ws = XLSX.utils.json_to_sheet(allData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "BOM列表");
 
-// 显示下载选择对话框
-const showDownloadSelection = (files) => {
-  downloadableFiles.value = files.map(file => ({
-    fullUrl: file,
-    displayName: getFileNameForDisplay(file)
-  }));
-  selectedDownloadFiles.value = []; // 清空选中状态
-  downloadSelectVisible.value = true;
-};
+        const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
 
-// 获取显示文件名（完整文件名）
-const getFileNameForDisplay = (url) => {
-  const decodedUrl = decodeURIComponent(url);
-  return decodedUrl.split('/').pop(); // 只显示文件名部分
-};
+        const fileName = `新产品项目编号_${importForm.projectCode}_BOM数据_${new Date().toISOString().slice(0, 10)}.xlsx`;
+        saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            fileName
+        );
+    } catch (error) {
+        console.error("导出失败:", error);
+        // 可以在这里添加错误提示，比如使用Element UI的Message.error
+        Message.error("导出失败：" + error.message);
+    }
+    openExport.value = false ;
+}
 
-// 确认下载
-const confirmDownload = () => {
-  if (selectedDownloadFiles.value.length === 0) {
-    proxy.$modal.msgError('请至少选择一个文件');
-    return;
-  }
-  handleDirectDownload(selectedDownloadFiles.value);
-  downloadSelectVisible.value = false;
-};
 
-// 直接下载处理
-const handleDirectDownload = (urls) => {
-  urls.forEach(url => {
-    const fullUrl = formatFileUrl(url);
-    const link = document.createElement('a');
-    link.href = fullUrl;
-    link.download = getFileNameForDisplay(url);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  });
-};
 
-// 格式化文件URL（添加基础路径）
-const formatFileUrl = (url) => {
-  if (url.startsWith('http')) return url;
-  const baseUrl = import.meta.env.VITE_APP_BASE_API;
-  return `${baseUrl}/${url}`;
-};
 
-// 解析文件URL（处理逗号分隔的多文件情况）
-const parseFileUrls = (urls) => {
-  if (!urls) return [];
-  if (Array.isArray(urls)) return urls;
-  return urls.split(',').map(url => url.trim());
-};
-
-// 获取文件扩展名
-const getFileExtension = (url) => {
-  const filename = url.split(/[\\/]/).pop();
-  return filename.split('.').pop() || '';
-};
-
-// 获取文件图标
-const getFileIcon = (url) => {
-  const ext = getFileExtension(url).toLowerCase();
-  const iconMap = {
-    mp4: 'VideoPlay', webm: 'VideoPlay', mov: 'VideoPlay',
-    jpg: 'Picture', jpeg: 'Picture', png: 'Picture', gif: 'Picture', webp: 'Picture',
-    pdf: 'Document', doc: 'Document', docx: 'Document', xls: 'Document', xlsx: 'Document', 
-    txt: 'Document', zip: 'Document', rar: 'Document'
-  };
-  return iconMap[ext] || 'Document';
-}; */
 
 getprojectCodeList();
 getList();

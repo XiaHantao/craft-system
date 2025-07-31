@@ -174,18 +174,21 @@ public class Excelutil {
 //                // 质检处理备注 (第10列)
 //                item.setInspectionRemarks(getCellValue(row.getCell(9), evaluator));
 
+                //领用记录
+                item.setExtField2(getCellValue(row.getCell(9), evaluator));
+
                 // 领用日期 (第11列)
-                Cell receivingDateCell = row.getCell(9);
+                Cell receivingDateCell = row.getCell(10);
                 if (receivingDateCell != null) {
                     item.setReceivingDate(parseDateCell(receivingDateCell, evaluator));
                 }
 
                 // 问题记录 (第12列)
-                item.setIssueRecord(getCellValue(row.getCell(10), evaluator));
+                item.setIssueRecord(getCellValue(row.getCell(11), evaluator));
 
 //                // 扩展字段 (第13-15列)
 //                item.setExtField1(getCellValue(row.getCell(12), evaluator));
-//                item.setExtField2(getCellValue(row.getCell(13), evaluator));
+
 //                item.setExtField3(getCellValue(row.getCell(14), evaluator));
 
                 // 设置父节点临时ID
@@ -224,7 +227,15 @@ public class Excelutil {
 
             // 处理字符串日期
             if (cell.getCellType() == CellType.STRING) {
-                return parseStringDate(cell.getStringCellValue());
+                String dateStr = cell.getStringCellValue().trim();
+                // 尝试解析 "yyyy.MM.dd" 格式
+                try {
+                    SimpleDateFormat dotDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+                    return dotDateFormat.parse(dateStr);
+                } catch (ParseException e) {
+                    // 如果失败，继续尝试其他格式（如原 parseStringDate 逻辑）
+                    return parseStringDate(dateStr);
+                }
             }
 
             // 处理数值日期

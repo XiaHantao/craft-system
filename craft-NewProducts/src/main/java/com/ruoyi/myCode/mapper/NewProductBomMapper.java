@@ -26,6 +26,7 @@ public interface NewProductBomMapper
      * @return 新产品BOM集合
      */
     public List<NewProductBom> selectNewProductBomList(NewProductBom newProductBom);
+    public List<NewProductBom> selectNewProductBom(NewProductBom newProductBom);
 
     /**
      * 新增新产品BOM

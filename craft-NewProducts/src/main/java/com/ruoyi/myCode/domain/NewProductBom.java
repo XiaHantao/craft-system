@@ -8,6 +8,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.TreeEntity;
 import org.springframework.data.annotation.Transient;
 
+
 /**
  * 新产品BOM对象 new_product_bom
  * 
@@ -97,6 +98,7 @@ public class NewProductBom extends TreeEntity
     private String extField1;
 
     /** 扩展字段2 */
+    @Excel(name = "领用记录")
     private String extField2;
 
     /** 扩展字段3 */

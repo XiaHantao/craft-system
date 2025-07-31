@@ -1,9 +1,13 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="88px">
-      <el-form-item label="项目编号" prop="projectCode">
-        <el-input v-model="queryParams.projectCode" placeholder="请输入项目编号" clearable @keyup.enter="handleQuery" />
-      </el-form-item>
+        <el-form-item label="项目编号" prop="projectCode">
+          <el-select v-model="queryParams.projectCode" aria-placeholder="请选择项目编号！" clearable filterable
+            @keyup.enter="handleQuery">
+            <el-option v-for="model in projectCodeList" :key="model.projectCode" :label="model.projectCode"
+              :value="model.projectCode"></el-option>
+          </el-select>
+        </el-form-item>
       <!-- <el-form-item label="项目名称" prop="projectName">
         <el-input
           v-model="queryParams.projectName"
@@ -69,7 +73,7 @@
           v-hasPermi="['newproducts:bom:import']">导入</el-button>
       </el-col> -->
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="Download" @click="handleExport"
+        <el-button type="warning" plain icon="Download" @click="Export"
           v-hasPermi="['newproducts:bom:export']">导出</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
@@ -209,10 +213,10 @@
         </el-form-item>
         <el-form-item label="到货情况" prop="arrivalStatus">
           <el-select v-model="form.arrivalStatus" placeholder="请选择到货情况" clearable filterable>
-            <el-option label="采购已到货" value="已到货"></el-option>
-            <el-option label="采购未到货" value="未到货"></el-option>
-            <el-option label="自制已完成" value="已完成"></el-option>
-            <el-option label="自制未完成" value="未完成"></el-option>
+            <el-option label="已到货" value="已到货"></el-option>
+            <el-option label="未到货" value="未到货"></el-option>
+            <el-option label="已完成" value="已完成"></el-option>
+            <el-option label="未完成" value="未完成"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="质检情况" prop="inspectionStatus">
@@ -293,6 +297,24 @@
         <div class="dialog-footer">
           <el-button @click="importDialogVisible = false">取消</el-button>
           <el-button type="primary" :loading="importLoading" @click="submitImport">开始导入</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+<!-- 导出对话框 -->
+    <el-dialog :title="title" v-model="openExport" width="800px" append-to-body>
+      <el-form ref="bomRef" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="项目编号" prop="projectCode">
+          <el-select v-model="importForm.projectCode" placeholder="请选择项目编号" clearable @change="handleProjectSelect">
+            <el-option v-for="item in projectCodeList" :key="item.projectCode" :label="item.projectCode"
+              :value="item.projectCode" />
+          </el-select>
+        </el-form-item>      
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="exportAll">导 出</el-button>
+          <el-button @click="cancel">取 消</el-button>
         </div>
       </template>
     </el-dialog>
@@ -416,6 +438,8 @@ import { getCurrentInstance, ref, reactive, toRefs } from 'vue';
 import { listBom, getBom, delBom, addBom, updateBom,importBom, checkProjectDataExists } from "@/api/newproducts/bom";
 import { listCreate } from "@/api/newproducts/create";
 
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 // 导入对话框相关变量
 const importDialogVisible = ref(false);
 const importLoading = ref(false);
@@ -522,6 +546,7 @@ const projectCodeList =ref([]);//项目编号列表
 const bomList = ref([]);
 const bomOptions = ref([]);
 const open = ref(false);
+const openExport =ref(false);//导出对话框
 const openInspectionStatus = ref(false);//质检情况对话框
 const openInspection =ref(false);//质检对话框
 const openCollection = ref(false);//领用对话框
@@ -529,7 +554,7 @@ const openIssue = ref(false);//问题记录对话框
 const loading = ref(true);
 const showSearch = ref(true);
 const title = ref("");
-const isExpandAll = ref(true);
+const isExpandAll = ref(false);//默认折叠状态
 const refreshTable = ref(true);
 // 新增下载相关状态
 // const downloadSelectVisible = ref(false);
@@ -582,6 +607,7 @@ function getTreeselect() {
 // 取消按钮
 function cancel() {
   open.value = false;
+  openExport.value = false;
   openInspectionStatus.value = false;
   openInspection.value = false;
   openCollection.value = false;
@@ -790,13 +816,67 @@ function handleDelete(row) {
     proxy.$modal.msgSuccess("删除成功");
   }).catch(() => {});
 }
-/** 导出按钮操作 */
-function handleExport() {
-  // 添加 issueRecord 参数，设置为 true 表示只导出有问题记录的数据
-  proxy.download('newproducts/bom/export', {
-    ...queryParams.value,
-    issueRecord: true // 新增参数
-  }, `问题记录${new Date().getTime()}.xlsx`)
+//导出对话框操作
+function Export(row) {
+    reset();
+    resetQuery();
+    openExport.value = true;
+    title.value = "导出";
+}
+
+function exportAll(){
+    const traverseTree = (nodes) => {
+        let results = [];
+        nodes.forEach(node => {
+            if(node.projectCode === importForm.projectCode &&
+              node.issueRecord && 
+              node.issueRecord.trim() !== ""
+            ){
+            results.push({
+                层: node.layer,
+                物料编号: node.materialCode,
+                物料描述: node.materialDescription,
+                数量: node.quantity,
+                采购类型: node.purchaseType,
+                到货情况: node.arrivalStatus,
+                质检情况: node.inspectionStatus,
+                质检结果: node.inspectionResult,
+                // 质检结果文件: node.inspectionFile,
+                质检结果处理: node.inspectionSolve,
+                // 质检处理备注: node.inspectionRemarks,
+                领用记录: node.extField2,
+                领用日期: node.receivingDate,
+                问题记录: node.issueRecord,
+            });
+            }
+            // 递归处理子节点（若依框架默认子节点字段是 `children`）
+            if (node.children && node.children.length > 0) {
+                results = results.concat(traverseTree(node.children));
+            }
+        });
+        return results;
+    };
+            // 获取所有节点数据
+    const allData = traverseTree(bomList.value);
+    try {
+        // 直接使用数据生成Excel，不需要Promise.all
+        const ws = XLSX.utils.json_to_sheet(allData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "BOM列表");
+
+        const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+
+        const fileName = `新产品项目编号_${importForm.projectCode}_BOM问题汇总_${new Date().toISOString().slice(0, 10)}.xlsx`;
+        saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            fileName
+        );
+    } catch (error) {
+        console.error("导出失败:", error);
+        // 可以在这里添加错误提示，比如使用Element UI的Message.error
+        Message.error("导出失败：" + error.message);
+    }
+    openExport.value = false ;
 }
 
 /* // 文件下载方法 - 多文件支持
