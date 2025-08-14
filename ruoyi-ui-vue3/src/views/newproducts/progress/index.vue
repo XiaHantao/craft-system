@@ -1,9 +1,13 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="项目编号" prop="projectCode">
-        <el-input v-model="queryParams.projectCode" placeholder="请输入项目编号" clearable @keyup.enter="handleQuery" />
-      </el-form-item>
+        <el-form-item label="项目编号" prop="projectCode">
+          <el-select v-model="queryParams.projectCode" aria-placeholder="请选择项目编号！" clearable filterable
+            @keyup.enter="handleQuery">
+            <el-option v-for="model in projectCodeList" :key="model.projectCode" :label="model.projectCode"
+              :value="model.projectCode"></el-option>
+          </el-select>
+        </el-form-item>
 
       <!--       <el-form-item label="项目名称" prop="projectName">
         <el-input
@@ -113,28 +117,28 @@
         </el-form-item> -->
 
         <el-form-item label="备料" prop="materialPreparation">
-          <el-input v-model="form.materialPreparation" placeholder="请输入备料" />
+          <el-input v-model="form.materialPreparation" placeholder="请输入备料进度（小数形式）" />
         </el-form-item>
         <el-form-item label="金工" prop="metalworking">
-          <el-input v-model="form.metalworking" placeholder="请输入金工" />
+          <el-input v-model="form.metalworking" placeholder="请输入金工进度（小数形式）" />
         </el-form-item>
         <el-form-item label="门架结构" prop="mastStructure">
-          <el-input v-model="form.mastStructure" placeholder="请输入门架结构" />
+          <el-input v-model="form.mastStructure" placeholder="请输入门架结构进度（小数形式）" />
         </el-form-item>
         <el-form-item label="车架结构" prop="frameStructure">
-          <el-input v-model="form.frameStructure" placeholder="请输入车架结构" />
+          <el-input v-model="form.frameStructure" placeholder="请输入车架结构进度（小数形式）" />
         </el-form-item>
         <el-form-item label="涂装" prop="painting">
-          <el-input v-model="form.painting" placeholder="请输入涂装" />
+          <el-input v-model="form.painting" placeholder="请输入涂装进度（小数形式）" />
         </el-form-item>
         <el-form-item label="门架装配" prop="mastAssembly">
-          <el-input v-model="form.mastAssembly" placeholder="请输入门架装配" />
+          <el-input v-model="form.mastAssembly" placeholder="请输入门架装配进度（小数形式）" />
         </el-form-item>
         <el-form-item label="车体装配" prop="bodyAssembly">
-          <el-input v-model="form.bodyAssembly" placeholder="请输入车体装配" />
+          <el-input v-model="form.bodyAssembly" placeholder="请输入车体装配进度（小数形式）" />
         </el-form-item>
         <el-form-item label="试车" prop="testDrive">
-          <el-input v-model="form.testDrive" placeholder="请输入试车" />
+          <el-input v-model="form.testDrive" placeholder="请输入试车进度（小数形式）" />
         </el-form-item>
 
         <!--         <el-form-item label="扩展字段1" prop="extField1">
@@ -301,7 +305,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除新产品生产进度跟踪编号为"' + _ids + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除？').then(function() {
     return delProgress(_ids);
   }).then(() => {
     getList();

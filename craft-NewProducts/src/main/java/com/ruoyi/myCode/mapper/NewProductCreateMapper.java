@@ -34,6 +34,7 @@ public interface NewProductCreateMapper
      * @return 结果
      */
     public int insertNewProductCreate(NewProductCreate newProductCreate);
+    public int insertNewproductDocumentDisplay(NewProductCreate newProductCreate);
 
     /**
      * 修改新产品信息
@@ -42,6 +43,7 @@ public interface NewProductCreateMapper
      * @return 结果
      */
     public int updateNewProductCreate(NewProductCreate newProductCreate);
+    public int updateNewproductDocumentDisplay(NewProductCreate newProductCreate);
 
     /**
      * 删除新产品信息
@@ -50,7 +52,7 @@ public interface NewProductCreateMapper
      * @return 结果
      */
     public int deleteNewProductCreateById(Long id);
-
+    public int deleteNewproductNewproductDocumentDisplayById(long id);
     /**
      * 批量删除新产品信息
      * 
@@ -58,4 +60,5 @@ public interface NewProductCreateMapper
      * @return 结果
      */
     public int deleteNewProductCreateByIds(Long[] ids);
+
 }

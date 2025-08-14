@@ -54,3 +54,14 @@ export function delProcessQuotaTable(vehicleModels) {
     }
   })
 }
+
+// 删除step不为空的工艺定额
+export function delProcessQuotaTable02(vehicleModels) {
+  return request({
+    url: '/process/processQuotaTable/delete02',
+    method: 'delete',
+    params: {
+      vehicleModels: vehicleModels.join(',')
+    }
+  })
+}

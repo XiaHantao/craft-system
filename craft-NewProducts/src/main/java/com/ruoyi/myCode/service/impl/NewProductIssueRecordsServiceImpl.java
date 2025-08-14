@@ -64,7 +64,15 @@ public class NewProductIssueRecordsServiceImpl implements INewProductIssueRecord
     @Override
     public int updateNewProductIssueRecords(NewProductIssueRecords newProductIssueRecords)
     {
-        return newProductIssueRecordsMapper.updateNewProductIssueRecords(newProductIssueRecords);
+        int Recordsresult = newProductIssueRecordsMapper.updateNewProductIssueRecords(newProductIssueRecords);
+        //如果修改成功，继续修改 NewproductDocumentDisplay
+        if(Recordsresult > 0) {
+            int Displayresult = newProductIssueRecordsMapper.updateNewproductDocumentDisplay(newProductIssueRecords);
+            if(Displayresult > 0){
+                return Displayresult;
+            }
+        }
+        return 0;
     }
 
     /**

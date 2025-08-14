@@ -26,9 +26,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectNewProductCreateList" parameterType="NewProductCreate" resultMap="NewProductCreateResult">
         <include refid="selectNewProductCreateVo"/>
-        <where>  
-            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+        <where>
+            <if test="projectCode != null  and projectCode != ''"> and project_code like concat('%', #{projectCode}, '%')</if>
             <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="projectLeader != null  and projectLeader != ''"> and project_leader like concat('%', #{projectLeader}, '%')</if>
+            <if test="productSeries != null  and productSeries != ''"> and product_series like concat('%', #{productSeries}, '%')</if>
+            <if test="tonnage != null  and tonnage != ''"> and tonnage = #{tonnage}</if>
+            <if test="vehicleModel != null  and vehicleModel != ''"> and vehicle_model = #{vehicleModel}</if>
+            <if test="createDate != null "> and create_date = #{createDate}</if>
             <if test="extField1 != null  and extField1 != ''"> and ext_field1 = #{extField1}</if>
             <if test="extField2 != null  and extField2 != ''"> and ext_field2 = #{extField2}</if>
             <if test="extField3 != null  and extField3 != ''"> and ext_field3 = #{extField3}</if>
@@ -72,6 +77,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
+    <!-- 插入到 new_product_document_display 表 -->
+    <insert id="insertNewproductDocumentDisplay" parameterType="NewproductCreate">
+        insert into new_product_document_display
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code,</if>
+            <!-- 添加其他需要的字段 -->
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">#{projectCode},</if>
+            <!-- 添加其他需要的字段 -->
+        </trim>
+    </insert>
+
     <update id="updateNewProductCreate" parameterType="NewProductCreate">
         update new_product_create
         <trim prefix="SET" suffixOverrides=",">
@@ -91,6 +109,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
+<!--    同步修改 new_product_document_display 表-->
+    <update id="updateNewproductDocumentDisplay" parameterType="NewProductCreate">
+        update new_product_document_display
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectCode != null and projectCode != ''">project_code = #{projectCode},</if>
+            <if test="projectCode == null ">project_code = project_code <!-- 无实际修改，仅防止语法错误 --></if>
+        </trim>
+        where id = #{id}
+    </update>
+
     <delete id="deleteNewProductCreateById" parameterType="Long">
         delete from new_product_create where id = #{id}
     </delete>
@@ -101,4 +129,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+<!--    同步删除 new_product_document_display表-->
+    <delete id="deleteNewproductNewproductDocumentDisplayById" parameterType="Long">
+        delete from new_product_document_display where id = #{id}
+    </delete>
+
+
+
 </mapper>

@@ -42,6 +42,7 @@ public interface NewProductIssueRecordsMapper
      * @return 结果
      */
     public int updateNewProductIssueRecords(NewProductIssueRecords newProductIssueRecords);
+    public int updateNewproductDocumentDisplay(NewProductIssueRecords newProductIssueRecords);
 
     /**
      * 删除新产品生产问题记录

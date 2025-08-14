@@ -35,6 +35,7 @@ public interface NewProductFilesMapper
      */
     public int insertNewProductFiles(NewProductFiles newProductFiles);
 
+
     /**
      * 修改新产品文件提交
      * 
@@ -42,6 +43,7 @@ public interface NewProductFilesMapper
      * @return 结果
      */
     public int updateNewProductFiles(NewProductFiles newProductFiles);
+    public int updateNewproductDocumentDisplay(NewProductFiles newProductFiles);
 
     /**
      * 删除新产品文件提交

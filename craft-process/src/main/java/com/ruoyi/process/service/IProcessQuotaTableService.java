@@ -60,6 +60,14 @@ public interface IProcessQuotaTableService
     public int deleteProcessQuotaTableByIds(String[] vehicleModels);
 
     /**
+     * 批量删除step不为空的工艺定额
+     *
+     * @param vehicleModels 需要删除的工艺定额主键集合
+     * @return 结果
+     */
+    public int deleteProcessQuotaTableByIds02(String[] vehicleModels);
+
+    /**
      * 删除工艺定额信息
      * 
      * @param vehicleModel 工艺定额主键

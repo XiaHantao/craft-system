@@ -43,6 +43,7 @@ public interface INewProductIssueRecordsService
      */
     public int updateNewProductIssueRecords(NewProductIssueRecords newProductIssueRecords);
 
+
     /**
      * 批量删除新产品生产问题记录
      * 

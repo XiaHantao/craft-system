@@ -64,7 +64,15 @@ public class NewProductFilesServiceImpl implements INewProductFilesService
     @Override
     public int updateNewProductFiles(NewProductFiles newProductFiles)
     {
-        return newProductFilesMapper.updateNewProductFiles(newProductFiles);
+        int Filesresult = newProductFilesMapper.updateNewProductFiles(newProductFiles);
+        //如果修改成功，继续修改 NewproductDocumentDisplay
+        if(Filesresult > 0) {
+            int Displayresult = newProductFilesMapper.updateNewproductDocumentDisplay(newProductFiles);
+            if(Displayresult > 0){
+                return Displayresult;
+            }
+        }
+        return 0;
     }
 
     /**

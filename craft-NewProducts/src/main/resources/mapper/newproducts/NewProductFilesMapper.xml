@@ -83,6 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
+
     <update id="updateNewProductFiles" parameterType="NewProductFiles">
         update new_product_files
         <trim prefix="SET" suffixOverrides=",">
@@ -103,6 +104,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="extField3 != null">ext_field3 = #{extField3},</if>
         </trim>
         where id = #{id}
+    </update>
+
+<!--    同步写入 new_product_document_display 表-->
+    <update id="updateNewproductDocumentDisplay" parameterType="NewProductFiles">
+        update new_product_document_display
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskOrderFile != null">task_order_display = #{taskOrderFile},</if>
+            <if test="techDisclosureFile != null">tech_disclosure_display = #{techDisclosureFile},</if>
+            <if test="bomFile != null">bom_display = #{bomFile},</if>
+            <if test="otherFiles != null">other_submission_display = #{otherFiles},</if>
+            <if test="checkFile != null">verification_display = #{checkFile},</if>
+            <if test="taskOrderFile == null and techDisclosureFile == null and bomFile == null and otherFiles == null and checkFile == null">
+                project_code = project_code <!-- 无实际修改，仅防止语法错误 -->
+            </if>
+        </trim>
+        where project_code = #{projectCode}
     </update>
 
     <delete id="deleteNewProductFilesById" parameterType="Long">

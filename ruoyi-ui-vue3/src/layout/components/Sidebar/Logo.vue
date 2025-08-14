@@ -15,7 +15,7 @@
 
 <script setup>
 import variables from '@/assets/styles/variables.module.scss'
-import logo from '@/assets/logo/logo.png'
+import logo from '@/assets/logo/logo2.png'
 import useSettingsStore from '@/store/modules/settings'
 
 defineProps({
@@ -54,8 +54,8 @@ const sideTheme = computed(() => settingsStore.sideTheme);
     width: 100%;
 
     & .sidebar-logo {
-      width: 32px;
-      height: 32px;
+      width: 48px;
+      height: 20px;
       vertical-align: middle;
       margin-right: 12px;
     }

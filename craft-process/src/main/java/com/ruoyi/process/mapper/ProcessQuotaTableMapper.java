@@ -66,4 +66,12 @@ public interface ProcessQuotaTableMapper
      * @return 结果
      */
     public int deleteProcessQuotaTableByIds(String[] vehicleModels);
+
+    /**
+     * 批量删除step不为空的工艺定额
+     *
+     * @param vehicleModels 需要删除的数据主键集合
+     * @return 结果
+     */
+    public int deleteProcessQuotaTableByIds02(String[] vehicleModels);
 }

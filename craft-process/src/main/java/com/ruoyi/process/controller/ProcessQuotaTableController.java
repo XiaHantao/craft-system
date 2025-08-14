@@ -105,4 +105,16 @@ public class ProcessQuotaTableController extends BaseController
     {
         return toAjax(processQuotaTableService.deleteProcessQuotaTableByIds(vehicleModels));
     }
+
+    /**
+     * 删除step不为空的工艺定额
+     */
+    @PreAuthorize("@ss.hasPermi('process:processQuotaTable:remove')")
+    @Log(title = "工艺定额", businessType = BusinessType.DELETE)
+    @DeleteMapping("/delete02")
+    public AjaxResult remove02(@RequestParam String[] vehicleModels)
+    {
+        return toAjax(processQuotaTableService.deleteProcessQuotaTableByIds02(vehicleModels));
+    }
+
 }

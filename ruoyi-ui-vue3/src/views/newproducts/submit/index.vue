@@ -284,7 +284,7 @@
 
 <script setup name="Submit">
 import { listSubmit, getSubmit, delSubmit, addSubmit, updateSubmit } from "@/api/newproducts/submit";
-import { getLatestRecord02 } from "@/api/newproducts/plan";
+import { getLatestRecord02 } from "@/api/process/processValidationAndSummary.js";
 import { getUserProfile, listUser } from "@/api/system/user";
 import {addSysMessageNotification} from "@/api/system/sysMessageNotification";
 import {listDept} from "@/api/system/dept";

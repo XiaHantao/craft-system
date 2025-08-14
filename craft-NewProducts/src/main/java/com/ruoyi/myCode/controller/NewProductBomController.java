@@ -43,7 +43,7 @@ public class NewProductBomController extends BaseController
     }
 
     /**
-     * 导出新产品BOM列表
+     * 导出新产品BOM问题记录列表
      */
     @PreAuthorize("@ss.hasPermi('newproducts:bom:export')")
     @Log(title = "新产品BOM", businessType = BusinessType.EXPORT)
@@ -55,8 +55,20 @@ public class NewProductBomController extends BaseController
         newProductBom.setIssueRecordFilter(issueRecord != null && issueRecord);
         List<NewProductBom> list = newProductBomService.selectNewProductBomList(newProductBom);
         ExcelUtil<NewProductBom> util = new ExcelUtil<NewProductBom>(NewProductBom.class);
+        util.exportExcel(response, list, "新产品BOM数据问题记录汇总");
+    }
+
+//    导出bom列表
+    @PreAuthorize("@ss.hasPermi('newproducts:bom:export')")
+    @Log(title = "新产品BOM", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportbom")
+    public void exportbom(HttpServletResponse response, NewProductBom newProductBom)
+    {
+        List<NewProductBom> list = newProductBomService.selectNewProductBom(newProductBom);
+        ExcelUtil<NewProductBom> util = new ExcelUtil<NewProductBom>(NewProductBom.class );
         util.exportExcel(response, list, "新产品BOM数据");
     }
+
 
 
     /**
@@ -101,6 +113,8 @@ public class NewProductBomController extends BaseController
     {
         return toAjax(newProductBomService.deleteNewProductBomByIds(ids));
     }
+
+//    导入
     @Log(title = "新产品BOM导入", businessType = BusinessType.IMPORT)
     @PostMapping("/importData")
     public AjaxResult importData(
