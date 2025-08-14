@@ -164,7 +164,7 @@
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['newproducts:plan:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['newproducts:plan:remove']">删除</el-button>
-          <el-button link type="primary" icon="Edit" @click="ResultStatus(scope.row)" v-hasPermi="['newproducts:plan:edit']">完成结果</el-button>
+          <el-button link type="primary" icon="Edit" @click="ResultStatus(scope.row)" v-hasPermi="['newproducts:plan:result']">完成结果</el-button>
         </template>
       </el-table-column>
     </el-table>
