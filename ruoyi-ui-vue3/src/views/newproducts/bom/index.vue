@@ -176,13 +176,13 @@
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
             v-hasPermi="['newproducts:bom:remove']">删除</el-button>
           <el-button link type="primary" icon="Edit" @click="handleInspectionStatus(scope.row)"
-            v-hasPermi="['newproducts:bom:edit']">质检情况</el-button>
+            v-hasPermi="['newproducts:bom:inspectionstatus']">质检情况</el-button>
           <el-button link type="primary" icon="Edit" @click="handleInspection(scope.row)"
-            v-hasPermi="['newproducts:bom:edit']">质检</el-button>
+            v-hasPermi="['newproducts:bom:inspection']">质检</el-button>
           <el-button link type="primary" icon="Edit" @click="handleCollection(scope.row)"
-            v-hasPermi="['newproducts:bom:edit']">领用</el-button>
+            v-hasPermi="['newproducts:bom:collection']">领用</el-button>
           <el-button link type="primary" icon="Edit" @click="handleIssue(scope.row)"
-            v-hasPermi="['newproducts:bom:edit']">问题记录</el-button>      
+            v-hasPermi="['newproducts:bom:issue']">问题记录</el-button>      
         </template>
       </el-table-column>
     </el-table>
