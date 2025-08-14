@@ -55,3 +55,11 @@ export function getBranches() {
     method: 'get'
   })
 }
+// 按月份查询
+export function countSalesByBranchForMonth(month) {
+  return request({
+    url: '/marketanalysis/saleanalysis/countByBranchForMonth',
+    method: 'get',
+    params: { month }
+  });
+}

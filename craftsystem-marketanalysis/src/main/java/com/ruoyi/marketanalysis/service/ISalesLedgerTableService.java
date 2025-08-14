@@ -69,7 +69,11 @@ public interface ISalesLedgerTableService
     List<Map<String, Object>> countSalesByVehicleForBranch(String branch);
     List<Map<String, Object>> countMonthlySalesComparison(Integer year, String vehicleType, String branch);
     // ISalesLedgerTableService.java 修改接口
-    List<Map<String, Object>> countSalesByVehicle(String vehicleType); // 添加参数
+//    List<Map<String, Object>> countSalesByVehicle(String vehicleType); // 添加参数
+    List<Map<String, Object>> countSalesByVehicle(
+            String vehicleType,
+            String month // 新增月份参数
+    );
     boolean checkDataExists();
     List<String> getVehicleTypes();
     List<String> getBranches();
@@ -85,6 +89,10 @@ public interface ISalesLedgerTableService
     List<Map<String, Object>> countSalesByVehicleForBranch1(String branch);
     // 新增方法
     List<String> getDistinctCategories();
-    List<Map<String, Object>> countSalesByCategory(String vehicleCategory);
-
+//    List<Map<String, Object>> countSalesByCategory(String vehicleCategory);
+List<Map<String, Object>> countSalesByCategory(
+        String vehicleCategory,
+        String month // 新增月份参数
+);
+    List<Map<String, Object>> countSalesByBranchForMonth(String month);
 }

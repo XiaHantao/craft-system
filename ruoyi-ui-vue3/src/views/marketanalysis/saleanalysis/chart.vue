@@ -1,5 +1,27 @@
 <template>
   <el-row>
+    <!-- 添加月份选择器 -->
+    <el-col :span="24" style="margin-bottom: 20px; display: flex; align-items: center;">
+      <span style="margin-right: 10px; font-weight: bold;">选择月份：</span>
+      <el-date-picker
+        v-model="selectedMonth"
+        type="month"
+        placeholder="请选择月份"
+        value-format="YYYY-MM"
+        style="width: 200px;"
+        @change="handleMonthChange"
+        :clearable="true"
+      />
+      <!-- 添加全部数据选项 -->
+      <el-button 
+        style="margin-left: 10px;" 
+        :type="!selectedMonth ? 'primary' : ''"
+        @click="selectAllData"
+      >
+        全部数据
+      </el-button>
+    </el-col>
+
     <el-col :span="24">
       <div ref="chart" style="height: 500px; margin-top: 20px;"></div>
     </el-col>
@@ -41,18 +63,30 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { countSalesByBranch } from "@/api/marketanalysis/saleanalysis/chart";
+import { countSalesByBranch, countSalesByBranchForMonth } from "@/api/marketanalysis/saleanalysis/chart"; // 导入两个API
 import * as echarts from 'echarts';
+import { ElMessage } from 'element-plus'; // 引入消息提示
 
 const chart = ref(null);
 let myChart = null;
 const tableData = ref([]); // 存储表格数据
 const tableFirstPart = ref([]); // 存储表格第一部分数据
 const tableSecondPart = ref([]); // 存储表格第二部分数据
+const selectedMonth = ref(''); // 默认不选择任何月份
 
 async function initChart() {
   try {
-    const response = await countSalesByBranch();
+    let response;
+    
+    // 根据是否选择月份调用不同的API
+    if (selectedMonth.value) {
+      // 调用按月统计的API
+      response = await countSalesByBranchForMonth(selectedMonth.value);
+    } else {
+      // 调用获取全部数据的API
+      response = await countSalesByBranch();
+    }
+    
     if (!response || !response.data) {
       throw new Error('未能获取销售数据');
     }
@@ -70,18 +104,29 @@ async function initChart() {
     tableFirstPart.value = chartData.slice(0, mid);
     tableSecondPart.value = chartData.slice(mid);
     
-    // 初始化ECharts实例
-    myChart = echarts.init(chart.value);
+    // 初始化或更新ECharts实例
+    if (!myChart) {
+      myChart = echarts.init(chart.value);
+      // 窗口调整时自适应
+      window.addEventListener('resize', handleResize);
+    }
+    
+    // 动态设置图表标题
+    const chartTitle = selectedMonth.value 
+      ? `各网点销售数据统计 (${selectedMonth.value})`
+      : '各网点销售数据统计 (全部)';
+    
     const option = {
       title: {
-        text: '各网点销售数据统计',
+        text: chartTitle,
         left: 'center',
         textStyle: {
-          fontSize: 16 // 图表标题稍小
+          fontSize: 16
         }
       },
       tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        formatter: '{b}：{c} 辆' // 显示网点名称和销量
       },
       xAxis: {
         type: 'category',
@@ -89,12 +134,14 @@ async function initChart() {
         axisLabel: { 
           rotate: 45,
           interval: 0,
-          fontSize: 12 // X轴标签字体稍小
-        }
+          fontSize: 12
+        },
+        name: '网点名称',
+        nameLocation: 'end'
       },
       yAxis: { 
         type: 'value',
-        name: '数量',
+        name: '销量（辆）',
         nameTextStyle: {
           fontSize: 12
         }
@@ -106,28 +153,26 @@ async function initChart() {
         itemStyle: {
           color: '#409EFF'
         },
-        barMaxWidth: 30, // 柱状图宽度减小
-        // 添加数据标签配置
+        barMaxWidth: 30,
         label: {
-          show: true,          // 显示标签
-          position: 'top',     // 标签位置在柱子上方
-          formatter: '{c}',    // 显示数值
-          fontSize: 12,        // 标签字体大小
-          fontWeight: 'bold',  // 加粗显示
-          color: '#333'        // 字体颜色
+          show: true,
+          position: 'top',
+          formatter: '{c}',
+          fontSize: 12,
+          fontWeight: 'bold',
+          color: '#333'
         }
       }],
       grid: {
-        bottom: 80 // 底部间距减小
+        bottom: 80
       }
     };
     
     myChart.setOption(option);
     
-    // 窗口调整时自适应
-    window.addEventListener('resize', handleResize);
   } catch (error) {
     console.error('图表初始化失败:', error);
+    ElMessage.error('加载销售数据失败：' + error.message);
   }
 }
 
@@ -135,6 +180,17 @@ function handleResize() {
   if (myChart) {
     myChart.resize();
   }
+}
+
+// 月份变更处理
+function handleMonthChange() {
+  initChart();
+}
+
+// 选择全部数据
+function selectAllData() {
+  selectedMonth.value = '';
+  initChart();
 }
 
 onMounted(() => {
@@ -213,6 +269,11 @@ onBeforeUnmount(() => {
   /* 图表容器高度减小 */
   .el-col > div[ref="chart"] {
     height: 400px;
+  }
+  
+  /* 月份选择器在小屏幕下全宽 */
+  .el-date-picker {
+    width: 100% !important;
   }
 }
 </style>

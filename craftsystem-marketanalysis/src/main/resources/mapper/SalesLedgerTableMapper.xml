@@ -269,14 +269,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE branch = #{branch}
         GROUP BY vehicle_type
     </select>
+<!--    <select id="countSalesByVehicle" resultType="map">-->
+<!--        SELECT-->
+<!--        vehicle_type AS name,-->
+<!--        COUNT(*) AS value-->
+<!--        FROM sales_ledger_table-->
+<!--        <where>-->
+<!--            <if test="vehicleType != null and vehicleType != ''">-->
+<!--                vehicle_type LIKE CONCAT('%', #{vehicleType}, '%')-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        GROUP BY vehicle_type-->
+<!--        ORDER BY value DESC-->
+<!--    </select>-->
     <select id="countSalesByVehicle" resultType="map">
         SELECT
         vehicle_type AS name,
         COUNT(*) AS value
         FROM sales_ledger_table
         <where>
+            <!-- 新增月份过滤条件 -->
+            <if test="month != null and month != ''">
+                AND DATE_FORMAT(order_acceptance_date, '%Y-%m') = #{month}
+            </if>
             <if test="vehicleType != null and vehicleType != ''">
-                vehicle_type LIKE CONCAT('%', #{vehicleType}, '%')
+                AND vehicle_type LIKE CONCAT('%', #{vehicleType}, '%')
             </if>
         </where>
         GROUP BY vehicle_type
@@ -373,6 +390,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT DISTINCT vehicle_category_chn
         FROM category_table
     </select>
+<!--    <select id="countSalesByCategory" resultType="map">-->
+<!--        SELECT-->
+<!--        c.vehicle_category_chn AS name,-->
+<!--        COUNT(s.id) AS value-->
+<!--        FROM category_table c-->
+<!--        LEFT JOIN sales_ledger_table s ON s.vehicle_type = c.vehicle_type-->
+<!--        <where>-->
+<!--            <if test="vehicleCategory != null and vehicleCategory != ''">-->
+<!--                AND c.vehicle_category_chn LIKE CONCAT('%', #{vehicleCategory}, '%')-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        GROUP BY c.vehicle_category_chn-->
+<!--        ORDER BY value DESC-->
+<!--    </select>-->
     <select id="countSalesByCategory" resultType="map">
         SELECT
         c.vehicle_category_chn AS name,
@@ -380,11 +411,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM category_table c
         LEFT JOIN sales_ledger_table s ON s.vehicle_type = c.vehicle_type
         <where>
+            <!-- 新增月份过滤条件 -->
+            <if test="month != null and month != ''">
+                AND DATE_FORMAT(s.order_acceptance_date, '%Y-%m') = #{month}
+            </if>
             <if test="vehicleCategory != null and vehicleCategory != ''">
                 AND c.vehicle_category_chn LIKE CONCAT('%', #{vehicleCategory}, '%')
             </if>
         </where>
         GROUP BY c.vehicle_category_chn
         ORDER BY value DESC
+    </select>
+    <select id="countSalesByBranchForMonth" resultType="java.util.Map">
+        SELECT
+            branch AS name,
+            COUNT(*) AS value
+        FROM sales_ledger_table
+        WHERE DATE_FORMAT(order_acceptance_date, '%Y-%m') = #{month}
+        GROUP BY branch
     </select>
 </mapper>
