@@ -3,6 +3,17 @@
     <!-- 搜索框 -->
     <div class="filter-container">
       <el-row :gutter="10" align="middle">
+        <!-- 添加年月选择器 -->
+        <el-col :span="6">
+          <el-date-picker
+            v-model="selectedMonth"
+            type="month"
+            placeholder="选择年月"
+            value-format="YYYY-MM"
+            style="width: 100%"
+          />
+        </el-col>
+        
         <el-col :span="6">
           <el-input
             v-model="searchCategory"
@@ -61,13 +72,15 @@ export default {
   data() {
     return {
       tableData: [],
-      searchCategory: '', // 改为车类
+      searchCategory: '', // 车类搜索词
+      selectedMonth: '', // 新增：选中的年月
       loading: true,
       total: 0,
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        vehicleCategory: null // 参数改为车类
+        vehicleCategory: null,
+        month: null // 新增：月份参数
       }
     }
   },
@@ -81,7 +94,8 @@ export default {
         const params = {
           pageNum: this.queryParams.pageNum,
           pageSize: this.queryParams.pageSize,
-          vehicleCategory: this.queryParams.vehicleCategory // 使用车类参数
+          vehicleCategory: this.queryParams.vehicleCategory,
+          month: this.queryParams.month // 新增：传递月份参数
         }
         const response = await countByCategory(params)
         this.tableData = response.rows
@@ -96,6 +110,7 @@ export default {
     handleFilter() {
       this.queryParams.pageNum = 1
       this.queryParams.vehicleCategory = this.searchCategory
+      this.queryParams.month = this.selectedMonth // 新增：设置月份参数
       this.fetchData()
     }
   }

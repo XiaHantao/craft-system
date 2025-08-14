@@ -3,6 +3,17 @@
     <!-- 搜索框 -->
     <div class="filter-container">
       <el-row :gutter="10" align="middle">
+        <!-- 添加年月选择器 -->
+        <el-col :span="6">
+          <el-date-picker
+            v-model="selectedMonth"
+            type="month"
+            placeholder="选择年月"
+            value-format="YYYY-MM"
+            style="width: 100%"
+          />
+        </el-col>
+        
         <el-col :span="6">
           <el-input
             v-model="searchVehicle"
@@ -22,87 +33,91 @@
       </el-row>
     </div>
   
-      <!-- 数据表格 -->
-      <el-table
-        :data="tableData" 
-        border
-        fit
-        highlight-current-row
-        v-loading="loading"
-        style="width: 100%"
-      >
-        <el-table-column
-          prop="name"
-          label="车型"
-          align="center"
-        />
-        <el-table-column
-          prop="value"
-          label="接单数"
-          align="center"
-        />
-      </el-table>
-
-      <!-- 分页组件 -->
-      <pagination
-        v-show="total>0"
-        :total="total"
-        v-model:page="queryParams.pageNum"
-        v-model:limit="queryParams.pageSize"
-        @pagination="fetchData"
+    <!-- 数据表格 -->
+    <el-table
+      :data="tableData" 
+      border
+      fit
+      highlight-current-row
+      v-loading="loading"
+      style="width: 100%"
+    >
+      <el-table-column
+        prop="name"
+        label="车型"
+        align="center"
       />
-    </div>
-  </template>
-  
-  <script>
-  import { countByVehicle } from '@/api/marketanalysis/saleanalysis/saleanalysis'
-  
-  export default {
-    data() {
-      return {
-        tableData: [],
-        searchVehicle: '',
-        loading: true,
-        total: 0,
-        queryParams: {
-          pageNum: 1,
-          pageSize: 10,
-          vehicleType:null 
-        }
-      }
-    },
-    created() {
-      this.fetchData()
-    },
-    methods: {
-      async fetchData() {
-        this.loading = true
-        try {
-          const params = {
-            pageNum: this.queryParams.pageNum,
-            pageSize: this.queryParams.pageSize,
-            vehicleType: this.queryParams.vehicleType // 确保参数名称与后端一致
-          }
-          const response = await countByVehicle(params)
-          this.tableData = response.rows
-          this.total = Number(response.total) // 确保后端返回分页总数
-        } catch (error) {
-          console.error('数据加载失败:', error)
-        } finally {
-          this.loading = false
-        }
-      },
-      handleFilter() {
-        this.queryParams.pageNum = 1
-        this.queryParams.vehicleType = this.searchVehicle
-        this.fetchData()
+      <el-table-column
+        prop="value"
+        label="接单数"
+        align="center"
+      />
+    </el-table>
+
+    <!-- 分页组件 -->
+    <pagination
+      v-show="total>0"
+      :total="total"
+      v-model:page="queryParams.pageNum"
+      v-model:limit="queryParams.pageSize"
+      @pagination="fetchData"
+    />
+  </div>
+</template>
+
+<script>
+import { countByVehicle } from '@/api/marketanalysis/saleanalysis/saleanalysis'
+
+export default {
+  data() {
+    return {
+      tableData: [],
+      searchVehicle: '',
+      selectedMonth: '', // 新增：选中的年月
+      loading: true,
+      total: 0,
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        vehicleType: null,
+        month: null // 新增：月份参数
       }
     }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    async fetchData() {
+      this.loading = true
+      try {
+        const params = {
+          pageNum: this.queryParams.pageNum,
+          pageSize: this.queryParams.pageSize,
+          vehicleType: this.queryParams.vehicleType,
+          month: this.queryParams.month // 新增：传递月份参数
+        }
+        const response = await countByVehicle(params)
+        this.tableData = response.rows
+        this.total = Number(response.total)
+      } catch (error) {
+        console.error('数据加载失败:', error)
+      } finally {
+        this.loading = false
+      }
+    },
+    handleFilter() {
+      this.queryParams.pageNum = 1
+      this.queryParams.vehicleType = this.searchVehicle
+      this.queryParams.month = this.selectedMonth // 新增：设置月份参数
+      this.fetchData()
+    }
   }
+}
 </script>
-  
-  <!-- 样式部分保持不变 -->
-  <style scoped>
+
+<!-- 样式部分保持不变 -->
+<style scoped>
 .filter-container {
   margin-bottom: 20px;
 }
@@ -112,4 +127,4 @@
 .el-row {
   margin-bottom: 10px;
 }
-  </style>
+</style>

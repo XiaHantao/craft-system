@@ -79,8 +79,12 @@ public interface SalesLedgerTableMapper
             @Param("vehicleType") String vehicleType,
             @Param("branch") String branch);
     List<Map<String, Object>> countSalesByVehicleForBranch(@Param("branch") String branch);
-    List<Map<String, Object>> countSalesByVehicle(@Param("vehicleType") String vehicleType);
-    // 新增数据存在检查方法
+//    List<Map<String, Object>> countSalesByVehicle(@Param("vehicleType") String vehicleType);
+List<Map<String, Object>> countSalesByVehicle(
+        @Param("vehicleType") String vehicleType,
+        @Param("month") String month // 新增月份参数
+);
+   // 新增数据存在检查方法
     int checkDataExists();
     // 清空表数据
     int cleanTable();
@@ -112,6 +116,11 @@ List<Map<String, Object>> countSalesByMonth1(
 
     // 新增方法
     List<String> getDistinctCategories();
-    List<Map<String, Object>> countSalesByCategory(@Param("vehicleCategory") String vehicleCategory);
+//    List<Map<String, Object>> countSalesByCategory(@Param("vehicleCategory") String vehicleCategory);
+List<Map<String, Object>> countSalesByCategory(
+        @Param("vehicleCategory") String vehicleCategory,
+        @Param("month") String month // 新增月份参数
+);
     List<Map<String, Object>> countSalesByVehicleForBranch1(@Param("branch") String branch);
+    List<Map<String, Object>> countSalesByBranchForMonth(@Param("month") String month);
 }

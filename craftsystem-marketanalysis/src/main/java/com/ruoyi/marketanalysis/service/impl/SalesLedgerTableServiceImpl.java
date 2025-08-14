@@ -138,10 +138,17 @@ public class SalesLedgerTableServiceImpl implements ISalesLedgerTableService
         if (year == null) year = Year.now().getValue();
         return salesLedgerTableMapper.countMonthlySalesComparison(year, vehicleType, branch);
     }
-    @Override
-    public List<Map<String, Object>> countSalesByVehicle(String vehicleType) {
-        return salesLedgerTableMapper.countSalesByVehicle(vehicleType); // 传递参数给Mapper
-    }
+//    @Override
+//    public List<Map<String, Object>> countSalesByVehicle(String vehicleType) {
+//        return salesLedgerTableMapper.countSalesByVehicle(vehicleType); // 传递参数给Mapper
+//    }
+@Override
+public List<Map<String, Object>> countSalesByVehicle(
+        String vehicleType,
+        String month // 新增月份参数
+) {
+    return salesLedgerTableMapper.countSalesByVehicle(vehicleType, month);
+}
     @Override
     public List<Map<String, Object>> countSalesByVehicleForBranch(String branch) {
         return salesLedgerTableMapper.countSalesByVehicleForBranch(branch);
@@ -184,12 +191,23 @@ public List<Map<String, Object>> countSalesByMonth1(String vehicleCategory, Stri
     public List<String> getDistinctCategories() {
         return salesLedgerTableMapper.getDistinctCategories();
     }
-    @Override
-    public List<Map<String, Object>> countSalesByCategory(String vehicleCategory) {
-        return salesLedgerTableMapper.countSalesByCategory(vehicleCategory);
-    }
+//    @Override
+//    public List<Map<String, Object>> countSalesByCategory(String vehicleCategory) {
+//        return salesLedgerTableMapper.countSalesByCategory(vehicleCategory);
+//    }
+@Override
+public List<Map<String, Object>> countSalesByCategory(
+        String vehicleCategory,
+        String month // 新增月份参数
+) {
+    return salesLedgerTableMapper.countSalesByCategory(vehicleCategory, month);
+}
     @Override
     public List<Map<String, Object>> countSalesByVehicleForBranch1(String branch) {
         return salesLedgerTableMapper.countSalesByVehicleForBranch1(branch);
+    }
+    @Override
+    public List<Map<String, Object>> countSalesByBranchForMonth(String month) {
+        return salesLedgerTableMapper.countSalesByBranchForMonth(month);
     }
 }

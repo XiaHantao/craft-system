@@ -148,11 +148,20 @@ public class SalesLedgerTableController extends BaseController
         return success(data);
     }
     // SalesLedgerTableController.java 修改countByVehicle接口
-    @PreAuthorize("@ss.hasPermi('marketanalysis:saleanalysis:list')")
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:saleanalysis:list')")
+//    @GetMapping("/countByVehicle")
+//    public TableDataInfo countByVehicle(@RequestParam(required = false) String vehicleType) { // 添加参数接收
+//        startPage();
+//        List<Map<String, Object>> data = salesLedgerTableService.countSalesByVehicle(vehicleType); // 修改服务层方法
+//        return getDataTable(data);
+//    }
     @GetMapping("/countByVehicle")
-    public TableDataInfo countByVehicle(@RequestParam(required = false) String vehicleType) { // 添加参数接收
+    public TableDataInfo countByVehicle(
+            @RequestParam(required = false) String vehicleType,
+            @RequestParam(required = false) String month // 新增月份参数
+    ) {
         startPage();
-        List<Map<String, Object>> data = salesLedgerTableService.countSalesByVehicle(vehicleType); // 修改服务层方法
+        List<Map<String, Object>> data = salesLedgerTableService.countSalesByVehicle(vehicleType, month);
         return getDataTable(data);
     }
     // 同比环比柱状图
@@ -230,16 +239,32 @@ public AjaxResult countByMonth1(
         List<String> data = salesLedgerTableService.getDistinctCategories();
         return success(data);
     }
-    @PreAuthorize("@ss.hasPermi('marketanalysis:saleanalysis:list')")
-    @GetMapping("/countByCategory")
-    public TableDataInfo countByCategory(@RequestParam(required = false) String vehicleCategory) {
-        startPage();
-        List<Map<String, Object>> data = salesLedgerTableService.countSalesByCategory(vehicleCategory);
-        return getDataTable(data);
-    }
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:saleanalysis:list')")
+//    @GetMapping("/countByCategory")
+//    public TableDataInfo countByCategory(@RequestParam(required = false) String vehicleCategory) {
+//        startPage();
+//        List<Map<String, Object>> data = salesLedgerTableService.countSalesByCategory(vehicleCategory);
+//        return getDataTable(data);
+//    }
+@PreAuthorize("@ss.hasPermi('marketanalysis:saleanalysis:list')")
+@GetMapping("/countByCategory")
+public TableDataInfo countByCategory(
+        @RequestParam(required = false) String vehicleCategory,
+        @RequestParam(required = false) String month // 新增月份参数
+) {
+    startPage();
+    List<Map<String, Object>> data = salesLedgerTableService.countSalesByCategory(vehicleCategory, month);
+    return getDataTable(data);
+}
     @GetMapping("/countByVehicleForBranch1")
     public AjaxResult countByVehicleForBranch1(@RequestParam String branch) {
         List<Map<String, Object>> data = salesLedgerTableService.countSalesByVehicleForBranch1(branch);
+        return success(data);
+    }
+    @PreAuthorize("@ss.hasPermi('marketanalysis:saleanalysis:list')")
+    @GetMapping("/countByBranchForMonth")
+    public AjaxResult countByBranchForMonth(@RequestParam String month) {
+        List<Map<String, Object>> data = salesLedgerTableService.countSalesByBranchForMonth(month);
         return success(data);
     }
 }
