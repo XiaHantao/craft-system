@@ -18,9 +18,6 @@ public class CostpriceTable extends BaseEntity
     /** id */
     private Long id;
 
-    /** 制造商 */
-    @Excel(name = "制造商")
-    private String manufacturer;
 
     /** 车型 */
     @Excel(name = "车型")
@@ -69,6 +66,11 @@ public class CostpriceTable extends BaseEntity
     /** 毛利（元，含税） */
     @Excel(name = "毛利（元，含税）")
     private String grossProfitIncludingTax;
+
+    /** 制造商 */
+    @Excel(name = "制造商")
+    private String manufacturer;
+
 
     public void setId(Long id) 
     {

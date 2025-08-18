@@ -97,7 +97,7 @@ public class CategoryoneParameterTableController extends BaseController
         return toAjax(categoryoneParameterTableService.deleteCategoryoneParameterTableByIds(ids));
     }
     // 一类车参数Excel导入接口
-    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_one:import')")
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_one:import')")
     @Log(title = "一类车参数导入", businessType = BusinessType.IMPORT)
     @PostMapping("/importData")
     @ResponseBody

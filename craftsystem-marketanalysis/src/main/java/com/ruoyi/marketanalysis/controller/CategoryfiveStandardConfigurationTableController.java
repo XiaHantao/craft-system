@@ -97,6 +97,7 @@ public class CategoryfiveStandardConfigurationTableController extends BaseContro
         return toAjax(categoryfiveStandardConfigurationTableService.deleteCategoryfiveStandardConfigurationTableByIds(ids));
     }
     // 导入接口
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:standardfive:import')")
     @PostMapping("/importData")
     public AjaxResult importData(
             @RequestParam("file") MultipartFile file,

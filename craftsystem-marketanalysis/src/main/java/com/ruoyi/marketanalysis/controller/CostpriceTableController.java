@@ -97,7 +97,7 @@ public class CostpriceTableController extends BaseController
         return toAjax(costpriceTableService.deleteCostpriceTableByIds(ids));
     }
     // 新增导入方法
-    @PreAuthorize("@ss.hasPermi('marketanalysis:costprice:import')")
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:costprice:import')")
     @Log(title = "成本售价表", businessType = BusinessType.IMPORT)
     @PostMapping("/importData")
     public AjaxResult importData(
