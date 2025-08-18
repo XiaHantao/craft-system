@@ -2,6 +2,7 @@ package com.ruoyi.marketanalysis.utils;
 
 import com.ruoyi.marketanalysis.domain.*;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
@@ -965,4 +966,104 @@ public class ExcelUtils {
         }
         return list;
     }
+//    // 添加辅助方法：检查单元格是否在合并区域内并返回值
+//    private static String getMergedRegionValue(Sheet sheet, int rowIndex, int columnIndex, FormulaEvaluator evaluator) {
+//        for (CellRangeAddress region : sheet.getMergedRegions()) {
+//            if (region.isInRange(rowIndex, columnIndex)) {
+//                // 获取合并区域左上角的单元格
+//                Row firstRow = sheet.getRow(region.getFirstRow());
+//                Cell firstCell = firstRow.getCell(region.getFirstColumn());
+//                return getCellValue(firstCell, evaluator);
+//            }
+//        }
+//        return null;
+//    }
+
+//    // 修改解析方法处理合并单元格
+//    public static List<VehicleCategoryTable> parseVehicleCategoryExcel(File excelFile) throws IOException {
+//        List<VehicleCategoryTable> list = new ArrayList<>();
+//        FileInputStream fis = new FileInputStream(excelFile);
+//        Workbook workbook = new XSSFWorkbook(fis);
+//        FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+//
+//        int numberOfSheets = workbook.getNumberOfSheets();
+//        for (int s = 0; s < numberOfSheets; s++) {
+//            Sheet sheet = workbook.getSheetAt(s);
+//            String sheetName = sheet.getSheetName();
+//            if (sheetName.contains("九大类")) continue; // 跳过说明sheet
+//
+//            // 提取车辆类别（第一个空格前的部分）
+//            String vehicleCategory = sheetName.split(" ")[0];
+//
+//            for (Row row : sheet) {
+//                if (row.getRowNum() < 2) continue; // 跳过前两行标题
+//
+//                VehicleCategoryTable item = new VehicleCategoryTable();
+//                item.setVehicleCategory(vehicleCategory);
+//
+//                // 解析每一列，处理合并单元格
+//                for (int i = 0; i < 8; i++) { // 共8列(A-H)
+//                    Cell cell = row.getCell(i);
+//                    String value = null;
+//
+//                    // 1. 检查是否在合并区域内
+//                    if (cell != null) {
+//                        value = getMergedRegionValue(sheet, row.getRowNum(), cell.getColumnIndex(), evaluator);
+//                    }
+//
+//                    // 2. 如果不是合并区域，直接读取单元格
+//                    if (value == null && cell != null) {
+//                        value = getCellValue(cell, evaluator);
+//                    }
+//
+//                    // 3. 根据列索引设置字段
+//                    switch (i) {
+//                        case 0: item.setSeries(value); break;      // A列：系列
+//                        case 1: item.setTonnage(value); break;    // B列：吨位
+//                        case 2: item.setVehicleType(value); break;// C列：车型
+//                        case 3: item.setEngineType(value); break; // D列：发动机/配置
+//                        case 4: // E列：标配（需拆分）
+//                            if (value != null) {
+//                                item.setValveplateNumber(parseConfig(value, "阀片数量："));
+//                                item.setBatteryCapacity(parseConfig(value, "电瓶容量："));
+//                                item.setTireSpecification(parseConfig(value, "轮胎规格："));
+//                            }
+//                            break;
+//                        case 5: item.setBusinessPersonnel(value); break; // F列
+//                        case 6: item.setDevelopmentClass(value); break;  // G列
+//                        case 7: item.setReleaseDate(parseDate(value));   // H列
+//                    }
+//                }
+//                list.add(item);
+//            }
+//        }
+//        workbook.close();
+//        fis.close();
+//        return list;
+//    }
+//
+//    // 辅助方法：解析配置字符串（如"阀片数量：二片阀"）
+//    private static String parseConfig(String config, String prefix) {
+//        if (config == null) return null;
+//        int start = config.indexOf(prefix);
+//        if (start == -1) return null;
+//        start += prefix.length();
+//        int end = config.indexOf("\n", start);
+//        return (end == -1) ? config.substring(start) : config.substring(start, end);
+//    }
+//
+//    // 辅助方法：转换日期格式（如"2024.6" -> Date）
+//    private static Date parseDate(String dateStr) {
+//        if (dateStr == null) return null;
+//        try {
+//            String[] parts = dateStr.split("\\.");
+//            int year = Integer.parseInt(parts[0]);
+//            int month = Integer.parseInt(parts[1]);
+//            Calendar cal = Calendar.getInstance();
+//            cal.set(year, month - 1, 1); // 月份从0开始
+//            return cal.getTime();
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
 }

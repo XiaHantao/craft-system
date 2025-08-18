@@ -98,6 +98,7 @@ public class PerformanceTableController extends BaseController
     }
     // 新增导入方法
     @PostMapping("/importData")
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:performance:import')")
     @ResponseBody
     public AjaxResult importData(
             @RequestParam("file") MultipartFile file,

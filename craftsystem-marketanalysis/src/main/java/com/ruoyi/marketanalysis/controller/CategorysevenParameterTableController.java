@@ -97,6 +97,7 @@ public class CategorysevenParameterTableController extends BaseController
         return toAjax(categorysevenParameterTableService.deleteCategorysevenParameterTableByIds(ids));
     }
     @PostMapping("/importData")
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_seven:import')")
     @ResponseBody
     public AjaxResult importData(
             @RequestParam("file") MultipartFile file,

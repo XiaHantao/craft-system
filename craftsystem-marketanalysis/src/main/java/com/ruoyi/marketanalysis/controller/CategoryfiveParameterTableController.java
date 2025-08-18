@@ -97,6 +97,7 @@ public class CategoryfiveParameterTableController extends BaseController
         return toAjax(categoryfiveParameterTableService.deleteCategoryfiveParameterTableByIds(ids));
     }
     // 在类中添加导入方法
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_five:import')")
     @PostMapping("/importData")
     @ResponseBody
     public AjaxResult importData(

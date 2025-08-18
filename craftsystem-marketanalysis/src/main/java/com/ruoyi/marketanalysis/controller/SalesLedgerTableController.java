@@ -99,6 +99,7 @@ public class SalesLedgerTableController extends BaseController
         return toAjax(salesLedgerTableService.deleteSalesLedgerTableByIds(ids));
     }
     @PostMapping("/importData")
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:saleanalysis:import')")
     @ResponseBody
     public AjaxResult importData(
             @RequestParam("file") MultipartFile file,

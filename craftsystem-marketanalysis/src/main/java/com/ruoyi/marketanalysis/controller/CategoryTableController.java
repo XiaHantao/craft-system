@@ -97,6 +97,7 @@ public class CategoryTableController extends BaseController
         return toAjax(categoryTableService.deleteCategoryTableByIds(ids));
     }
     // 新增导入方法
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:category:import')")
     @PostMapping("/importData")
     @ResponseBody
     public AjaxResult importData(

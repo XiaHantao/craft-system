@@ -97,6 +97,7 @@ public class CategorythreeParameterTableController extends BaseController
         return toAjax(categorythreeParameterTableService.deleteCategorythreeParameterTableByIds(ids));
     }
     @PostMapping("/importData")
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_three:import')")
     @ResponseBody
     public AjaxResult importData(
             @RequestParam("file") MultipartFile file,

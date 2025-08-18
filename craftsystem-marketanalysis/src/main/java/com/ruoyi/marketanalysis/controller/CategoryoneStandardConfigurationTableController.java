@@ -97,6 +97,7 @@ public class CategoryoneStandardConfigurationTableController extends BaseControl
         return toAjax(categoryoneStandardConfigurationTableService.deleteCategoryoneStandardConfigurationTableByIds(ids));
     }
     @PostMapping("/importData")
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:standardone:import')")
     public AjaxResult importData(
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "updateSupport", defaultValue = "false") boolean updateSupport

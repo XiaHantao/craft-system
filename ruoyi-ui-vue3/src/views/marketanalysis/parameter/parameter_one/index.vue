@@ -32,7 +32,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button type="info" plain icon="Upload" @click="handleImport"
-          v-hasPermi="['marketanalysis:parameter_one:import']">导入</el-button>
+         >导入</el-button>
       </el-col>
       <input ref="importRef" type="file" hidden accept=".xlsx, .xls" @change="handleFileChange" />
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>

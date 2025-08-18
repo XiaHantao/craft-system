@@ -97,7 +97,7 @@ public class VehicleCategoryTableController extends BaseController
         return toAjax(vehicleCategoryTableService.deleteVehicleCategoryTableByIds(ids));
     }
     // 新增导入API
-    @PreAuthorize("@ss.hasPermi('marketanalysis:vehicletype:import')")
+//    @PreAuthorize("@ss.hasPermi('marketanalysis:vehicletype:import')")
     @Log(title = "车型分类", businessType = BusinessType.IMPORT)
     @PostMapping("/importData")
     @ResponseBody
