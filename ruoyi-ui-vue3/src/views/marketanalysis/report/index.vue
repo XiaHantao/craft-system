@@ -75,7 +75,7 @@
           <el-input v-model="form.reportFormat" placeholder="请输入报告说明" />
         </el-form-item>
         <el-form-item label="试验报告" prop="file">
-          <file-upload :limit="1"  v-model="form.file"/>
+          <file-upload  v-model="form.file"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -83,6 +83,30 @@
           <el-button type="primary" @click="submitForm">确 定</el-button>
           <el-button @click="cancel">取 消</el-button>
         </div>
+      </template>
+    </el-dialog>
+    <!-- 新增文件选择下载对话框 -->
+    <el-dialog v-model="downloadSelectVisible" title="选择下载文件" width="500px">
+      <el-scrollbar height="300px">
+        <el-checkbox-group v-model="selectedDownloadFiles" class="file-select-group">
+          <el-checkbox 
+            v-for="(file, index) in downloadableFiles" 
+            :key="index" 
+            :label="file.fullUrl"
+            class="file-item"
+          >
+            <div class="file-info">
+              <el-icon class="file-type-icon">
+                <component :is="getFileIcon(file.fullUrl)"/>
+              </el-icon>
+              <span class="file-name">{{ file.displayName }}</span>
+            </div>
+          </el-checkbox>
+        </el-checkbox-group>
+      </el-scrollbar>
+      <template #footer>
+        <el-button @click="downloadSelectVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmDownload">下载选中文件</el-button>
       </template>
     </el-dialog>
   </div>
@@ -103,7 +127,10 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-
+// 新增下载相关状态
+const downloadSelectVisible = ref(false);
+const downloadableFiles = ref([]);
+const selectedDownloadFiles = ref([]);
 const data = reactive({
   form: {},
   queryParams: {
@@ -234,35 +261,81 @@ function handleExport() {
   }, `report_${new Date().getTime()}.xlsx`)
 }
 
-/** 多文件下载 */
+// 文件下载方法 - 多文件支持
+const getFileExtension = (url) => {
+  const filename = url.split(/[\\/]/).pop();
+  return filename.split('.').pop() || '';
+};
+
+const getFileName = (url) => {
+  const filename = url.split(/[\\/]/).pop();
+  return filename.split('_').slice(0, -1).join('_');
+};
+
+const getFileIcon = (url) => {
+  const ext = getFileExtension(url).toLowerCase();
+  const iconMap = {
+    mp4: 'VideoPlay', webm: 'VideoPlay', mov: 'VideoPlay',
+    jpg: 'Picture', jpeg: 'Picture', png: 'Picture', gif: 'Picture', webp: 'Picture'
+  };
+  return iconMap[ext] || 'Document';
+};
+const parseFileUrls = (fileString) => {
+  if (!fileString) return [];
+  return decodeURIComponent(fileString)
+    .split(',')
+    .map(url => url.trim().replace(/^\/+/, '')) // 去除开头斜杠
+    .filter(url => url.length > 0);
+};
 const formatFileUrl = (url) => {
   const baseUrl = import.meta.env.VITE_APP_BASE_API;
   if (url.startsWith('http')) return url;
   return `${baseUrl}/${url}`;
 };
 
-function downloadFiles(urls) {
-  // 统一处理输入为数组
-  if (typeof urls === 'string') {
-    urls = decodeURIComponent(urls).split(',').map(url => url.trim());
-  }
-  
-  // 确保是数组格式
-  if (!Array.isArray(urls)) {
-    console.error('urls 必须是数组或逗号分隔的字符串');
+const downloadFiles = (urls) => {
+  const files = parseFileUrls(urls);
+  // 多个文件显示选择框
+  showDownloadSelection(files);
+};
+
+// 显示下载选择对话框
+const showDownloadSelection = (files) => {
+  downloadableFiles.value = files.map(file => ({
+    fullUrl: file,
+    displayName: getFileNameForDisplay(file)
+  }));
+  selectedDownloadFiles.value = []; // 清空选中状态
+  downloadSelectVisible.value = true;
+};
+
+// 获取显示文件名（完整文件名）
+const getFileNameForDisplay = (url) => {
+  const decodedUrl = decodeURIComponent(url);
+  return decodedUrl.split('/').pop().split('_').join('_'); // 保留完整文件名
+};
+
+// 确认下载
+const confirmDownload = () => {
+  if (selectedDownloadFiles.value.length === 0) {
+    proxy.$modal.msgError('请至少选择一个文件');
     return;
   }
+  handleDirectDownload(selectedDownloadFiles.value);
+  downloadSelectVisible.value = false;
+};
 
-  // 遍历下载每个文件
+// 直接下载处理
+const handleDirectDownload = (urls) => {
   urls.forEach(url => {
-    const formattedUrl = formatFileUrl(url);
     const link = document.createElement('a');
-    link.href = formattedUrl;
-    link.download = decodeURIComponent(url.split('/').pop());
+    link.href = formatFileUrl(url);
+    link.download = getFileNameForDisplay(url);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   });
-}
+};
+
 getList();
 </script>
