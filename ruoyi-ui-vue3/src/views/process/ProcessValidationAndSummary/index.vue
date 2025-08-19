@@ -747,7 +747,10 @@ function handleHistory() {
 
 /** 文件下载 */
 function downloadFile(filePath) {
-  proxy.$download.resource(filePath);
+  const paths = filePath.split(',').map(path => path.trim());
+  paths.forEach(path => {
+    proxy.$download.resource(path);
+  });
 }
 
 
