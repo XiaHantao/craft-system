@@ -70,16 +70,22 @@
 <!--      <el-table-column label="id" align="center" prop="id" />-->
       <el-table-column label="维修内容" align="center" prop="maintenanceRecord" />
 <!--      <el-table-column label="维修文件" align="center" prop="maintenanceFile" />-->
+<!--      <el-table-column label="维修文件" align="center" prop="maintenanceFile">-->
+<!--        <template #default="{ row }">-->
+<!--            <span v-if="row.maintenanceFile">-->
+<!--              &lt;!&ndash; 如果有文件地址，显示预览按钮 &ndash;&gt;-->
+<!--              <el-button type="text" @click="previewFile(row.maintenanceFile)">预览</el-button>-->
+<!--            </span>-->
+<!--          <span v-else>-->
+<!--            &lt;!&ndash; 如果没有文件地址，显示“无图纸” &ndash;&gt;-->
+<!--            无文件-->
+<!--          </span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="维修文件" align="center" prop="maintenanceFile">
-        <template #default="{ row }">
-            <span v-if="row.maintenanceFile">
-              <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.maintenanceFile)">预览</el-button>
-            </span>
-          <span v-else>
-            <!-- 如果没有文件地址，显示“无图纸” -->
-            无文件
-          </span>
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.maintenanceFile" icon="Download" @click="downloadFile(scope.row.maintenanceFile)">
+          </el-button>
         </template>
       </el-table-column>
 <!--      <el-table-column label="创建者" align="center" prop="createBy" />-->
@@ -193,7 +199,13 @@ function reset() {
   };
   proxy.resetForm("maintenanceRecordRef");
 }
-
+/** 文件下载 */
+function downloadFile(filePath) {
+  const paths = filePath.split(',').map(path => path.trim());
+  paths.forEach(path => {
+    proxy.$download.resource(path);
+  });
+}
 //预览文件
 function previewFile(fileUrl) {
   const baseUrl = import.meta.env.VITE_APP_BASE_API; // 或者你可以直接赋值为基础文件路径

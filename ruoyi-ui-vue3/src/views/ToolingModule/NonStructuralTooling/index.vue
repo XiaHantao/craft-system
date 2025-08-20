@@ -178,42 +178,60 @@
       <el-table-column label="模具位置" align="center" prop="moldPosition" />
       <el-table-column label="备注" align="center" prop="remark" />
 <!--      <el-table-column label="是否为共用件" align="center" prop="sharedComponents" />-->
+<!--      <el-table-column label="工装图纸" align="center" prop="toolingDrawings">-->
+<!--        <template #default="{ row }">-->
+<!--            <span v-if="row.toolingDrawings">-->
+<!--              &lt;!&ndash; 如果有文件地址，显示预览按钮 &ndash;&gt;-->
+<!--              <el-button type="text" @click="previewFile(row.toolingDrawings)">预览</el-button>-->
+<!--            </span>-->
+<!--          <span v-else>-->
+<!--            &lt;!&ndash; 如果没有文件地址，显示“无图纸” &ndash;&gt;-->
+<!--            无图纸-->
+<!--          </span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="工装图纸" align="center" prop="toolingDrawings">
-        <template #default="{ row }">
-            <span v-if="row.toolingDrawings">
-              <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.toolingDrawings)">预览</el-button>
-            </span>
-          <span v-else>
-            <!-- 如果没有文件地址，显示“无图纸” -->
-            无图纸
-          </span>
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.toolingDrawings" icon="Download" @click="downloadFile(scope.row.toolingDrawings)">
+          </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="工艺文件" align="center" prop="processDocumentsName" width="160">
-        <template #default="{ row }">
-            <span v-if="getFileName(row.processDocuments)">
-              <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.processDocuments)">{{ getFileName(row.processDocuments) }}</el-button>
-            </span>
-          <span v-else>
-            <!-- 如果没有文件地址，显示“无图纸” -->
-            无文件
-          </span>
+<!--      <el-table-column label="工艺文件" align="center" prop="processDocumentsName" width="160">-->
+<!--        <template #default="{ row }">-->
+<!--            <span v-if="getFileName(row.processDocuments)">-->
+<!--              &lt;!&ndash; 如果有文件地址，显示预览按钮 &ndash;&gt;-->
+<!--              <el-button type="text" @click="previewFile(row.processDocuments)">{{ getFileName(row.processDocuments) }}</el-button>-->
+<!--            </span>-->
+<!--          <span v-else>-->
+<!--            &lt;!&ndash; 如果没有文件地址，显示“无图纸” &ndash;&gt;-->
+<!--            无文件-->
+<!--          </span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+      <el-table-column label="工艺文件" align="center" prop="processDocuments" width="160">
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.processDocuments" icon="Download" @click="downloadFile(scope.row.processDocuments)">
+          </el-button>
         </template>
       </el-table-column>
       <!--      <el-table-column label="工艺文件路径" align="center" prop="processDocuments" />-->
       <!--      <el-table-column label="物料清单名" align="center" prop="mbomName" />-->
-      <el-table-column label="物料清单" align="center" prop="mbomName" width="160">
-        <template #default="{ row }">
-            <span v-if="getFileName(row.mbomFile)">
-              <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.mbomFile)">{{ getFileName(row.mbomFile) }}</el-button>
-            </span>
-          <span v-else>
-            <!-- 如果没有文件地址，显示“无图纸” -->
-            无文件
-          </span>
+<!--      <el-table-column label="物料清单" align="center" prop="mbomName" width="160">-->
+<!--        <template #default="{ row }">-->
+<!--            <span v-if="getFileName(row.mbomFile)">-->
+<!--              &lt;!&ndash; 如果有文件地址，显示预览按钮 &ndash;&gt;-->
+<!--              <el-button type="text" @click="previewFile(row.mbomFile)">{{ getFileName(row.mbomFile) }}</el-button>-->
+<!--            </span>-->
+<!--          <span v-else>-->
+<!--            &lt;!&ndash; 如果没有文件地址，显示“无图纸” &ndash;&gt;-->
+<!--            无文件-->
+<!--          </span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+      <el-table-column label="物料清单" align="center" prop="mbomFile" width="160">
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.mbomFile" icon="Download" @click="downloadFile(scope.row.mbomFile)">
+          </el-button>
         </template>
       </el-table-column>
       <!--      <el-table-column label="验证文件" align="center" prop="verifyFile" />-->
@@ -553,7 +571,12 @@ function handleSelectionChange(selection) {
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
-
+function downloadFile(filePath) {
+  const paths = filePath.split(',').map(path => path.trim());
+  paths.forEach(path => {
+    proxy.$download.resource(path);
+  });
+}
 /** 新增按钮操作 */
 function handleAdd() {
   reset();

@@ -100,17 +100,12 @@
 <!--      <el-table-column label="车型id" align="center" prop="modelId" />-->
 <!--      <el-table-column label="是否为共用件" align="center" prop="sharedComponents" />-->
       <el-table-column label="工装图纸" align="center" prop="toolingDrawings">
-        <template #default="{ row }">
-            <span v-if="row.toolingDrawings">
-              <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.toolingDrawings)">预览</el-button>
-            </span>
-          <span v-else>
-            <!-- 如果没有文件地址，显示“无图纸” -->
-            无图纸
-          </span>
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.toolingDrawings" icon="Download" @click="downloadFile(scope.row.toolingDrawings)">
+          </el-button>
         </template>
-      </el-table-column><!--      <el-table-column label="验证文件" align="center" prop="verifyFile" />-->
+      </el-table-column>
+      <!--      <el-table-column label="验证文件" align="center" prop="verifyFile" />-->
 <!--      <el-table-column label="采购清单" align="center" prop="procurementList" />-->
 <!--      <el-table-column label="验证结论" align="center" prop="verificationConclusion" />-->
       <el-table-column label="更换时间" align="center" prop="changeTime" width="180">
@@ -425,7 +420,13 @@ function handleDelete(row) {
     proxy.$modal.msgSuccess("删除成功");
   }).catch(() => {});
 }
-
+/** 文件下载 */
+function downloadFile(filePath) {
+  const paths = filePath.split(',').map(path => path.trim());
+  paths.forEach(path => {
+    proxy.$download.resource(path);
+  });
+}
 /** 导出按钮操作 */
 function handleExport() {
   proxy.download('ToolingModule/toolingDetail/export', {
