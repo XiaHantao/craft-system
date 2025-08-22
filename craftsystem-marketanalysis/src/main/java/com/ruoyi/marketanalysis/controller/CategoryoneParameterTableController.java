@@ -17,7 +17,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 一类车参数Controller
+ * I类车参数Controller
  * 
  * @author ruoyi
  * @date 2025-03-19
@@ -45,7 +45,7 @@ public class CategoryoneParameterTableController extends BaseController
      * 导出一类车参数列表
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_one:export')")
-    @Log(title = "一类车参数", businessType = BusinessType.EXPORT)
+    @Log(title = "I类车参数", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CategoryoneParameterTable categoryoneParameterTable)
     {
@@ -68,7 +68,7 @@ public class CategoryoneParameterTableController extends BaseController
      * 新增一类车参数
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_one:add')")
-    @Log(title = "一类车参数", businessType = BusinessType.INSERT)
+    @Log(title = "I类车参数", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CategoryoneParameterTable categoryoneParameterTable)
     {
@@ -79,7 +79,7 @@ public class CategoryoneParameterTableController extends BaseController
      * 修改一类车参数
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_one:edit')")
-    @Log(title = "一类车参数", businessType = BusinessType.UPDATE)
+    @Log(title = "I类车参数", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CategoryoneParameterTable categoryoneParameterTable)
     {
@@ -90,15 +90,15 @@ public class CategoryoneParameterTableController extends BaseController
      * 删除一类车参数
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_one:remove')")
-    @Log(title = "一类车参数", businessType = BusinessType.DELETE)
+    @Log(title = "I类车参数", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(categoryoneParameterTableService.deleteCategoryoneParameterTableByIds(ids));
     }
-    // 一类车参数Excel导入接口
+    // I类车参数Excel导入接口
 //    @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_one:import')")
-    @Log(title = "一类车参数导入", businessType = BusinessType.IMPORT)
+    @Log(title = "I类车参数导入", businessType = BusinessType.IMPORT)
     @PostMapping("/importData")
     @ResponseBody
     public AjaxResult importData(

@@ -18,6 +18,10 @@ public class CategoryfiveStandardConfigurationTable extends BaseEntity
     /** id */
     private Long id;
 
+    /** 车型 */
+    @Excel(name = "车型")
+    private String vehicleType;
+
     /** 制造商 */
     @Excel(name = "制造商")
     private String manufacturer;
@@ -253,7 +257,15 @@ public class CategoryfiveStandardConfigurationTable extends BaseEntity
     /** FICS合力车联网基本版（国内） */
     @Excel(name = "FICS合力车联网基本版（国内）")
     private String ficsHeliConnectedCarBasicEdition;
+    public void setVehicleType(String vehicleType)
+    {
+        this.vehicleType = vehicleType;
+    }
 
+    public String getVehicleType()
+    {
+        return vehicleType;
+    }
     public void setId(Long id) 
     {
         this.id = id;
@@ -799,6 +811,7 @@ public class CategoryfiveStandardConfigurationTable extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
+            .append("vehicleType", getVehicleType())
             .append("manufacturer", getManufacturer())
             .append("pneumaticTire", getPneumaticTire())
             .append("solidTire", getSolidTire())

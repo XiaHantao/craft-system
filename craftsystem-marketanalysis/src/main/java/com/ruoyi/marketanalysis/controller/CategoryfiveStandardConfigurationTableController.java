@@ -45,7 +45,7 @@ public class CategoryfiveStandardConfigurationTableController extends BaseContro
      * 导出五类/七类车标准配置列表
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:standardfive:export')")
-    @Log(title = "五类/七类车标准配置", businessType = BusinessType.EXPORT)
+    @Log(title = "V类/VII类车标准配置", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CategoryfiveStandardConfigurationTable categoryfiveStandardConfigurationTable)
     {
@@ -68,7 +68,7 @@ public class CategoryfiveStandardConfigurationTableController extends BaseContro
      * 新增五类/七类车标准配置
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:standardfive:add')")
-    @Log(title = "五类/七类车标准配置", businessType = BusinessType.INSERT)
+    @Log(title = "V类/VII类车标准配置", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CategoryfiveStandardConfigurationTable categoryfiveStandardConfigurationTable)
     {
@@ -79,7 +79,7 @@ public class CategoryfiveStandardConfigurationTableController extends BaseContro
      * 修改五类/七类车标准配置
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:standardfive:edit')")
-    @Log(title = "五类/七类车标准配置", businessType = BusinessType.UPDATE)
+    @Log(title = "V类/VII类车标准配置", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CategoryfiveStandardConfigurationTable categoryfiveStandardConfigurationTable)
     {
@@ -90,7 +90,7 @@ public class CategoryfiveStandardConfigurationTableController extends BaseContro
      * 删除五类/七类车标准配置
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:standardfive:remove')")
-    @Log(title = "五类/七类车标准配置", businessType = BusinessType.DELETE)
+    @Log(title = "V类/VII类车标准配置", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {

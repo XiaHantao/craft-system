@@ -709,61 +709,62 @@ public class ExcelUtils {
                 CategoryoneStandardConfigurationTable item = new CategoryoneStandardConfigurationTable();
 
                 // 按Excel列顺序设置所有字段
-                item.setManufacturer(getCellValue(row.getCell(0), evaluator)); // 制造商
-                item.setPneumaticTire(getCellValue(row.getCell(1), evaluator)); // 充气胎
-                item.setSolidTire(getCellValue(row.getCell(2), evaluator)); // 实心胎
-                item.setSingleTire(getCellValue(row.getCell(3), evaluator)); // 单胎（前轮）
-                item.setDualTire(getCellValue(row.getCell(4), evaluator)); // 双胎（前轮）
-                item.setTwoPieceValve(getCellValue(row.getCell(5), evaluator)); // 两片阀
-                item.setThreeOrFourPieceValve(getCellValue(row.getCell(6), evaluator)); // 三片或四片阀
-                item.setThreeMeterLiftingHeight(getCellValue(row.getCell(7), evaluator)); // 基本型3米起升高度
-                item.setLiftingHeightGantry(getCellValue(row.getCell(8), evaluator)); // 其它型及其它起升高度门架
-                item.setStandardSeriesFork(getCellValue(row.getCell(9), evaluator)); // 标准系列货叉
-                item.setNonStandardSeriesForks(getCellValue(row.getCell(10), evaluator)); // 非标系列货叉、属具
-                item.setStandardBodyColor(getCellValue(row.getCell(11), evaluator)); // 标准车身颜色（蓝灰色+合力红）
-                item.setCustomizedBodyColor(getCellValue(row.getCell(12), evaluator)); // 其它车身颜色（客户定制）
-                item.setCompleteOpsFunctionality(getCellValue(row.getCell(13), evaluator)); // 全套OPS功能
-                item.setTurningSpeedLimit(getCellValue(row.getCell(14), evaluator)); // 转弯限速
-                item.setOverspeed(getCellValue(row.getCell(15), evaluator)); // 超速报警
-                item.setReverseArmrestWithHorn(getCellValue(row.getCell(16), evaluator)); // 倒车扶手带喇叭开关
-                item.setSeatBeltSwitch(getCellValue(row.getCell(17), evaluator)); // 座椅带安全带开关
-                item.setOverloadOfMultiWayValve(getCellValue(row.getCell(18), evaluator)); // 多路阀过载
-                item.setFireExtinguisher(getCellValue(row.getCell(19), evaluator)); // 灭火器
-                item.setReverseBuzzer(getCellValue(row.getCell(20), evaluator)); // 倒车蜂鸣器
-                item.setCentralWideangleRearviewMirror(getCellValue(row.getCell(21), evaluator)); // 中央广角后极镜
-                item.setTwoSideRearviewMirrors(getCellValue(row.getCell(22), evaluator)); // 两侧后视镜
-                item.setParkingSensor(getCellValue(row.getCell(23), evaluator)); // 倒车雷达
-                item.setSemiEnclosedSeat(getCellValue(row.getCell(24), evaluator)); // 半包围座椅
-                item.setFullySuspendedSeat(getCellValue(row.getCell(25), evaluator)); // 全悬浮座椅
-                item.setUsbInterface(getCellValue(row.getCell(26), evaluator)); // USB接口
-                item.setElectricFan(getCellValue(row.getCell(27), evaluator)); // 电风扇
-                item.setTurnTheSteeringWheel(getCellValue(row.getCell(28), evaluator)); // 方向盘启动转向
-                item.setSynchronousSteering(getCellValue(row.getCell(29), evaluator)); // 同步转向
-                item.setStandardRoofProtectionFrame(getCellValue(row.getCell(30), evaluator)); // 标准护顶架
-                item.setNonStandardRoofProtectionFrame(getCellValue(row.getCell(31), evaluator)); // 非标护顶架
-                item.setWindscreen(getCellValue(row.getCell(32), evaluator)); // 前挡风玻璃（带雨刮器）
-                item.setFrontHeatresistantWindshield(getCellValue(row.getCell(33), evaluator)); // 前耐高温挡风玻璃（带雨刮器）
-                item.setRearWindshield(getCellValue(row.getCell(34), evaluator)); // 后挡风玻璃（不带雨刮器）
-                item.setPcEnduranceBoardCeiling(getCellValue(row.getCell(35), evaluator)); // PC耐力板顶棚
-                item.setSurfaceMountedCab(getCellValue(row.getCell(36), evaluator)); // 贴片式驾驶室
-                item.setSingleCoolingAirConditioner(getCellValue(row.getCell(37), evaluator)); // 单冷空调
-                item.setDualPurposeAirConditioner(getCellValue(row.getCell(38), evaluator)); // 冷暖两用空调
-                item.setWarmAirBlower(getCellValue(row.getCell(39), evaluator)); // 暖风机
-                item.setFullCarLedLights(getCellValue(row.getCell(40), evaluator)); // 全车LED灯
-                item.setLedRearWorkLight(getCellValue(row.getCell(41), evaluator)); // LED后工作灯
-                item.setBlueLightBehindTheCar(getCellValue(row.getCell(42), evaluator)); // 车后方蓝光灯
-                item.setThreeSidedBlueStripLight(getCellValue(row.getCell(43), evaluator)); // 三边蓝色条形灯
-                item.setThreeSidedRedStripLights(getCellValue(row.getCell(44), evaluator)); // 三边红色条形灯
-                item.setLedFlashingWarningLight(getCellValue(row.getCell(45), evaluator)); // 配装LED闪光警示灯（装配式）
-                item.setLedRotatingWarningLight(getCellValue(row.getCell(46), evaluator)); // 配装LED旋转式警示灯（装配式）
-                item.setLedRotatingBuzzerWarningLight(getCellValue(row.getCell(47), evaluator)); // 配装LED旋转蜂鸣式警示灯（装配式）
-                item.setMetric(getCellValue(row.getCell(48), evaluator)); // 公制螺纹
-                item.setTiltCylinderSleeve(getCellValue(row.getCell(49), evaluator)); // 倾斜油缸护套
-                item.setSteeringCylinderSleeve(getCellValue(row.getCell(50), evaluator)); // 转向油缸护套
-                item.setRemaPowerConnector(getCellValue(row.getCell(51), evaluator)); // REMA电源接插件
-                item.setNationalStandardPowerConnector(getCellValue(row.getCell(52), evaluator)); // 国标电源接插件
-                item.setDomesticBattery(getCellValue(row.getCell(53), evaluator)); // 国产蓄电池
-                item.setFicsHeliConnectedCarBasicEdition(getCellValue(row.getCell(54), evaluator)); // FICS合力车联网基本版（国内）
+                item.setManufacturer(getCellValue(row.getCell(1), evaluator)); // 制造商
+                item.setVehicleType(getCellValue(row.getCell(0), evaluator));//车型
+                item.setPneumaticTire(getCellValue(row.getCell(2), evaluator)); // 充气胎
+                item.setSolidTire(getCellValue(row.getCell(3), evaluator)); // 实心胎
+                item.setSingleTire(getCellValue(row.getCell(4), evaluator)); // 单胎（前轮）
+                item.setDualTire(getCellValue(row.getCell(5), evaluator)); // 双胎（前轮）
+                item.setTwoPieceValve(getCellValue(row.getCell(6), evaluator)); // 两片阀
+                item.setThreeOrFourPieceValve(getCellValue(row.getCell(7), evaluator)); // 三片或四片阀
+                item.setThreeMeterLiftingHeight(getCellValue(row.getCell(8), evaluator)); // 基本型3米起升高度
+                item.setLiftingHeightGantry(getCellValue(row.getCell(9), evaluator)); // 其它型及其它起升高度门架
+                item.setStandardSeriesFork(getCellValue(row.getCell(10), evaluator)); // 标准系列货叉
+                item.setNonStandardSeriesForks(getCellValue(row.getCell(11), evaluator)); // 非标系列货叉、属具
+                item.setStandardBodyColor(getCellValue(row.getCell(12), evaluator)); // 标准车身颜色（蓝灰色+合力红）
+                item.setCustomizedBodyColor(getCellValue(row.getCell(13), evaluator)); // 其它车身颜色（客户定制）
+                item.setCompleteOpsFunctionality(getCellValue(row.getCell(14), evaluator)); // 全套OPS功能
+                item.setTurningSpeedLimit(getCellValue(row.getCell(15), evaluator)); // 转弯限速
+                item.setOverspeed(getCellValue(row.getCell(16), evaluator)); // 超速报警
+                item.setReverseArmrestWithHorn(getCellValue(row.getCell(17), evaluator)); // 倒车扶手带喇叭开关
+                item.setSeatBeltSwitch(getCellValue(row.getCell(18), evaluator)); // 座椅带安全带开关
+                item.setOverloadOfMultiWayValve(getCellValue(row.getCell(19), evaluator)); // 多路阀过载
+                item.setFireExtinguisher(getCellValue(row.getCell(20), evaluator)); // 灭火器
+                item.setReverseBuzzer(getCellValue(row.getCell(21), evaluator)); // 倒车蜂鸣器
+                item.setCentralWideangleRearviewMirror(getCellValue(row.getCell(22), evaluator)); // 中央广角后极镜
+                item.setTwoSideRearviewMirrors(getCellValue(row.getCell(23), evaluator)); // 两侧后视镜
+                item.setParkingSensor(getCellValue(row.getCell(24), evaluator)); // 倒车雷达
+                item.setSemiEnclosedSeat(getCellValue(row.getCell(25), evaluator)); // 半包围座椅
+                item.setFullySuspendedSeat(getCellValue(row.getCell(26), evaluator)); // 全悬浮座椅
+                item.setUsbInterface(getCellValue(row.getCell(27), evaluator)); // USB接口
+                item.setElectricFan(getCellValue(row.getCell(28), evaluator)); // 电风扇
+                item.setTurnTheSteeringWheel(getCellValue(row.getCell(29), evaluator)); // 方向盘启动转向
+                item.setSynchronousSteering(getCellValue(row.getCell(30), evaluator)); // 同步转向
+                item.setStandardRoofProtectionFrame(getCellValue(row.getCell(31), evaluator)); // 标准护顶架
+                item.setNonStandardRoofProtectionFrame(getCellValue(row.getCell(32), evaluator)); // 非标护顶架
+                item.setWindscreen(getCellValue(row.getCell(33), evaluator)); // 前挡风玻璃（带雨刮器）
+                item.setFrontHeatresistantWindshield(getCellValue(row.getCell(34), evaluator)); // 前耐高温挡风玻璃（带雨刮器）
+                item.setRearWindshield(getCellValue(row.getCell(35), evaluator)); // 后挡风玻璃（不带雨刮器）
+                item.setPcEnduranceBoardCeiling(getCellValue(row.getCell(36), evaluator)); // PC耐力板顶棚
+                item.setSurfaceMountedCab(getCellValue(row.getCell(37), evaluator)); // 贴片式驾驶室
+                item.setSingleCoolingAirConditioner(getCellValue(row.getCell(38), evaluator)); // 单冷空调
+                item.setDualPurposeAirConditioner(getCellValue(row.getCell(39), evaluator)); // 冷暖两用空调
+                item.setWarmAirBlower(getCellValue(row.getCell(40), evaluator)); // 暖风机
+                item.setFullCarLedLights(getCellValue(row.getCell(41), evaluator)); // 全车LED灯
+                item.setLedRearWorkLight(getCellValue(row.getCell(42), evaluator)); // LED后工作灯
+                item.setBlueLightBehindTheCar(getCellValue(row.getCell(43), evaluator)); // 车后方蓝光灯
+                item.setThreeSidedBlueStripLight(getCellValue(row.getCell(44), evaluator)); // 三边蓝色条形灯
+                item.setThreeSidedRedStripLights(getCellValue(row.getCell(45), evaluator)); // 三边红色条形灯
+                item.setLedFlashingWarningLight(getCellValue(row.getCell(46), evaluator)); // 配装LED闪光警示灯（装配式）
+                item.setLedRotatingWarningLight(getCellValue(row.getCell(47), evaluator)); // 配装LED旋转式警示灯（装配式）
+                item.setLedRotatingBuzzerWarningLight(getCellValue(row.getCell(48), evaluator)); // 配装LED旋转蜂鸣式警示灯（装配式）
+                item.setMetric(getCellValue(row.getCell(49), evaluator)); // 公制螺纹
+                item.setTiltCylinderSleeve(getCellValue(row.getCell(50), evaluator)); // 倾斜油缸护套
+                item.setSteeringCylinderSleeve(getCellValue(row.getCell(51), evaluator)); // 转向油缸护套
+                item.setRemaPowerConnector(getCellValue(row.getCell(52), evaluator)); // REMA电源接插件
+                item.setNationalStandardPowerConnector(getCellValue(row.getCell(53), evaluator)); // 国标电源接插件
+                item.setDomesticBattery(getCellValue(row.getCell(54), evaluator)); // 国产蓄电池
+                item.setFicsHeliConnectedCarBasicEdition(getCellValue(row.getCell(55), evaluator)); // FICS合力车联网基本版（国内）
 
                 list.add(item);
             }
@@ -784,38 +785,39 @@ public class ExcelUtils {
                 CategorytwoStandardConfigurationTable item = new CategorytwoStandardConfigurationTable();
 
                 // 按顺序映射所有字段
-                item.setManufacturer(getCellValue(row.getCell(0), evaluator));
-                item.setPolyurethaneTires(getCellValue(row.getCell(1), evaluator));
-                item.setFiveMeterLiftingHeight(getCellValue(row.getCell(2), evaluator));
-                item.setLiftingHeightGantry(getCellValue(row.getCell(3), evaluator));
-                item.setStandardSeriesFork(getCellValue(row.getCell(4), evaluator));
-                item.setNonStandardSeriesFork(getCellValue(row.getCell(5), evaluator));
-                item.setStandardBodyColor(getCellValue(row.getCell(6), evaluator));
-                item.setCustomizedBodyColor(getCellValue(row.getCell(7), evaluator));
-                item.setAccessoriesAndSpeedLimit(getCellValue(row.getCell(8), evaluator));
-                item.setTurningSpeedLimit(getCellValue(row.getCell(9), evaluator));
-                item.setFireExtinguisher(getCellValue(row.getCell(10), evaluator));
-                item.setReverseBuzzer(getCellValue(row.getCell(11), evaluator));
-                item.setReverseVoiceHorn(getCellValue(row.getCell(12), evaluator));
-                item.setTwoSideRearviewMirrors(getCellValue(row.getCell(13), evaluator));
-                item.setEscapeBag(getCellValue(row.getCell(14), evaluator));
-                item.setRearWheelBraking(getCellValue(row.getCell(15), evaluator));
-                item.setFrontWheelBrake(getCellValue(row.getCell(16), evaluator));
-                item.setGuideWheel(getCellValue(row.getCell(17), evaluator));
-                item.setMonitor(getCellValue(row.getCell(18), evaluator));
-                item.setMagneticNavigation(getCellValue(row.getCell(19), evaluator));
-                item.setStationDrivingSoftPackSeat(getCellValue(row.getCell(20), evaluator));
-                item.setCarStyleSeats(getCellValue(row.getCell(21), evaluator));
-                item.setElectricFan(getCellValue(row.getCell(22), evaluator));
-                item.setWindscreen(getCellValue(row.getCell(23), evaluator));
-                item.setRearWindshield(getCellValue(row.getCell(24), evaluator));
-                item.setFullCarLedLights(getCellValue(row.getCell(25), evaluator));
-                item.setReadingLamp(getCellValue(row.getCell(26), evaluator));
-                item.setLedFlashingWarningLight(getCellValue(row.getCell(27), evaluator));
-                item.setMetric(getCellValue(row.getCell(28), evaluator));
-                item.setNationalStandardPowerConnector(getCellValue(row.getCell(29), evaluator));
-                item.setChineseIdentification(getCellValue(row.getCell(30), evaluator));
-                item.setEnglishLogo(getCellValue(row.getCell(31), evaluator));
+                item.setManufacturer(getCellValue(row.getCell(1), evaluator));
+                item.setVehicleType(getCellValue(row.getCell(0), evaluator));
+                item.setPolyurethaneTires(getCellValue(row.getCell(2), evaluator));
+                item.setFiveMeterLiftingHeight(getCellValue(row.getCell(3), evaluator));
+                item.setLiftingHeightGantry(getCellValue(row.getCell(4), evaluator));
+                item.setStandardSeriesFork(getCellValue(row.getCell(5), evaluator));
+                item.setNonStandardSeriesFork(getCellValue(row.getCell(6), evaluator));
+                item.setStandardBodyColor(getCellValue(row.getCell(7), evaluator));
+                item.setCustomizedBodyColor(getCellValue(row.getCell(8), evaluator));
+                item.setAccessoriesAndSpeedLimit(getCellValue(row.getCell(9), evaluator));
+                item.setTurningSpeedLimit(getCellValue(row.getCell(10), evaluator));
+                item.setFireExtinguisher(getCellValue(row.getCell(11), evaluator));
+                item.setReverseBuzzer(getCellValue(row.getCell(12), evaluator));
+                item.setReverseVoiceHorn(getCellValue(row.getCell(13), evaluator));
+                item.setTwoSideRearviewMirrors(getCellValue(row.getCell(14), evaluator));
+                item.setEscapeBag(getCellValue(row.getCell(15), evaluator));
+                item.setRearWheelBraking(getCellValue(row.getCell(16), evaluator));
+                item.setFrontWheelBrake(getCellValue(row.getCell(17), evaluator));
+                item.setGuideWheel(getCellValue(row.getCell(18), evaluator));
+                item.setMonitor(getCellValue(row.getCell(19), evaluator));
+                item.setMagneticNavigation(getCellValue(row.getCell(20), evaluator));
+                item.setStationDrivingSoftPackSeat(getCellValue(row.getCell(21), evaluator));
+                item.setCarStyleSeats(getCellValue(row.getCell(22), evaluator));
+                item.setElectricFan(getCellValue(row.getCell(23), evaluator));
+                item.setWindscreen(getCellValue(row.getCell(24), evaluator));
+                item.setRearWindshield(getCellValue(row.getCell(25), evaluator));
+                item.setFullCarLedLights(getCellValue(row.getCell(26), evaluator));
+                item.setReadingLamp(getCellValue(row.getCell(27), evaluator));
+                item.setLedFlashingWarningLight(getCellValue(row.getCell(28), evaluator));
+                item.setMetric(getCellValue(row.getCell(29), evaluator));
+                item.setNationalStandardPowerConnector(getCellValue(row.getCell(30), evaluator));
+                item.setChineseIdentification(getCellValue(row.getCell(31), evaluator));
+                item.setEnglishLogo(getCellValue(row.getCell(32), evaluator));
 
                 list.add(item);
             }
@@ -837,65 +839,66 @@ public class ExcelUtils {
                 CategoryfiveStandardConfigurationTable item = new CategoryfiveStandardConfigurationTable();
 
                 // 按Excel列顺序设置所有字段
-                item.setManufacturer(getCellValue(row.getCell(0), evaluator)); // 制造商
-                item.setPneumaticTire(getCellValue(row.getCell(1), evaluator)); // 充气胎
-                item.setSolidTire(getCellValue(row.getCell(2), evaluator)); // 实心胎
-                item.setSingleTire(getCellValue(row.getCell(3), evaluator)); // 单胎（前轮）
-                item.setTwinTires(getCellValue(row.getCell(4), evaluator)); // 双胎（前轮）
-                item.setTwoPieceValve(getCellValue(row.getCell(5), evaluator)); // 两片阀
-                item.setThreeOrFourPieceValve(getCellValue(row.getCell(6), evaluator)); // 三片或四片阀
-                item.setThreeMeterLiftingHeight(getCellValue(row.getCell(7), evaluator)); // 基本型3米起升高度
-                item.setLiftingHeightGantry(getCellValue(row.getCell(8), evaluator)); // 其它型及其它起升高度门架
-                item.setStandardSeriesFork(getCellValue(row.getCell(9), evaluator)); // 标准系列货叉
-                item.setNonStandardSeriesForks(getCellValue(row.getCell(10), evaluator)); // 非标系列货叉属具
-                item.setStandardBodyColor(getCellValue(row.getCell(11), evaluator)); // 标准车身颜色
-                item.setCustomizedBodyColor(getCellValue(row.getCell(12), evaluator)); // 其它车身颜色
-                item.setCompleteOpsFunctionality(getCellValue(row.getCell(13), evaluator)); // 全套OPS功能
-                item.setWalkingOpsFunction(getCellValue(row.getCell(14), evaluator)); // 行走OPS功能
-                item.setOverspeed(getCellValue(row.getCell(15), evaluator)); // 超速报警
-                item.setReverseArmrestWithHorn(getCellValue(row.getCell(16), evaluator)); // 倒车扶手带喇叭开关
-                item.setSeatBeltSwitch(getCellValue(row.getCell(17), evaluator)); // 座椅带安全带开关
-                item.setOverloadOfMultiWayValve(getCellValue(row.getCell(18), evaluator)); // 多路阀过载
-                item.setFireExtinguisher(getCellValue(row.getCell(19), evaluator)); // 灭火器
-                item.setReverseBuzzer(getCellValue(row.getCell(20), evaluator)); // 倒车蜂鸣器
-                item.setCentralWideangleRearviewMirror(getCellValue(row.getCell(21), evaluator)); // 中央广角后视镜
-                item.setTwoSideRearviewMirrors(getCellValue(row.getCell(22), evaluator)); // 两侧后视镜
-                item.setParkingSensor(getCellValue(row.getCell(23), evaluator)); // 倒车雷达
-                item.setSemiEnclosedSeat(getCellValue(row.getCell(24), evaluator)); // 半包围座椅
-                item.setFullySuspendedSeat(getCellValue(row.getCell(25), evaluator)); // 全悬浮座椅
-                item.setUsbInterface(getCellValue(row.getCell(26), evaluator)); // USB接口
-                item.setElectricFan(getCellValue(row.getCell(27), evaluator)); // 电风扇
-                item.setTurnTheSteeringWheel(getCellValue(row.getCell(28), evaluator)); // 方向盘启动转向
-                item.setSynchronousSteering(getCellValue(row.getCell(29), evaluator)); // 同步转向
-                item.setStandardRoofProtectionFrame(getCellValue(row.getCell(30), evaluator)); // 标准护顶架
-                item.setNonStandardRoofProtectionFrame(getCellValue(row.getCell(31), evaluator)); // 非标护顶架
-                item.setWindscreen(getCellValue(row.getCell(32), evaluator)); // 前挡风玻璃（带雨刮器）
-                item.setFrontHeatresistantWindshield(getCellValue(row.getCell(33), evaluator)); // 前耐高温挡风玻璃（带雨刮器）
-                item.setRearWindshield(getCellValue(row.getCell(34), evaluator)); // 后挡风玻璃（不带雨刮器）
-                item.setPcEnduranceBoardCeiling(getCellValue(row.getCell(35), evaluator)); // PC耐力板顶棚
-                item.setSurfaceMountedCab(getCellValue(row.getCell(36), evaluator)); // 贴片式驾驶室
-                item.setSingleCoolingAirConditioner(getCellValue(row.getCell(37), evaluator)); // 单冷空调
-                item.setDualPurposeAirConditioner(getCellValue(row.getCell(38), evaluator)); // 冷暖两用空调
-                item.setWarmAirBlower(getCellValue(row.getCell(39), evaluator)); // 暖风机
-                item.setFullCarLedLights(getCellValue(row.getCell(40), evaluator)); // 全车LED灯
-                item.setLedRearWorkLight(getCellValue(row.getCell(41), evaluator)); // LED后工作灯
-                item.setBlueLightBehindTheCar(getCellValue(row.getCell(42), evaluator)); // 车后方蓝光灯
-                item.setThreeSidedBlueStripLight(getCellValue(row.getCell(43), evaluator)); // 三边蓝色条形灯
-                item.setThreeSidedRedStripLights(getCellValue(row.getCell(44), evaluator)); // 三边红色条形灯
-                item.setLedFlashingWarningLight(getCellValue(row.getCell(45), evaluator)); // LED闪光警示灯
-                item.setLedRotatingWarningLight(getCellValue(row.getCell(46), evaluator)); // LED旋转式警示灯
-                item.setLedRotatingBuzzerWarningLight(getCellValue(row.getCell(47), evaluator)); // LED旋转蜂鸣式警示灯
-                item.setMetric(getCellValue(row.getCell(48), evaluator)); // 公制螺纹
-                item.setTiltCylinderSleeve(getCellValue(row.getCell(49), evaluator)); // 倾斜油缸护套
-                item.setSteeringCylinderSleeve(getCellValue(row.getCell(50), evaluator)); // 转向油缸护套
-                item.setMedianExhaust(getCellValue(row.getCell(51), evaluator)); // 中位排气
-                item.setHighExhaust(getCellValue(row.getCell(52), evaluator)); // 高排气
-                item.setTwoWheelDrive(getCellValue(row.getCell(53), evaluator)); // 两驱
-                item.setFourWheelDrive(getCellValue(row.getCell(54), evaluator)); // 四驱
-                item.setDentalEmbeddedDifferentialLock(getCellValue(row.getCell(55), evaluator)); // 牙嵌式差速锁
-                item.setLimitedSlipDifferential(getCellValue(row.getCell(56), evaluator)); // 限滑差速器
-                item.setManualDifferentialLock(getCellValue(row.getCell(57), evaluator)); // 手动差速锁
-                item.setFicsHeliConnectedCarBasicEdition(getCellValue(row.getCell(58), evaluator)); // FICS合力车联网
+                item.setVehicleType(getCellValue(row.getCell(0), evaluator));
+                item.setManufacturer(getCellValue(row.getCell(1), evaluator)); // 制造商
+                item.setPneumaticTire(getCellValue(row.getCell(2), evaluator)); // 充气胎
+                item.setSolidTire(getCellValue(row.getCell(3), evaluator)); // 实心胎
+                item.setSingleTire(getCellValue(row.getCell(4), evaluator)); // 单胎（前轮）
+                item.setTwinTires(getCellValue(row.getCell(5), evaluator)); // 双胎（前轮）
+                item.setTwoPieceValve(getCellValue(row.getCell(6), evaluator)); // 两片阀
+                item.setThreeOrFourPieceValve(getCellValue(row.getCell(7), evaluator)); // 三片或四片阀
+                item.setThreeMeterLiftingHeight(getCellValue(row.getCell(8), evaluator)); // 基本型3米起升高度
+                item.setLiftingHeightGantry(getCellValue(row.getCell(9), evaluator)); // 其它型及其它起升高度门架
+                item.setStandardSeriesFork(getCellValue(row.getCell(10), evaluator)); // 标准系列货叉
+                item.setNonStandardSeriesForks(getCellValue(row.getCell(11), evaluator)); // 非标系列货叉属具
+                item.setStandardBodyColor(getCellValue(row.getCell(12), evaluator)); // 标准车身颜色
+                item.setCustomizedBodyColor(getCellValue(row.getCell(13), evaluator)); // 其它车身颜色
+                item.setCompleteOpsFunctionality(getCellValue(row.getCell(14), evaluator)); // 全套OPS功能
+                item.setWalkingOpsFunction(getCellValue(row.getCell(15), evaluator)); // 行走OPS功能
+                item.setOverspeed(getCellValue(row.getCell(16), evaluator)); // 超速报警
+                item.setReverseArmrestWithHorn(getCellValue(row.getCell(17), evaluator)); // 倒车扶手带喇叭开关
+                item.setSeatBeltSwitch(getCellValue(row.getCell(18), evaluator)); // 座椅带安全带开关
+                item.setOverloadOfMultiWayValve(getCellValue(row.getCell(19), evaluator)); // 多路阀过载
+                item.setFireExtinguisher(getCellValue(row.getCell(20), evaluator)); // 灭火器
+                item.setReverseBuzzer(getCellValue(row.getCell(21), evaluator)); // 倒车蜂鸣器
+                item.setCentralWideangleRearviewMirror(getCellValue(row.getCell(22), evaluator)); // 中央广角后视镜
+                item.setTwoSideRearviewMirrors(getCellValue(row.getCell(23), evaluator)); // 两侧后视镜
+                item.setParkingSensor(getCellValue(row.getCell(24), evaluator)); // 倒车雷达
+                item.setSemiEnclosedSeat(getCellValue(row.getCell(25), evaluator)); // 半包围座椅
+                item.setFullySuspendedSeat(getCellValue(row.getCell(26), evaluator)); // 全悬浮座椅
+                item.setUsbInterface(getCellValue(row.getCell(27), evaluator)); // USB接口
+                item.setElectricFan(getCellValue(row.getCell(28), evaluator)); // 电风扇
+                item.setTurnTheSteeringWheel(getCellValue(row.getCell(29), evaluator)); // 方向盘启动转向
+                item.setSynchronousSteering(getCellValue(row.getCell(30), evaluator)); // 同步转向
+                item.setStandardRoofProtectionFrame(getCellValue(row.getCell(31), evaluator)); // 标准护顶架
+                item.setNonStandardRoofProtectionFrame(getCellValue(row.getCell(32), evaluator)); // 非标护顶架
+                item.setWindscreen(getCellValue(row.getCell(33), evaluator)); // 前挡风玻璃（带雨刮器）
+                item.setFrontHeatresistantWindshield(getCellValue(row.getCell(34), evaluator)); // 前耐高温挡风玻璃（带雨刮器）
+                item.setRearWindshield(getCellValue(row.getCell(35), evaluator)); // 后挡风玻璃（不带雨刮器）
+                item.setPcEnduranceBoardCeiling(getCellValue(row.getCell(36), evaluator)); // PC耐力板顶棚
+                item.setSurfaceMountedCab(getCellValue(row.getCell(37), evaluator)); // 贴片式驾驶室
+                item.setSingleCoolingAirConditioner(getCellValue(row.getCell(38), evaluator)); // 单冷空调
+                item.setDualPurposeAirConditioner(getCellValue(row.getCell(39), evaluator)); // 冷暖两用空调
+                item.setWarmAirBlower(getCellValue(row.getCell(40), evaluator)); // 暖风机
+                item.setFullCarLedLights(getCellValue(row.getCell(41), evaluator)); // 全车LED灯
+                item.setLedRearWorkLight(getCellValue(row.getCell(42), evaluator)); // LED后工作灯
+                item.setBlueLightBehindTheCar(getCellValue(row.getCell(43), evaluator)); // 车后方蓝光灯
+                item.setThreeSidedBlueStripLight(getCellValue(row.getCell(44), evaluator)); // 三边蓝色条形灯
+                item.setThreeSidedRedStripLights(getCellValue(row.getCell(45), evaluator)); // 三边红色条形灯
+                item.setLedFlashingWarningLight(getCellValue(row.getCell(46), evaluator)); // LED闪光警示灯
+                item.setLedRotatingWarningLight(getCellValue(row.getCell(47), evaluator)); // LED旋转式警示灯
+                item.setLedRotatingBuzzerWarningLight(getCellValue(row.getCell(48), evaluator)); // LED旋转蜂鸣式警示灯
+                item.setMetric(getCellValue(row.getCell(49), evaluator)); // 公制螺纹
+                item.setTiltCylinderSleeve(getCellValue(row.getCell(50), evaluator)); // 倾斜油缸护套
+                item.setSteeringCylinderSleeve(getCellValue(row.getCell(51), evaluator)); // 转向油缸护套
+                item.setMedianExhaust(getCellValue(row.getCell(52), evaluator)); // 中位排气
+                item.setHighExhaust(getCellValue(row.getCell(53), evaluator)); // 高排气
+                item.setTwoWheelDrive(getCellValue(row.getCell(54), evaluator)); // 两驱
+                item.setFourWheelDrive(getCellValue(row.getCell(55), evaluator)); // 四驱
+                item.setDentalEmbeddedDifferentialLock(getCellValue(row.getCell(56), evaluator)); // 牙嵌式差速锁
+                item.setLimitedSlipDifferential(getCellValue(row.getCell(57), evaluator)); // 限滑差速器
+                item.setManualDifferentialLock(getCellValue(row.getCell(58), evaluator)); // 手动差速锁
+                item.setFicsHeliConnectedCarBasicEdition(getCellValue(row.getCell(59), evaluator)); // FICS合力车联网
 
                 list.add(item);
             }

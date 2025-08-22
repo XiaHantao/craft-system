@@ -3,9 +3,10 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.marketanalysis.mapper.CategorytwoStandardConfigurationTableMapper">
-    
+
     <resultMap type="CategorytwoStandardConfigurationTable" id="CategorytwoStandardConfigurationTableResult">
         <result property="id"    column="id"    />
+        <result property="vehicleType"    column="vehicle_type"    />
         <result property="manufacturer"    column="manufacturer"    />
         <result property="polyurethaneTires"    column="polyurethane_tires"    />
         <result property="fiveMeterLiftingHeight"    column="five_meter_lifting_height"    />
@@ -41,24 +42,57 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCategorytwoStandardConfigurationTableVo">
-        select id, manufacturer, polyurethane_tires, five_meter_lifting_height, lifting_height_gantry, standard_series_fork, non_standard_series_fork, standard_body_color, customized_body_color, accessories_and_speed_limit, turning_speed_limit, fire_extinguisher, reverse_buzzer, reverse_voice_horn, two_side_rearview_mirrors, escape_bag, rear_wheel_braking, front_wheel_brake, guide_wheel, monitor, magnetic_navigation, station_driving_soft_pack_seat, car_style_seats, electric_fan, windscreen, rear_windshield, full_car_led_lights, reading_lamp, led_flashing_warning_light, metric, national_standard_power_connector, chinese_identification, english_logo from categorytwo_standard_configuration_table
+        select id, vehicle_type, manufacturer, polyurethane_tires, five_meter_lifting_height, lifting_height_gantry, standard_series_fork, non_standard_series_fork, standard_body_color, customized_body_color, accessories_and_speed_limit, turning_speed_limit, fire_extinguisher, reverse_buzzer, reverse_voice_horn, two_side_rearview_mirrors, escape_bag, rear_wheel_braking, front_wheel_brake, guide_wheel, monitor, magnetic_navigation, station_driving_soft_pack_seat, car_style_seats, electric_fan, windscreen, rear_windshield, full_car_led_lights, reading_lamp, led_flashing_warning_light, metric, national_standard_power_connector, chinese_identification, english_logo from categorytwo_standard_configuration_table
     </sql>
 
     <select id="selectCategorytwoStandardConfigurationTableList" parameterType="CategorytwoStandardConfigurationTable" resultMap="CategorytwoStandardConfigurationTableResult">
         <include refid="selectCategorytwoStandardConfigurationTableVo"/>
-        <where>  
+        <where>
+            <if test="vehicleType != null  and vehicleType != ''"> and vehicle_type like concat('%', #{vehicleType}, '%')</if>
             <if test="manufacturer != null  and manufacturer != ''"> and manufacturer like concat('%', #{manufacturer}, '%')</if>
+            <if test="polyurethaneTires != null  and polyurethaneTires != ''"> and polyurethane_tires = #{polyurethaneTires}</if>
+            <if test="fiveMeterLiftingHeight != null  and fiveMeterLiftingHeight != ''"> and five_meter_lifting_height = #{fiveMeterLiftingHeight}</if>
+            <if test="liftingHeightGantry != null  and liftingHeightGantry != ''"> and lifting_height_gantry = #{liftingHeightGantry}</if>
+            <if test="standardSeriesFork != null  and standardSeriesFork != ''"> and standard_series_fork = #{standardSeriesFork}</if>
+            <if test="nonStandardSeriesFork != null  and nonStandardSeriesFork != ''"> and non_standard_series_fork = #{nonStandardSeriesFork}</if>
+            <if test="standardBodyColor != null  and standardBodyColor != ''"> and standard_body_color = #{standardBodyColor}</if>
+            <if test="customizedBodyColor != null  and customizedBodyColor != ''"> and customized_body_color = #{customizedBodyColor}</if>
+            <if test="accessoriesAndSpeedLimit != null  and accessoriesAndSpeedLimit != ''"> and accessories_and_speed_limit = #{accessoriesAndSpeedLimit}</if>
+            <if test="turningSpeedLimit != null  and turningSpeedLimit != ''"> and turning_speed_limit = #{turningSpeedLimit}</if>
+            <if test="fireExtinguisher != null  and fireExtinguisher != ''"> and fire_extinguisher = #{fireExtinguisher}</if>
+            <if test="reverseBuzzer != null  and reverseBuzzer != ''"> and reverse_buzzer = #{reverseBuzzer}</if>
+            <if test="reverseVoiceHorn != null  and reverseVoiceHorn != ''"> and reverse_voice_horn = #{reverseVoiceHorn}</if>
+            <if test="twoSideRearviewMirrors != null  and twoSideRearviewMirrors != ''"> and two_side_rearview_mirrors = #{twoSideRearviewMirrors}</if>
+            <if test="escapeBag != null  and escapeBag != ''"> and escape_bag = #{escapeBag}</if>
+            <if test="rearWheelBraking != null  and rearWheelBraking != ''"> and rear_wheel_braking = #{rearWheelBraking}</if>
+            <if test="frontWheelBrake != null  and frontWheelBrake != ''"> and front_wheel_brake = #{frontWheelBrake}</if>
+            <if test="guideWheel != null  and guideWheel != ''"> and guide_wheel = #{guideWheel}</if>
+            <if test="monitor != null  and monitor != ''"> and monitor = #{monitor}</if>
+            <if test="magneticNavigation != null  and magneticNavigation != ''"> and magnetic_navigation = #{magneticNavigation}</if>
+            <if test="stationDrivingSoftPackSeat != null  and stationDrivingSoftPackSeat != ''"> and station_driving_soft_pack_seat = #{stationDrivingSoftPackSeat}</if>
+            <if test="carStyleSeats != null  and carStyleSeats != ''"> and car_style_seats = #{carStyleSeats}</if>
+            <if test="electricFan != null  and electricFan != ''"> and electric_fan = #{electricFan}</if>
+            <if test="windscreen != null  and windscreen != ''"> and windscreen = #{windscreen}</if>
+            <if test="rearWindshield != null  and rearWindshield != ''"> and rear_windshield = #{rearWindshield}</if>
+            <if test="fullCarLedLights != null  and fullCarLedLights != ''"> and full_car_led_lights = #{fullCarLedLights}</if>
+            <if test="readingLamp != null  and readingLamp != ''"> and reading_lamp = #{readingLamp}</if>
+            <if test="ledFlashingWarningLight != null  and ledFlashingWarningLight != ''"> and led_flashing_warning_light = #{ledFlashingWarningLight}</if>
+            <if test="metric != null  and metric != ''"> and metric = #{metric}</if>
+            <if test="nationalStandardPowerConnector != null  and nationalStandardPowerConnector != ''"> and national_standard_power_connector = #{nationalStandardPowerConnector}</if>
+            <if test="chineseIdentification != null  and chineseIdentification != ''"> and chinese_identification = #{chineseIdentification}</if>
+            <if test="englishLogo != null  and englishLogo != ''"> and english_logo = #{englishLogo}</if>
         </where>
     </select>
-    
+
     <select id="selectCategorytwoStandardConfigurationTableById" parameterType="Long" resultMap="CategorytwoStandardConfigurationTableResult">
         <include refid="selectCategorytwoStandardConfigurationTableVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertCategorytwoStandardConfigurationTable" parameterType="CategorytwoStandardConfigurationTable" useGeneratedKeys="true" keyProperty="id">
         insert into categorytwo_standard_configuration_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vehicleType != null and vehicleType != ''">vehicle_type,</if>
             <if test="manufacturer != null and manufacturer != ''">manufacturer,</if>
             <if test="polyurethaneTires != null">polyurethane_tires,</if>
             <if test="fiveMeterLiftingHeight != null">five_meter_lifting_height,</if>
@@ -91,8 +125,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nationalStandardPowerConnector != null">national_standard_power_connector,</if>
             <if test="chineseIdentification != null">chinese_identification,</if>
             <if test="englishLogo != null">english_logo,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vehicleType != null and vehicleType != ''">#{vehicleType},</if>
             <if test="manufacturer != null and manufacturer != ''">#{manufacturer},</if>
             <if test="polyurethaneTires != null">#{polyurethaneTires},</if>
             <if test="fiveMeterLiftingHeight != null">#{fiveMeterLiftingHeight},</if>
@@ -125,12 +160,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nationalStandardPowerConnector != null">#{nationalStandardPowerConnector},</if>
             <if test="chineseIdentification != null">#{chineseIdentification},</if>
             <if test="englishLogo != null">#{englishLogo},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateCategorytwoStandardConfigurationTable" parameterType="CategorytwoStandardConfigurationTable">
         update categorytwo_standard_configuration_table
         <trim prefix="SET" suffixOverrides=",">
+            <if test="vehicleType != null and vehicleType != ''">vehicle_type = #{vehicleType},</if>
             <if test="manufacturer != null and manufacturer != ''">manufacturer = #{manufacturer},</if>
             <if test="polyurethaneTires != null">polyurethane_tires = #{polyurethaneTires},</if>
             <if test="fiveMeterLiftingHeight != null">five_meter_lifting_height = #{fiveMeterLiftingHeight},</if>
@@ -172,13 +208,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteCategorytwoStandardConfigurationTableByIds" parameterType="String">
-        delete from categorytwo_standard_configuration_table where id in 
+        delete from categorytwo_standard_configuration_table where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
     <insert id="batchInsertCategorytwoStandard" parameterType="java.util.List">
         INSERT INTO categorytwo_standard_configuration_table (
+        vehicle_type,
         manufacturer,
         polyurethane_tires,
         five_meter_lifting_height,
@@ -215,6 +252,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (
+            #{item.vehicleType},
             #{item.manufacturer},
             #{item.polyurethaneTires},
             #{item.fiveMeterLiftingHeight},

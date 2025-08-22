@@ -45,7 +45,7 @@ public class CategoryfiveParameterTableController extends BaseController
      * 导出五类车参数列表
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_five:export')")
-    @Log(title = "五类车参数", businessType = BusinessType.EXPORT)
+    @Log(title = "V类车参数", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CategoryfiveParameterTable categoryfiveParameterTable)
     {
@@ -68,7 +68,7 @@ public class CategoryfiveParameterTableController extends BaseController
      * 新增五类车参数
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_five:add')")
-    @Log(title = "五类车参数", businessType = BusinessType.INSERT)
+    @Log(title = "V类车参数", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CategoryfiveParameterTable categoryfiveParameterTable)
     {
@@ -79,7 +79,7 @@ public class CategoryfiveParameterTableController extends BaseController
      * 修改五类车参数
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_five:edit')")
-    @Log(title = "五类车参数", businessType = BusinessType.UPDATE)
+    @Log(title = "V类车参数", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CategoryfiveParameterTable categoryfiveParameterTable)
     {
@@ -90,7 +90,7 @@ public class CategoryfiveParameterTableController extends BaseController
      * 删除五类车参数
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:parameter_five:remove')")
-    @Log(title = "五类车参数", businessType = BusinessType.DELETE)
+    @Log(title = "V类车参数", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
