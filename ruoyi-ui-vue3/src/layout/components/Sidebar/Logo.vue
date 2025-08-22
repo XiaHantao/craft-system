@@ -25,7 +25,7 @@ defineProps({
   }
 })
 
-const title = ref('工艺管理系统');
+const title = ref('盘锦合力工艺管理系统');
 const settingsStore = useSettingsStore();
 const sideTheme = computed(() => settingsStore.sideTheme);
 </script>

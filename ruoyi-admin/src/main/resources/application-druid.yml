@@ -11,6 +11,11 @@ spring:
                 password: qualityMS
 
 #            master:
+#                url: jdbc:mysql://10.36.53.27:3306/craft-system?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
+#                username: root
+#                password: 123456
+
+#            master:
 #                url: jdbc:mysql://8.153.37.12:3306/craft-system?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
 #                username: root
 #                password: qualityMS

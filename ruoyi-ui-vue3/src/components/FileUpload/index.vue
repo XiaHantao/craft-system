@@ -20,7 +20,7 @@
     <!-- 上传提示 -->
     <div class="el-upload__tip" v-if="showTip">
       请上传
-      <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
+<!--      <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>-->
       <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b> </template>
       的文件
     </div>
@@ -52,7 +52,7 @@ const props = defineProps({
   // 大小限制(MB)
   fileSize: {
     type: Number,
-    default: 10,
+    default: 1000,
   },
   // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileType: {
@@ -75,7 +75,8 @@ const uploadFileUrl = ref(import.meta.env.VITE_APP_BASE_API + "/common/upload");
 const headers = ref({ Authorization: "Bearer " + getToken() });
 const fileList = ref([]);
 const showTip = computed(
-  () => props.isShowTip && (props.fileType || props.fileSize)
+  // () => props.isShowTip && (props.fileType || props.fileSize)
+    () => props.isShowTip && (props.fileType)
 );
 
 watch(() => props.modelValue, val => {
@@ -110,13 +111,13 @@ function handleBeforeUpload(file) {
     }
   }
   // 校检文件大小
-  if (props.fileSize) {
-    const isLt = file.size / 1024 / 1024 < props.fileSize;
-    if (!isLt) {
-      proxy.$modal.msgError(`上传文件大小不能超过 ${props.fileSize} MB!`);
-      return false;
-    }
-  }
+  // if (props.fileSize) {
+  //   const isLt = file.size / 1024 / 1024 < props.fileSize;
+  //   if (!isLt) {
+  //     proxy.$modal.msgError(`上传文件大小不能超过 ${props.fileSize} MB!`);
+  //     return false;
+  //   }
+  // }
   proxy.$modal.loading("正在上传文件，请稍候...");
   number.value++;
   return true;

@@ -378,9 +378,11 @@ function handleExport() {
 
 /** 文件下载 */
 function downloadFile(filePath) {
-  proxy.$download.resource(filePath);
+  const paths = filePath.split(',').map(path => path.trim());
+  paths.forEach(path => {
+    proxy.$download.resource(path);
+  });
 }
-
 /** 整改报告文件上传 */
 function handleRectification(row) {
   reset();
