@@ -1,6 +1,14 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+     <el-form-item label="车型" prop="vehicleType">
+        <el-input
+          v-model="queryParams.vehicleType"
+          placeholder="请输入车型"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="制造商" prop="manufacturer">
         <el-input
           v-model="queryParams.manufacturer"
@@ -64,6 +72,7 @@
     <el-table v-loading="loading" :data="standardtwoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="id" align="center" prop="id" /> -->
+       <el-table-column label="车型" align="center" prop="vehicleType" />
       <el-table-column label="制造商" align="center" prop="manufacturer" />
       <el-table-column label="聚氨酯轮胎" align="center" prop="polyurethaneTires" />
       <el-table-column label="基本型5米起升高度" align="center" prop="fiveMeterLiftingHeight" />
@@ -115,6 +124,9 @@
     <!-- 添加或修改II类车/III类车标准配置对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="standardtwoRef" :model="form" :rules="rules" label-width="140px">
+         <el-form-item label="车型" prop="vehicleType">
+          <el-input v-model="form.vehicleType" placeholder="请输入车型" />
+        </el-form-item>
         <el-form-item label="制造商" prop="manufacturer">
           <el-input v-model="form.manufacturer" placeholder="请输入制造商" />
         </el-form-item>
@@ -512,6 +524,9 @@ const data = reactive({
     manufacturer: null,
   },
   rules: {
+    vehicleType: [
+      { required: true, message: "车型不能为空", trigger: "blur" }
+    ],
     manufacturer: [
       { required: true, message: "制造商不能为空", trigger: "blur" }
     ],
@@ -540,6 +555,7 @@ function cancel() {
 function reset() {
   form.value = {
     id: null,
+    vehicleType: null,
     manufacturer: null,
     polyurethaneTires: null,
     fiveMeterLiftingHeight: null,

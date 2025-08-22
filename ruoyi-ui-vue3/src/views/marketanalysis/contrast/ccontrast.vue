@@ -6,7 +6,7 @@
         <div class="selector-item" v-for="n in 3" :key="n">
           <!-- 车型选择器 -->
           <el-select
-            v-model="selectedVehicleTypeIds[n-1]"
+            v-model="selectedVehicleTypes[n-1]"
             placeholder="请选择车型（相同车类）"
             @change="handleVehicleTypeChange(n)"
             style="margin-bottom: 10px"
@@ -14,10 +14,10 @@
             filterable
           >
             <el-option
-              v-for="item in vehicleTypeOptions"
-              :key="item.id"
-              :label="item.vehicleType"
-              :value="item.id"
+              v-for="item in vehicleTypeOptions[n-1]"
+              :key="item"
+              :label="item"
+              :value="item"
             />
           </el-select>
 
@@ -28,8 +28,8 @@
             remote
             :remote-method="query => searchManufacturers(n, query)"
             :loading="loadingManufacturer"
-            :disabled="!selectedVehicleTypeIds[n-1]"
-            :placeholder="selectedVehicleTypeIds[n-1] ? '请选择制造商' : '请先选择车型'"
+            :disabled="!selectedVehicleTypes[n-1]"
+            :placeholder="selectedVehicleTypes[n-1] ? '请选择制造商' : '请先选择车型'"
             style="width: 100%"
             clearable
           >
@@ -48,7 +48,7 @@
         <!-- 第四和第五个选择器 -->
         <div class="selector-item selector-item-shrink" v-for="n in 2" :key="n+3">
           <el-select
-            v-model="selectedVehicleTypeIds[n+2]"
+            v-model="selectedVehicleTypes[n+2]"
             placeholder="请选择车型（相同车类）"
             @change="handleVehicleTypeChange(n+3)"
             style="margin-bottom: 10px"
@@ -56,10 +56,10 @@
             filterable
           >
             <el-option
-              v-for="item in vehicleTypeOptions"
-              :key="item.id"
-              :label="item.vehicleType"
-              :value="item.id"
+              v-for="item in vehicleTypeOptions[n+2]"
+              :key="item"
+              :label="item"
+              :value="item"
             />
           </el-select>
 
@@ -69,8 +69,8 @@
             remote
             :remote-method="query => searchManufacturers(n+3, query)"
             :loading="loadingManufacturer"
-            :disabled="!selectedVehicleTypeIds[n+2]"
-            :placeholder="selectedVehicleTypeIds[n+2] ? '请选择制造商' : '请先选择车型'"
+            :disabled="!selectedVehicleTypes[n+2]"
+            :placeholder="selectedVehicleTypes[n+2] ? '请选择制造商' : '请先选择车型'"
             style="width: 100%"
             clearable
           >
@@ -128,7 +128,6 @@
 import { listStandardone } from '@/api/marketanalysis/standard/standardone'
 import { listStandardtwo } from '@/api/marketanalysis/standard/standardtwo'
 import { listStandardfive } from '@/api/marketanalysis/standard/standardfive'
-import { listVehicletype } from '@/api/marketanalysis/vehicletype/vehicletype' 
 
 // 各车类参数配置保持不变
 const vehicleParams = {
@@ -286,15 +285,17 @@ export default {
   data() {
     return {
       // 修改为5个元素
-      selectedVehicleTypeIds: Array(5).fill(null),
+      selectedVehicleTypes: Array(5).fill(null),
       selectedVehicleCategories: Array(5).fill(null),
       selectedManufacturers: Array(5).fill(null),
+      vehicleTypeOptions: Array(5).fill([]),
       manufacturerOptions: Array(5).fill([]),
       cachedManufacturers: Array(5).fill([]),
       loadingManufacturer: false,
       tableLoading: false,
       comparisonData: [],
-      vehicleTypeOptions: []
+      allVehicleTypes: [], // 存储所有车型数据
+      allVehicleTypesSet: [] // 存储所有车型名称（去重）
     }
   },
   computed: {
@@ -310,133 +311,161 @@ export default {
     }
   },
   created() {
-    this.loadVehicleTypes()
+    this.loadAllVehicleTypes()
   },
   methods: {
-    // 加载车型列表
-    async loadVehicleTypes() {
+    // 加载所有车型数据
+    async loadAllVehicleTypes() {
       try {
-        const res = await listVehicletype({ pageNum: 1, pageSize: 1000 })
-        this.vehicleTypeOptions = res.rows
+        // 同时获取三类车的车型数据
+        const [res1, res2, res3] = await Promise.all([
+          listStandardone({}),
+          listStandardtwo({}),
+          listStandardfive({})
+        ]);
+        
+        // 合并所有车型数据
+        this.allVehicleTypes = [
+          ...res1.rows.map(item => ({ 
+            vehicleType: item.vehicleType, 
+            manufacturer: item.manufacturer,
+            category: 1,
+            data: item
+          })),
+          ...res2.rows.map(item => ({ 
+            vehicleType: item.vehicleType, 
+            manufacturer: item.manufacturer,
+            category: 2,
+            data: item
+          })),
+          ...res3.rows.map(item => ({ 
+            vehicleType: item.vehicleType, 
+            manufacturer: item.manufacturer,
+            category: 3,
+            data: item
+          }))
+        ];
+        
+        // 获取所有车型名称（去重）
+        this.allVehicleTypesSet = [...new Set(this.allVehicleTypes.map(item => item.vehicleType))].filter(Boolean);
+        
+        // 初始化所有选择器的车型选项
+        this.vehicleTypeOptions = Array(5).fill(this.allVehicleTypesSet);
       } catch (error) {
-        console.error('获取车型列表失败:', error)
+        console.error('获取车型列表失败:', error);
+        this.$message.error('获取车型数据失败，请稍后重试');
       }
     },
     
     // 处理车型选择变化
     handleVehicleTypeChange(index) {
-      const idx = index - 1
-      const vehicleTypeId = this.selectedVehicleTypeIds[idx]
+      const idx = index - 1;
+      const vehicleType = this.selectedVehicleTypes[idx];
       
-      if (!vehicleTypeId) {
-        this.selectedVehicleCategories.splice(idx, 1, null)
-        this.manufacturerOptions.splice(idx, 1, [])
-        this.selectedManufacturers.splice(idx, 1, null) // 清空制造商选择
-        return
+      if (!vehicleType) {
+        this.selectedVehicleCategories.splice(idx, 1, null);
+        this.manufacturerOptions.splice(idx, 1, []);
+        this.selectedManufacturers.splice(idx, 1, null); // 清空制造商选择
+        // 重置车型选项为所有车型
+        this.vehicleTypeOptions.splice(idx, 1, this.allVehicleTypesSet);
+        return;
       }
       
-      // 查找选中的车型
-      const selectedVehicle = this.vehicleTypeOptions.find(v => v.id === vehicleTypeId)
-      if (!selectedVehicle) return
-      
-      // 映射车类字符串到数字ID
-      let categoryId = null
-      switch(selectedVehicle.vehicleCategory) {
-        case 'I类车':
-          categoryId = 1
-          break
-        case 'II类车':
-        case 'III类车':
-          categoryId = 2
-          break
-        case 'V类车':
-        case 'VII类车':
-          categoryId = 3
-          break
-      }
+      // 查找选中的车型数据
+      const vehicleData = this.allVehicleTypes.find(v => v.vehicleType === vehicleType);
+      if (!vehicleData) return;
       
       // 保存车类ID
-      this.selectedVehicleCategories.splice(idx, 1, categoryId)
+      this.selectedVehicleCategories.splice(idx, 1, vehicleData.category);
       
-      // 加载制造商
-      if (categoryId) {
-        this.loadManufacturers(index, categoryId)
-      }
+      // 加载该车型对应的制造商
+      this.loadManufacturers(index, vehicleType, vehicleData.category);
+      
+      // 更新车型选项为同一车类的所有车型
+      this.updateVehicleTypeOptions(index, vehicleData.category);
     },
 
     // 加载制造商
-    async loadManufacturers(index, categoryId) {
-      this.loadingManufacturer = true
+    async loadManufacturers(index, vehicleType, categoryId) {
+      this.loadingManufacturer = true;
       try {
-        let apiMethod
-        switch (categoryId) {
-          case 1: apiMethod = listStandardone; break
-          case 2: apiMethod = listStandardtwo; break
-          case 3: apiMethod = listStandardfive; break
-          default: return
-        }
-
-        const res = await apiMethod({})
-        const manufacturers = res.rows.map(item => item.manufacturer).filter(Boolean)
-        const uniqueManufacturers = [...new Set(manufacturers)]
+        // 从所有车型数据中筛选出符合条件的制造商
+        const manufacturers = this.allVehicleTypes
+          .filter(item => item.vehicleType === vehicleType && item.category === categoryId)
+          .map(item => item.manufacturer)
+          .filter(Boolean);
         
-        const formatted = uniqueManufacturers.map(m => ({ value: m, label: m }))
-        this.cachedManufacturers.splice(index - 1, 1, formatted)
-        this.manufacturerOptions.splice(index - 1, 1, formatted)
+        const uniqueManufacturers = [...new Set(manufacturers)];
+        const formatted = uniqueManufacturers.map(m => ({ value: m, label: m }));
+        
+        this.cachedManufacturers.splice(index - 1, 1, formatted);
+        this.manufacturerOptions.splice(index - 1, 1, formatted);
       } catch (error) {
-        console.error('获取制造商失败:', error)
+        console.error('获取制造商失败:', error);
+        this.$message.error('获取制造商数据失败');
       } finally {
-        this.loadingManufacturer = false
+        this.loadingManufacturer = false;
       }
+    },
+
+    // 更新车型选项
+    updateVehicleTypeOptions(index, categoryId) {
+      const idx = index - 1;
+      // 从所有车型数据中筛选出对应车类的车型
+      const vehicleTypes = this.allVehicleTypes
+        .filter(item => item.category === categoryId)
+        .map(item => item.vehicleType)
+        .filter(Boolean);
+      
+      const uniqueVehicleTypes = [...new Set(vehicleTypes)];
+      this.vehicleTypeOptions.splice(idx, 1, uniqueVehicleTypes);
     },
 
     // 搜索制造商
     searchManufacturers(index, query) {
-      const cached = this.cachedManufacturers[index - 1]
+      const cached = this.cachedManufacturers[index - 1];
       if (!query) {
-        this.manufacturerOptions.splice(index - 1, 1, cached)
-        return
+        this.manufacturerOptions.splice(index - 1, 1, cached);
+        return;
       }
       const filtered = cached.filter(item =>
         item.label.toLowerCase().includes(query.toLowerCase())
-      )
-      this.manufacturerOptions.splice(index - 1, 1, filtered)
+      );
+      this.manufacturerOptions.splice(index - 1, 1, filtered);
     },
 
     // 处理对比按钮点击
     handleCompare() {
       if (!this.canCompare) {
-        this.$message.warning('请至少选择两个制造商进行对比')
-        return
+        this.$message.warning('请至少选择两个制造商进行对比');
+        return;
       }
       
-      this.loadComparisonData()
+      // 检查所有已选车类是否相同
+      const selectedCategories = this.selectedVehicleCategories.filter(Boolean);
+      if (selectedCategories.length > 0 && !selectedCategories.every(c => c === selectedCategories[0])) {
+        this.$message.warning('请选择相同车类下的车型进行对比');
+        return;
+      }
+      
+      this.loadComparisonData();
     },
 
     // 加载对比数据
     async loadComparisonData() {
-      // 获取所有已选车类ID
-      const selectedCategories = this.selectedVehicleCategories.filter(Boolean);
-      
-      // 检查所有已选车类是否相同
-      if (selectedCategories.length > 0 && !selectedCategories.every(c => c === selectedCategories[0])) {
-        this.$message.warning('请选择相同车类下的车型进行对比');
-        this.comparisonData = [];
-        return;
-      }
-
       this.tableLoading = true;
       try {
         // 获取所有已选制造商的数据
         const manufacturerData = await Promise.all(
           this.selectedManufacturers.map((manufacturer, index) => 
-            manufacturer ? this.fetchManufacturerData(index) : Promise.resolve({})
+            manufacturer ? this.fetchManufacturerData(index) : Promise.resolve(null)
           )
         );
         
         this.generateComparisonTable(manufacturerData);
       } catch (error) {
         console.error('数据对比失败:', error);
+        this.$message.error('数据对比失败，请稍后重试');
       } finally {
         this.tableLoading = false;
       }
@@ -444,21 +473,20 @@ export default {
 
     // 获取制造商数据
     async fetchManufacturerData(index) {
-      const categoryId = this.selectedVehicleCategories[index]
-      const manufacturer = this.selectedManufacturers[index]
+      const categoryId = this.selectedVehicleCategories[index];
+      const manufacturer = this.selectedManufacturers[index];
+      const vehicleType = this.selectedVehicleTypes[index];
 
-      if (!categoryId || !manufacturer) return {}
+      if (!categoryId || !manufacturer || !vehicleType) return null;
 
-      let apiMethod
-      switch (categoryId) {
-        case 1: apiMethod = listStandardone; break
-        case 2: apiMethod = listStandardtwo; break
-        case 3: apiMethod = listStandardfive; break
-        default: return {}
-      }
-
-      const res = await apiMethod({ manufacturer })
-      return res.rows[0] || {}
+      // 直接从已加载的数据中查找
+      const vehicleData = this.allVehicleTypes.find(item => 
+        item.category === categoryId && 
+        item.manufacturer === manufacturer && 
+        item.vehicleType === vehicleType
+      );
+      
+      return vehicleData ? vehicleData.data : null;
     },
 
     // 生成对比表格
@@ -472,14 +500,20 @@ export default {
       const params = vehicleParams[categoryId] || [];
       
       this.comparisonData = params.map(param => {
-        const values = manufacturerData.map(data => data[param] || '-');
+        const values = manufacturerData.map(data => {
+          if (!data) return '-';
+          // 处理布尔值显示
+          const value = data[param];
+          if (typeof value === 'boolean') {
+            return value ? '是' : '否';
+          }
+          return value || '-';
+        });
         
-        // 检查该行所有值是否相同
-        const allSame = values.every((val, _, arr) => 
-          val === arr[0] || 
-          val === '-' || 
-          arr[0] === '-'
-        );
+        // 检查该行所有值是否相同（忽略'-'）
+        const nonEmptyValues = values.filter(v => v !== '-');
+        const allSame = nonEmptyValues.length <= 1 || 
+                       nonEmptyValues.every(v => v === nonEmptyValues[0]);
         
         return {
           paramName: this.formatParamName(param),

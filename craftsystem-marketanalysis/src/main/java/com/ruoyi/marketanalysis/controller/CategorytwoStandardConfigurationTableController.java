@@ -45,7 +45,7 @@ public class CategorytwoStandardConfigurationTableController extends BaseControl
      * 导出二类车标准配置列表
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:standardtwo:export')")
-    @Log(title = "二类车标准配置", businessType = BusinessType.EXPORT)
+    @Log(title = "II类车标准配置", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CategorytwoStandardConfigurationTable categorytwoStandardConfigurationTable)
     {
@@ -68,7 +68,7 @@ public class CategorytwoStandardConfigurationTableController extends BaseControl
      * 新增二类车标准配置
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:standardtwo:add')")
-    @Log(title = "二类车标准配置", businessType = BusinessType.INSERT)
+    @Log(title = "II类车标准配置", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CategorytwoStandardConfigurationTable categorytwoStandardConfigurationTable)
     {
@@ -79,7 +79,7 @@ public class CategorytwoStandardConfigurationTableController extends BaseControl
      * 修改二类车标准配置
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:standardtwo:edit')")
-    @Log(title = "二类车标准配置", businessType = BusinessType.UPDATE)
+    @Log(title = "II类车标准配置", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CategorytwoStandardConfigurationTable categorytwoStandardConfigurationTable)
     {
@@ -90,7 +90,7 @@ public class CategorytwoStandardConfigurationTableController extends BaseControl
      * 删除二类车标准配置
      */
     @PreAuthorize("@ss.hasPermi('marketanalysis:standardtwo:remove')")
-    @Log(title = "二类车标准配置", businessType = BusinessType.DELETE)
+    @Log(title = "II类车标准配置", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {

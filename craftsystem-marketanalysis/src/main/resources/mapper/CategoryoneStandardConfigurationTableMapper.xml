@@ -3,9 +3,10 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.marketanalysis.mapper.CategoryoneStandardConfigurationTableMapper">
-    
+
     <resultMap type="CategoryoneStandardConfigurationTable" id="CategoryoneStandardConfigurationTableResult">
         <result property="id"    column="id"    />
+        <result property="vehicleType"    column="vehicle_type"    />
         <result property="manufacturer"    column="manufacturer"    />
         <result property="pneumaticTire"    column="pneumatic_tire"    />
         <result property="solidTire"    column="solid_tire"    />
@@ -64,25 +65,81 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCategoryoneStandardConfigurationTableVo">
-        select id, manufacturer, pneumatic_tire, solid_tire, single_tire, dual_tire, two_piece_valve, three_or_four_piece_valve, three_meter_lifting_height, lifting_height_gantry, standard_series_fork, non_standard_series_forks, standard_body_color, customized_body_color, complete_ops_functionality, turning_speed_limit, overspeed, reverse_armrest_with_horn, seat_belt_switch, overload_of_multi_way_valve, fire_extinguisher, reverse_buzzer, central_wideangle_rearview_mirror, two_side_rearview_mirrors, parking_sensor, semi_enclosed_seat, fully_suspended_seat, usb_interface, electric_fan, turn_the_steering_wheel, synchronous_steering, standard_roof_protection_frame, non_standard_roof_protection_frame, windscreen, front_heatresistant_windshield, rear_windshield, pc_endurance_board_ceiling, surface_mounted_cab, single_cooling_air_conditioner, dual_purpose_air_conditioner, warm_air_blower, full_car_led_lights, led_rear_work_light, blue_light_behind_the_car, three_sided_blue_strip_light, three_sided_red_strip_lights, led_flashing_warning_light, led_rotating_warning_light, led_rotating_buzzer_warning_light, metric, tilt_cylinder_sleeve, steering_cylinder_sleeve, rema_power_connector, national_standard_power_connector, domestic_battery, fics_heli_connected_car_basic_edition from categoryone_standard_configuration_table
+        select id, vehicle_type, manufacturer, pneumatic_tire, solid_tire, single_tire, dual_tire, two_piece_valve, three_or_four_piece_valve, three_meter_lifting_height, lifting_height_gantry, standard_series_fork, non_standard_series_forks, standard_body_color, customized_body_color, complete_ops_functionality, turning_speed_limit, overspeed, reverse_armrest_with_horn, seat_belt_switch, overload_of_multi_way_valve, fire_extinguisher, reverse_buzzer, central_wideangle_rearview_mirror, two_side_rearview_mirrors, parking_sensor, semi_enclosed_seat, fully_suspended_seat, usb_interface, electric_fan, turn_the_steering_wheel, synchronous_steering, standard_roof_protection_frame, non_standard_roof_protection_frame, windscreen, front_heatresistant_windshield, rear_windshield, pc_endurance_board_ceiling, surface_mounted_cab, single_cooling_air_conditioner, dual_purpose_air_conditioner, warm_air_blower, full_car_led_lights, led_rear_work_light, blue_light_behind_the_car, three_sided_blue_strip_light, three_sided_red_strip_lights, led_flashing_warning_light, led_rotating_warning_light, led_rotating_buzzer_warning_light, metric, tilt_cylinder_sleeve, steering_cylinder_sleeve, rema_power_connector, national_standard_power_connector, domestic_battery, fics_heli_connected_car_basic_edition from categoryone_standard_configuration_table
     </sql>
 
     <select id="selectCategoryoneStandardConfigurationTableList" parameterType="CategoryoneStandardConfigurationTable" resultMap="CategoryoneStandardConfigurationTableResult">
         <include refid="selectCategoryoneStandardConfigurationTableVo"/>
-        <where>  
+        <where>
+            <if test="vehicleType != null  and vehicleType != ''"> and vehicle_type like concat('%', #{vehicleType}, '%')</if>
             <if test="manufacturer != null  and manufacturer != ''"> and manufacturer like concat('%', #{manufacturer}, '%')</if>
+            <if test="pneumaticTire != null  and pneumaticTire != ''"> and pneumatic_tire = #{pneumaticTire}</if>
+            <if test="solidTire != null  and solidTire != ''"> and solid_tire = #{solidTire}</if>
+            <if test="singleTire != null  and singleTire != ''"> and single_tire = #{singleTire}</if>
+            <if test="dualTire != null  and dualTire != ''"> and dual_tire = #{dualTire}</if>
+            <if test="twoPieceValve != null  and twoPieceValve != ''"> and two_piece_valve = #{twoPieceValve}</if>
+            <if test="threeOrFourPieceValve != null  and threeOrFourPieceValve != ''"> and three_or_four_piece_valve = #{threeOrFourPieceValve}</if>
+            <if test="threeMeterLiftingHeight != null  and threeMeterLiftingHeight != ''"> and three_meter_lifting_height = #{threeMeterLiftingHeight}</if>
+            <if test="liftingHeightGantry != null  and liftingHeightGantry != ''"> and lifting_height_gantry = #{liftingHeightGantry}</if>
+            <if test="standardSeriesFork != null  and standardSeriesFork != ''"> and standard_series_fork = #{standardSeriesFork}</if>
+            <if test="nonStandardSeriesForks != null  and nonStandardSeriesForks != ''"> and non_standard_series_forks = #{nonStandardSeriesForks}</if>
+            <if test="standardBodyColor != null  and standardBodyColor != ''"> and standard_body_color = #{standardBodyColor}</if>
+            <if test="customizedBodyColor != null  and customizedBodyColor != ''"> and customized_body_color = #{customizedBodyColor}</if>
+            <if test="completeOpsFunctionality != null  and completeOpsFunctionality != ''"> and complete_ops_functionality = #{completeOpsFunctionality}</if>
+            <if test="turningSpeedLimit != null  and turningSpeedLimit != ''"> and turning_speed_limit = #{turningSpeedLimit}</if>
+            <if test="overspeed != null  and overspeed != ''"> and overspeed = #{overspeed}</if>
+            <if test="reverseArmrestWithHorn != null  and reverseArmrestWithHorn != ''"> and reverse_armrest_with_horn = #{reverseArmrestWithHorn}</if>
+            <if test="seatBeltSwitch != null  and seatBeltSwitch != ''"> and seat_belt_switch = #{seatBeltSwitch}</if>
+            <if test="overloadOfMultiWayValve != null  and overloadOfMultiWayValve != ''"> and overload_of_multi_way_valve = #{overloadOfMultiWayValve}</if>
+            <if test="fireExtinguisher != null  and fireExtinguisher != ''"> and fire_extinguisher = #{fireExtinguisher}</if>
+            <if test="reverseBuzzer != null  and reverseBuzzer != ''"> and reverse_buzzer = #{reverseBuzzer}</if>
+            <if test="centralWideangleRearviewMirror != null  and centralWideangleRearviewMirror != ''"> and central_wideangle_rearview_mirror = #{centralWideangleRearviewMirror}</if>
+            <if test="twoSideRearviewMirrors != null  and twoSideRearviewMirrors != ''"> and two_side_rearview_mirrors = #{twoSideRearviewMirrors}</if>
+            <if test="parkingSensor != null  and parkingSensor != ''"> and parking_sensor = #{parkingSensor}</if>
+            <if test="semiEnclosedSeat != null  and semiEnclosedSeat != ''"> and semi_enclosed_seat = #{semiEnclosedSeat}</if>
+            <if test="fullySuspendedSeat != null  and fullySuspendedSeat != ''"> and fully_suspended_seat = #{fullySuspendedSeat}</if>
+            <if test="usbInterface != null  and usbInterface != ''"> and usb_interface = #{usbInterface}</if>
+            <if test="electricFan != null  and electricFan != ''"> and electric_fan = #{electricFan}</if>
+            <if test="turnTheSteeringWheel != null  and turnTheSteeringWheel != ''"> and turn_the_steering_wheel = #{turnTheSteeringWheel}</if>
+            <if test="synchronousSteering != null  and synchronousSteering != ''"> and synchronous_steering = #{synchronousSteering}</if>
+            <if test="standardRoofProtectionFrame != null  and standardRoofProtectionFrame != ''"> and standard_roof_protection_frame = #{standardRoofProtectionFrame}</if>
+            <if test="nonStandardRoofProtectionFrame != null  and nonStandardRoofProtectionFrame != ''"> and non_standard_roof_protection_frame = #{nonStandardRoofProtectionFrame}</if>
+            <if test="windscreen != null  and windscreen != ''"> and windscreen = #{windscreen}</if>
+            <if test="frontHeatresistantWindshield != null  and frontHeatresistantWindshield != ''"> and front_heatresistant_windshield = #{frontHeatresistantWindshield}</if>
+            <if test="rearWindshield != null  and rearWindshield != ''"> and rear_windshield = #{rearWindshield}</if>
+            <if test="pcEnduranceBoardCeiling != null  and pcEnduranceBoardCeiling != ''"> and pc_endurance_board_ceiling = #{pcEnduranceBoardCeiling}</if>
+            <if test="surfaceMountedCab != null  and surfaceMountedCab != ''"> and surface_mounted_cab = #{surfaceMountedCab}</if>
+            <if test="singleCoolingAirConditioner != null  and singleCoolingAirConditioner != ''"> and single_cooling_air_conditioner = #{singleCoolingAirConditioner}</if>
+            <if test="dualPurposeAirConditioner != null  and dualPurposeAirConditioner != ''"> and dual_purpose_air_conditioner = #{dualPurposeAirConditioner}</if>
+            <if test="warmAirBlower != null  and warmAirBlower != ''"> and warm_air_blower = #{warmAirBlower}</if>
+            <if test="fullCarLedLights != null  and fullCarLedLights != ''"> and full_car_led_lights = #{fullCarLedLights}</if>
+            <if test="ledRearWorkLight != null  and ledRearWorkLight != ''"> and led_rear_work_light = #{ledRearWorkLight}</if>
+            <if test="blueLightBehindTheCar != null  and blueLightBehindTheCar != ''"> and blue_light_behind_the_car = #{blueLightBehindTheCar}</if>
+            <if test="threeSidedBlueStripLight != null  and threeSidedBlueStripLight != ''"> and three_sided_blue_strip_light = #{threeSidedBlueStripLight}</if>
+            <if test="threeSidedRedStripLights != null  and threeSidedRedStripLights != ''"> and three_sided_red_strip_lights = #{threeSidedRedStripLights}</if>
+            <if test="ledFlashingWarningLight != null  and ledFlashingWarningLight != ''"> and led_flashing_warning_light = #{ledFlashingWarningLight}</if>
+            <if test="ledRotatingWarningLight != null  and ledRotatingWarningLight != ''"> and led_rotating_warning_light = #{ledRotatingWarningLight}</if>
+            <if test="ledRotatingBuzzerWarningLight != null  and ledRotatingBuzzerWarningLight != ''"> and led_rotating_buzzer_warning_light = #{ledRotatingBuzzerWarningLight}</if>
+            <if test="metric != null  and metric != ''"> and metric = #{metric}</if>
+            <if test="tiltCylinderSleeve != null  and tiltCylinderSleeve != ''"> and tilt_cylinder_sleeve = #{tiltCylinderSleeve}</if>
+            <if test="steeringCylinderSleeve != null  and steeringCylinderSleeve != ''"> and steering_cylinder_sleeve = #{steeringCylinderSleeve}</if>
+            <if test="remaPowerConnector != null  and remaPowerConnector != ''"> and rema_power_connector = #{remaPowerConnector}</if>
+            <if test="nationalStandardPowerConnector != null  and nationalStandardPowerConnector != ''"> and national_standard_power_connector = #{nationalStandardPowerConnector}</if>
+            <if test="domesticBattery != null  and domesticBattery != ''"> and domestic_battery = #{domesticBattery}</if>
+            <if test="ficsHeliConnectedCarBasicEdition != null  and ficsHeliConnectedCarBasicEdition != ''"> and fics_heli_connected_car_basic_edition = #{ficsHeliConnectedCarBasicEdition}</if>
         </where>
     </select>
-    
+
     <select id="selectCategoryoneStandardConfigurationTableById" parameterType="Long" resultMap="CategoryoneStandardConfigurationTableResult">
         <include refid="selectCategoryoneStandardConfigurationTableVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertCategoryoneStandardConfigurationTable" parameterType="CategoryoneStandardConfigurationTable" useGeneratedKeys="true" keyProperty="id">
         insert into categoryone_standard_configuration_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="manufacturer != null">manufacturer,</if>
+            <if test="vehicleType != null and vehicleType != ''">vehicle_type,</if>
+            <if test="manufacturer != null and manufacturer != ''">manufacturer,</if>
             <if test="pneumaticTire != null">pneumatic_tire,</if>
             <if test="solidTire != null">solid_tire,</if>
             <if test="singleTire != null">single_tire,</if>
@@ -137,9 +194,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nationalStandardPowerConnector != null">national_standard_power_connector,</if>
             <if test="domesticBattery != null">domestic_battery,</if>
             <if test="ficsHeliConnectedCarBasicEdition != null">fics_heli_connected_car_basic_edition,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="vehicleType != null and vehicleType != ''">#{vehicleType},</if>
+            <if test="manufacturer != null and manufacturer != ''">#{manufacturer},</if>
             <if test="pneumaticTire != null">#{pneumaticTire},</if>
             <if test="solidTire != null">#{solidTire},</if>
             <if test="singleTire != null">#{singleTire},</if>
@@ -194,13 +252,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nationalStandardPowerConnector != null">#{nationalStandardPowerConnector},</if>
             <if test="domesticBattery != null">#{domesticBattery},</if>
             <if test="ficsHeliConnectedCarBasicEdition != null">#{ficsHeliConnectedCarBasicEdition},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateCategoryoneStandardConfigurationTable" parameterType="CategoryoneStandardConfigurationTable">
         update categoryone_standard_configuration_table
         <trim prefix="SET" suffixOverrides=",">
-            <if test="manufacturer != null">manufacturer = #{manufacturer},</if>
+            <if test="vehicleType != null and vehicleType != ''">vehicle_type = #{vehicleType},</if>
+            <if test="manufacturer != null and manufacturer != ''">manufacturer = #{manufacturer},</if>
             <if test="pneumaticTire != null">pneumatic_tire = #{pneumaticTire},</if>
             <if test="solidTire != null">solid_tire = #{solidTire},</if>
             <if test="singleTire != null">single_tire = #{singleTire},</if>
@@ -264,13 +323,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteCategoryoneStandardConfigurationTableByIds" parameterType="String">
-        delete from categoryone_standard_configuration_table where id in 
+        delete from categoryone_standard_configuration_table where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
     <insert id="batchInsertCategoryoneStandardConfigurationTable" parameterType="java.util.List">
         INSERT INTO categoryone_standard_configuration_table (
+        vehicle_type,
         manufacturer,
         pneumatic_tire,
         solid_tire,
@@ -329,6 +389,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ) VALUES
         <foreach collection="list" item="item" separator=",">
             (
+            #{item.vehicleType},
             #{item.manufacturer},
             #{item.pneumaticTire},
             #{item.solidTire},

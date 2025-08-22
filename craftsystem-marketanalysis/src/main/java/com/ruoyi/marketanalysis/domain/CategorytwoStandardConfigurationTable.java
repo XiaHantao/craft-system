@@ -18,6 +18,10 @@ public class CategorytwoStandardConfigurationTable extends BaseEntity
     /** id */
     private Long id;
 
+    /** 车型 */
+    @Excel(name = "车型")
+    private String vehicleType;
+
     /** 制造商 */
     @Excel(name = "制造商")
     private String manufacturer;
@@ -145,7 +149,15 @@ public class CategorytwoStandardConfigurationTable extends BaseEntity
     /** 英文标识 */
     @Excel(name = "英文标识")
     private String englishLogo;
+    public void setVehicleType(String vehicleType)
+    {
+        this.vehicleType = vehicleType;
+    }
 
+    public String getVehicleType()
+    {
+        return vehicleType;
+    }
     public void setId(Long id) 
     {
         this.id = id;
@@ -448,6 +460,7 @@ public class CategorytwoStandardConfigurationTable extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
+            .append("vehicleType", getVehicleType())
             .append("manufacturer", getManufacturer())
             .append("polyurethaneTires", getPolyurethaneTires())
             .append("fiveMeterLiftingHeight", getFiveMeterLiftingHeight())
