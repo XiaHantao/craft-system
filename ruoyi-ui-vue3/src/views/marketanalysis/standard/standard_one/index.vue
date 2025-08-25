@@ -10,7 +10,7 @@
         />
       </el-form-item>
       <el-form-item label="制造商" prop="manufacturer">
-        <el-select
+        <el-input
           v-model="queryParams.manufacturer"
           placeholder="请输入制造商"
           clearable
