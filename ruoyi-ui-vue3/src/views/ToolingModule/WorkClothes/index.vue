@@ -141,43 +141,41 @@
       <el-table-column label="数量" align="center" prop="quantityOfTooling" />
       <el-table-column label="模具状态" align="center" prop="moldStatus" />
       <el-table-column label="组装产品" align="center" prop="assemblingProducts" />
+<!--      <el-table-column label="工装图纸" align="center" prop="toolingDrawings">-->
+<!--        <template #default="{ row }">-->
+<!--            <span v-if="row.toolingDrawings">-->
+<!--              &lt;!&ndash; 如果有文件地址，显示预览按钮 &ndash;&gt;-->
+<!--              <el-button type="text" @click="previewFile(row.toolingDrawings)">预览</el-button>-->
+<!--            </span>-->
+<!--          <span v-else>-->
+<!--            &lt;!&ndash; 如果没有文件地址，显示“无图纸” &ndash;&gt;-->
+<!--            无图纸-->
+<!--          </span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="工装图纸" align="center" prop="toolingDrawings">
-        <template #default="{ row }">
-            <span v-if="row.toolingDrawings">
-              <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.toolingDrawings)">预览</el-button>
-            </span>
-          <span v-else>
-            <!-- 如果没有文件地址，显示“无图纸” -->
-            无图纸
-          </span>
-        </template>
+              <template v-slot:default="scope">
+                <el-button  v-if="scope.row.toolingDrawings" icon="Download" @click="downloadFile(scope.row.toolingDrawings)">
+                </el-button>
+              </template>
       </el-table-column>
-<!--      <el-table-column label="工艺文件名" align="center" prop="processDocumentsName" />-->
-      <el-table-column label="工艺文件" align="center" prop="processDocumentsName" width="160">
-        <template #default="{ row }">
-            <span v-if="getFileName(row.processDocuments)">
-              <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.processDocuments)">{{ getFileName(row.processDocuments) }}</el-button>
-            </span>
-          <span v-else>
-            <!-- 如果没有文件地址，显示“无图纸” -->
-            无文件
-          </span>
+<!--      <template v-slot:default="scope">-->
+<!--        <el-button  v-if="scope.row.otherFiles" icon="Download" @click="downloadFiles(scope.row.otherFiles)">-->
+<!--        </el-button>-->
+<!--      </template>-->
+      <!--      <el-table-column label="工艺文件名" align="center" prop="processDocumentsName" />-->
+      <el-table-column label="工艺文件" align="center" prop="processDocuments" width="160">
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.processDocuments" icon="Download" @click="downloadFile(scope.row.processDocuments)">
+          </el-button>
         </template>
       </el-table-column>
 <!--      <el-table-column label="工艺文件路径" align="center" prop="processDocuments" />-->
 <!--      <el-table-column label="物料清单名" align="center" prop="mbomName" />-->
-      <el-table-column label="物料清单" align="center" prop="mbomName" width="160">
-        <template #default="{ row }">
-            <span v-if="getFileName(row.mbomFile)">
-              <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.mbomFile)">{{ getFileName(row.mbomFile) }}</el-button>
-            </span>
-          <span v-else>
-            <!-- 如果没有文件地址，显示“无图纸” -->
-            无文件
-          </span>
+      <el-table-column label="物料清单" align="center" prop="mbomFile" width="160">
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.mbomFile" icon="Download" @click="downloadFile(scope.row.mbomFile)">
+          </el-button>
         </template>
       </el-table-column>
 <!--      <el-table-column label="物料清单路径" align="center" prop="mbomFile" />-->
@@ -611,7 +609,13 @@ function extractModelName(filename) {
   // 如果匹配成功，返回型号部分，否则返回空字符串
   return matchBasic ? matchBasic[1] : '';
 }
-
+/** 文件下载 */
+function downloadFile(filePath) {
+  const paths = filePath.split(',').map(path => path.trim());
+  paths.forEach(path => {
+    proxy.$download.resource(path);
+  });
+}
 /** 搜索按钮操作 */
 function handleQuery() {
   queryParams.value.pageNum = 1;

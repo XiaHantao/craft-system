@@ -136,28 +136,28 @@
       <el-table-column label="设计要求" align="center" prop="designRequirement" />
 <!--      <el-table-column label="工装图纸" align="center" prop="toolingDrawings" />-->
       <el-table-column label="工装图纸" align="center" prop="toolingDrawings">
-        <template #default="{ row }">
-            <span v-if="row.toolingDrawings">
-              <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.toolingDrawings)">预览</el-button>
-            </span>
-          <span v-else>
-            <!-- 如果没有文件地址，显示“无图纸” -->
-            无文件
-          </span>
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.toolingDrawings" icon="Download" @click="downloadFile(scope.row.toolingDrawings)">
+          </el-button>
         </template>
       </el-table-column>
 <!--      <el-table-column label="验证文件" align="center" prop="verifyFile" />-->
+<!--      <el-table-column label="验证文件" align="center" prop="verifyFile">-->
+<!--        <template #default="{ row }">-->
+<!--            <span v-if="row.verifyFile">-->
+<!--              &lt;!&ndash; 如果有文件地址，显示预览按钮 &ndash;&gt;-->
+<!--              <el-button type="text" @click="previewFile(row.verifyFile)">预览</el-button>-->
+<!--            </span>-->
+<!--          <span v-else>-->
+<!--            &lt;!&ndash; 如果没有文件地址，显示“无图纸” &ndash;&gt;-->
+<!--            无文件-->
+<!--          </span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="验证文件" align="center" prop="verifyFile">
-        <template #default="{ row }">
-            <span v-if="row.verifyFile">
-              <!-- 如果有文件地址，显示预览按钮 -->
-              <el-button type="text" @click="previewFile(row.verifyFile)">预览</el-button>
-            </span>
-          <span v-else>
-            <!-- 如果没有文件地址，显示“无图纸” -->
-            无文件
-          </span>
+        <template v-slot:default="scope">
+          <el-button  v-if="scope.row.verifyFile" icon="Download" @click="downloadFile(scope.row.verifyFile)">
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column label="创建人" align="center" prop="toolUploader" />
@@ -441,7 +441,13 @@ onMounted(() => {
   // console.log('加载中....' , moldTypeList.value)
 });
 const { queryParams, form, rules } = toRefs(data);
-
+/** 文件下载 */
+function downloadFile(filePath) {
+  const paths = filePath.split(',').map(path => path.trim());
+  paths.forEach(path => {
+    proxy.$download.resource(path);
+  });
+}
 const getButtonText = (state) => {
   return computed(() => {
     if (state === '进行中') return '上传文件';
